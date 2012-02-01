@@ -24,8 +24,6 @@ while File.exists? "raw_data/law_list_#{tmp_name}_page1.html"
 end
 name = tmp_name
 
-puts "=====#{name}======"
-
 f = File.open("raw_data/law_list_#{name}_page1.html", "w")
 f.write doc_raw
 f.close
@@ -33,8 +31,7 @@ f.close
 doc = Nokogiri::HTML(doc_raw)
 
 number_strip_regex = /총(\d+)건이 검색되었습니다/
-title_strip_regex = /(.*)\(.*\d+인\)$/
-title_strip_regex2 = /(.*)\(.*의원\)$/
+title_strip_regex = /(.*)\(.*\)$/
 code_strip_regex = /GoDetail\(\'([a-z_A-Z0-9]+)\'\)/
 
 #발의건수
@@ -42,7 +39,7 @@ elem = doc.xpath("/html/body/table[2]/tbody/tr[2]/td[1]")[0]
 s = elem.children[1].children[0].children[0].children[2].children[3].children[0].to_s.strip
 init_num = s.match(number_strip_regex)[1].to_i
 
-puts "=====#{init_num}건====="
+puts "=====#{name} #{init_num}건====="
 
 #각 의안에 대해..
 CSV.open("laws_#{name}.csv", "w") do |csv|
@@ -57,8 +54,8 @@ CSV.open("laws_#{name}.csv", "w") do |csv|
       code = row.xpath("td[2]/a").attr("href").to_s.match(code_strip_regex)[1]
       #의안제목
       tmp = title.match(title_strip_regex)
-      tmp = title.match(title_strip_regex2) if tmp.nil?
-      strip_title = tmp[1]
+			strip_title = title
+      strip_title = tmp[1] unless tmp.nil?
       puts "##{i} #{strip_title} #{code}"
       #처리 플래그 (처리=true, 계류=false)
       complete = row.xpath("td[2]/img").attr("src").to_s.split("/").last == "icon_02.gif"
