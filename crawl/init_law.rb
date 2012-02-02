@@ -5,23 +5,18 @@ require 'iconv'
 require 'nokogiri'
 require 'csv'
 
-if ARGV.length < 1
-	puts "USAGE : #{__FILE__} [working_dir_path]"
-	exit 1
-end
-
 iconv = Iconv.new("utf-8", "euc-kr")
 
-unless File.exists? ARGV[0]+"list.txt"
+unless File.exists? "list.txt"
 	puts "`list.txt` must be in #{ARGV[0]}"
 	exit 1
 end
 
-total_names = File.readlines(ARGV[0]+"list.txt").map {|name| name.gsub /\n/, ''}
+total_names = File.readlines("list.txt").map {|name| name.gsub /\n/, ''}
 
 processed_names = []
-if File.exists? ARGV[0]+"complete_list.txt"
-	processed_names = File.readlines(ARGV[0]+"complete_list.txt").map {|name| name.gsub /\n/,''}
+if File.exists? "complete_list.txt"
+	processed_names = File.readlines("complete_list.txt").map {|name| name.gsub /\n/,''}
 end
 
 names = total_names - processed_names
@@ -38,13 +33,13 @@ names.each do |name|
 
 	tmp_name = name
 	c = 1
-	while File.exists? ARGV[0]+"raw_data/law_list_#{tmp_name}_page1.html"
+	while File.exists? "raw_data/law_list_#{tmp_name}_page1.html"
 		tmp_name = name+"_#{c}"
 		c+=1
 	end
 	name = tmp_name
 
-	f = File.open(ARGV[0]+"raw_data/law_list_#{name}_page1.html", "w")
+	f = File.open("raw_data/law_list_#{name}_page1.html", "w")
 	f.write doc_raw
 	f.close
 
@@ -62,19 +57,18 @@ names.each do |name|
 	puts "=====#{name} #{init_num}건====="
 
 	#각 의안에 대해..
-	CSV.open(ARGV[0]+"laws_#{name}.csv", "w") do |csv|
+	CSV.open("laws_#{name}.csv", "w") do |csv|
 		1.upto(init_num).each do |i|
 			row=doc.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[#{i*2}]")
 			break if row.xpath("td").count == 1
 			#의안번호
 			num = row.xpath("td[1]").children[0].to_s.strip
 			#의안제목(의원명 포함)
-			title = row.xpath("td[2]/a").attr('title').to_s
+			strip_title = title = row.xpath("td[2]/a").attr('title').to_s
 			#의안코드(사이트내부적으로 쓰이는듯)
 			code = row.xpath("td[2]/a").attr("href").to_s.match(code_strip_regex)[1]
 			#의안제목
 			tmp = title.match(title_strip_regex)
-			strip_title = title
 			strip_title = tmp[1] unless tmp.nil?
 			puts "##{i} #{strip_title} #{code}"
 			#처리 플래그 (처리=true, 계류=false)
@@ -88,13 +82,13 @@ names.each do |name|
 
 			#의안 써머리
 			doc2_raw = ""
-			if File.exists? ARGV[0]+"raw_data/law_summary_#{code}.html"
-				doc2_raw = File.read(ARGV[0]+"raw_data/law_summary_#{code}.html")
+			if File.exists? "raw_data/law_summary_#{code}.html"
+				doc2_raw = File.read("raw_data/law_summary_#{code}.html")
 			else
 				begin
 					sleep(1)
 					doc2_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/SummaryPopup.jsp?bill_id=#{code}").read)
-					f = File.open(ARGV[0]+"raw_data/law_summary_#{code}.html", "w")
+					f = File.open("raw_data/law_summary_#{code}.html", "w")
 					f.write doc2_raw
 					f.close
 				rescue
@@ -106,13 +100,13 @@ names.each do |name|
 
 			#위원회
 			doc3_raw = ""
-			if File.exists? ARGV[0]+"raw_data/law_detail_#{code}.html"
-				doc3_raw = File.read(ARGV[0]+"raw_data/law_detail_#{code}.html")
+			if File.exists? "raw_data/law_detail_#{code}.html"
+				doc3_raw = File.read("raw_data/law_detail_#{code}.html")
 			else
 				begin
 					sleep(1)
 					doc3_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/BillDetail.jsp?bill_id=#{code}").read)
-					f = File.open(ARGV[0]+"raw_data/law_detail_#{code}.html", "w")
+					f = File.open("raw_data/law_detail_#{code}.html", "w")
 					f.write doc3_raw
 					f.close
 				rescue
@@ -124,13 +118,13 @@ names.each do |name|
 
 			#발의의원
 			doc4_raw = ""
-			if File.exists? ARGV[0]+"raw_data/law_coactors_#{code}.html"
-				doc4_raw = File.read ARGV[0]+"raw_data/law_coactors_#{code}.html"
+			if File.exists? "raw_data/law_coactors_#{code}.html"
+				doc4_raw = File.read "raw_data/law_coactors_#{code}.html"
 			else
 				begin
 					sleep(1)
 					doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
-					f = File.open(ARGV[0]+"raw_data/law_coactors_#{code}.html", "w")
+					f = File.open("raw_data/law_coactors_#{code}.html", "w")
 					f.write doc4_raw
 					f.close
 				rescue
@@ -144,7 +138,7 @@ names.each do |name|
 		end #end of each law row
 	end #end of CSV
 
-	f = File.open(ARGV[0] + "complete_list.txt", "a")
+	f = File.open("complete_list.txt", "a")
 	f.puts name
 	f.close
 end
