@@ -14,7 +14,14 @@ name = ARGV[0]
 
 iconv = Iconv.new("utf-8", "euc-kr")
 
-doc_raw = iconv.iconv(Net::HTTP.post_form(URI.parse("http://likms.assembly.go.kr/bill/jsp/BillSearchResult.jsp"), {:PAGE_SIZE=>2000, :PROPOSER=>name.encode("euc-kr"), :PROPOSE_GUBN=>"대표발의".encode("euc-kr"), :AGE_FROM=>1, :AGE_TO=>18}).body)
+doc_raw = ""
+begin
+	doc_raw = iconv.iconv(Net::HTTP.post_form(URI.parse("http://likms.assembly.go.kr/bill/jsp/BillSearchResult.jsp"), {:PAGE_SIZE=>2000, :PROPOSER=>name.encode("euc-kr"), :PROPOSE_GUBN=>"대표발의".encode("euc-kr"), :AGE_FROM=>1, :AGE_TO=>18}).body)
+rescue
+	puts "=====ERR : #{name} search failed====="
+	exit 1
+end
+	
 
 tmp_name = name
 c = 1
@@ -71,10 +78,15 @@ CSV.open("laws_#{name}.csv", "w") do |csv|
       if File.exists? "raw_data/law_summary_#{code}.html"
         doc2_raw = File.read("raw_data/law_summary_#{code}.html")
       else
-        doc2_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/SummaryPopup.jsp?bill_id=#{code}").read)
-        f = File.open("raw_data/law_summary_#{code}.html", "w")
-        f.write doc2_raw
-        f.close
+				begin
+					sleep(1)
+					doc2_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/SummaryPopup.jsp?bill_id=#{code}").read)
+					f = File.open("raw_data/law_summary_#{code}.html", "w")
+					f.write doc2_raw
+					f.close
+				rescue
+					puts "=====ERR : #{code} summary failed ====="
+				end
       end
       doc2 = Nokogiri::HTML(doc2_raw)
       summary = doc2.xpath("/html/body/table/tbody/tr[3]/td/table/tbody/tr/td[2]/span[2]").inner_text.strip
@@ -84,10 +96,15 @@ CSV.open("laws_#{name}.csv", "w") do |csv|
       if File.exists? "raw_data/law_detail_#{code}.html"
         doc3_raw = File.read("raw_data/law_detail_#{code}.html")
       else
-        doc3_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/BillDetail.jsp?bill_id=#{code}").read)
-        f = File.open("raw_data/law_detail_#{code}.html", "w")
-        f.write doc3_raw
-        f.close
+				begin
+					sleep(1)
+					doc3_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/BillDetail.jsp?bill_id=#{code}").read)
+					f = File.open("raw_data/law_detail_#{code}.html", "w")
+					f.write doc3_raw
+					f.close
+				rescue
+					puts "=====ERR : #{code} detail failed====="
+				end
       end
       doc3 = Nokogiri::HTML(doc3_raw)
       commitee = doc3.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[6]/td[2]/table/tbody/tr[2]/td/div").children[0].to_s
@@ -97,10 +114,15 @@ CSV.open("laws_#{name}.csv", "w") do |csv|
       if File.exists? "raw_data/law_coactors_#{code}.html"
         doc4_raw = File.read "raw_data/law_coactors_#{code}.html"
       else
-        doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
-        f = File.open("raw_data/law_coactors_#{code}.html", "w")
-        f.write doc4_raw
-        f.close
+				begin
+					sleep(1)
+					doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
+					f = File.open("raw_data/law_coactors_#{code}.html", "w")
+					f.write doc4_raw
+					f.close
+				rescue
+					puts "=====ERR : #{code} coactors failed====="
+				end
       end
       doc4 = Nokogiri::HTML(doc4_raw)
       coactors = doc4.xpath("/html/body/table[2]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[1]/td").map {|elem| elem.inner_text.to_s}
