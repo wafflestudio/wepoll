@@ -1,8 +1,6 @@
 class User
   include Mongoid::Document
 
-  #=== Mongoid fields ===
-
   #=== Associtations ===
   has_many :user_tokens # user can have various ways to sign in (Facebook, Twitter etc)
 
@@ -16,12 +14,49 @@ class User
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token.extra.raw_info
+#    Rails.logger.info  data
 
     if user = User.where(:email => data.email).first
       user
     else
-      User.create!(:email => data.email, :password => Devise.friendly_token[0,20])
+      user = User.create!(:email => data.email, :password => Devise.friendly_token[0,20])
+      UserToken.create!(:provider => 'facebook', :uid => data.id, :user => user)
+      user
     end
+  end
+
+  def self.find_for_twitter_oauth(access_token, signed_in_resource=nil)
+    data = access_token.extra.raw_info
+    Rails.logger.info  data
+
+    if user = User.where(:email => data.email).first
+      user
+    else
+      user = User.create!(:email => data.email, :password => Devise.friendly_token[0,20])
+      UserToken.create!(:provider => 'facebook', :uid => data.id, :user => user)
+      user
+    end
+  end
+
+
+  def facebook_connected?
+    user_tokens.where(:provider => 'facebook').any?
+  end
+
+  def facebook_uid
+    t = user_tokens.where(:provider => 'facebook').first
+    t.nil? ? nil : t.uid
+  end
+
+
+
+  def twitter_uid
+    t = user_tokens.where(:provider => 'twitter').first
+    t.nil? ? nil : t.uid
+  end
+
+  def twitter_connected?
+    user_tokens.where(:provider => 'twitter').any?
   end
 
   def self.new_with_session(params, session)

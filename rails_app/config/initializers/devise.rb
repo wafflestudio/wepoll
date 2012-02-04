@@ -208,4 +208,5 @@ Devise.setup do |config|
   # end
 
   config.omniauth :facebook, "185387964894905", "331fcf8686c33ecf0805ab25765e0263"
+  config.omniauth :twitter, "ZaqgbIDlZUi0zEALTF8ukg", "2nN0bG5mQLLGhKhuRhiumZFFv8NaCPdncIRvYlAibqQ"
 end
