@@ -1,0 +1,11 @@
+<% unless user_signed_in? -%>
+  <div class="pull-right navbar-text">
+    <%= link_to 'Login', '#', :class => "btn btn-primary navbar-btn" %>
+    <%= link_to '회원가입', new_user_registration_path, :class => "btn" %>
+  </div>
+<% else -%>
+  <p class="navbar-text pull-right">
+    Logged in as <a href="#"><%= current_user.email %></a>
+  </p>
+<% end -%>
+

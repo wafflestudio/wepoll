@@ -10,4 +10,7 @@
  *
  *= require_self
  *= require_tree .
+ *
+ * Added by drh
+ * = require bootstrap.min
 */
