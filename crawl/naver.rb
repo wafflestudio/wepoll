@@ -5,7 +5,6 @@ require 'iconv'
 require 'nokogiri'
 require 'csv'
 
-iconv = Iconv.new("utf-8", "euc-kr")
 
 unless File.exists? "list.txt"
 	puts "`list.txt` must be in #{ARGV[0]}"
@@ -15,8 +14,8 @@ end
 total_names = File.readlines("list.txt").map {|name| name.gsub /\n/, ''}
 
 processed_names = []
-if File.exists? "complete_list.txt"
-	processed_names = File.readlines("complete_list.txt").map {|name| name.gsub /\n/,''}
+if File.exists? "naver_complete_list.txt"
+	processed_names = File.readlines("naver_complete_list.txt").map {|name| name.gsub /\n/,''}
 end
 
 names = total_names - processed_names
@@ -24,9 +23,9 @@ names = total_names - processed_names
 names.each do |name|
 	doc_raw = ""
 	begin
-		doc_raw = open("http://people.search.naver.com/search.naver?sm=sbx_hty&where=people&ie=utf8&query="+name.encode("UTF-8")+"&x=0&y=0")
+		doc_raw = Net::HTTP.get(URI.parse("http://people.search.naver.com/search.naver?sm=sbx_hty&where=people&ie=utf8&query="+URI.escape(name)+"&x=0&y=0"))
 	rescue
-		puts "=====ERR : #{name} get failed====="
+		puts "=====ERR : #{name} search failed====="
 		exit 1
 	end
 
@@ -46,14 +45,13 @@ names.each do |name|
 	doc = Nokogiri::HTML(doc_raw)
 
 
-	#프로필 정보 갯수
+	#프로필 정보
 	row = doc.css("dl.detail_profile")
 
-	puts "=====#{name} #{info_num}개====="
 
 	#출생, 소속1, 소속2, 소속3, 학력, 수상, 경력, 사이트, 가족, 
 	#각 프로필 정보에 대해
-	CSV.open("naver_#{name}.csv", "w") do |csv|
+	CSV.open("result/naver_#{name}.csv", "w") do |csv|
 		#initialize
 		birth=""
 		belong=[]
@@ -88,7 +86,7 @@ names.each do |name|
 		csv << [birth, belong[1], belong[2], belong[3], edu, award, career, site, family]
 	end #end of CSV
 
-	f = File.open("complete_list.txt", "a")
+	f = File.open("naver_complete_list.txt", "a")
 	f.puts name
 	f.close
 end
