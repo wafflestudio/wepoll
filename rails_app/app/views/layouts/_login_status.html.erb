@@ -1,0 +1,12 @@
+<% unless user_signed_in? -%>
+  <div class="pull-right navbar-text">
+    <%= link_to 'Login', new_user_session_path, :class => "btn btn-primary navbar-btn" %>
+    <%= link_to '회원가입', new_user_registration_path, :class => "btn" %>
+  </div>
+<% else -%>
+  <p class="navbar-text pull-right">
+  Logged in as <%= link_to current_user.email, mypage_path %>
+  <%= link_to 'Logout', destroy_user_session_path, :class => 'btn btn-small', :method => 'delete' %>
+  </p>
+<% end -%>
+
