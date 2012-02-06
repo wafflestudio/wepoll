@@ -1,0 +1,5 @@
+<div>
+  아래 링크를 누르면, <%= @user_token.provider%> 계정이 <%= @user.email%>과 연동됩니다.
+
+  <%= link_to "인증하기", sns_link_verify_url(@user.id, @user_token.id, @user_token.approve_key)%>
+</div>

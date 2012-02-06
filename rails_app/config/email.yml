@@ -1,0 +1,14 @@
+development:
+  :address: smtp.gmail.com
+  :port: 587
+  :authentication: plain
+  :user_name: drh@wepoll.or.kr
+  :password: gkswoghkWkd
+  :enable_starttls_auto: true
+production:
+  :address: smtp.gmail.com
+  :port: 587
+  :authentication: plain
+  :user_name: drh@wepoll.or.kr
+  :password: gkswoghkWkd
+  :enable_starttls_auto: true

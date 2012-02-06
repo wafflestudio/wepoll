@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Wepoll::Application.config.secret_token = 'e372d13f424cb3b0e52f728bdd53cf1059521c294c29bd1f951c2b07a1a127349ae4b8698e39337a10e2a8ce33092c342af9526729facef28a73b4677e651d8e'
+Wepoll::Application.config.secret_token = 'e5f86fbcaf5e664aa5404e141079929385a932b36ebd4d8109f8e76bee830a3d04260a3fc2a3b3a536abf02871485cd43ca583547975098056c15001e4ec273f'

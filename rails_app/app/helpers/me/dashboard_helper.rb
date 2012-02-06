@@ -1,0 +1,2 @@
+module Me::DashboardHelper
+end
