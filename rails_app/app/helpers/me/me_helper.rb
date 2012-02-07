@@ -1,0 +1,2 @@
+module Me::MeHelper
+end

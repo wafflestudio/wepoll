@@ -1,8 +1,14 @@
-class UserToken #this model holds uid and provider
+class UserToken
   include Mongoid::Document
-  belongs_to :user
+  field :provider, :type => String
+  field :uid, :type => String
 
-  #=== Mongoid fields ===
-  field :provider, type: String
-  field :uid, type: String
+  field :approved, :type => Boolean, :default => false
+  field :approve_key, :type => String
+  field :approve_expire_at, :type => Integer
+
+  field :access_token_secret, type: String
+  field :access_token, type: String
+
+  belongs_to :user
 end
