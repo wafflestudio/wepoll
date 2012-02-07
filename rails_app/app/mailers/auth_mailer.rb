@@ -5,7 +5,7 @@ class AuthMailer < ActionMailer::Base
   def link_sns_verification(user_token)
     @user = user_token.user
     @user_token = user_token
-    mail(to: user.email, subject: "위키폴리틱스 SNS 계정연동확인")
+    mail(to: @user.email, subject: "위키폴리틱스 SNS 계정연동확인")
   end
 end
 

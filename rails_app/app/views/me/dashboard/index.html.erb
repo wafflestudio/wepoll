@@ -14,24 +14,32 @@
   <div class="span5 well">
     <h3>SNS 연동</h3>
     <h4>Facebook</h4>
-    <% if current_user.facebook_connected? -%>
+    <% if current_user.facebook_token && current_user.facebook_token.approved -%>
       <div class="alert alert-success">
         Facebook 연동이 돼있습니다. <%= link_to "바로가기", "https://facebook.com/#{current_user.facebook_token.uid}" %>
       </div>
+    <% elsif current_user.facebook_token && !current_user.facebook_token.approved -%>
+      <div class="alert alert-info">
+        Facebook 연동 인증메일을 통해 인증 대기중입니다. <%= link_to '메일을 못받았어요.', '#' %>
+      </div>
     <% else -%>
       <div class="alert">
-        Facebook연동이 되어있지 않습니다.
+        Facebook을 연결하여 위폴을 이용해보세요 <%= link_to '연동하기', me_sns_link_path(:facebook), :class => 'btn btn-small' %>
       </div>
     <% end -%>
 
     <h4>Twitter</h4>
-    <% if current_user.twitter_connected? -%>
+    <% if current_user.twitter_token && current_user.twitter_token.approved-%>
       <div class="alert alert-success">
-        Twitter 연동이 돼있습니다.
+        Twitter 연동이 돼있습니다. <%= link_to '바로가기', '#' %>
+      </div>
+    <% elsif current_user.twitter_token && !current_user.twitter_token.approved -%>
+      <div class="alert alert-info">
+        Twitter 연동 인증메일을 통해 인증 대기중입니다. <%= link_to '메일을 못받았어요', '#' %>
       </div>
     <% else -%>
       <div class="alert">
-        Twitter 연동이 되어있지 않습니다. <%= link_to '연동하기', '#', :class => 'btn btn-small' %>
+        Twitter를 연결하여 위폴을 이용해보세요 <%= link_to '연동하기', me_sns_link_path(:twitter), :class => 'btn btn-small' %>
       </div>
     <% end -%>
   </div>
