@@ -54,7 +54,8 @@ class Users::OmniauthCallbacksController < ApplicationController
         AuthMailer.link_sns_verification(tw_token).deliver
         redirect_to me_dashboard_path
       else
-        session["user_twitter_data"] = request.env["omniauth.auth"]
+        #see http://stackoverflow.com/questions/7117200/devise-for-twitter-cookie-overflow-error
+        session["user_twitter_data"] = request.env["omniauth.auth"].except('extra')
         redirect_to new_user_registration_url
       end
     end

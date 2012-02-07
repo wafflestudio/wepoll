@@ -1,1 +1,11 @@
 <h1>wepoll.kr <small>선거문화를 바꾸는 위폴!</small></h1>
+
+<div class="span9 well">
+  <% if user_signed_in? -%>
+    안녕하세요, <%= link_to current_user.email, me_dashboard_path %>님<br />
+    <%= link_to '로그아웃' , destroy_user_session_path, :method => :delete %>
+  <% else -%>
+    <%= link_to '로그인' , new_user_session_path %><br />
+    <%= link_to '회원가입' , new_user_registration_path %>
+  <% end -%>
+</div>

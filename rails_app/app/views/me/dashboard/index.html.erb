@@ -3,7 +3,7 @@
 <div class="row">
   <div class="span5 well">
     <h3>내가 올린 링크들</h3>
-    <p>구현해달라능.. 헠헠</p>
+    <p>없어요 아직</p>
   </div>
 
   <div class="span6 well">
@@ -31,7 +31,7 @@
     <h4>Twitter</h4>
     <% if current_user.twitter_token && current_user.twitter_token.approved-%>
       <div class="alert alert-success">
-        Twitter 연동이 돼있습니다. <%= link_to '바로가기', '#' %>
+        Twitter 연동이 돼있습니다. <%= link_to '바로가기', "https://twitter.com/users/#{current_user.twitter_token.uid}" %>
       </div>
     <% elsif current_user.twitter_token && !current_user.twitter_token.approved -%>
       <div class="alert alert-info">
