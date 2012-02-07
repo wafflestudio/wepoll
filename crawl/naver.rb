@@ -51,18 +51,18 @@ names.each do |name|
 
 	#출생, 소속1, 소속2, 소속3, 학력, 수상, 경력, 사이트, 가족, 
 	#각 프로필 정보에 대해
-	CSV.open("result/naver_#{name}.csv", "w") do |csv|
+	CSV.open("naver_result/naver_#{name}.csv", "w") do |csv|
 		#initialize
-		birth=""
+#		birth=""
 		belong=[]
-		belong[0]=""
-		belong[1]=""
-		belong[2]=""
-		edu=""
-		award=""
-		career=""
-		site=""
-		family=""
+#		belong[0]=""
+#		belong[1]=""
+#		belong[2]=""
+#		edu=""
+#		award=""
+#		career=""
+#		site=""
+#		family=""
 
 		#출생
 		birth = row.css('dt[text()=출생]').first.next.text unless row.css('dt[text()=출생]').first.nil?
@@ -79,11 +79,19 @@ names.each do |name|
 		#경력
 		career = row.css('dt[text()=경력]').first.next.next.text unless row.css('dt[text()=경력]').first.nil?
 		#사이트
-		site = row.css('dt[text()=사이트]').first.next.next.text unless row.css('dt[text()=사이트]').first.nil?
+		if row.css('dt[text()=사이트]').first.nil?
+		else
+			site = row.css('dt[text()=사이트]').first.next.next
+			official = site.css('a[text()=공식사이트]')[0]['href'] unless site.css('a[text()=공식사이트]')[0].nil?
+			blog = site.css('a[text()=블로그]')[0]['href'] unless site.css('a[text()=블로그]')[0].nil?
+			twitter = site.css('a[text()=트위터]')[0]['href'] unless site.css('a[text()=트위터]')[0].nil?
+			facebook = site.css('a[text()=페이스북]')[0]['href'] unless site.css('a[text()=페이스북]')[0].nil?
+			mini = site.css('a[text()=미니홈피]')[0]['href'] unless site.css('a[text()=미니홈피]')[0].nil?
+		end
 		#가족
 		family = row.css('dt[text()=가족]').first.next.next.text unless row.css('dt[text()=가족]').first.nil?
 
-		csv << [birth, belong[1], belong[2], belong[3], edu, award, career, site, family]
+		csv << [birth, belong[1], belong[2], belong[3], edu, award, career, official, blog, twitter, facebook, mini, family]
 	end #end of CSV
 
 	f = File.open("naver_complete_list.txt", "a")
