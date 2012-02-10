@@ -1,2 +1,21 @@
-<div class="column grid_16">
-asdf</div>
+<div class="grid_16" id="main-pages-container">
+  <div id="main-content">
+    <div class="alpha grid_2" id="logo-wrapper">
+      <h1>wepoll</h1>
+    </div>
+    <div class="grid_6 prefix_2 omega" id="search-bar-wrapper">
+      <%= form_tag "/", :id => "main-search-bar" do %>
+        <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요" %>
+        <%= submit_tag "검색"%>
+      <% end -%>
+    </div>
+    <div class="clear"></div>
+    <hr />
+  </div>
+
+  <div id="main-right" class="grid_5 omega">
+    <div id="login-btn">
+      <a href="#">로그인</a>
+    </div>
+  </div>
+</div>

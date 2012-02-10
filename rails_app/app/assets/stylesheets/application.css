@@ -11,6 +11,7 @@
  *= require_self
  *= require reset
  *= require 1024_16_8_8
+ *= require clearfix
  *= require_tree .
 */
 
