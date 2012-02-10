@@ -9,6 +9,12 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require twitter/bootstrap
+ *= require reset
+ *= require 1024_16_8_8
  *= require_tree .
 */
+
+/* below css is for debugging, DO NOT ADD OTHER LINES  */
+#container {
+/*  background-image:url(/assets/1024_16_8_8.png);*/
+}
