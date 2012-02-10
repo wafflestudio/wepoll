@@ -1,4 +1,4 @@
-ruby_path = "/home/jineok12/.rvm/rubies/ruby-1.9.2-p290/bin/ruby"
+ruby_path = "~/.rvm/rubies/ruby-1.9.2-p290/bin/ruby"
 God.watch do |w|
   w.dir = Dir.pwd
   w.name = "naver_crawler"
