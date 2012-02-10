@@ -4,6 +4,9 @@ class Bill #법안모델
 
   #=== Mongoid fields ===
   field :title, type: String
+  field :initiated_at, type: Date #발의일자
+  field :voted_at, type: Date #표결일자
+  field :result, type: Boolean #표결결과
 
   #=== Association ===
   belongs_to :initiator, class_name: "Politician", inverse_of: :initiate_bills #대표발의자
