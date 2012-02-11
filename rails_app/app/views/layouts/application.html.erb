@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8">
     <title>Wepoll</title>
@@ -20,25 +20,25 @@
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
   </head>
   <body>
-    <div id="container" class="row">
-      <div class="content">
+    <div id="container" class="container_16">
+      <div class="content clearfix">
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
-              <div class="column grid_16">
-                <div data-alert="alert" class="alert alert-<%= flash_class(level) %> fade in">
-                  <a class="close" data-dismiss="alert" href="#">&times;</a>
-                  <%= content_tag :p, flash[level] %>
-                </div>
+            <div class="grid_16">
+              <div data-alert="alert" class="alert alert-<%= flash_class(level) %> fade in">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <%= content_tag :p, flash[level] %>
               </div>
-            <% end %>
+            </div>
           <% end %>
+        <% end %> <!-- end of alert levels -->
 
         <%= yield %>
 
-      </div>
+      </div> <!-- end of content -->
 
-      <footer class="column grid_16">
-      <%= render :partial => '/layouts/footer' %>
+      <footer>
+        <%= render :partial => '/layouts/footer' %>
       </footer>
 
     </div> <!-- /container -->

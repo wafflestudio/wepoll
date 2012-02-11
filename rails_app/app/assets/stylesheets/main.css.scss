@@ -1,3 +1,119 @@
 // Place all the styles related to the main controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#main-pages-container {
+  position:relative;
+  height:738px;
+  overflow:visible;
+}
+
+@mixin drop-shadow($x,$y,$r,$s,$color) {
+  -moz-box-shadow: $x $y $r $s $color;
+  -webkit-box-shadow: $x $y $r $s $color;
+  box-shadow: $x $y $r $s $color;
+}
+
+#main-content {
+  margin-right:0;
+
+  //positioning
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:101;
+
+  //dimension
+  height:730px;
+  width:688px;
+
+  //traits
+  background-color:white;
+  @include drop-shadow(0, 0, 6px, 2px, #929292);
+
+  hr {
+    border:0;
+    background-color:#000;
+    margin-left:30px;
+    width:658px;
+    height:2px;
+  }
+}
+
+#main-right {
+  margin-left:0;
+  padding-left:32px;
+
+  //positioning
+  position:absolute;
+  right:0;
+  top:8px;
+  z-index:100;
+
+  //dimension
+  height:730px;
+
+  //traits
+  background-color:white;
+  @include drop-shadow(0, 0, 6px, 2px, #929292);
+}
+
+#logo-wrapper {
+  margin-top:10px;
+  margin-left:30px;
+  h1 {
+    text-indent:-99999px;
+    background:url(/assets/logo.png) no-repeat;
+    height:40px;
+  }
+}
+
+#search-bar-wrapper {
+  margin-top:24px;
+}
+
+#main-search-bar {
+  border:2px solid #848484;
+  height:23px;
+
+  input[type=text] {
+    margin:0;
+    border:0;
+    width:362px - 28px;
+    height:21px;
+    display:block;
+    float:left;
+  }
+
+  input[type=submit] {
+    margin:0;
+    padding:0;
+    display:block;
+    float:right;
+    height:100%;
+    width:28px;
+    border:0;
+    text-indent:-99999px;
+    background:url(/assets/btn_search.gif) no-repeat;
+  }
+}
+
+#login-btn {
+  margin-top:-25px;
+  margin-left:230px;
+  height:25px - 7px;
+  width:60px;
+  background-color:#848484;
+  color:white;
+  font-size:9pt;
+  text-align:center;
+  padding-top:7px;
+
+  a {
+    display:block;
+    width:100%;
+    height:100%;
+    color:white;
+    text-decoration:none;
+  }
+}

@@ -1,6 +1,6 @@
 class MainController < ApplicationController
   def index
-    @politicians = Politician.all
+    @politicians = Politician.all.limit(10)
   end
 
 
