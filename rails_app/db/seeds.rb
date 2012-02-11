@@ -44,7 +44,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
     military = "면제#{csv[13]}"
   end
 
-  profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| !(p.index name).nil?}[0]
+  profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name}[0]
 
   p = Politician.new(:name => name,
                      :party => party,
