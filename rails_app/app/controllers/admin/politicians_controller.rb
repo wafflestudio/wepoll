@@ -7,4 +7,9 @@ class Admin::PoliticiansController < Admin::AdminController
     @politician = Politician.find(params[:id])
     @keys = Politician.fields.keys.reject {|k| k.index("_") || k =~ /id$/}
   end
+
+  def search
+    @politicians = Politician.find(:all, :conditions => {:name => /#{params[:query]}/}).page(params[:page]).per(20)
+    render :action => 'index'
+  end
 end

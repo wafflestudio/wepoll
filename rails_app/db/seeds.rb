@@ -27,7 +27,7 @@ ommitted_names = []
 #==== 정치인 ====
 puts "-------- 18대 국회의원 생성중 --------"
 cnt = 0
-CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
+CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do |csv|
   district = csv[3]
   name = csv[4]
   printf "#{name}\t"
@@ -60,7 +60,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
   (p.save! ; ommitted_names << name ; next) if csv_file_path.nil?
   (p.save! ; ommitted_names << name ; next) if File.stat(csv_file_path).size == 0
 
-  CSV.foreach csv_file_path do |csv2|
+  CSV.foreach(csv_file_path, :encoding => "UTF-8")do |csv2|
     t = csv2[3].split("/").last.match(/\(.*\)$/)
     t = t.to_s
     p.elections = t.scan(/\d+/).map {|s| s.to_i}
@@ -74,7 +74,7 @@ puts "세부 프로필 빠진 사람 : #{ommitted_names.join(",")}"
 #==== 법안 ====
 c2 = 0
 puts "-------- 발의법안 처리중 --------"
-CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
+CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do |csv|
   name = csv[4]
   p = Politician.where(:name => name).first #XXX : 동명이인 어떻게 처리
   csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name}.csv")[0]
@@ -82,7 +82,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
   (puts "0개"; next) if csv_file_path.nil?
 
   law_count = 0
-  CSV.foreach csv_file_path do |csv2|
+  CSV.foreach(csv_file_path, :encoding => "UTF-8") do |csv2|
     number = csv2[2] #법안번호 (국회에서 쓰는것)
     code = csv2[3] #법안코드 (의안정보사이트 내에서 쓰는것)
     title = csv2[4] #법안제목

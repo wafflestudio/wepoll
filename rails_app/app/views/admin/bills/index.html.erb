@@ -1,22 +1,35 @@
-<table class="listing" cellpadding="0" cellspacing="0">
-  <tr>
-    <th>제목</th>
-    <th>대표발의</th>
-    <th>처리여부</th>
-    <th>처리결과</th>
-    <th>발의일자</th>
-    <th>처리일자</th>
-  </tr>
-<% @bills.each do |b| -%>
-  <tr>
-    <td><%= link_to b.title, admin_bill_path(b)%></td>
-    <td><%= b.initiator.name%></td>
-    <td><%= b.complete ? "의결" : "계류"%></td>
-    <td><%= b.result%></td>
-    <td><%= b.initiated_at.strftime("%Y.%m.%d")%></td>
-    <td><%= b.voted_at.strftime("%Y.%m.%d") unless b.voted_at.nil?%></td>
-  </tr>
-<% end -%>
-</table>
+<div class="top-bar">
+  <h1>법안 <small>(<%= Bill.count %>개)</small></h1>
+</div>
+
+<div class="select-bar">
+  <%= form_tag search_admin_bills_path, :method => 'get' do %>
+    <%= text_field_tag 'query', params[:query], :placeholder => '법안명입력' %>
+    <%= submit_tag '검색' %>
+  <% end-%>
+</div>
+
+<div class="table">
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <tr>
+      <th>제목</th>
+      <th>대표발의</th>
+      <th>처리여부</th>
+      <th>처리결과</th>
+      <th>발의일자</th>
+      <th>처리일자</th>
+    </tr>
+    <% @bills.each do |b| -%>
+      <tr>
+        <td><%= link_to b.title, admin_bill_path(b)%></td>
+        <td><%= b.initiator.name%></td>
+        <td><%= b.complete ? "의결" : "계류"%></td>
+        <td><%= b.result%></td>
+        <td><%= b.initiated_at.strftime("%Y.%m.%d")%></td>
+        <td><%= b.voted_at.strftime("%Y.%m.%d") unless b.voted_at.nil?%></td>
+      </tr>
+    <% end -%>
+  </table>
+</div>
 
 <%= paginate @bills%>

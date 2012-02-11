@@ -1,3 +1,8 @@
+/*
+ *= require_self
+ *= require_tree .
+*/
+
 /* main styles */
 body {
 	margin:0;

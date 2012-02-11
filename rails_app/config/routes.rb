@@ -4,8 +4,13 @@ Wepoll::Application.routes.draw do
     match 'login' => 'auth#login'
     match 'logout' => 'auth#logout'
     match 'authorize' => 'auth#authorize'
-    resources 'politicians'
-    resources 'bills'
+    resources 'politicians' do
+      get 'search', :as => 'search', :on => :collection
+    end
+    resources 'bills' do
+      get 'search', :as => 'search', :on => :collection
+    end
+    resources 'users'
   end
 
   devise_for :users, :controllers => {

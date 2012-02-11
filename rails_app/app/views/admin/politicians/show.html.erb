@@ -4,12 +4,13 @@
 
 <div class="table">
   <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr><th colspan="2">정치인 정보</th></tr>
     <% @keys.each_with_index do |k, i| -%>
       <tr>
         <td><strong><%= k%></strong></td>
-        <td><%= @politician.send k %></td>
+        <td style="text-align:left;"><%= v=(@politician.send k); v.class.to_s == 'Array' ? v.join(','): v %></td>
         <% if i == 0 -%>
-          <td rowspan="<%=@keys.count%>"><%= @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
+          <td style="width:110px;" rowspan="<%=@keys.count%>"><%= image_tag @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
         <% end -%>
       </tr>
     <% end -%>
