@@ -4,16 +4,19 @@
 
 <div class="table">
   <table class="listing form" cellpadding="0" cellspacing="0">
-    <% @keys.each do |k| -%>
+    <% @keys.each_with_index do |k, i| -%>
       <tr>
         <td><strong><%= k%></strong></td>
         <td><%= @politician.send k %></td>
+        <% if i == 0 -%>
+          <td rowspan="<%=@keys.count%>"><%= @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
+        <% end -%>
       </tr>
     <% end -%>
 
     <tr>
       <td><strong>대표발의법안들</strong></td>
-      <td>
+      <td colspan="2">
         <% @politician.initiate_bills.each do |b| -%>
           <%= link_to b.title, admin_bill_path(b) %><br />
         <% end -%>

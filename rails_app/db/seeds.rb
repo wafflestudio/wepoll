@@ -44,7 +44,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
     military = "면제#{csv[13]}"
   end
 
-  profile_photo_path = Dir.glob("init_data/profile_photos/#{name}*.jpg")[0]
+  profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| !(p.index name).nil?}[0]
 
   p = Politician.new(:name => name,
                      :party => party,
@@ -54,6 +54,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv") do |csv|
                      :district => district)
   cnt += 1
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
+  puts "#{name} photo doesn't exist" if profile_photo_path.nil?
 
   csv_file_path = Dir.glob("init_data/profile_csvs/csvs*/profile2_#{name}.csv")[0]
   (p.save! ; ommitted_names << name ; next) if csv_file_path.nil?

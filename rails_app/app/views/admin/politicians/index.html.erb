@@ -9,7 +9,7 @@
   </tr>
 <% @politicians.each do |p| -%>
   <tr>
-    <td><%= p.name%></td>
+    <td><%= link_to p.name, admin_politician_path(p)%></td>
     <td><%= p.birthday%></td>
     <td><%= p.district%></td>
     <td><%= p.party%></td>
