@@ -43,6 +43,10 @@ class User
 
   has_many :user_tokens, :dependent => :destroy
 
+  # tweet forum association
+  
+  has_many :tweet_replies
+
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token.extra.raw_info
 

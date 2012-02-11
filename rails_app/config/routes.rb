@@ -14,5 +14,6 @@ Wepoll::Application.routes.draw do
   match '/sns_verify/:user_id/:token_id/:key' => 'me/sns#verify_sns_link',
     :via => :get, :as => :sns_link_verify
 
+  match '/forum/:politician_id' => 'main#forum' , :as => :forum
   root :to => 'main#index'
 end

@@ -1,2 +1,7 @@
 <div class="column grid_16">
-asdf</div>
+  <% @politicians.each do |p| -%>
+    <%= link_to p.name, forum_path(p) %>
+  <% end -%>
+  asdf
+</div>
+

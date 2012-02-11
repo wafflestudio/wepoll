@@ -1,0 +1,13 @@
+<div class="grid_16 alpha omega">
+  <%= @politician.name %>
+  <%= image_tag @politician.profile_photo.url %>
+  <% @politician.tweets.each do |t| %>
+    <%= t.create_at %>
+    <%= t.content %>
+  <% end -%>
+
+  <% @politician.total_replies.each do |r| %>
+    <%= r.created_at %>
+    <%= r.content %>
+  <% end -%>
+</div>

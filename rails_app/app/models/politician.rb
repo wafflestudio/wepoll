@@ -14,6 +14,7 @@ class Politician #정치인 모델
   field :elections, type: Array #당선된 대수 ex : [15,16,18]
   field :election_count, type: Integer #NOTE:120210 데이터에는 당선횟수밖에 없어
   field :birthday, type: Date
+  field :tweet_name, type: String
 
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
@@ -27,4 +28,12 @@ class Politician #정치인 모델
   belongs_to :user
   # 법안관련
   has_many :initiate_bills, class_name: "Bill", inverse_of: :initiator
+
+  # 트윗 관련
+  has_many :tweets
+
+
+  def total_replies
+    self.tweets.map {|t| t.replies}.flatten
+  end
 end
