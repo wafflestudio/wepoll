@@ -1,0 +1,26 @@
+<div class="top-bar">
+  <h1><%= @politician.name %></h1>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <% @keys.each do |k| -%>
+      <tr>
+        <td><strong><%= k%></strong></td>
+        <td><%= @politician.send k %></td>
+      </tr>
+    <% end -%>
+
+    <tr>
+      <td><strong>대표발의법안들</strong></td>
+      <td>
+        <% @politician.initiate_bills.each do |b| -%>
+          <%= link_to b.title, admin_bill_path(b) %><br />
+        <% end -%>
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+

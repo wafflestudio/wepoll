@@ -1,0 +1,14 @@
+<h3>Model1</h3>
+<ul class="nav">
+  <li><%= link_to 'Menu', '#' %></li>
+</ul>
+
+<h3>Model2</h3>
+<ul class="nav">
+  <li><%= link_to 'Menu', '#' %></li>
+</ul>
+
+
+<% unless session[:admin].nil? -%>
+  <%= link_to 'Logout', admin_logout_path, :class => 'link' %>
+<% end -%>

@@ -1,4 +1,13 @@
 Wepoll::Application.routes.draw do
+  namespace :admin do
+    match '/' => 'admin#index'
+    match 'login' => 'auth#login'
+    match 'logout' => 'auth#logout'
+    match 'authorize' => 'auth#authorize'
+    resources 'politicians'
+    resources 'bills'
+  end
+
   devise_for :users, :controllers => {
     :omniauth_callbacks => "users/omniauth_callbacks",
     :registrations => "users/registrations",
