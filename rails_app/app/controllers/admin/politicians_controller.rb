@@ -49,6 +49,9 @@ class Admin::PoliticiansController < Admin::AdminController
 
   def update
     raise "hello"
+    params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
+    #XXX : elections가 확정적이 되면 이 필드는 필요없다
+    params[:politician][:election_count] = params[:politician][:elections].count
     @politician = Politician.find(params[:id])
 
     if @politician.update_attributes(params[:politician])
