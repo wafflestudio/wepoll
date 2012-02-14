@@ -411,3 +411,22 @@ div.actions {
   padding:15px 5px;
   text-align:right;
 }
+
+a.action {
+  padding:3px 0;
+  padding-left:18px;
+  margin:5px 5px;
+}
+
+a.action.edit {
+  background:url(/assets/admin/icn_edit.png) no-repeat 0 2px;
+}
+
+a.action.destroy {
+  background:url(/assets/admin/icn_trash.png) no-repeat 0 2px;
+}
+
+a.action.list {
+  background:url(/assets/admin/icn_categories.png) no-repeat 0 2px;
+}
+

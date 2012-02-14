@@ -17,6 +17,7 @@ class Bill #법안모델
   field :commitee, type: String #소관위원회
   field :code, type: String #의안정보사이트 likms.assembly.go.kr 에서 쓰는 법안 코드
   field :number, type: Integer #국회에서 쓰이는 법안 번호
+  field :summary, type: String
 
   #=== Association ===
   belongs_to :initiator, class_name: "Politician", inverse_of: :initiate_bills #대표발의자

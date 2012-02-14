@@ -27,5 +27,18 @@
         <% end -%>
       </td>
     </tr>
+
+    <tr>
+      <td><strong>주요내용</strong></td>
+      <td>
+        <%= simple_format @bill.summary %>
+      </td>
+    </tr>
   </table>
+</div>
+
+<div class="actions">
+  <%= link_to '편집', edit_admin_bill_path(@bill) %> | 
+  <%= link_to '삭제', admin_bill_path(@bill), :method => :delete, :confirm => '정말 삭제하시겠습니까?' %> | 
+  <%= link_to '목록', admin_bills_path %>
 </div>

@@ -4,6 +4,8 @@ Wepoll::Application.routes.draw do
     match 'login' => 'auth#login'
     match 'logout' => 'auth#logout'
     match 'authorize' => 'auth#authorize'
+    match 'new' => 'admin#new_admin', :via => :get
+    match 'create' => 'admin#create_admin', :via => :post
     resources 'politicians' do
       get 'search', :as => 'search', :on => :collection
     end
@@ -21,8 +23,10 @@ Wepoll::Application.routes.draw do
   end
 
   namespace :me do
-    match 'sns' => "sns#index"
+    match 'sns/' => "sns#index"
     match 'sns/link/:provider' => "sns#link", :as => :sns_link
+    match 'sns/mail_fail' => 'sns#mail_resend', :as => :sns_mail_resend
+
     match '/' => 'dashboard#index', :as => "dashboard"
   end
   match '/sns_verify/:user_id/:token_id/:key' => 'me/sns#verify_sns_link',

@@ -36,4 +36,22 @@ class Me::SnsController < ApplicationController
     session["link_sns"] = true
     redirect_to user_omniauth_authorize_path(params[:provider])
   end
+
+  def mail_resend
+    @token = current_user.user_tokens.where(:provider => params[:provider]).first
+  end
+
+  def send_sns_link_auth_mail
+    @token = UserToken.find(params[:token_id])
+    unless @token.nil?
+      Stalker.enqueue('email.send',
+                      :type => 'sns_link_auth',
+                      :token_id => @token.id)
+      flash[:notice] = "페이스북 연동 확인메일이 전송되었습니다."
+      redirect_to me_dashboard_path
+    else
+      flash[:error] = "토큰을 찾을수 없습니다. 오류"
+      redirect_to me_dashboard_path
+    end
+  end
 end

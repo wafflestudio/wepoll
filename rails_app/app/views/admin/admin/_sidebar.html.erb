@@ -10,5 +10,12 @@
 
 
 <% unless session[:admin].nil? -%>
-  <%= link_to 'Logout', admin_logout_path, :class => 'link' %>
+  <h3>
+    <%= image_tag '/assets/admin/icn_user.png', :style=>"padding-top:2px;" %>
+    <span style="margin-left:3px;"><%= session[:admin]%></span>
+  </h3>
+  <ul class="nav">
+    <li><%= link_to 'Logout', admin_logout_path%></li>
+    <li><%= link_to 'New Admin', admin_new_path%></li>
+  </ul>
 <% end -%>

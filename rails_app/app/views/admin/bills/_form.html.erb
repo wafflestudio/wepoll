@@ -1,0 +1,117 @@
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+      var coactors = $.parseJSON('<%=raw @coactors.to_json(:only => [:name, :_id, :party]) %>');
+      var initiator = $.parseJSON('<%=raw @initiator.to_json(:only => [:name, :_id, :party]) %>');
+      var dissenters = $.parseJSON('<%=raw @dissenters.to_json(:only => [:name, :_id, :party]) %>');
+      var supporters = $.parseJSON('<%=raw @supporters.to_json(:only => [:name, :_id, :party]) %>');
+
+    $(document).ready(function() {
+
+      $(".politician-name").tokenInput(
+        "<%= search_admin_politicians_path %>",
+        {
+          queryParam:"query", minChars:2,
+          theme:'facebook',
+          tokenValue:"_id",
+          propertyToSearch:"_id",
+          resultsFormatter:function(item) {
+            return "<li>"+ item.name + "("+ item.party +")"+"</li>";
+          },
+          tokenFormatter:function(item) {
+            return "<li><p>"+item.name+"</p></li>";
+          }
+        }
+      );
+
+      $("#bill_initiator_id").tokenInput("add", initiator);
+
+      for (var i in coactors) {
+        var o = coactors[i];
+        $("#bill_coactor_ids").tokenInput("add", o);
+      };
+
+      for (var i in supporters) {
+        var o = supporters[i];
+        $("#bill_supporter_ids").tokenInput("add", o);
+      };
+
+      for (var i in dissenters) {
+        var o = dissenters[i];
+        $("#bill_dissenter_ids").tokenInput("add", o);
+      };
+
+    });
+  </script>
+<% end -%>
+<%= form_for [:admin,@bill] do |f| -%>
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="full" colspan="2">법안정보입력</th>
+      </tr>
+      <tr>
+        <td><strong>법안명</strong></td>
+        <td><%= f.text_field :title%></td>
+      </tr>
+      <tr>
+        <td><strong>발의일자</strong></td>
+        <td><%= f.date_select :initiated_at%></td>
+      </tr>
+      <tr>
+        <td><strong>표결일자</strong></td>
+        <td><%= f.date_select :voted_at%></td>
+      </tr>
+      <tr>
+        <td><strong>표결여부</strong></td>
+        <td><%= f.select :complete, [["계류", false] , ["의결", true]]%></td>
+      </tr>
+      <tr>
+        <td><strong>소관위원회</strong></td>
+        <td><%= f.text_field :commitee%></td>
+      </tr>
+      <tr>
+        <td><strong>법안코드</strong></td>
+        <td><%= f.text_field :code%></td>
+      </tr>
+      <tr>
+        <td><strong>법안번호</strong></td>
+        <td><%= f.text_field :number%></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="full"><strong>주요내용</strong></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="full"><%= f.text_area :summary, :style => 'width:90%'%></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="full" colspan="2">의원정보입력</th>
+      </tr>
+      <tr>
+        <td><strong>대표발의자</strong></td>
+        <td><%= f.text_field :initiator_id, :class => 'politician-name' %>
+      </tr>
+      <tr>
+        <td><strong>공동발의자</strong></td>
+        <td><%= f.text_field :coactor_ids, :class => 'politician-name' %>
+      </tr>
+      <tr>
+        <td><strong>찬성의원</strong></td>
+        <td><%= f.text_field :supporter_ids, :class => 'politician-name' %>
+      </tr>
+      <tr>
+        <td><strong>반대의원</strong></td>
+        <td><%= f.text_field :dissenter_ids, :class => 'politician-name' %>
+      </tr>
+
+    </table>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag '확인' %>
+  </div>
+<% end -%>

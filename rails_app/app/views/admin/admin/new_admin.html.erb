@@ -1,0 +1,26 @@
+<div class="top-bar">
+  <h1>새 관리자 추가</h1>
+</div>
+
+<%= form_tag admin_create_path do %>
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr><th colspan="2">정보입력</th></tr>
+      <tr>
+        <td><strong>ID</strong></td>
+        <td><%=text_field_tag 'admin_id', nil,:class => 'text'%></td>
+      </tr>
+      <tr>
+        <td><strong>비밀번호</strong></td>
+        <td><%=password_field_tag 'password', nil,:class => 'text'%></td>
+      </tr>
+      <tr>
+        <td><strong>비밀번호확인</strong></td>
+        <td><%=password_field_tag 'password_confirm', nil,:class => 'text'%></td>
+      </tr>
+    </table>
+    <div class="select">
+      <%= submit_tag '확인' %>
+    </div>
+  </div>
+<% end -%>

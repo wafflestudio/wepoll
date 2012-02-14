@@ -149,7 +149,8 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
                  :number => number,
                  :code => code,
                  :coactors => coactors,
-                 :initiator => p)
+                 :initiator => p,
+                 :summary => summary)
     b.voted_at = Date.parse(complete_date) unless (complete_date.nil? || complete_date.length == 0)
     b.save!
     law_count += 1
