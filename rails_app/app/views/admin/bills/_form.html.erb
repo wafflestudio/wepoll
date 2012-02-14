@@ -1,11 +1,10 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
+    $(document).ready(function() {
       var coactors = $.parseJSON('<%=raw @coactors.to_json(:only => [:name, :_id, :party]) %>');
       var initiator = $.parseJSON('<%=raw @initiator.to_json(:only => [:name, :_id, :party]) %>');
       var dissenters = $.parseJSON('<%=raw @dissenters.to_json(:only => [:name, :_id, :party]) %>');
       var supporters = $.parseJSON('<%=raw @supporters.to_json(:only => [:name, :_id, :party]) %>');
-
-    $(document).ready(function() {
 
       $(".politician-name").tokenInput(
         "<%= search_admin_politicians_path %>",

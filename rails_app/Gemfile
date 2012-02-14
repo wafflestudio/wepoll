@@ -43,6 +43,7 @@ gem "less"
 
 # for file attachment
 gem 'mongoid-paperclip', :require => "mongoid_paperclip"
+gem 'stalker'
 
 #group :development do
 #  gem 'linecache19', '0.5.13'

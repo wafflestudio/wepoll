@@ -39,6 +39,40 @@ class Admin::PoliticiansController < Admin::AdminController
     end
   end
 
+  def new
+    @politician = Politician.new
+  end
+
+  def edit
+    @politician = Politician.find(params[:id])
+  end
+
+  def update
+    raise "hello"
+    @politician = Politician.find(params[:id])
+
+    if @politician.update_attributes(params[:politician])
+      render admin_politician_path(@politician)
+    else
+      render edit_admin_politician_path(@politician)
+    end
+  end
+
+  def create
+    @politician = Politician.new(params[:politician])
+    if @politician.save
+      redirect_to admin_politician_path(@politician)
+    else
+      render new_admin_politician_path
+    end
+  end
+
+  def destroy
+    @politician = Politician.find(params[:id])
+    @politician.destroy
+    redirect_to admin_politicians_path
+  end
+
   def search
     @politicians = Politician.find(:all, :conditions => {:name => /#{params[:query]}/}).page(params[:page]).per(20)
     Rails.logger.info @politicians.count
@@ -47,5 +81,12 @@ class Admin::PoliticiansController < Admin::AdminController
       format.html {render :action => 'index'}
       format.js {render :json => @politicians.to_json(:only => [:_id, :name, :party])}
     end
+  end
+
+  def upload_photo
+    tmp_file_name = (0...8).map{ ('a'..'z').to_a[rand(26)] }.join + "_" + Time.now.to_i.to_s
+    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
+    FileUtils.copy(Paperclip::Thumbnail.new(params[:data], :geometry => params[:geometry]).make, Rails.root + "public/" + "#{tmp_file_name}_thumb")
+    render :text => {:file_name => tmp_file_name, :thumb_url => "/#{tmp_file_name}_thumb"}.to_json
   end
 end

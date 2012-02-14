@@ -1,0 +1,121 @@
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#politician_party").tokenInput(
+        [{name:"민주통합당"}, {name:"새누리당"}, {name:"한나라당"}, {name:"통합진보당"}],
+        {
+          tokenValue:"name",
+          propertyToSearch:"name",
+          tokenLimit:1,
+          theme:'facebook'
+        }
+      );
+      $("#politician_district").tokenInput(
+        //TODO : 밑에 정리좀...ㅜㅜ
+        [{name:"노원구갑"},{name:"노원구병"},{name:"용산구"},{name:"남구갑"},{name:"부천시소사구"},{name:"파주시"},
+        {name:"춘천시"},{name:"홍천군횡성군"},{name:"북구강서구을"},{name:"사하구갑"},{name:"밀양시창녕군"},
+        {name:"강북구을"},{name:"부평구을"},{name:"남양주시갑"},{name:"태백시영월군평창군정선군"},{name:"청주시상당구"},
+        {name:"순천시"},{name:"홍성군예산군"},{name:"비례대표03"},{name:"수성구갑"},{name:"영천시"},{name:"달서구병"},
+        {name:"의령군함안군합천군"},{name:"수성구을"},{name:"비례대표19"},{name:"동구"},{name:"영등포구갑"},{name:"강북구갑"},
+        {name:"동해시삼척시"},{name:"이천시여주군"},{name:"비례대표22"},{name:"서구"},{name:"익산시을"},{name:"도지사"},
+        {name:"김제시완주군"},{name:"진안군무주군장수군임실군"},{name:"철원군화천군양구군인제군"},{name:"성북구갑"},
+        {name:"포항시남구울릉군"},{name:"비례대표21"},{name:"동대문구을"},{name:"비례대표20"},{name:"종로구"},
+        {name:"서대문구을"},{name:"남동구을"},{name:"고흥군보성군"},{name:"중랑구을"},{name:"연수구"},{name:"부평구갑"},
+        {name:"중구동구"},{name:"구리시"},{name:"광명시을"},{name:"부여군청양군"},{name:"송파구갑"},{name:"구로구갑"},
+        {name:"은평구을"},{name:"진주시갑"},{name:"서구강화군갑"},{name:"김포시"},{name:"성남시분당구갑"},{name:"서초구갑"},
+        {name:"부산진구갑"},{name:"안성시"},{name:"성동구갑"},{name:"비례대표08"},{name:"부천시원미구갑"},{name:"남동구갑"},
+        {name:"비례대표16"},{name:"충주시"},{name:"시흥시을"},{name:"안산시단원구을"},{name:"비례대표17"},{name:"비례대표11"},
+        {name:"경산시청도군"},{name:"포항시북구"},{name:"성남시분당구을"},{name:"중구"},{name:"양산시"},{name:"동작구을"},
+        {name:"남구을"},{name:"송파구을"},{name:"안산시상록구갑"},{name:"강릉시"},{name:"가평군양평군"},{name:"관악구갑"},
+        {name:"영주시"},{name:"강동구을"},{name:"김천시"},{name:"제천시단양군"},{name:"사상구"},{name:"강남구갑"},{name:"수영구"},
+        {name:"부산진구을"},{name:"용인시수지구"},{name:"달서구을"},{name:"강동구갑"},{name:"비례대표07"},{name:"영도구"},
+        {name:"수원시권선구"},{name:""},{name:"비례대표14"},{name:"통영시고성군"},{name:"광진구갑"},{name:"비례대표06"},
+        {name:"비례대표15"},{name:"비례대표10"},{name:"도봉구갑"},{name:"달성군"},{name:"비례대표18"},{name:"광진구을"},
+        {name:"안산시단원구갑"},{name:"여수시을"},{name:"남원시순창군"},{name:"수원시영통구"},{name:"서구갑"},{name:"의정부시갑"},
+        {name:"비례대표12"},{name:"나주시화순군"},{name:"부천시오정구"},{name:"광산구을"},{name:"전주시완산구을"},{name:"안산시상록구을"},
+        {name:"비례대표02"},{name:"목포시"},{name:"전주시완산구갑"},{name:"남구"},{name:"광주시"},{name:"안양시동안구갑"},
+        {name:"증평군진천군괴산군음성군"},{name:"비례대표13"},{name:"보은군옥천군영동군"},{name:"논산시계룡시금산군"},{name:"유성구"},
+        {name:"비례대표04"},{name:"강서구갑"},{name:"영등포구을"},{name:"수원시팔달구"},{name:"노원구을"},{name:"용인시기흥구"},
+        {name:"중구동구옹진군"},{name:"강남구을"},{name:"동구갑"},{name:"달서구갑"},{name:"고양시일산서구"},{name:"북구을"},{name:"북구갑"},
+        {name:"북구강서구갑"},{name:"성동구을"},{name:"고양시일산동구"},{name:"화성시을"},{name:"고령군성주군칠곡군"},{name:"경주시"},
+        {name:"해운대구기장군갑"},{name:"안동시"},{name:"강서구을"},{name:"성남시중원구"},{name:"고양시덕양구갑"},{name:"의왕시과천시"},
+        {name:"마산시갑"},{name:"마산시을"},{name:"남해군하동군"},{name:"상주시"},{name:"안양시동안구을"},{name:"포천시연천군"},
+        {name:"진주시을"},{name:"동구을"},{name:"산청군함양군거창군"},{name:"구미시갑"},{name:"평택시갑"},{name:"창원시갑"},{name:"울주군"},
+        {name:"비례대표01"},{name:"서초구을"},{name:"성남시수정구"},{name:"천안시을"},{name:"진해시"},{name:"비례대표"},{name:"양천구갑"},
+        {name:"화성시갑"},{name:"성북구을"},{name:"비례대표05"},{name:"비례대표09"},{name:"금정구"},{name:"중랑구갑"},{name:"중구남구"},
+        {name:"문경시예천군"},{name:"서구강화군을"},{name:"양주시동두천시"},{name:"영양군영덕군봉화군울진군"},{name:"구미시을"},{name:"금천구"},
+        {name:"마포구갑"},{name:"마포구을"},{name:"해운대구기장군을"},{name:"연제구"},{name:"속초시고성군양양군"},{name:"청원군"},
+        {name:"의정부시을"},{name:"거제시"},{name:"정읍시"},{name:"동작구갑"},{name:"안양시만안구"},{name:"원주시"},{name:"하남시"},
+        {name:"무안군신안군"},{name:"구로구을"},{name:"군산시"},{name:"담양군곡성군구례군"},{name:"북구"},{name:"청주시흥덕구을"},
+        {name:"평택시을"},{name:"함평군영광군장성군"},{name:"남양주시을"},{name:"제주시을"},{name:"청주시흥덕구갑"},{name:"군위군의성군청송군"},
+        {name:"부천시원미구을"},{name:"송파구병"},{name:"장흥군강진군영암군"},{name:"해남군완도군진도군"},{name:"계양구을"},{name:"광명시갑"},
+        {name:"광산구갑"},{name:"군포시"},{name:"천안시갑"},{name:"광양시"},{name:"익산시갑"},{name:"관악구을"},{name:"시흥시갑"},
+        {name:"은평구갑"},{name:"전주시덕진구"},{name:"도봉구을"},{name:"여수시갑"},{name:"서귀포시"},{name:"서구을"},{name:"수원시장안구"},
+        {name:"창원시을"},{name:"사천시"},{name:"제주시갑"},{name:"용인시처인구"},{name:"아산시"},{name:"서산시태안군"},{name:"공주시연기군"},
+        {name:"김해시갑"},{name:"양천구을"},{name:"당진군"},{name:"계양구갑"},{name:"오산시"},{name:"대덕구"},{name:"김해시을"},{name:"사하구을"},
+        {name:"동대문구갑"},{name:"보령시서천군"},{name:"서대문구갑"},{name:"고창군부안군"},{name:"동래구"},{name:"고양시덕양구을"}
+        ],
+        {
+          tokenValue:"name",
+          propertyToSearch:"name",
+          tokenLimit:1,
+          theme:'facebook'
+        }
+      );
+
+      <% if @politician.district -%>
+        $("#politician_district").tokenInput("add",
+        {name:"<%= @politician.district %>"});
+      <% end -%>
+
+      <% if @politician.party -%>
+        $("#politician_party").tokenInput("add",
+        {name:"<%= @politician.party %>"});
+      <% end -%>
+
+      $("#politician_profile_photo").photoUpload({
+        uploadAction:"<%= upload_photo_admin_politicians_path %>",
+        imgWidth:100,
+        imgHeight:100,
+        placeholder_img_src:
+        '<%= @politician.profile_photo? ? @politician.profile_photo.url(:square100) : "http://placehold.it/100x100"  %>',
+        field_name:"data",
+        optional_parameters:{geometry:"100x100#",authenticity_token:"<%= form_authenticity_token %>"}
+      });
+
+    });
+  </script>
+<% end -%>
+<%= form_for [:admin, @politician] do |f| -%>
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="full" colspan="2">정치인정보입력</th>
+      </tr>
+      <tr>
+        <td><strong>이름</strong></td>
+        <td><%= f.text_field :name %></td>
+      </tr>
+      <tr>
+        <td><strong>정당</strong></td>
+        <td><%= f.text_field :party %></td>
+      </tr>
+      <tr>
+        <td><strong>지역구</strong></td>
+        <td><%= f.text_field :district %></td>
+      </tr>
+      <tr>
+        <td><strong>생년월일</strong></td>
+        <td><%= f.date_select :birthday%></td>
+      </tr>
+      <tr>
+        <td><strong>사진</strong></td>
+        <td><%= f.file_field :profile_photo %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="actions">
+    <%= f.submit '확인'%>
+  </div>
+<% end -%>

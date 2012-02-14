@@ -1,6 +1,7 @@
 #coding:utf-8
 class Bill #법안모델
   include Mongoid::Document
+  include Mongoid::MultiParameterAttributes
 
   RESULT_APPROVED = "approved" #가결
   RESULT_REJECTED = "rejected" #부결

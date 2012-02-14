@@ -8,6 +8,7 @@ Wepoll::Application.routes.draw do
     match 'create' => 'admin#create_admin', :via => :post
     resources 'politicians' do
       get 'search', :as => 'search', :on => :collection
+      post 'upload_photo', :as => 'upload_photo', :on => :collection
     end
     resources 'bills' do
       get 'search', :as => 'search', :on => :collection

@@ -24,7 +24,7 @@ class Admin::BillsController < Admin::AdminController
 
   def show
     @bill = Bill.find(params[:id])
-    @keys = Bill.fields.keys.reject {|k| k.index("_") || k =~ /ids$/ || k == 'summary'}
+    @keys = Bill.fields.keys.reject {|k| k =~ /^_/ || k =~ /id[s]?$/ || k == 'summary'}
 
     respond_to do |format|
       format.html
@@ -43,6 +43,9 @@ class Admin::BillsController < Admin::AdminController
   end
 
   def create
+    params[:bill][:coactor_ids] = params[:bill][:coactor_ids].split(",")
+    params[:bill][:supporter_ids] = params[:bill][:coactor_ids].split(",")
+    params[:bill][:dissenter_ids] = params[:bill][:coactor_ids].split(",")
     @bill = Bill.new(params[:bill])
 
     if @bill.save
@@ -62,7 +65,9 @@ class Admin::BillsController < Admin::AdminController
   end
 
   def update
-    raise "hello"
+    params[:bill][:coactor_ids] = params[:bill][:coactor_ids].split(",")
+    params[:bill][:supporter_ids] = params[:bill][:coactor_ids].split(",")
+    params[:bill][:dissenter_ids] = params[:bill][:coactor_ids].split(",")
     @bill = Bill.find(params[:id])
     if @bill.update_attributes(params[:bill])
       redirect_to admin_bill_path(@bill)
