@@ -15,5 +15,14 @@ Wepoll::Application.routes.draw do
     :via => :get, :as => :sns_link_verify
 
   match '/forum/:politician_id' => 'main#forum' , :as => :forum
+  resources :tweets do
+    match '/recommend' => 'tweets#recommend', :as => :recommend
+    match '/opposite' => 'tweets#opposite', :as => :opposite
+  end
+  resources :tweet_replies do
+    match '/recommend' => 'tweet_replies#recommend', :as => :recommend
+    match '/opposite' => 'tweet_replies#opposite', :as => :opposite
+    match '/report' => 'tweet_replies#report', :as => :report
+  end
   root :to => 'main#index'
 end
