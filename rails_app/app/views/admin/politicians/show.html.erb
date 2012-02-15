@@ -1,0 +1,36 @@
+<div class="top-bar">
+  <h1><%= @politician.name %></h1>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr><th colspan="2">정치인 정보</th></tr>
+    <% @keys.each_with_index do |k, i| -%>
+      <tr>
+        <td><strong><%= k%></strong></td>
+        <td style="text-align:left;"><%= v=(@politician.send k); v.class.to_s == 'Array' ? v.join(','): v %></td>
+        <% if i == 0 -%>
+          <td style="width:110px;" rowspan="<%=@keys.count%>"><%= image_tag @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
+        <% end -%>
+      </tr>
+    <% end -%>
+
+    <tr>
+      <td><strong>대표발의법안들</strong></td>
+      <td colspan="2">
+        <% @politician.initiate_bills.each do |b| -%>
+          <%= link_to b.title, admin_bill_path(b) %><br />
+        <% end -%>
+      </td>
+    </tr>
+
+  </table>
+</div>
+
+<div class="actions">
+  <%= link_to '목록' , admin_politicians_path, :class => 'action list' %> | 
+  <%= link_to '수정' , edit_admin_politician_path(@politician), :class => 'action edit' %> | 
+  <%= link_to '삭제' , admin_politician_path(@politician), :method => 'delete', :confirm => '정말 삭제하시겠습니까?', :class => 'action destroy' %>
+</div>
+
+

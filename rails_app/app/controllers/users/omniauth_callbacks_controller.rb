@@ -1,4 +1,5 @@
 #coding : utf-8
+require 'stalker'
 class Users::OmniauthCallbacksController < ApplicationController
   def facebook
     @user = User.find_for_facebook_oauth(request.env["omniauth.auth"], current_user)
@@ -20,7 +21,9 @@ class Users::OmniauthCallbacksController < ApplicationController
           :approve_key => SecureRandom.hex, :approve_expire_at => 2.hour.from_now.to_i
         )
 
-        AuthMailer.link_sns_verification(fb_token).deliver
+        Stalker.enqueue('email.send',
+                        :type => 'sns_link_auth',
+                        :token_id => fb_token.id)
         flash[:notice] = "페이스북 연동 확인메일이 전송되었습니다."
 
         session.delete "link_sns"
@@ -50,8 +53,10 @@ class Users::OmniauthCallbacksController < ApplicationController
           :access_token => token, :access_token_secret => secret,
           :approve_key => SecureRandom.hex, :approve_expire_at => 2.hour.from_now.to_i
         )
+        Stalker.enqueue('email.send',
+                        :type => 'sns_link_auth',
+                        :token_id => tw_token.id)
         flash[:notice] = "트위터 연동 확인메일이 전송되었습니다."
-        AuthMailer.link_sns_verification(tw_token).deliver
         redirect_to me_dashboard_path
       else
         #see http://stackoverflow.com/questions/7117200/devise-for-twitter-cookie-overflow-error

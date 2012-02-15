@@ -1,0 +1,44 @@
+<div class="top-bar">
+  <h1><%= @bill.title %></h1>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">법안정보</th>
+    </tr>
+    <% @keys.each do |k| -%>
+      <tr>
+        <td><strong><%= k%></strong></td>
+        <td><%= @bill.send k %></td>
+      </tr>
+    <% end -%>
+
+    <tr>
+      <td><strong>발의의원</strong></td>
+      <td><%= link_to @bill.initiator.name, admin_politician_path(@bill.initiator)%></td>
+    </tr>
+
+    <tr>
+      <td><strong>공동발의자</strong></td>
+      <td>
+        <% @bill.coactors.each do |p2| -%>
+          <%= link_to(p2.name, admin_politician_path(p2)) %>
+        <% end -%>
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>주요내용</strong></td>
+      <td>
+        <%= simple_format @bill.summary %>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="actions">
+  <%= link_to '목록', admin_bills_path, :class => 'action list' %> | 
+  <%= link_to '편집', edit_admin_bill_path(@bill), :class => 'action edit' %> | 
+  <%= link_to '삭제', admin_bill_path(@bill), :method => :delete, :confirm => '정말 삭제하시겠습니까?', :class => 'action destroy' %>
+</div>

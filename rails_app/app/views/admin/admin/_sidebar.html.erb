@@ -1,0 +1,21 @@
+<h3>Politicians</h3>
+<ul class="nav">
+  <li><%= link_to '모두보기', admin_politicians_path %></li>
+</ul>
+
+<h3>Bills</h3>
+<ul class="nav">
+  <li><%= link_to '모두보기', admin_bills_path %></li>
+</ul>
+
+
+<% unless session[:admin].nil? -%>
+  <h3>
+    <%= image_tag '/assets/admin/icn_user.png', :style=>"padding-top:2px;" %>
+    <span style="margin-left:3px;"><%= session[:admin]%></span>
+  </h3>
+  <ul class="nav">
+    <li><%= link_to 'Logout', admin_logout_path%></li>
+    <li><%= link_to 'New Admin', admin_new_path%></li>
+  </ul>
+<% end -%>

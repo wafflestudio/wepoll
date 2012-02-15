@@ -11,8 +11,7 @@
  *= require_self
  *= require reset
  *= require 1024_16_8_8
- *= require clearfix
- *= require_tree .
+ *= require_tree . exclude: "admin"
 */
 
 /* below css is for debugging, DO NOT ADD OTHER LINES  */

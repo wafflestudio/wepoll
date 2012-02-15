@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="ko">
+    <%= javascript_include_tag "admin/admin" %>
+    <%= stylesheet_link_tag "admin/admin"%>
+
+    <%= yield :scripts %>
+
+    <%= csrf_meta_tags %>
+</head>
+<body>
+    <div id="main">
+        <div id="header">
+          <%= link_to image_tag("/assets/admin/logo.png", :style => "width:143px;height:59px;"), admin_path, :class => 'logo' %>
+            <ul id="top-navigation">
+                <li><%= link_to 'Dashboard', admin_path, :class => params[:controller] == 'admin/admin'?"active":""%></li>
+                <li><%= link_to 'Politician', admin_politicians_path, :class => params[:controller]=='admin/politicians'?"active":"" %></li>
+                <li><%= link_to 'Bill', admin_bills_path, :class => params[:controller]=='admin/bills'?"active":"" %></li>
+                <li><%= link_to 'User', admin_users_path, :class => params[:controller]=='admin/users'?"active":"" %></li>
+            </ul>
+        </div>
+        <div id="middle">
+            <div id="left-column">
+              <%= render :partial => 'sidebar' %>
+                <%#= yield :sidebar %>
+                <!-- <a href="#" class="link">Link here</a>
+                <a href="#" class="link">Link here</a> -->
+            </div>
+            <div id="center-column">
+              <%= yield %>
+            </div>
+            <div id="right-column">
+                <strong class="h">Quick Info</strong>
+                <div class="box">This is your admin home page. It will give you access to all things within the back end system that you will need to facilitate a smooth operation.</div>
+            </div>
+        </div>
+        <div id="footer"><p>Developed by <a href="http://twitter.com/umutm">Umut Muhaddisoglu</a> 2008. Updated for HTML5/CSS3 by <a href="http://mediagearhead.com">Giles Wells</a> 2010.</p></div>
+    </div>
+</body>
+</html>

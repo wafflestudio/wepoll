@@ -1,6 +1,6 @@
 development:
   host: localhost
-  database: wepoll_development
+  database: drh_wepoll_development
 
 test:
   host: localhost
