@@ -1,10 +1,8 @@
 #coding : utf-8
 require 'csv'
 require 'mongoid'
-require 'iconv'
 require 'nokogiri'
 
-=begin
 period = {}
 period[1]  = [Date.parse("1948.5.31"),Date.parse("1950.5.30")]
 period[2]  = [Date.parse("1950.5.31"),Date.parse("1954.5.30")]
@@ -160,13 +158,11 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
   end
   puts "#{law_count}개"
 end
-=end
 
 #==== 법안에 대한 찬성 반대 ====
+#==== 반대는 raw data에 없어서 구현이 안됨
 puts "법안에 대한 찬성 반대 입력 중"
 puts "=============================\n"
-
-iconv = Iconv.new("utf-8", "euc-kr")
 
 File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
   file_name = line.sub("\n", "") + ".html"
@@ -174,11 +170,14 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
   if File.exists? Rails.root + "raw_data/law_coactors_#{file_name}"
     puts "\n파일명...law_coactors_#{file_name}"
 
-    raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_coactors_#{file_name}").read.encode("euc-kr"))
-    detail_raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_detail_#{file_name}").read.encode("euc-kr"))
-    #raw_data = File.open(Rails.root + "raw_data/law_coactors_#{file_name}", "r")
+    #raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_coactors_#{file_name}").read.encode("euc-kr"))
+    #detail_raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_detail_#{file_name}").read.encode("euc-kr")) # coactors에서 법안명을 가져올 수가 없어서 detail 사용
+    raw_data = File.open(Rails.root + "raw_data/law_coactors_#{file_name}").read
+    detail_raw_data = File.open(Rails.root + "raw_data/law_detail_#{file_name}").read
+
     doc = Nokogiri::HTML(raw_data)
     detail_doc = Nokogiri::HTML(detail_raw_data)
+
     agenda = detail_doc.xpath("html/body/table[2]/tbody/tr[2]/td[1]/table[1]/tbody/tr[3]/td[2]/table/tbody/tr[1]/td[1]").inner_text.strip
 
     bill = Bill.where(title: agenda.to_s).first
@@ -187,13 +186,8 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
       puts "안건...#{agenda}...존재하지않습니다."
     else
       puts "안건...#{bill.title}\n"
-=begin
-  i = 0
-  while !(share_member = doc.xpath("html/body/table[2]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[1]").children[i].children[0].to_s).nil?
-    i += 1
-    bill.coactors << share_member 
-  end
-=end
+
+      #===찬성 명단
       i = 1
       j = 1
       puts "====== 찬성 명단 ======"
@@ -202,8 +196,8 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
           agree_member = doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[#{i}]").inner_text.to_s
           member = Politician.where(name: agree_member).first
           if !member.nil?
-            puts "...의원...#{member.name}"
-            bill.dissenters << Politician.where(name: agree_member).first
+            puts ":..의원...#{member.name}"
+            bill.supporters << Politician.where(name: agree_member).first
           end
           i += 1
         end
