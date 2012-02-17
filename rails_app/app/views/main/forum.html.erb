@@ -4,10 +4,15 @@
   <% @politician.tweets.each do |t| %>
     <%= t.create_at %>
     <%= t.content %>
+    <%= link_to tweet_recommend_path(t) %>
+    <%= link_to tweet_opposite_path(t) %>
   <% end -%>
 
   <% @politician.total_replies.each do |r| %>
     <%= r.created_at %>
     <%= r.content %>
+    <%= link_to tweet_reply_recommend_path(r) %>
+    <%= link_to tweet_reply_opposite_path(r) %>
+    <%= link_to tweet_reply_report_path(r) %>
   <% end -%>
 </div>

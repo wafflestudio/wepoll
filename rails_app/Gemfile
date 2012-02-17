@@ -36,6 +36,9 @@ gem 'rspec'
 gem 'kaminari'
 gem 'nokogiri'
 
+# twitter gem
+gem 'twitter'
+
 #bootstrap for scaffolding
 gem 'twitter-bootstrap-rails', :group => :assets
 #gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git", :branch => "static"

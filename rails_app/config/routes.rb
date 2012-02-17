@@ -43,5 +43,6 @@ Wepoll::Application.routes.draw do
     match '/opposite' => 'tweet_replies#opposite', :as => :opposite
     match '/report' => 'tweet_replies#report', :as => :report
   end
+  match "/search" => "main#search"
   root :to => 'main#index'
 end

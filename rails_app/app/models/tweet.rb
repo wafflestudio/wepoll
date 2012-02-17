@@ -1,8 +1,8 @@
 class Tweet
   include Mongoid::Document
-  include Mongoid::Timestamps
 
   field :content, type: String
+  field :created_at, type: DateTime
 
   field :recommend_count, type: Integer, default: 0       # 추천
   field :opposite_count, type: Integer, default: 0        # 반대
