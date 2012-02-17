@@ -46,11 +46,11 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
   end
 
   profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name}[0]
-  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
-    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
-      tweet_name = tw[9]
-    end
-  end
+#  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
+#    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
+#      tweet_name = tw[9]
+#    end
+#  end
 
   p = Politician.new(:name => name,
                      :party => party,
