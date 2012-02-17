@@ -1,32 +1,9 @@
 <div class="search_result">
+  <script type="text/javascript">
+    var search_source = [<%= "'"+(@name + @dong + @district).join("','")+"'" %>]
+    $("input#query").autocomplete({delay: 0, source: search_source});
+  </script>
   <% if @name.empty? && @district.empty? && @dong.empty? %>
     <h3>'<%= @query %>'에 대한 검색결과가 없습니다.</h3>
-  <% else %>
-    <ul>
-      <% if !@name.empty? %>
-        <li>
-        <h3>국회의원 이름</h3>
-        <% @name.each do |name| %>
-          <li><%= "#{name[0]}(#{name[1]})" %></li>
-        <% end %>
-        </li>
-      <% end %>
-      <% if !@district.empty? %>
-        <li>
-        <h3>지역구</h3>
-        <% @district.each do |district| %>
-          <li><%= "#{district[0]}(#{district[1]})" %></li>
-        <% end %>
-        </li>
-      <% end %>
-      <% if !@dong.empty? %>
-        <li>
-        <h3>행정동</h3>
-        <% @dong.each do |dong| %>
-          <li><%= "#{dong[0]}(#{dong[1]}, #{dong[2]})" %></li>
-        <% end %>
-        </li>
-      <% end %>
-    </ul>
   <% end %>
 </div>

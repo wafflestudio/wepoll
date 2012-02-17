@@ -23,14 +23,20 @@ class MainController < ApplicationController
 
       CSV.foreach(Rails.root + "district.csv", :encoding => "UTF-8") do |csv|
         if !csv[0].to_s.match(params[:query].to_s).nil?
-          @district << [csv[0], csv[1]]
+#          @district << [csv[0], csv[1]]
+#          @district << ["#{csv[0]}(#{csv[1]})"]
+           @district << [csv[0]]
         end
         if !csv[1].to_s.match(params[:query].to_s).nil?
-          @name << [csv[1], csv[0]]
+          #@name << [csv[1], csv[0]]
+          #@name << ["#{csv[1]}(#{csv[0]})"]
+          @name << [csv[1]]
         end
         csv[3].split(" ").each do |dong|
           if !dong.to_s.match(params[:query].to_s).nil?
-            @dong << [dong, csv[0], csv[1]]
+            #@dong << [dong, csv[0], csv[1]]
+            #@dong << ["#{dong}(#{csv[0]}, #{csv[1]})"]
+            @dong << [dong]
           end
         end
       end
