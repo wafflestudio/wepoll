@@ -57,8 +57,8 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
                      :election_count => count,
                      :birthday => birth,
                      :military => military,
-                     :district => district
-                     :tweet_name => tweet_name)
+                     :district => district)
+#                     :tweet_name => tweet_name)
   cnt += 1
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
   puts "#{name} photo doesn't exist" if profile_photo_path.nil?
