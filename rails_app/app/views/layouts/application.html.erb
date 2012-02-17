@@ -48,6 +48,14 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
-
+    <script type="text/javascript">
+      $('#main-search-bar').keyup(function() {
+          $.post('/search', { query: $('#query').val() }, function(html) {
+              $('.search_result').remove();
+              $(html).appendTo('.result_field');
+              return true;
+            });
+      });
+    </script>
   </body>
 </html>

@@ -34,5 +34,6 @@ Wepoll::Application.routes.draw do
     :via => :get, :as => :sns_link_verify
 
   match '/forum/:politician_id' => 'main#forum' , :as => :forum
+  match "/search" => "main#search"
   root :to => 'main#index'
 end
