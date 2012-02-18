@@ -46,19 +46,21 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
   end
 
   profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name}[0]
-#  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
-#    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
-#      tweet_name = tw[9]
-#    end
-#  end
+
+  tweet_name = nil
+  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
+    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
+      tweet_name = tw[9].slice(19..-1) unless tw[9].nil?
+    end
+  end
 
   p = Politician.new(:name => name,
                      :party => party,
                      :election_count => count,
                      :birthday => birth,
                      :military => military,
-                     :district => district)
-#                     :tweet_name => tweet_name)
+                     :district => district,
+                     :tweet_name => tweet_name)
   cnt += 1
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
   puts "#{name} photo doesn't exist" if profile_photo_path.nil?
@@ -76,7 +78,6 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
 end
 puts "\n총 #{cnt}명"
 puts "세부 프로필 빠진 사람 : #{ommitted_names.join(",")}"
-
 
 #==== 법안 ====
 c2 = 0

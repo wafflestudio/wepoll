@@ -34,6 +34,6 @@ class Politician #정치인 모델
 
 
   def total_replies
-    self.tweets.map {|t| t.replies}.flatten
+    self.tweets.map {|t| t.tweet_replies}.flatten
   end
 end

@@ -34,9 +34,12 @@ Wepoll::Application.routes.draw do
     :via => :get, :as => :sns_link_verify
 
   match '/forum/:politician_id' => 'main#forum' , :as => :forum
+  match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
+
   resources :tweets do
     match '/recommend' => 'tweets#recommend', :as => :recommend
     match '/opposite' => 'tweets#opposite', :as => :opposite
+    post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend
