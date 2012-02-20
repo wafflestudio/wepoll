@@ -1,4 +1,6 @@
 Wepoll::Application.routes.draw do
+  resources :timeline_entries
+
   namespace :admin do
     match '/' => 'admin#index'
     match 'login' => 'auth#login'
@@ -46,6 +48,8 @@ Wepoll::Application.routes.draw do
     match '/opposite' => 'tweet_replies#opposite', :as => :opposite
     match '/report' => 'tweet_replies#report', :as => :report
   end
+
+
   match "/search" => "main#search"
   root :to => 'main#index'
 end
