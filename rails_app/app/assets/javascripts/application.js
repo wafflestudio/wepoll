@@ -12,4 +12,28 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require timeline/underscore
+//= require timeline/json2
+//= require timeline/module
+//= require timeline/raphael-min
+//= require timeline/date
 //= require_tree . exclude: "admin"
+var AppRouter = Backbone.Router.extend({
+	routes: {
+		"index" : "index",
+		"all" : "showAll",
+		"year" : "showYear"
+	},
+	index: function() {
+	},
+	showAll: function() {
+	},
+	showYear: function() {
+	}
+});
+
+var router = new AppRouter()
+Backbone.history.start();
+router.navigate();
+
+var timelineView = new modules.TimelineView()

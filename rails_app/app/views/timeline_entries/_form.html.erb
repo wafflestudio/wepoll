@@ -1,0 +1,21 @@
+<%= form_for(@timeline_entry) do |f| %>
+  <% if @timeline_entry.errors.any? %>
+  <div id="error_explanation">
+      <h2><%= pluralize(@timeline_entry.errors.count, "error") %> prohibited this timeline_entry from being saved:</h2>
+
+      <ul>
+      <% @timeline_entry.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+	<p>Comment:</p>
+	<p><%= f.text_area :comment %></p>
+  <p>Link:<%= f.text_field :url %></p>
+	<p>Date:<%= f.date_select :posted_at %></p> 	
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
