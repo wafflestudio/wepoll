@@ -42,11 +42,11 @@ TimelineEntryView = Backbone.View.extend(
 			@render()
 		render: ()->
 			if @hasEl
-				@setElement($("<p>#{@model.id}(modified:#{new Date(@model.get("updated_at"))})</p>").replaceAll(@el))
-
+				@setElement($("<div></div>").replaceAll(@el))
 			else
-				@setElement($("<p>#{@model.id}</p>").appendTo("#timeline"))
+				@setElement($("<div></div>").appendTo("#timeline"))
 				@hasEl = true
+			@$el.load("/timeline_entries/#{@model.id}/edit")
 			
 			
 		clear: ()->
@@ -91,6 +91,15 @@ TimelineView = Backbone.View.extend(
 				view.clear()
 			@views = []
 			console.log('cleared')
+
+		startAutoUpdate: ()->
+			self = this
+			@timer = setInterval ()->
+				self.update()
+			, 10000
+
+		stopAutoUpdate: ()->
+			clearTimeout(@timer)
 
 		update: ()->
 			self = this

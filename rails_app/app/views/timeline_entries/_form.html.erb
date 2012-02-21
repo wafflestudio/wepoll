@@ -1,4 +1,4 @@
-<%= form_for(@timeline_entry) do |f| %>
+<%= form_for(@timeline_entry, :remote => true) do |f| %>
   <% if @timeline_entry.errors.any? %>
   <div id="error_explanation">
       <h2><%= pluralize(@timeline_entry.errors.count, "error") %> prohibited this timeline_entry from being saved:</h2>
@@ -11,7 +11,7 @@
     </div>
   <% end %>
 	<p>Comment:</p>
-	<p><%= f.text_area :comment %></p>
+	<p><%= f.text_area :comment, :rows => 2, :cols => 20 %></p>
   <p>Link:<%= f.text_field :url %></p>
 	<p>Date:<%= f.date_select :posted_at %></p> 	
 

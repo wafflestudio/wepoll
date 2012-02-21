@@ -2,6 +2,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries
   # GET /timeline_entries.json
   def index
+  	# TODO: we don't need equal part here always, actually.
   	if params[:from]
 	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gte' => params[:from]})
 	  else
@@ -20,7 +21,6 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
       format.json { render json: @timeline_entry }
     end
   end
@@ -31,7 +31,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => false }# new.html.erb
       format.json { render json: @timeline_entry }
     end
   end
@@ -39,6 +39,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1/edit
   def edit
     @timeline_entry = TimelineEntry.find(params[:id])
+    render :layout => false
   end
 
   # POST /timeline_entries
@@ -77,7 +78,7 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1.json
   def destroy
     @timeline_entry = TimelineEntry.find(params[:id])
-    #@timeline_entry.destroy
+    # rather than @timeline_entry.destroy, we mark deleted
     @timeline_entry.deleted = true
     @timeline_entry.save
 

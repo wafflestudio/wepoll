@@ -22,28 +22,17 @@ $(function() {
 	router.navigate();
 
 	timelineView = new modules.TimelineView()
+	timelineView.startAutoUpdate()
+
+	$("#button-new").click(function() {
+		$("#timeline-form").load("/timeline_entries/new")
+	})
 })
 </script>
 <% end %>
-<h1>Listing timeline_entries</h1>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @timeline_entries.each do |timeline_entry| %>
-  <tr>
-    <td><%= link_to 'Show', timeline_entry %></td>
-    <td><%= link_to 'Edit', edit_timeline_entry_path(timeline_entry) %></td>
-    <td><%= link_to 'Destroy', timeline_entry, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Timeline entry', new_timeline_entry_path %>
-<div id="timeline"></div>
+<button id="button-new">new Timeline Entry</button>
+<div id="timeline-form">
+</div>
+<div id="timeline">
+</div>
