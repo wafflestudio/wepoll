@@ -5,7 +5,7 @@ class TimelineEntriesController < ApplicationController
   	if params[:from]
 	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gte' => params[:from]})
 	  else
-	    @timeline_entries = TimelineEntry.all
+	    @timeline_entries = TimelineEntry.where(:deleted => false)
 	  end
 
     respond_to do |format|
@@ -77,7 +77,9 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1.json
   def destroy
     @timeline_entry = TimelineEntry.find(params[:id])
-    @timeline_entry.destroy
+    #@timeline_entry.destroy
+    @timeline_entry.deleted = true
+    @timeline_entry.save
 
     respond_to do |format|
       format.html { redirect_to timeline_entries_url }

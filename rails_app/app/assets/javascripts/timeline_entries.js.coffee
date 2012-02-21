@@ -7,8 +7,8 @@ TimelineEntry = Backbone.Model.extend(
 		defaults: {
 			deleted:false}
 		url: '/timeline_entries'
+		idAttribute:"_id"
 		initialize: ()->
-			#this.on("change")
 			this.on "error", (model,error)->
 
 				
@@ -30,19 +30,29 @@ TimelineEntryView = Backbone.View.extend(
 	{
 		initialize: ()->
 			@model = if @options.model then @options.model else new TimelineEntry()
+			@model.view = this
 			self = this
 			# update on change event
 			@onChange = ()->
-				self.clear()
+				console.log("changed")
 				self.render()
 
 			@model.on "change", @onChange
 			# initial render
 			@render()
 		render: ()->
-			console.log("model" + this.model.toJSON())
+			if @hasEl
+				@setElement($("<p>#{@model.id}(modified:#{new Date(@model.get("updated_at"))})</p>").replaceAll(@el))
+
+			else
+				@setElement($("<p>#{@model.id}</p>").appendTo("#timeline"))
+				@hasEl = true
+			
+			
 		clear: ()->
 			@model.off "change", @onChange
+			delete @model.view
+			@$el.remove() if @hasEl
 	}
 )
 
@@ -57,6 +67,16 @@ TimelineView = Backbone.View.extend(
 			@collection.on "reset", ()->
 				self.clear()
 				self.render()
+				console.log("resetted")
+			@collection.on "change", ()->
+				console.log("changed")
+			@collection.on "add", (entry)->
+				view = new TimelineEntryView({model:entry})
+				self.views.push(view)
+				console.log("added")
+			@collection.on "remove", (entry)->
+				entry.view.clear() if entry.view
+				console.log("removed")
 			# fetch initial collection
 			@collection.fetch()
 	
@@ -73,11 +93,28 @@ TimelineView = Backbone.View.extend(
 			console.log('cleared')
 
 		update: ()->
-			latest = new Date("1800-01-01")
+			self = this
+			latest = new Date("1800-01-01") # let's assume some time
+			updated = new @collection.constructor()
+
 			@collection.each (model)->
 				date = new Date(model.get("updated_at"))
 				latest = date if latest.getTime() < date.getTime()
-			@collection.fetch({data: $.param({from:latest.toISOString()}),add:true})
+			
+			updated.fetch({data: $.param({from:latest.toISOString()}), success: ()->
+				updated.forEach (entry)->
+					target = self.collection.get(entry.id)
+					# insertion
+					if !target && !entry.get("deleted")
+						self.collection.add entry
+					# deletion
+					else if target && entry.get("deleted")
+						self.collection.remove entry
+					# update
+					else if target
+						target.set(entry.attributes)
+				})
+			
 
 	}
 )

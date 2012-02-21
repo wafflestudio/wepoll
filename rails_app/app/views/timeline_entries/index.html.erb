@@ -1,25 +1,28 @@
 <% content_for(:scripts) do %>
 <script type="text/coffeescript"></script>
 <script type="text/javascript">
-var AppRouter = Backbone.Router.extend({
-	routes: {
-		"index" : "index",
-		"all" : "showAll",
-		"year" : "showYear"
-	},
-	index: function() {
-	},
-	showAll: function() {
-	},
-	showYear: function() {
-	}
-});
+var timelineView;
+$(function() {
+	var AppRouter = Backbone.Router.extend({
+		routes: {
+			"index" : "index",
+			"all" : "showAll",
+			"year" : "showYear"
+		},
+		index: function() {
+		},
+		showAll: function() {
+		},
+		showYear: function() {
+		}
+	});
 
-var router = new AppRouter()
-Backbone.history.start();
-router.navigate();
+	var router = new AppRouter()
+	Backbone.history.start();
+	router.navigate();
 
-var timelineView = new modules.TimelineView()
+	timelineView = new modules.TimelineView()
+})
 </script>
 <% end %>
 <h1>Listing timeline_entries</h1>
@@ -43,3 +46,4 @@ var timelineView = new modules.TimelineView()
 <br />
 
 <%= link_to 'New Timeline entry', new_timeline_entry_path %>
+<div id="timeline"></div>
