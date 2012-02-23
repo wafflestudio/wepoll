@@ -59,6 +59,16 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
-
+    <script type="text/javascript">
+      $(document).ready(function() {
+          $('#query').keydown(function(e) {
+            if (e.keyCode != 38 && e.keyCode != 40) {
+            if ($('#query').val() != "") { $.post('/search', { query: $('#query').val() }, function(html) {
+              $('.search_result').remove();
+              $(html).appendTo('.result_field');
+              });
+            }}});
+          })
+    </script>
   </body>
 </html>

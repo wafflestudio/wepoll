@@ -1,6 +1,7 @@
 #coding : utf-8
 require 'csv'
 require 'mongoid'
+require 'nokogiri'
 
 period = {}
 period[1]  = [Date.parse("1948.5.31"),Date.parse("1950.5.30")]
@@ -46,12 +47,20 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
 
   profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name}[0]
 
+  tweet_name = nil
+  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
+    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
+      tweet_name = tw[9].slice(19..-1) unless tw[9].nil?
+    end
+  end
+
   p = Politician.new(:name => name,
                      :party => party,
                      :election_count => count,
                      :birthday => birth,
                      :military => military,
-                     :district => district)
+                     :district => district,
+                     :tweet_name => tweet_name)
   cnt += 1
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
   puts "#{name} photo doesn't exist" if profile_photo_path.nil?
@@ -69,7 +78,6 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
 end
 puts "\n총 #{cnt}명"
 puts "세부 프로필 빠진 사람 : #{ommitted_names.join(",")}"
-
 
 #==== 법안 ====
 c2 = 0
@@ -156,4 +164,60 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
     law_count += 1
   end
   puts "#{law_count}개"
+end
+
+#==== 법안에 대한 찬성 반대 ====
+#==== 반대는 raw data에 없어서 구현이 안됨
+puts "법안에 대한 찬성 반대 입력 중"
+puts "=============================\n"
+
+File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
+  file_name = line.sub("\n", "") + ".html"
+
+  if File.exists? Rails.root + "raw_data/law_coactors_#{file_name}"
+    puts "\n파일명...law_coactors_#{file_name}"
+
+    #raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_coactors_#{file_name}").read.encode("euc-kr"))
+    #detail_raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_detail_#{file_name}").read.encode("euc-kr")) # coactors에서 법안명을 가져올 수가 없어서 detail 사용
+    raw_data = File.open(Rails.root + "raw_data/law_coactors_#{file_name}").read
+    detail_raw_data = File.open(Rails.root + "raw_data/law_detail_#{file_name}").read
+
+    doc = Nokogiri::HTML(raw_data)
+    detail_doc = Nokogiri::HTML(detail_raw_data)
+
+    agenda = detail_doc.xpath("html/body/table[2]/tbody/tr[2]/td[1]/table[1]/tbody/tr[3]/td[2]/table/tbody/tr[1]/td[1]").inner_text.strip
+
+    bill = Bill.where(title: agenda.to_s).first
+
+    if bill.nil?
+      puts "안건...#{agenda}...존재하지않습니다."
+    else
+      puts "안건...#{bill.title}\n"
+
+      #===찬성 명단
+      i = 1
+      j = 1
+      puts "====== 찬성 명단 ======"
+      while !doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[1]").inner_text.empty?
+        while !doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[#{i}]").inner_text.empty?
+          agree_member = doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[#{i}]").inner_text.to_s
+          member = Politician.where(name: agree_member).first
+          if !member.nil?
+            puts ":..의원...#{member.name}"
+            bill.supporters << Politician.where(name: agree_member).first
+          end
+          i += 1
+        end
+        i = 1
+        j += 1
+      end
+      if bill.save 
+        puts "==== 성공 ====\n"
+      else
+        puts "==== 실패 ====\n"
+      end
+    end
+  else
+    puts "파일명...#{file_name}...존재하지않습니다."
+  end
 end

@@ -1,13 +1,49 @@
-<div class="grid_16 alpha omega">
-  <%= @politician.name %>
-  <%= image_tag @politician.profile_photo.url %>
-  <% @politician.tweets.each do |t| %>
-    <%= t.create_at %>
-    <%= t.content %>
-  <% end -%>
+<%= content_for :scripts do %>
+<script type="text/javascript">
+  $(function() {
+    $('.reply_btn').click(function() {
+      console.log(this.id);
+      $('#reply_box form').eq(0).attr('action','/tweets/'+this.id+'/tweet_replies');
+    });
 
-  <% @politician.total_replies.each do |r| %>
-    <%= r.created_at %>
-    <%= r.content %>
-  <% end -%>
+
+  });
+</script>
+<% end -%>
+<div class="grid_16 alpha omega">
+  <div class="grid_8 alpha">
+    <div class="grid_8 alpha omega">
+      <%= @politician.name %>
+      <%= image_tag @politician.profile_photo.url %>
+      <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+    </div>
+    <div class="grid_8 alpha omega">
+      <% @politician.tweets.desc('created_at').each do |t| %>
+        <div class="tweet_item">
+          <%= t.created_at %>
+          <%= t.content %><br />
+          <%= link_to 'recommend', tweet_recommend_path(t) %>
+          <%= link_to 'opposite', tweet_opposite_path(t) %>
+          <button id=<%= t.id %> class="reply_btn">reply</button>
+        </div>
+      <% end -%>
+    </div>
+  </div>
+
+  <div class="grid_8 omega">
+    <div id="reply_box" class="grid_8 alpha omega">
+      <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+        <%= text_area_tag(:content) %>
+        <%= submit_tag 'reply' %>
+      <% end -%>
+    </div>
+    <% @politician.total_replies.sort{|a,b| a.created_at <=> b.created_at}.each do |r| %>
+      <%= r.created_at %>
+      <%= r.content %>
+      <%= r.tweet.content.slice(0..10) %>...
+      <%= link_to 'recommend', tweet_reply_recommend_path(r) %>
+      <%= link_to 'opposite', tweet_reply_opposite_path(r) %>
+      <%= link_to 'report', tweet_reply_report_path(r) %>
+    <% end -%>
+  </div>
 </div>

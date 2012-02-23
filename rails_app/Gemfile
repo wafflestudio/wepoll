@@ -35,6 +35,10 @@ gem 'bson_ext'
 gem 'rspec'
 
 gem 'kaminari'
+gem 'nokogiri'
+
+# twitter gem
+gem 'twitter'
 
 #bootstrap for scaffolding
 gem 'twitter-bootstrap-rails', :group => :assets

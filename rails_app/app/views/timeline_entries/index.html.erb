@@ -1,0 +1,38 @@
+<% content_for(:scripts) do %>
+<script type="text/coffeescript"></script>
+<script type="text/javascript">
+var timelineView;
+$(function() {
+	var AppRouter = Backbone.Router.extend({
+		routes: {
+			"index" : "index",
+			"all" : "showAll",
+			"year" : "showYear"
+		},
+		index: function() {
+		},
+		showAll: function() {
+		},
+		showYear: function() {
+		}
+	});
+
+	var router = new AppRouter()
+	Backbone.history.start();
+	router.navigate();
+
+	timelineView = new modules.TimelineView()
+	timelineView.startAutoUpdate()
+
+	$("#button-new").click(function() {
+		$("#timeline-form").load("/timeline_entries/new")
+	})
+})
+</script>
+<% end %>
+
+<button id="button-new">new Timeline Entry</button>
+<div id="timeline-form">
+</div>
+<div id="timeline">
+</div>

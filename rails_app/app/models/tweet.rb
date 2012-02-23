@@ -1,8 +1,8 @@
 class Tweet
   include Mongoid::Document
-  include Mongoid::Timestamps
 
   field :content, type: String
+  field :created_at, type: DateTime
 
   field :recommend_count, type: Integer, default: 0       # 추천
   field :opposite_count, type: Integer, default: 0        # 반대
@@ -10,26 +10,28 @@ class Tweet
   field :vote_ips, type: Array, default: []
 
 
-  has_many :replies
+  has_many :tweet_replies
   belongs_to :politician
 
 
-  def recommend
-    if vote_ips.include? ip
+  def recommend(ip)
+    if self.vote_ips.include? ip
       false
     else
-      self.recommend_count += 1
-      self.today_recommend_count += 1
-      vote_ips << ip
+      self.recommend_count = self.recommend_count+1
+      self.today_recommend_count = self.today_recommend_count+1
+      self.vote_ips << ip
+      self.save
     end
   end
 
-  def opposite
-    if vote_ips.include? ip
+  def opposite(ip)
+    if self.vote_ips.include? ip
       false
     else
-      self.opposite_count += 1
-      vote_ips << ip
+      self.opposite_count = self.opposite_count+1
+      self.vote_ips << ip
+      self.save
     end
   end
 

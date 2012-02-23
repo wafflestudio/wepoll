@@ -27,10 +27,13 @@
       <h1>wepoll</h1>
     </div>
     <div class="grid_6 prefix_2 omega" id="search-bar-wrapper">
-      <%= form_tag "/", :id => "main-search-bar" do %>
-        <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요" %>
+      <%= form_tag "/search", :id => "main-search-bar" do |f| %>
+        <%= hidden_field_tag :search_pass, "true" %>
+        <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요", :autocomplete => "off" %>
         <%= submit_tag "검색"%>
       <% end -%>
+      <div class="result_field">
+      </div>
     </div>
     <div class="clear"></div>
     <div class="grid_6 alpha omega">
