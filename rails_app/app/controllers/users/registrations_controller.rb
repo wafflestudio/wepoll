@@ -1,3 +1,5 @@
+#coding : utf-8
+require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
   def new
     super
@@ -18,9 +20,18 @@ class Users::RegistrationsController < Devise::RegistrationsController
     Rails.logger.info session["user_facebook_data"].to_s
     if session["user_facebook_data"] && @fb_token.nil?
       Rails.logger.info "===== Build token with FB ====="
-      uid = session["user_facebook_data"].extra.raw_info.uid
+      uid = session["user_facebook_data"].uid
       secret = session["user_facebook_data"].credentials.secret
       token = session["user_facebook_data"].credentials.token
+
+      Rails.logger.info "== uid:#{uid} =="
+      Rails.logger.info "== secret:#{secret} =="
+      Rails.logger.info "== token:#{token} =="
+
+#      current_user.send_facebook(
+#        :access_token => token,
+#        :message => '안녕!'
+#      )
 
       @fb_token = current_user.user_tokens.create!(
         :provider => 'facebook', :uid => uid,

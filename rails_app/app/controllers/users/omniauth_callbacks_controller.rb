@@ -36,6 +36,7 @@ class Users::OmniauthCallbacksController < ApplicationController
   end
 
   def twitter
+    Rails.logger.info 'twitter auth callback'
     @user = User.find_for_twitter_oauth(request.env["omniauth.auth"], current_user)
 
     if @user && @user.persisted?
@@ -64,5 +65,15 @@ class Users::OmniauthCallbacksController < ApplicationController
         redirect_to new_user_registration_url
       end
     end
+  end
+
+  def failure
+#    super
+#    Rails.logger.info request.inspect
+    Rails.logger.info "==========="
+    Rails.logger.info params[:message]
+    Rails.logger.info params.inspect
+    Rails.logger.info "==========="
+
   end
 end

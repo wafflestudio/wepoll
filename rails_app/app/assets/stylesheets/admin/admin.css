@@ -430,3 +430,7 @@ a.action.list {
   background:url(/assets/admin/icn_categories.png) no-repeat 0 2px;
 }
 
+a.action.add {
+  background:url(/assets/admin/icn_plus.png) no-repeat 0 2px;
+}
+

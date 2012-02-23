@@ -134,4 +134,23 @@ class User
   def twitter_token
     user_tokens.where(:provider => 'twitter').first
   end
+
+  def send_tweet(options={})
+  end
+
+  def send_facebook(options={}) #facebook access token is very short-term, so options[:access_token] should be provided
+    raise "No access_token given" unless options[:access_token]
+    raise "No message given" unless options[:message]
+
+    client = OAuth2::Client.new(FACEBOOK_CLIENT[:key],
+                                FACEBOOK_CLIENT[:secret],
+                                :site => "https://graph.facebook.com")
+    token = OAuth2::AccessToken.new(client, options[:access_token])
+    begin
+    token.post("/#{facebook_token.uid}/feed?access_token=#{options[:access_token]}&message=#{options[:message]}")
+    rescue OAuth2::Error => e
+      Rails.logger.info e.response.body
+      raise e
+    end
+  end
 end

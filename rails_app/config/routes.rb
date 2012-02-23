@@ -35,4 +35,9 @@ Wepoll::Application.routes.draw do
 
   match '/forum/:politician_id' => 'main#forum' , :as => :forum
   root :to => 'main#index'
+
+
+  #for test
+  match 'main/fb_test' => 'main#facebook_test', :as => :fb_test
+  match 'main/fb_test_callback' => 'main#facebook_test_callback', :as => :fb_test_callback
 end
