@@ -1,3 +1,6 @@
+FACEBOOK_CLIENT = {:key => "148897555227851", :secret => "9a6f2c2c948f9d4021321b568f247069"}
+TWITTER_CLIENT = {:key => "ZaqgbIDlZUi0zEALTF8ukg", :secret => "2nN0bG5mQLLGhKhuRhiumZFFv8NaCPdncIRvYlAibqQ"}
+
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
@@ -221,6 +224,6 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
   #
-  config.omniauth :facebook, "185387964894905", "331fcf8686c33ecf0805ab25765e0263", :scope => 'email,read_stream,publish_stream'
-  config.omniauth :twitter, "ZaqgbIDlZUi0zEALTF8ukg", "2nN0bG5mQLLGhKhuRhiumZFFv8NaCPdncIRvYlAibqQ"
+  config.omniauth :facebook, FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret], :scope => 'email,read_stream,publish_stream'
+  config.omniauth :twitter, TWITTER_CLIENT[:key], TWITTER_CLIENT[:secret]
 end

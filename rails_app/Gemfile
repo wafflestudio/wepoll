@@ -50,6 +50,8 @@ gem "less"
 gem 'mongoid-paperclip', :require => "mongoid_paperclip"
 gem 'stalker'
 
+gem 'fastercsv'
+
 #group :development do
 #  gem 'linecache19', '0.5.13'
 #  gem 'ruby-debug-base19', '0.11.26'
