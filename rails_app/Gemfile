@@ -21,10 +21,14 @@ end
 
 gem 'jquery-rails'
 
+# twitter gem
+gem 'twitter'
+
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
-gem 'omniauth-twitter'
+#gem 'omniauth-twitter'
+gem 'oauth2'
 
 gem 'thin'
 
@@ -36,6 +40,7 @@ gem 'rspec'
 gem 'kaminari'
 gem 'nokogiri'
 
+
 #bootstrap for scaffolding
 gem 'twitter-bootstrap-rails', :group => :assets
 #gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git", :branch => "static"
@@ -45,6 +50,10 @@ gem "less"
 # for file attachment
 gem 'mongoid-paperclip', :require => "mongoid_paperclip"
 gem 'stalker'
+
+gem 'fastercsv'
+
+gem 'koala'
 
 #group :development do
 #  gem 'linecache19', '0.5.13'

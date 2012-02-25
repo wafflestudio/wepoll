@@ -1,10 +1,33 @@
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+    FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        // the user is logged in and connected to your
+        // app, and response.authResponse supplies
+        // the user's ID, a valid access token, a signed
+        // request, and the time the access token 
+        // and signed request each expire
+        var uid = response.authResponse.userID;
+        var accessToken = response.authResponse.accessToken;
+//        alert("connected");
+      } else if (response.status === 'not_authorized') {
+        // the user is logged in to Facebook, 
+        //but not connected to the app
+//        alert("not authorized");
+      } else {
+        // the user isn't even logged in to Facebook.
+//        alert("not logged in");
+      }
+    });
+  </script>
+<% end -%>
 <div class="grid_16" id="main-pages-container">
   <div id="main-content">
     <div class="alpha grid_2" id="logo-wrapper">
       <h1>wepoll</h1>
     </div>
     <div class="grid_6 prefix_2 omega" id="search-bar-wrapper">
-      <%= form_tag "/search", :id => "main-search-bar",  do %>
+      <%= form_tag "/search", :id => "main-search-bar" do |f| %>
         <%= hidden_field_tag :search_pass, "true" %>
         <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
         <%= hidden_field_tag :query_party %>
@@ -22,6 +45,8 @@
       <% end -%>
     </div>
     <hr />
+
+    <%= link_to 'fb_test', fb_test_path %>
   </div>
 
   <div id="main-right" class="grid_5 omega">
@@ -29,4 +54,5 @@
       <%= link_to '로그인', new_user_session_path %>
     </div>
   </div>
+
 </div>

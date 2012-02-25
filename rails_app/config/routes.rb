@@ -1,4 +1,6 @@
 Wepoll::Application.routes.draw do
+  resources :timeline_entries
+
   namespace :admin do
     match '/' => 'admin#index'
     match 'login' => 'auth#login'
@@ -34,6 +36,25 @@ Wepoll::Application.routes.draw do
     :via => :get, :as => :sns_link_verify
 
   match '/forum/:politician_id' => 'main#forum' , :as => :forum
+  match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
+
+  resources :tweets do
+    match '/recommend' => 'tweets#recommend', :as => :recommend
+    match '/opposite' => 'tweets#opposite', :as => :opposite
+    post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
+  end
+  resources :tweet_replies do
+    match '/recommend' => 'tweet_replies#recommend', :as => :recommend
+    match '/opposite' => 'tweet_replies#opposite', :as => :opposite
+    match '/report' => 'tweet_replies#report', :as => :report
+  end
+
+
   match "/search" => "main#search"
   root :to => 'main#index'
+
+
+  #for test
+  match 'main/fb_test' => 'main#facebook_test', :as => :fb_test
+  match 'main/fb_test_callback' => 'main#facebook_test_callback', :as => :fb_test_callback
 end

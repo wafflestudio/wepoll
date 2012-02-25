@@ -7,7 +7,10 @@ class User
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
   ## Database authenticatable
-  field :email,              :type => String, :null => false, :default => ""
+
+  field :email,              :type => String, :default => ""
+  #  이메일이 아닌 userid가 identifier이다.
+  field :userid,              :type => String, :null => false, :default => ""
   field :encrypted_password, :type => String, :null => false, :default => ""
 
   ## Recoverable
@@ -23,6 +26,14 @@ class User
   field :last_sign_in_at,    :type => Time
   field :current_sign_in_ip, :type => String
   field :last_sign_in_ip,    :type => String
+
+  field :agree_provision, :type => Boolean, :default => false
+
+  validates :agree_provision,:inclusion => {:in => [true]}
+
+  def email_required?
+    false
+  end
 
   ## Encryptable
   # field :password_salt, :type => String
@@ -41,10 +52,14 @@ class User
   ## Token authenticatable
   # field :authentication_token, :type => String
 
+  ## User settings
+  field :auto_post_facebook, :type => Boolean, :default => true
+  field :auto_post_twitter, :type => Boolean, :default => true
+
   has_many :user_tokens, :dependent => :destroy
 
   # tweet forum association
-  
+
   has_many :tweet_replies
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
@@ -52,6 +67,10 @@ class User
 
     if user_token = UserToken.where(:provider => 'facebook', :uid => data["id"]).first
       user_token.user
+#    elsif signed_in_resource.nil?
+#      user = User.create!(:userid => "fb_#{data["id"]}", :email => data.email, :password => Devise.friendly_token[0,20])
+#      UserToken.create!(:provider => 'facebook', :uid => data.id, :user => user, :approved => true)
+#      user
     end
   end
 
@@ -60,6 +79,12 @@ class User
 
     if user_token = UserToken.where(:provider => 'twitter', :uid => uid).first
       user_token.user
+#    elsif signed_in_resource.nil? #만약에 현재 로그인 된 유저가 없다면 이건 새로 만드는거라고 간주한다
+#      user = User.create!(:userid => "tw_#{uid}", :password => Devise.friendly_token[0,20])
+#      UserToken.create!(:provider => 'twitter', :uid => uid, :user => user, :approved => true,
+#                        :access_token_secret => secret,
+#                        :access_token => token)
+#      user
     end
   end
 
@@ -69,7 +94,7 @@ class User
   #   if user_token = UserToken.where(:uid => data.id, :provider => 'facebook', :approved => true).first
   #     user_token.user
   #   elsif signed_in_resource.nil? #만약에 현재 로그인 된 유저가 없다면 이건 새로 만드는거라고 간주한다
-  #     user = User.create!(:email => data.email, :password => Devise.friendly_token[0,20])
+  #     user = User.create!(:email => data.email, :password => devise.friendly_token[0,20])
   #     UserToken.create!(:provider => 'facebook', :uid => data.id, :user => user, :approved => true)
   #     user
   #   else #만약에 현재 로그인 된 유저가 있다면 이건 계정 통합이라 간주하고 확인 메일을 전송한다.
@@ -133,5 +158,24 @@ class User
 
   def twitter_token
     user_tokens.where(:provider => 'twitter').first
+  end
+
+  def send_tweet(options={})
+  end
+
+  def send_facebook(options={}) #facebook access token is very short-term, so options[:access_token] should be provided
+    raise "No access_token given" unless options[:access_token]
+    raise "No message given" unless options[:message]
+
+    client = OAuth2::Client.new(FACEBOOK_CLIENT[:key],
+                                FACEBOOK_CLIENT[:secret],
+                                :site => "https://graph.facebook.com")
+    token = OAuth2::AccessToken.new(client, options[:access_token])
+    begin
+    token.post("/#{facebook_token.uid}/feed?access_token=#{options[:access_token]}&message=#{options[:message]}")
+    rescue OAuth2::Error => e
+      Rails.logger.info e.response.body
+      raise e
+    end
   end
 end

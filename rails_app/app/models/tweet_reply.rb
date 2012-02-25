@@ -12,31 +12,35 @@ class TweetReply
 
 
   belongs_to :user
+  belongs_to :tweet
 
 
   def recommend(ip)
-    if vote_ips.include? ip
+    if self.vote_ips.include? ip
       false
     else
       self.recommend_count += 1
-      vote_ips << ip
+      self.vote_ips << ip
+      self.save
     end
   end
 
   def opposite(ip)
-    if vote_ips.include? ip
+    if self.vote_ips.include? ip
       false
     else
       self.opposite_count += 1
-      vote_ips << ip
+      self.vote_ips << ip
+      self.save
     end
   end
   def report(ip)
-    if vote_ips.include? ip
+    if self.vote_ips.include? ip
       false
     else
       self.report_count += 1
-      vote_ips << ip
+      self.vote_ips << ip
+      self.save
     end
   end
 

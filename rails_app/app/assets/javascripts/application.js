@@ -12,4 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require timeline/underscore
+//= require timeline/json2
+//= require timeline/module
+//= require timeline/raphael-min
+//= require timeline/date
 //= require_tree . exclude: "admin"
