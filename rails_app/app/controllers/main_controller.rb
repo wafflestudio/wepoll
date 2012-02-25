@@ -82,13 +82,13 @@ class MainController < ApplicationController
   def search
     type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
     query = params[:query].sub(" ","")
-    sub_query = params[:query_party].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
+    sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
     id = params[:query_id]
 
     if type == 0
-      @politician = Politician.where(district: query).first
+      @politician = Politician.where(district: sub_query).first
     elsif type == 1
-      @politician = Politician.where(name: query, party: sub_query).first
+      @politician = Politician.find(sub_query)
     else
       @politician = Politician.where(district: sub_query).first
     end
