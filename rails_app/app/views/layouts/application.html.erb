@@ -40,7 +40,6 @@
       <footer>
         <%= render :partial => '/layouts/footer' %>
       </footer>
-
     </div> <!-- /container -->
 
     <!-- Le javascript
@@ -49,15 +48,19 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
-      $(document).ready(function() {
-          $('#query').keydown(function(e) {
-            if (e.keyCode != 38 && e.keyCode != 40) {
-            if ($('#query').val() != "") { $.post('/search', { query: $('#query').val() }, function(html) {
-              $('.search_result').remove();
-              $(html).appendTo('.result_field');
-              });
-            }}});
-          })
+    var search_source = [<%= @source.join(",") %>];
+      $("input#query").autocomplete({
+        source: search_source,
+        delay: 50, 
+        autoFocus: true,
+        select: function(event, ui) {
+        $("#query_party").val(ui.item.party);
+        $("#query_type").val(ui.item.type);
+        $("#query").val(ui.item.data);
+        return false;
+        },
+        focus: function() {return false;}
+}); 
     </script>
   </body>
 </html>
