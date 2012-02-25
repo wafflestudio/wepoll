@@ -1,9 +1,2 @@
 <div class="search_result">
-  <script type="text/javascript">
-    var search_source = [<%= "'"+(@name + @dong + @district).join("','")+"'" %>]
-    $("input#query").autocomplete({delay: 0, source: search_source});
-  </script>
-  <% if @name.empty? && @district.empty? && @dong.empty? %>
-    <h3>'<%= @query %>'에 대한 검색결과가 없습니다.</h3>
-  <% end %>
 </div>

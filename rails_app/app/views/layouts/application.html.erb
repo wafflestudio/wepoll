@@ -58,7 +58,9 @@
             <div id="search-bar-wrapper" class="prefix_1 grid_5">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
-                <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요", :autocomplete => "off" %>
+                <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
+                <%= hidden_field_tag :query_hidden %>
+                <%= hidden_field_tag :query_type %>
                 <%= submit_tag "검색"%>
               <% end -%>
             </div>
@@ -86,22 +88,25 @@
       </div>
     </footer>
 
-
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
-      $(document).ready(function() {
-          $('#query').keydown(function(e) {
-            if (e.keyCode != 38 && e.keyCode != 40) {
-            if ($('#query').val() != "") { $.post('/search', { query: $('#query').val() }, function(html) {
-              $('.search_result').remove();
-              $(html).appendTo('.result_field');
-              });
-            }}});
-          })
+    var search_source = [<%= @source.join(",") %>];
+      $("input#query").autocomplete({
+        source: search_source,
+        delay: 50, 
+        autoFocus: true,
+        select: function(event, ui) {
+        $("#query_party").val(ui.item.party);
+        $("#query_type").val(ui.item.type);
+        $("#query").val(ui.item.data);
+        return false;
+        },
+        focus: function() {return false;}
+}); 
     </script>
   </body>
 </html>
