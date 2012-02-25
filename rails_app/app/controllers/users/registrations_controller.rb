@@ -1,7 +1,34 @@
 #coding : utf-8
 require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout false, :only => [:new]
   def new
+    super
+  end
+
+  def create
+    if session["user_facebook_data"]
+      Rails.logger.info "=====has facebook data====="
+      uid = session["user_facebook_data"].uid
+      params[:user] = {}
+      params[:user][:userid] = "fb_#{uid}"
+      params[:user][:password] = Devise.friendly_token[0,20]
+      params[:user][:password_confirmation]= params[:password]
+      # Rails.logger.info "==========="
+      # Rails.logger.info params.inspect
+      # Rails.logger.info "==========="
+
+    end
+    if session["user_twitter_data"]
+      Rails.logger.info "=====has twitter data====="
+      uid = session["user_twitter_data"].uid
+      params[:user] = {}
+      params[:user][:userid] = "tw_#{uid}"
+      params[:user][:password] = Devise.friendly_token[0,20]
+      params[:user][:password_confirmation]= params[:password]
+    end
+    params[:user][:agree_provision] = true if params[:agree_provision]
+
     super
   end
 

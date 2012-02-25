@@ -17,4 +17,5 @@
 //= require timeline/module
 //= require timeline/raphael-min
 //= require timeline/date
+//= require jquery.colorbox-min
 //= require_tree . exclude: "admin"

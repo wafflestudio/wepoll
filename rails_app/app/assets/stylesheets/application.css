@@ -12,6 +12,7 @@
  *= require reset
  *= require 1024_16_8_8
  *= require_tree . exclude: "admin"
+ *= require colorbox
 */
 
 /* below css is for debugging, DO NOT ADD OTHER LINES  */

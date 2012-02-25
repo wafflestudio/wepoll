@@ -31,8 +31,14 @@
         xfbml      : true  // parse XFBML
       });
     </script>
-    <div id="container" class="container_16">
-      <div class="content clearfix">
+    <div class="top-bar">
+      top-bar
+    </div>
+
+    <div id="container" class="container_16 clearfix">
+
+      <div class="grid_16 clearfix">
+        <!-- notification bars -->
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
             <div class="grid_16">
@@ -43,16 +49,43 @@
             </div>
           <% end %>
         <% end %> <!-- end of alert levels -->
+        <div id="main-content" class="grid_12 alpha">
+          <div id="header" class="clearfix">
+            <div id="logo-wrapper" class="prefix_1 grid_3">
+              <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
+            </div>
 
-        <%= yield %>
+            <div id="search-bar-wrapper" class="prefix_1 grid_5">
+              <%= form_tag "/search", :id => "main-search-bar" do |f| %>
+                <%= hidden_field_tag :search_pass, "true" %>
+                <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요", :autocomplete => "off" %>
+                <%= submit_tag "검색"%>
+              <% end -%>
+            </div>
+
+          </div>
+          <div class="grid_12 alpha omega">
+            <%= yield %>
+          </div>
+        </div>
+
+        <div id="sidebar" class="grid_4 omega">
+          <div class="grid_3" id="login-status">
+            <%= render :partial => '/login_info' %>
+          </div>
+
+          <%= yield :sidebar %>
+        </div>
 
       </div> <!-- end of content -->
 
-      <footer>
-        <%= render :partial => '/layouts/footer' %>
-      </footer>
-
     </div> <!-- /container -->
+    <footer>
+      <div class="container_16">
+        <%= render :partial => '/layouts/footer' %>
+      </div>
+    </footer>
+
 
     <!-- Le javascript
     ================================================== -->

@@ -15,87 +15,40 @@
 }
 
 #main-content {
+//  @include drop-shadow(3px, 0px, 5px, 3px, #929292);
+  box-shadow: 15px 0px 10px -5px #e7cb4f;
+//  background:url(/assets/bg_left.gif);
+  width:752px;
   margin-right:0;
-
-  //positioning
-  position:absolute;
-  left:0;
-  top:0;
-  z-index:101;
-
-  //dimension
-  height:730px;
-  width:688px;
-
-  //traits
-  background-color:white;
-  @include drop-shadow(0, 0, 6px, 2px, #929292);
-
-  hr {
-    border:0;
-    background-color:#000;
-    margin-left:30px;
-    width:658px;
-    height:2px;
-  }
+  min-height:300px;
 }
 
-#main-right {
+#sidebar {
+///  background:url(/assets/bg_right.gif);
   margin-left:0;
-  padding-left:32px;
+  width:256px - 16px;
+  padding-left:0;
+  min-height:300px;
 
-  //positioning
+}
+
+#login-actions {
+  margin-left:14px;
+  width:68px;
+  a {
+    font-size:8pt;
+    color:white;
+    text-decoration:none;
+  }
+}
+
+#bubble {
   position:absolute;
-  right:0;
-  top:8px;
-  z-index:100;
-
-  //dimension
-  height:730px;
-
-  //traits
-  background-color:white;
-  @include drop-shadow(0, 0, 6px, 2px, #929292);
-}
-
-#logo-wrapper {
-  margin-top:10px;
-  margin-left:30px;
-  h1 {
-    text-indent:-99999px;
-    background:url(/assets/logo.png) no-repeat;
-    height:40px;
-  }
-}
-
-#search-bar-wrapper {
-  margin-top:24px;
-}
-
-#main-search-bar {
-  border:2px solid #848484;
-  height:23px;
-
-  input[type=text] {
-    margin:0;
-    border:0;
-    width:362px - 28px;
-    height:21px;
-    display:block;
-    float:left;
-  }
-
-  input[type=submit] {
-    margin:0;
-    padding:0;
-    display:block;
-    float:right;
-    height:100%;
-    width:28px;
-    border:0;
-    text-indent:-99999px;
-    background:url(/assets/btn_search.gif) no-repeat;
-  }
+  left:20px;
+  top:70px;
+  width:214px;
+  height:165px;
+  background:url(/assets/bubble1.gif);
 }
 
 #login-btn {

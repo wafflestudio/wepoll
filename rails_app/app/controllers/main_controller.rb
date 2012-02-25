@@ -24,20 +24,18 @@ class MainController < ApplicationController
                                 FACEBOOK_CLIENT[:secret],
                                 :token_url => '/oauth/access_token',
                                 :site => 'https://graph.facebook.com')
-    begin
       token = client.get_token(:client_id => FACEBOOK_CLIENT[:key],
                                :client_secret => FACEBOOK_CLIENT[:secret],
                                :code => params[:code],
                                :redirect_uri => "http://ruby.snu.ac.kr:7789/main/fb_test_callback/")
-      token.post("/#{current_user.facebook_token.uid}/feed?access_token=#{token.token}&message=hihi", :message => "hihi", :link => 'http://google.com')
+      @graph = Koala::Facebook::API.new(token.token)
+      @graph.put_object("me","feed",:message => 'Using koala')
+
+
+#      token.post("/#{current_user.facebook_token.uid}/feed?access_token=#{token.token}&message=hihi", :message => "hihi", :link => 'http://google.com')
       render :text => 'hello'
 
-    rescue OAuth2::Error => e
-      Rails.logger.info "========"
-      Rails.logger.info e.response.body
-      Rails.logger.info "========"
-      raise e
-    end
+
   end
 
 

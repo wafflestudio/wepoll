@@ -27,6 +27,9 @@ Wepoll::Application.routes.draw do
     match 'users/sign_up/link_sns/:id' => 'users/registrations#link_sns', :via => :get, :as => 'new_user_link_sns'
   end
 
+  match 'users/auth/twitter/callback' => 'users/omniauth_callbacks#twitter'
+
+
   namespace :me do
     match 'sns/' => "sns#index"
     match 'sns/link/:provider' => "sns#link", :as => :sns_link
@@ -59,4 +62,6 @@ Wepoll::Application.routes.draw do
   #for test
   match 'main/fb_test' => 'main#facebook_test', :as => :fb_test
   match 'main/fb_test_callback' => 'main#facebook_test_callback', :as => :fb_test_callback
+
+  match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
 end

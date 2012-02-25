@@ -1,0 +1,26 @@
+<div class="">
+  <div class="grid_1 alpha" style="width:30px;">
+    <%= link_to image_tag('/assets/btn_fb.png'), "/users/auth/facebook"%>
+  </div>
+  <div class="grid_1" style="width:30px; margin-right:32px;">
+    <%= link_to image_tag('/assets/btn_tw.png'), "/users/auth/twitter"%>
+  </div>
+  <div class="grid_1 alpha omega" style="width:30px;">
+    <%= link_to image_tag('/assets/btn_wepoll.png'), "#"%>
+  </div>
+  <div class="grid_1 omega" id="login-actions">
+    <%= link_to_function '회원가입', 'show_join_form()' %><br />
+    <%= link_to '비밀번호찾기', '#' %>
+  </div>
+</div>
+
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+    function show_join_form() {
+      $.colorbox({href:"<%= new_user_registration_path%>"});
+    }
+
+    $(document).ready(function() {
+    });
+  </script>
+<% end -%>
