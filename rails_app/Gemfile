@@ -22,7 +22,7 @@ end
 gem 'jquery-rails'
 
 # twitter gem
-#gem 'twitter'
+gem 'twitter'
 
 gem 'devise'
 gem 'omniauth'
