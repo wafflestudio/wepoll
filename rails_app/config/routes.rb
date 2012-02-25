@@ -15,6 +15,8 @@ Wepoll::Application.routes.draw do
     resources 'bills' do
       get 'search', :as => 'search', :on => :collection
     end
+
+    resources 'timeline_entries'
     resources 'users'
   end
 

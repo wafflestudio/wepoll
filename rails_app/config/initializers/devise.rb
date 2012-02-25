@@ -1,5 +1,5 @@
 FACEBOOK_CLIENT = {:key => "148897555227851", :secret => "9a6f2c2c948f9d4021321b568f247069"}
-TWITTER_CLIENT = {:key => "ZaqgbIDlZUi0zEALTF8ukg", :secret => "2nN0bG5mQLLGhKhuRhiumZFFv8NaCPdncIRvYlAibqQ"}
+TWITTER_CLIENT = {:key => "H6fDcyU6pRgs2mmHSj76PA", :secret => "405iY9l5YIR5yxcQFT9641mhmfu98SYM7Jf8F8Fg1Y"}
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
