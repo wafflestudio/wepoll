@@ -1,5 +1,6 @@
+#coding: utf-8
 FACEBOOK_CLIENT = {:key => "148897555227851", :secret => "9a6f2c2c948f9d4021321b568f247069"}
-TWITTER_CLIENT = {:key => "ZaqgbIDlZUi0zEALTF8ukg", :secret => "2nN0bG5mQLLGhKhuRhiumZFFv8NaCPdncIRvYlAibqQ"}
+TWITTER_CLIENT = {:key => "40T6Ck0T9dRcWaPtBvMw", :secret => "PNXjZ1WKgLqpx16OjL504UtwoqhdB3M31jt7WnXIwm4"}
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
@@ -29,7 +30,9 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  # config.authentication_keys = [ :email ]
+
+  # userid는 이메일도 될 수 있고, 페북 uid도 될수있고, twitter uid가 될수도 있어요 뿌우
+  config.authentication_keys = [ :userid ]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -41,12 +44,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email ]
+  config.case_insensitive_keys = [ :userid ]
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email ]
+  config.strip_whitespace_keys = [ :userid ]
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the
@@ -225,5 +228,5 @@ Devise.setup do |config|
   # end
   #
   config.omniauth :facebook, FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret], :scope => 'email,read_stream,publish_stream'
-  config.omniauth :twitter, TWITTER_CLIENT[:key], TWITTER_CLIENT[:secret]
+  #config.omniauth :twitter, TWITTER_CLIENT[:key], TWITTER_CLIENT[:secret]
 end
