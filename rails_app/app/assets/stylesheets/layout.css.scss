@@ -89,3 +89,27 @@ footer {
 //  background-color:white;
 }
 
+#profile-pic-thumb-wrapper {
+}
+
+#profile-pic-thumb {
+  border:2px solid #f7d748;
+  border-radius:3px;
+}
+
+#nickname {
+  color:#f7d748;
+  font-size:8.5pt;
+}
+
+#session-actions {
+  a {
+    font-size:7.5pt;
+    color:#333;
+    border:2px solid #f7d747;
+    border-radius:2px;
+    background-color:white;
+    text-decoration:none;
+  }
+}
+

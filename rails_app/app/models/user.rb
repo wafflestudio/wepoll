@@ -1,6 +1,7 @@
 #coding: utf-8
 class User
   include Mongoid::Document
+  include Mongoid::Paperclip
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -29,11 +30,18 @@ class User
 
   field :agree_provision, :type => Boolean, :default => false
 
+  field :nickname, :type => String
+
   validates :agree_provision,:inclusion => {:in => [true]}
 
   def email_required?
     false
   end
+
+  has_mongoid_attached_file :profile_picture,
+    :styles => {:square50 => "50x50#"},
+    :url => "/system/user_profile_pictures/:id/:style",
+    :path => Rails.root.to_s + "/public/system/user_profile_pictures/:id/:style"
 
   ## Encryptable
   # field :password_salt, :type => String

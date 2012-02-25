@@ -1,3 +1,4 @@
+<% unless user_signed_in? -%>
 <div class="">
   <div class="grid_1 alpha" style="width:30px;">
     <%= link_to image_tag('/assets/btn_fb.png'), "/users/auth/facebook"%>
@@ -23,4 +24,18 @@
     $(document).ready(function() {
     });
   </script>
+<% end -%>
+<% else -%>
+  <div class="grid_1 alpha" id="profile-pic-thumb-wrapper">
+    <%= image_tag current_user.profile_picture.url(:square50), :style => "width:40px;height:40px;", :id => 'profile-pic-thumb'%>
+  </div>
+  <div class="grid_2 omega">
+    <div id="nickname">
+      <%=current_user.nickname %> 님
+    </div>
+    <div id="session-actions">
+      <%= link_to "MY PAGE", me_dashboard_path %>
+      <%= link_to "LOGOUT", destroy_user_session_path, :method => :delete %>
+    </div>
+  </div>
 <% end -%>
