@@ -55,6 +55,8 @@ Wepoll::Application.routes.draw do
   end
 
 
+  match 'district/:name' => "district#show"
+
   match "/search" => "main#search"
   root :to => 'main#index'
 

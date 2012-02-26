@@ -16,6 +16,10 @@ class Politician #정치인 모델
   field :birthday, type: Date
   field :tweet_name, type: String
 
+  #타임라인 관련
+  field :good_link_count, type: Integer, default: 0
+  field :bad_link_count, type: Integer, default: 0
+
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
     :styles => {:square100 => "100x100#"},
@@ -31,6 +35,9 @@ class Politician #정치인 모델
 
   # 트윗 관련
   has_many :tweets
+
+  #타임라인 관련
+  has_many :timeline_entries
 
 
   def total_replies

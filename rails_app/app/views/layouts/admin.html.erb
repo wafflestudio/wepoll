@@ -14,7 +14,7 @@
 <body>
     <div id="main">
         <div id="header">
-          <%= link_to image_tag("/assets/admin/logo.png", :style => "width:143px;height:59px;"), admin_path, :class => 'logo' %>
+          <%= link_to image_tag("/assets/logo.png", :style => "width:176px;height:60px;"), admin_path, :class => 'logo' %>
             <ul id="top-navigation">
                 <li><%= link_to 'Dashboard', admin_path, :class => params[:controller] == 'admin/admin'?"active":""%></li>
                 <li><%= link_to 'Politician', admin_politicians_path, :class => params[:controller]=='admin/politicians'?"active":"" %></li>

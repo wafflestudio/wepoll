@@ -29,7 +29,6 @@
   width:256px - 16px;
   padding-left:0;
   min-height:300px;
-
 }
 
 #login-actions {
@@ -46,9 +45,16 @@
   position:absolute;
   left:20px;
   top:70px;
-  width:214px;
-  height:165px;
-  background:url(/assets/bubble1.gif);
+  width:207px;
+  height:157px;
+  background:url(/assets/bubble1.gif) no-repeat;
+}
+
+#bubble-text {
+  text-align:center;
+  margin-top:50px;
+  font-size:11pt;
+  line-height:120%;
 }
 
 #login-btn {
@@ -69,4 +75,39 @@
     color:white;
     text-decoration:none;
   }
+}
+
+#vs-container {
+  padding:30px 40px 30px 40px;
+  width:320px - 80px;
+  height:260px - 60px;
+  background:url(/assets/bg_vs.png) no-repeat;
+  margin-top:75px;
+  margin-left:-70px;
+}
+
+#vs-district {
+  text-align:center;
+  margin-top:10px;
+}
+
+.vs-part {
+  float:left;
+  width:110px;
+}
+
+.vs-part.alpha {
+  margin-right:10px;
+}
+
+.vs-part.omega {
+  margin-left:10px;
+}
+
+
+.small-map {
+  width:200px;
+  height:200px;
+  margin-top:170px;
+  margin-left:50px;
 }

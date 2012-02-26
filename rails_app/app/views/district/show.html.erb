@@ -1,0 +1,21 @@
+<h1><%=@district %></h1>
+
+<div id="name-cards" class="grid_12 alpha omega">
+  <div class="grid_6 alpha name-card">
+    <div class="grid_2 alpha tweet">
+      last tweet of <%= @p1.tweet_name%>
+    </div>
+    <div class="grid_4 omega">
+    <%= image_tag @p1.profile_photo.url(:square100) %>
+    </div>
+
+  </div>
+
+  <div class="grid_4 name-card">
+    <%= image_tag @p2.profile_photo.url(:square100) %>
+  </div>
+  <div class="grid_2 alpha tweet omega">
+    last tweet of <%=@p2.tweet_name%>
+  </div>
+</div>
+

@@ -24,13 +24,27 @@
 <% end -%>
 
 <div id="bubble">
+  <div id="bubble-text">
+    서울시 지도에<br />
+    마우스를 올려보세요!
+  </div>
 </div>
 
 <div class="pefix_1 grid_11">
-  <%= image_tag '/assets/dummy_map.gif' %>
+  <div id="seoul-map">
+    <%= image_tag '/assets/dummy_map.gif' %>
+  </div>
 </div>
 
 
 <% content_for :sidebar do -%>
-  hasdf
+  <div id="vs-container" class="clearfix">
+    <h3 id="vs-district">지역구</h3>
+    <div class="vs-part alpha"></div>
+    <div class="vs-part omega"></div>
+  </div>
+
+  <div id="busan-map" class="small-map">
+    <%= image_tag '/assets/busan_map_small.png' %>
+  </div>
 <% end -%>
