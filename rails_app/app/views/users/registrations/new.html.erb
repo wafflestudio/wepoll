@@ -2,10 +2,11 @@
 
 <% if signed_via_facebook? -%>
   <div class="alert alert-info">
-    페이스북으로 로그인하셨습니다. 필요한 정보를 입력하시면 페이스북과 연동하여 위폴을 이용할 수 있습니다.
+    <%= image_tag session["user_facebook_data"]["info"]["image"]  %> 페이스북으로 로그인하셨습니다. 필요한 정보를 입력하시면 페이스북과 연동하여 위폴을 이용할 수 있습니다.
   </div>
 <% elsif signed_via_twitter? -%>
   <div class="alert alert-info">
+    <%= image_tag session["user_twitter_data"]["info"]["image"] %>
     트위터로 로그인하셨습니다. 필요한 정보를 입력하시면 트위터와 연동하여 위폴을 이용할 수 있습니다.
   </div>
 <% end -%>
@@ -13,14 +14,27 @@
 <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
   <%= devise_error_messages! %>
 
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email %></div>
+  <% unless signed_via_facebook? || signed_via_twitter? -%>
+    <div>
+      <%= f.label :userid %><br />
+      <%= f.text_field :userid %>
+    </div>
 
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
+    <div>
+      <%= f.label :password %><br />
+      <%= f.password_field :password %>
+    </div>
 
-  <div><%= f.label :password_confirmation %><br />
-  <%= f.password_field :password_confirmation %></div>
+    <div>
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation %>
+    </div>
+  <% end -%>
+
+  <div>
+    <p>약관이 주절주절주절주절</p>
+    <%= check_box_tag :agree_provision %>
+  </div>
 
   <div><%= f.submit "Sign up" %></div>
 <% end %>

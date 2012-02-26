@@ -43,6 +43,7 @@ class Admin::BillsController < Admin::AdminController
   end
 
   def create
+    params[:bill][:tags] = params[:bill_tags].split(",").map {|t| t.strip}.reject {|t| t.length == 0}
     params[:bill][:coactor_ids] = params[:bill][:coactor_ids].split(",")
     params[:bill][:supporter_ids] = params[:bill][:coactor_ids].split(",")
     params[:bill][:dissenter_ids] = params[:bill][:coactor_ids].split(",")
@@ -65,6 +66,7 @@ class Admin::BillsController < Admin::AdminController
   end
 
   def update
+    params[:bill][:tags] = params[:bill_tags].split(",").map {|t| t.strip}.reject {|t| t.length == 0}
     params[:bill][:coactor_ids] = params[:bill][:coactor_ids].split(",")
     params[:bill][:supporter_ids] = params[:bill][:coactor_ids].split(",")
     params[:bill][:dissenter_ids] = params[:bill][:coactor_ids].split(",")

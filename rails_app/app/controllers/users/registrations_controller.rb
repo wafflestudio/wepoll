@@ -1,5 +1,33 @@
+#coding : utf-8
+require 'open-uri'
+require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
+  layout false, :only => [:new]
   def new
+    super
+  end
+
+  def create
+    sns_data = session["user_facebook_data"] || session["user_twitter_data"]
+    if sns_data
+      uid = sns_data.uid
+      tmp_pwd = Devise.friendly_token[0,20]
+      params[:user] = {
+        password: tmp_pwd,
+        password_confirmation: tmp_pwd,
+        nickname:
+        (if sns_data['provider']=='facebook'
+          sns_data['info']['name'] || sns_data['extra']['raw_info']['name']
+        else
+          sns_data['info']['nickname'] || sns_data['info']['name']
+        end)
+      }
+      pic_url = sns_data["info"]["image"]
+      #TODO : 그림 처리가 느리니 이것을 큐로 빼는것 고민해보셈
+      params[:user][:profile_picture] = open(pic_url) unless pic_url.nil?
+    end
+    params[:user][:agree_provision] = true if params[:agree_provision]
+
     super
   end
 
@@ -15,12 +43,24 @@ class Users::RegistrationsController < Devise::RegistrationsController
     @tw_token = current_user.user_tokens.where(:provider => 'twitter').first
 
     Rails.logger.info "===== link_sns ====="
-    Rails.logger.info session["user_facebook_data"].to_s
     if session["user_facebook_data"] && @fb_token.nil?
       Rails.logger.info "===== Build token with FB ====="
-      uid = session["user_facebook_data"].extra.raw_info.uid
+      session["user_facebook_data"].keys.each do |k|
+        Rails.logger.info "===#{k}==="
+        Rails.logger.info session["user_facebook_data"][k].to_s
+      end
+      uid = session["user_facebook_data"].uid
       secret = session["user_facebook_data"].credentials.secret
       token = session["user_facebook_data"].credentials.token
+
+      Rails.logger.info "== uid:#{uid} =="
+      Rails.logger.info "== secret:#{secret} =="
+      Rails.logger.info "== token:#{token} =="
+
+#      current_user.send_facebook(
+#        :access_token => token,
+#        :message => '안녕!'
+#      )
 
       @fb_token = current_user.user_tokens.create!(
         :provider => 'facebook', :uid => uid,
@@ -30,6 +70,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     if session["user_twitter_data"] && @tw_token.nil?
       Rails.logger.info "===== Build token with Twitter ====="
+      session["user_twitter_data"].keys.each do |k|
+        Rails.logger.info "===#{k}==="
+        Rails.logger.info session["user_twitter_data"][k].to_s
+      end
+
       uid = session["user_twitter_data"].uid
       secret = session["user_twitter_data"].credentials.secret
       token = session["user_twitter_data"].credentials.token
@@ -39,8 +84,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         :access_token => token, :access_token_secret => secret,
         :approved => true)
     end
-    session.keys.grep(/^user\_facebook\./).each {|k| session.delete k}
-    session.keys.grep(/^user\_twitter\./).each {|k| session.delete k}
+    session.keys.grep(/^user\_facebook/).each {|k| puts "delete #{k}";session.delete k}
+    session.keys.grep(/^user\_twitter/).each {|k| puts "delete #{k}";session.delete k}
   end
 
   def after_sign_up_path_for(resource)

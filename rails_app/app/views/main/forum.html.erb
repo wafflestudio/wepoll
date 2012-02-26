@@ -31,12 +31,12 @@
   </div>
 
   <div class="grid_8 omega">
-    <div id="reply_box" class="grid_8 alpha omega">
-      <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
-        <%= text_area_tag(:content) %>
-        <%= submit_tag 'reply' %>
-      <% end -%>
-    </div>
+    <!--<div id="reply_box" class="grid_8 alpha omega">-->
+      <%#= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+        <%#= text_area_tag(:content) %>
+        <%#= submit_tag 'reply' %>
+      <% #end -%>
+    <!--</div>-->
     <% @politician.total_replies.sort{|a,b| a.created_at <=> b.created_at}.each do |r| %>
       <%= r.created_at %>
       <%= r.content %>

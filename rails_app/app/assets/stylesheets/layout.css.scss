@@ -1,19 +1,115 @@
+/* application wide */
+body {
+  background-color:rgb(255,227,52);
+}
+
+#header {
+}
+
+.top-bar {
+  text-indent:-99999px;
+  background-color:#4f4f50;
+  height:26px;
+}
+
 #container {
-  background-color:#d3d3d3;
-  padding-top:30px;
+ // background-color:#d3d3d3;
+//  padding-top:30px;
 }
 
 
 footer {
+  background-color:#4f4f50;
   height:30px;
   font-size:9pt;
+  text-align:right;
+}
+#footer-links {
+  margin-top:10px;
   a {
-    color:#828282;
+    color:#fede4d;
     text-decoration:none;
   }
 }
 
+#logo-wrapper {
+  margin-top:40px;
+//  background-image:url(/assets/logo.png);
+ h1 {
+    text-indent:-99999px;
+    background:url(/assets/logo.png) no-repeat;
+    height:60px;
+  }
+}
+
+#search-bar-wrapper {
+  margin-top:58px;
+}
+
+#main-search-bar {
+  border:4px solid #454b4f;
+  border-radius:4px;
+  height:20px;
+  width:296px;
+
+  input[type=text] {
+    margin:0;
+    padding:2px;
+    border:0;
+    width:296px - 24px;
+    height:16px;
+    display:block;
+    float:left;
+  }
+
+  input[type=submit] {
+    margin:0;
+    padding:0;
+    display:block;
+    float:right;
+    height:20px;
+    width:20px;
+    border:0;
+    text-indent:-99999px;
+    background:url(/assets/btn_search.gif) no-repeat;
+  }
+}
+
+#login-status {
+  width:248px - 18px;
+  background-color:#4f4f50;
+  border-bottom-right-radius:12px;
+  border-bottom-left-radius:12px;
+  height:56px;
+  margin-left:0;
+  padding-left:18px;
+}
+
 .content .column{
 //  background-color:white;
+}
+
+#profile-pic-thumb-wrapper {
+}
+
+#profile-pic-thumb {
+  border:2px solid #f7d748;
+  border-radius:3px;
+}
+
+#nickname {
+  color:#f7d748;
+  font-size:8.5pt;
+}
+
+#session-actions {
+  a {
+    font-size:7.5pt;
+    color:#333;
+    border:2px solid #f7d747;
+    border-radius:2px;
+    background-color:white;
+    text-decoration:none;
+  }
 }
 

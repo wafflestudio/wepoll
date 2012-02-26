@@ -11,10 +11,12 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require timeline/underscore
 //= require timeline/json2
 //= require timeline/module
 //= require timeline/raphael-min
 //= require timeline/date
+//= require jquery.colorbox-min
 //= require_tree . exclude: "admin"

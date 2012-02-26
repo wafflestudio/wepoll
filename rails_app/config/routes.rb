@@ -15,6 +15,8 @@ Wepoll::Application.routes.draw do
     resources 'bills' do
       get 'search', :as => 'search', :on => :collection
     end
+
+    resources 'timeline_entries'
     resources 'users'
   end
 
@@ -24,6 +26,9 @@ Wepoll::Application.routes.draw do
     :sessions => "users/sessions"} do
     match 'users/sign_up/link_sns/:id' => 'users/registrations#link_sns', :via => :get, :as => 'new_user_link_sns'
   end
+
+  match 'users/auth/twitter/callback' => 'users/omniauth_callbacks#twitter'
+
 
   namespace :me do
     match 'sns/' => "sns#index"
@@ -52,4 +57,11 @@ Wepoll::Application.routes.draw do
 
   match "/search" => "main#search"
   root :to => 'main#index'
+
+
+  #for test
+  match 'main/fb_test' => 'main#facebook_test', :as => :fb_test
+  match 'main/fb_test_callback' => 'main#facebook_test_callback', :as => :fb_test_callback
+
+  match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
 end

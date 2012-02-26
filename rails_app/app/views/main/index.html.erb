@@ -1,30 +1,36 @@
-<div class="grid_16" id="main-pages-container">
-  <div id="main-content">
-    <div class="alpha grid_2" id="logo-wrapper">
-      <h1>wepoll</h1>
-    </div>
-    <div class="grid_6 prefix_2 omega" id="search-bar-wrapper">
-      <%= form_tag "/search", :id => "main-search-bar" do |f| %>
-        <%= hidden_field_tag :search_pass, "true" %>
-        <%= text_field_tag :query,"", :placeholder => "정치인, 동 이름을 입력하세요", :autocomplete => "off" %>
-        <%= submit_tag "검색"%>
-      <% end -%>
-      <div class="result_field">
-      </div>
-    </div>
-    <div class="clear"></div>
-    <div class="grid_6 alpha omega">
-      <h1>example list</h1>
-      <% @politicians.each do |p| -%>
-        <%= link_to p.name, forum_path(p) %>
-      <% end -%>
-    </div>
-    <hr />
-  </div>
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+    FB.getLoginStatus(function(response) {
+      if (response.status === 'connected') {
+        // the user is logged in and connected to your
+        // app, and response.authResponse supplies
+        // the user's ID, a valid access token, a signed
+        // request, and the time the access token 
+        // and signed request each expire
+        var uid = response.authResponse.userID;
+        var accessToken = response.authResponse.accessToken;
+//        alert("connected");
+      } else if (response.status === 'not_authorized') {
+        // the user is logged in to Facebook, 
+        //but not connected to the app
+//        alert("not authorized");
+      } else {
+        // the user isn't even logged in to Facebook.
+//        alert("not logged in");
+      }
+    });
 
-  <div id="main-right" class="grid_5 omega">
-    <div id="login-btn">
-      <%= link_to '로그인', new_user_session_path %>
-    </div>
-  </div>
+  </script>
+<% end -%>
+
+<div id="bubble">
 </div>
+
+<div class="pefix_1 grid_11">
+  <%= image_tag '/assets/dummy_map.gif' %>
+</div>
+
+
+<% content_for :sidebar do -%>
+  hasdf
+<% end -%>

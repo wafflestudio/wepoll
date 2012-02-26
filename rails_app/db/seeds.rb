@@ -3,25 +3,27 @@ require 'csv'
 require 'mongoid'
 require 'nokogiri'
 
-period = {}
-period[1]  = [Date.parse("1948.5.31"),Date.parse("1950.5.30")]
-period[2]  = [Date.parse("1950.5.31"),Date.parse("1954.5.30")]
-period[3]  = [Date.parse("1954.5.31"),Date.parse("1958.5.30")]
-period[4]  = [Date.parse("1958.5.31"),Date.parse("1960.7.28")]
-period[5]  = [Date.parse("1960.7.29"),Date.parse("1961.5.16")]
-period[6]  = [Date.parse("1963.12.17"),Date.parse("1967.6.30")]
-period[7]  = [Date.parse("1967.7.1"),Date.parse("1971.6.30")]
-period[8]  = [Date.parse("1971.7.1"),Date.parse("1972.10.17")]
-period[9]  = [Date.parse("1973.3.12"),Date.parse("1979.3.11")]
-period[10] = [Date.parse("1979.3.12"),Date.parse("1980.10.27")]
-period[11] = [Date.parse("1981.4.11"),Date.parse("1985.4.10")]
-period[12] = [Date.parse("1985.4.11"),Date.parse("1988.5.29")]
-period[13] = [Date.parse("1988.5.30"),Date.parse("1992.5.29")]
-period[14] = [Date.parse("1992.5.30"),Date.parse("1996.5.29")]
-period[15] = [Date.parse("1996.5.30"),Date.parse("2000.5.29")]
-period[16] = [Date.parse("2000.5.30"),Date.parse("2004.5.29")]
-period[17] = [Date.parse("2004.5.30"),Date.parse("2008.5.29")]
-period[18] = [Date.parse("2008.5.30"),Date.parse("2012.5.29")]
+require Rails.root + 'romanize.rb'
+
+period = []
+period[0]  = [Date.parse("1948.5.31"),Date.parse("1950.5.30")]
+period[1]  = [Date.parse("1950.5.31"),Date.parse("1954.5.30")]
+period[2]  = [Date.parse("1954.5.31"),Date.parse("1958.5.30")]
+period[3]  = [Date.parse("1958.5.31"),Date.parse("1960.7.28")]
+period[4]  = [Date.parse("1960.7.29"),Date.parse("1961.5.16")]
+period[5]  = [Date.parse("1963.12.17"),Date.parse("1967.6.30")]
+period[6]  = [Date.parse("1967.7.1"),Date.parse("1971.6.30")]
+period[7]  = [Date.parse("1971.7.1"),Date.parse("1972.10.17")]
+period[8]  = [Date.parse("1973.3.12"),Date.parse("1979.3.11")]
+period[9] = [Date.parse("1979.3.12"),Date.parse("1980.10.27")]
+period[10] = [Date.parse("1981.4.11"),Date.parse("1985.4.10")]
+period[11] = [Date.parse("1985.4.11"),Date.parse("1988.5.29")]
+period[12] = [Date.parse("1988.5.30"),Date.parse("1992.5.29")]
+period[13] = [Date.parse("1992.5.30"),Date.parse("1996.5.29")]
+period[14] = [Date.parse("1996.5.30"),Date.parse("2000.5.29")]
+period[15] = [Date.parse("2000.5.30"),Date.parse("2004.5.29")]
+period[16] = [Date.parse("2004.5.30"),Date.parse("2008.5.29")]
+period[17] = [Date.parse("2008.5.30"),Date.parse("2012.5.29")]
 
 ommitted_names = []
 
@@ -45,11 +47,12 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
     military = "면제#{csv[13]}"
   end
 
-  profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name}[0]
+  name_romanize = name.romanize
+  profile_photo_path = Dir.glob("init_data/profile_photos/*.jpg").select {|p| p.include? name_romanize}[0]
 
   tweet_name = nil
-  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name}.csv")
-    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name}.csv", :encoding => "UTF-8") do |tw|
+  if File.exists?(Rails.root+"init_data/naver_result/naver_#{name_romanize}.csv")
+    CSV.foreach(Rails.root+"init_data/naver_result/naver_#{name_romanize}.csv", :encoding => "UTF-8") do |tw|
       tweet_name = tw[9].slice(19..-1) unless tw[9].nil?
     end
   end
@@ -65,7 +68,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
   puts "#{name} photo doesn't exist" if profile_photo_path.nil?
 
-  csv_file_path = Dir.glob("init_data/profile_csvs/csvs*/profile2_#{name}.csv")[0]
+  csv_file_path = Dir.glob("init_data/profile_csvs/csvs*/profile2_#{name_romanize}.csv")[0]
   (p.save! ; ommitted_names << name ; next) if csv_file_path.nil?
   (p.save! ; ommitted_names << name ; next) if File.stat(csv_file_path).size == 0
 
@@ -79,13 +82,48 @@ end
 puts "\n총 #{cnt}명"
 puts "세부 프로필 빠진 사람 : #{ommitted_names.join(",")}"
 
+dump_file_exist = false
+if File.exists? Rails.root+"bill_dump"
+  dump_file_exist = true
+elsif File.exists? Rails.root+"bill_dump.gz"
+  %x(gunzip -c #{Rails.root+"bill_dump.gz"} > #{Rails.root+"bill_dump"})
+  dump_file_exist = true
+end
+
+puts "-------- 발의법안 처리중 --------"
+if dump_file_exist
+  puts "-------- 기존 dump 파일에서 생성 --------"
+  dumps = File.read(Rails.root+"bill_dump").split("!averyspecialandlongstringwhichwouldnotbeappearedinthistextfilekk!")
+  cnt = 0
+  total = dumps.count
+
+  dumps.each do |dump|
+    h = YAML::load(dump)
+
+    party, name = (h.delete :initiator_name).split(" ")
+    h[:initiator_id] = Politician.where(:party => party, :name => name).first.id
+
+    h[:coactor_ids] = (h.delete :coactor_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
+    h[:supporter_ids] = (h.delete :supporter_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
+    h[:dissenter_ids] = (h.delete :dissenter_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
+
+    bill = Bill.create(h)
+
+    #진행상황표시
+    printf "\r%5d/%5d (%.2f%%) #{bill.title}                         ", cnt+=1, total, cnt.to_f/total*100.0
+  end
+end
+
+(exit 0) if dump_file_exist
+
 #==== 법안 ====
 c2 = 0
-puts "-------- 발의법안 처리중 --------"
+puts "-------- csv 파일에서 생성 --------"
 CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do |csv|
   name = csv[4]
   p = Politician.where(:name => name).first #XXX : 동명이인 어떻게 처리
-  csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name}.csv")[0]
+  name_romanize = name.romanize
+  csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name_romanize}.csv")[0]
   printf "#{name}(#{c2+=1}) 발의한 법안..."
   (puts "0개"; next) if csv_file_path.nil?
 
@@ -99,10 +137,10 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
 
     #법안 제안 날짜중에 이 정치인이 발의할 수 없는 날짜인것은 제외
     tmp_date = Date.parse init_date
-    age = 0
-    period.keys.each_with_index do |k|
-      s,f = period[k]
-      (age = k; break) if tmp_date>=s && tmp_date<=f
+    age = 18
+    period.reverse_each do |s,f|
+      break if tmp_date>=s && tmp_date<=f
+      age-=1
     end
 
     next if p.elections.nil? || !p.elections.include?(age)
@@ -169,55 +207,62 @@ end
 #==== 법안에 대한 찬성 반대 ====
 #==== 반대는 raw data에 없어서 구현이 안됨
 puts "법안에 대한 찬성 반대 입력 중"
-puts "=============================\n"
+puts "============================="
 
 File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
-  file_name = line.sub("\n", "") + ".html"
+  code = line.sub("\n", "")
+  file_name = "#{code}.html"
 
-  if File.exists? Rails.root + "raw_data/law_coactors_#{file_name}"
-    puts "\n파일명...law_coactors_#{file_name}"
+  bill = Bill.where(:code => code).first
 
-    #raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_coactors_#{file_name}").read.encode("euc-kr"))
-    #detail_raw_data = iconv.iconv(File.new(Rails.root + "raw_data/law_detail_#{file_name}").read.encode("euc-kr")) # coactors에서 법안명을 가져올 수가 없어서 detail 사용
-    raw_data = File.open(Rails.root + "raw_data/law_coactors_#{file_name}").read
-    detail_raw_data = File.open(Rails.root + "raw_data/law_detail_#{file_name}").read
-
-    doc = Nokogiri::HTML(raw_data)
-    detail_doc = Nokogiri::HTML(detail_raw_data)
-
-    agenda = detail_doc.xpath("html/body/table[2]/tbody/tr[2]/td[1]/table[1]/tbody/tr[3]/td[2]/table/tbody/tr[1]/td[1]").inner_text.strip
-
-    bill = Bill.where(title: agenda.to_s).first
-
-    if bill.nil?
-      puts "안건...#{agenda}...존재하지않습니다."
-    else
-      puts "안건...#{bill.title}\n"
-
-      #===찬성 명단
-      i = 1
-      j = 1
-      puts "====== 찬성 명단 ======"
-      while !doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[1]").inner_text.empty?
-        while !doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[#{i}]").inner_text.empty?
-          agree_member = doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[#{j}]/td[#{i}]").inner_text.to_s
-          member = Politician.where(name: agree_member).first
-          if !member.nil?
-            puts ":..의원...#{member.name}"
-            bill.supporters << Politician.where(name: agree_member).first
-          end
-          i += 1
-        end
-        i = 1
-        j += 1
-      end
-      if bill.save 
-        puts "==== 성공 ====\n"
-      else
-        puts "==== 실패 ====\n"
-      end
-    end
+  if bill.nil?
+    puts "법안 code=#{code} 존재하지 않습니다."
   else
-    puts "파일명...#{file_name}...존재하지않습니다."
+    #find containing dir
+    fname = Dir.glob(Rails.root+"raw_data*/law_coactors_#{file_name}")[0]
+
+    if fname
+      raw_data = File.open(fname).read
+      doc = Nokogiri::HTML(raw_data)
+      names = doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table//td").map {|td| td.inner_text}.reject {|txt| txt.length == 0}
+
+      bill.supporters = names.map {|name| Politician.where(:name => name).first}
+      puts "==== 법안찬성자 ===="
+      puts names.join(",")
+      puts(bill.save ? "==== 성공 ====" : "==== 실패 ====")
+    else
+      puts "파일 law_coactors_#{file_name} 이 존재하지않습니다."
+    end
   end
 end
+
+# Make search input
+## type
+  # 0 : district
+  # 1 : name
+  # 2 : dong
+##
+f = File.open(Rails.root+"app/assets/javascripts/search.js", "w")
+f.write "var search_source=["
+Politician.all.each do |member|
+  # [
+  # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"},
+  # ...
+  # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"}
+  # ]
+  s = "{'form':'#{member.name}','query':'#{member._id.to_s}','type':'1','label':'#{member.name}(#{member.party})'},"
+  f.write s
+end
+CSV.foreach(Rails.root + "init_data/district.csv", :encoding => "UTF-8") do |csv|
+  # district
+  district = csv[0]
+  s = "{'form':'#{district}','query':'#{district}','type':'0','label':'#{district}'},"
+  f.write s
+  # dong
+  csv[3].split(" ").each do |dong|
+    s = "{'form':'#{dong}','query':'#{district}','type':'2','label':'#{dong}(#{district})'},"
+    f.write s
+  end
+end
+f.write "]"
+f.close

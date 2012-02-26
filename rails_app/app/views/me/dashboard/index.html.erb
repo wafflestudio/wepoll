@@ -1,6 +1,13 @@
 <h1><%= current_user.email %> <small>위폴 정보수정 페이지</small></h1>
 
 <div class="row">
+  <div>
+    <h3>닉네임</h3>
+    <%= form_for current_user, :url => '/users' do |f| -%>
+    <%= f.text_field :nickname %>
+    <% end -%>
+  </div>
+
   <div class="span5 well">
     <h3>내가 올린 링크들</h3>
     <p>없어요 아직</p>
