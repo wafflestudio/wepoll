@@ -259,10 +259,12 @@ CSV.foreach(Rails.root + "init_data/district.csv", :encoding => "UTF-8") do |csv
   s = "{'form':'#{district}','query':'#{district}','type':'0','label':'#{district}'},"
   f.write s
   # dong
+  obj_arr = []
   csv[3].split(" ").each do |dong|
-    s = "{'form':'#{dong}','query':'#{district}','type':'2','label':'#{dong}(#{district})'},"
-    f.write s
+    s = "{'form':'#{dong}','query':'#{district}','type':'2','label':'#{dong}(#{district})'}"
+    obj_arr << s
   end
+  f.write obj_arr.join(",")
 end
 f.write "]"
 f.close
