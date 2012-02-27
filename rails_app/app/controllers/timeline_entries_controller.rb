@@ -2,9 +2,14 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries
   # GET /timeline_entries.json
   def index
-  	# TODO: we don't need equal part here always, actually.
+		
+		#conditions = {}
+		#[:start, :end, :unit]
+
   	if params[:from]
 	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gte' => params[:from]})
+	  elsif params[:after]
+	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gt' => params[:after]})
 	  else
 	    @timeline_entries = TimelineEntry.where(:deleted => false)
 	  end

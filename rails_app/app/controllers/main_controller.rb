@@ -80,6 +80,9 @@ class MainController < ApplicationController
   end
 
   def search
+    Rails.logger.info "======================"
+    Rails.logger.info params.inspect
+    Rails.logger.info "======================"
     type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
     query = params[:query].sub(" ","")
     sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
@@ -92,7 +95,7 @@ class MainController < ApplicationController
     else
       @politician = Politician.where(district: sub_query).first
     end
-    
+
     if !@politician.nil?
       redirect_to forum_path(@politician._id)
     else

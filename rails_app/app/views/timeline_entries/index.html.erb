@@ -2,6 +2,13 @@
 <script type="text/coffeescript"></script>
 <script type="text/javascript">
 var timelineView;
+
+Backbone.Model.prototype.toJSON = function() {
+  return _(_.clone(this.attributes)).extend({
+   'authenticity_token' : $('meta[name="csrf-token"]').attr('content')
+  });
+ }
+
 $(function() {
 	var AppRouter = Backbone.Router.extend({
 		routes: {
@@ -21,18 +28,56 @@ $(function() {
 	Backbone.history.start();
 	router.navigate();
 
-	timelineView = new modules.TimelineView()
-	timelineView.startAutoUpdate()
+	timelineController = new modules.TimelineController()
+	timelineController.startAutoUpdate()
+	timelineController.appendTo($("#timeline"))
+	
+	$(modules.TimelineController.getForm()).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+		timelineController.addEntry(model)
+		$.colorbox.close()
+	}
+	)
+	$("#link-new").colorbox({inline:true});
 
-	$("#button-new").click(function() {
-		$("#timeline-form").load("/timeline_entries/new")
-	})
+
 })
 </script>
+<style type="text/css">
+#timeline {
+width:1024px;
+height:400px;
+}
+
+
+.tm-slider {
+	position:absolute;
+	width:200px;
+	height:200px;
+	border:1px solid black;
+}
+.tm-entry {
+	position:absolute;
+	top:0px;
+	left:0px;
+	background-color:white;
+}
+
+.tm-legend {
+	position:absolute;
+	bottom:0px;
+}
+
+#tm-entry-new {
+	background-color:white;
+}
+
+</style>
 <% end %>
 
-<button id="button-new">new Timeline Entry</button>
-<div id="timeline-form">
+<a id="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry</a>
+
+<div style='display:none'>	
+	<div id='tm-entry-new'></div>
 </div>
 <div id="timeline">
 </div>

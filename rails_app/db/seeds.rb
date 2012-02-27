@@ -110,7 +110,7 @@ if dump_file_exist
     bill = Bill.create(h)
 
     #진행상황표시
-    printf "\r%5d/%5d (%.2f%%) #{bill.title}                         ", cnt+=1, total, cnt.to_f/total
+    printf "\r%5d/%5d (%.2f%%) #{bill.title}                         ", cnt+=1, total, cnt.to_f/total*100.0
   end
 end
 

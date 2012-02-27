@@ -10,6 +10,12 @@ class Users::OmniauthCallbacksController < ApplicationController
     else
       if current_user && session["link_sns"]
         Rails.logger.info "======= link Facebook ======="
+        request.env["omniauth.auth"].keys.each {|k|
+          Rails.logger.info "===#{k}==="
+          Rails.logger.info request.env["omniauth.auth"][k]
+        }
+        Rails.logger.info "============================="
+
         fb_data = request.env["omniauth.auth"]
         uid = fb_data.extra.raw_info.uid
         secret = fb_data.credentials.secret
@@ -38,7 +44,12 @@ class Users::OmniauthCallbacksController < ApplicationController
   def twitter
     Rails.logger.info 'twitter auth callback'
     @user = User.find_for_twitter_oauth(request.env["omniauth.auth"], current_user)
-
+    Rails.logger.info "=========================="
+    request.env["omniauth.auth"].keys.each {|k|
+      Rails.logger.info "===#{k}==="
+      Rails.logger.info request.env["omniauth.auth"][k]
+    }
+    Rails.logger.info "=========================="
     if @user && @user.persisted?
       sign_in_and_redirect @user,
         session["link_sns"] ? {:bypass => true} : {:event => :authentication}
@@ -50,7 +61,7 @@ class Users::OmniauthCallbacksController < ApplicationController
         token = tw_data.credentials.token
 
         tw_token = current_user.user_tokens.create!(
-          :provider => 'twitter', :uid => uid,
+          :provider => 'twitter', :uid => uid, :approved => true,
           :access_token => token, :access_token_secret => secret
 #          :approve_key => SecureRandom.hex, :approve_expire_at => 2.hour.from_now.to_i
         )

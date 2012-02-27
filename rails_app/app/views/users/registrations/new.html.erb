@@ -2,10 +2,11 @@
 
 <% if signed_via_facebook? -%>
   <div class="alert alert-info">
-    페이스북으로 로그인하셨습니다. 필요한 정보를 입력하시면 페이스북과 연동하여 위폴을 이용할 수 있습니다.
+    <%= image_tag session["user_facebook_data"]["info"]["image"]  %> 페이스북으로 로그인하셨습니다. 필요한 정보를 입력하시면 페이스북과 연동하여 위폴을 이용할 수 있습니다.
   </div>
 <% elsif signed_via_twitter? -%>
   <div class="alert alert-info">
+    <%= image_tag session["user_twitter_data"]["info"]["image"] %>
     트위터로 로그인하셨습니다. 필요한 정보를 입력하시면 트위터와 연동하여 위폴을 이용할 수 있습니다.
   </div>
 <% end -%>
