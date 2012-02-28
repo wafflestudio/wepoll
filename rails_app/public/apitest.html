@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="/assets/jquery.js"></script>
+<script type="text/javascript">
+	
+	function load(url)  {
+		$.ajax({ url: '/api/article_parse', data: 'url='+ url, type: 'POST', dataType: 'json', success: 
+			function(data)  { 
+				$("#preview-title").html(data.title);
+				$("#preview-img").empty().append("<img src='" + data.image + "'/>");
+				$("#preview-desc").html(data.description);
+			} 
+		}); 
+
+	}
+
+	$(function()  {
+		var timeout;
+
+		$("#link").keydown( function changing() {
+			console.log('change')
+			if(timeout)
+				clearTimeout(timeout)
+
+			timeout = setTimeout( 
+				function ()  {
+					timeout = null
+					load($("#link").val())
+				}
+			,5000)
+
+		});
+
+
+		$("#link").focusout( function () {
+			console.log("focusout")
+			load($("#link").val())
+		});
+	});
+</script>
+</head>
+<body>
+	<div>
+		<p>Link:<textarea id="link" rows="2" cols="49"/></textarea></p>
+	</div>
+	<div id="preview">
+		<h2 id="preview-title">Title</h2> 
+		<div id="preview-img">Image</div>
+		<div id="preview-desc">Description</div>
+	</div>
+
+</body>
+</html>
