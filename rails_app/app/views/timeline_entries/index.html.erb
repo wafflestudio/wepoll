@@ -10,50 +10,75 @@ Backbone.Model.prototype.toJSON = function() {
  }
 
 $(function() {
+	timelineController = new modules.TimelineController()
+	timelineController.startAutoUpdate()
+	timelineController.appendTo($("#timeline"))
+	
+	
+	$("#link-new").click(function() {
+		$("#tm-entry-new").empty()
+		$(modules.TimelineController.getForm()).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+			timelineController.addEntry(model)
+			$.colorbox.close()
+		}
+		)
+		$(this).colorbox({inline:true,open:true})
+	})
+	//$("#link-new").colorbox({inline:true});
+
 	var AppRouter = Backbone.Router.extend({
 		routes: {
-			"index" : "index",
+			"" : "index",
 			"all" : "showAll",
-			"year" : "showYear"
+			"year" : "showYear",
+			"year/:year" : "showYear",
+			"year/:year/m:month" : "showYear",
+
 		},
 		index: function() {
+			console.log('DEFAULT')
+			timelineController.changeScale('all')
 		},
 		showAll: function() {
+			console.log('ALL')
+			timelineController.changeScale('all')
 		},
-		showYear: function() {
+		showYear: function(year,month) {
+			if(year)
+				timelineController.changeScale('year',year*12+(month ? month-1 : 0))
+			else
+				timelineController.changeScale('year')
+		},
+		showMonth: function(year,month,week)  {
 		}
+
 	});
 
 	var router = new AppRouter()
 	Backbone.history.start();
 	router.navigate();
 
-	timelineController = new modules.TimelineController()
-	timelineController.startAutoUpdate()
-	timelineController.appendTo($("#timeline"))
-	
-	$(modules.TimelineController.getForm()).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-		timelineController.addEntry(model)
-		$.colorbox.close()
-	}
-	)
-	$("#link-new").colorbox({inline:true});
-
 
 })
 </script>
 <style type="text/css">
 #timeline {
+position:relative;
+overflow:hidden;
 width:1024px;
 height:400px;
+background-color:#ccc;
+z-index:10;
 }
 
+.timeline-view {
+	position:absolute;
+}
 
 .tm-slider {
 	position:absolute;
 	width:200px;
 	height:200px;
-	border:1px solid black;
 }
 .tm-entry {
 	position:absolute;
@@ -78,6 +103,11 @@ height:400px;
 
 <div style='display:none'>	
 	<div id='tm-entry-new'></div>
+</div>
+<div id="timeline-nav">
+<a href="#">All</a>
+<a href="#year">Year</a>
+Month
 </div>
 <div id="timeline">
 </div>
