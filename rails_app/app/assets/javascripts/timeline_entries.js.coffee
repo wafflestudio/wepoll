@@ -131,6 +131,19 @@ class TimelineEntryCollection extends Backbone.Collection
 #	* A `TimelineEntryView` is normally held in a [`TimelineEntrySlider`](#section-TimelineEntrySlider).
 #
 class TimelineEntryView extends Backbone.View
+	@createView: (model)->
+		template = "<div class='tm-entry-view'>
+				<p>Comment: #{model.escape('comment')}<p>
+				<p>Link: #{model.escape('url')}</p>
+				<p>Date: #{model.escape('posted_at')}</p>
+				<p><a href='#'>Edit</a></p>
+			</div>"
+		element = $(template)
+		element.find('a').click (evt)=>
+			$(element).trigger('changeMode')
+			return false
+		return element
+		
 	# The `createForm` class method definition is exposed for new/edit form creation.
 	# `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
 	# the returned object exposes *save* event to listen to.
@@ -142,7 +155,7 @@ class TimelineEntryView extends Backbone.View
 				<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
 					
 				<p>Date:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
-				<p><input type='submit' value='변경'/></p>
+				<p><input type='submit' value='Done'/></p>
 			</form>"
 		# Create a new model with default values if not supplied in the argument.
 		model = new TimelineEntry({comment:"",url:"",posted_at:new Date().toISOString()}) if !model
@@ -179,12 +192,22 @@ class TimelineEntryView extends Backbone.View
 	
 	render: ()->
 		if !@hasEl
-			element = TimelineEntryView.createForm(@model)
-			element = $("<div class='tm-entry'/>").append(element)
-			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
-				@model.destroy()
+			edit = TimelineEntryView.createForm(@model)
+			view = TimelineEntryView.createView(@model)
+			element = $("<div class='tm-entry'/>").append(edit).append(view)
+			edit.css('display','none')
 
-			element.append(delete_link)
+			view.on "changeMode", ()=>
+				view.css('display','none')
+				edit.css('display','')
+			edit.on "save", ()=>
+				edit.css('display','none')
+				view.css('display', '')
+
+			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
+				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
+
+			edit.append(delete_link)
 			@setElement(element)
 		@hasEl = true
 	
