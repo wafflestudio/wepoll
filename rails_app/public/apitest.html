@@ -1,6 +1,8 @@
 <!doctype html>
-<html>
+<html lang="ko">
 <head>
+		<meta charset="utf-8">
+    <title>Preview API Test</title>
 <script type="text/javascript" src="/assets/jquery.js"></script>
 <script type="text/javascript">
 	
@@ -8,7 +10,7 @@
 		$.ajax({ url: '/api/article_parse', data: 'url='+ url, type: 'POST', dataType: 'json', success: 
 			function(data)  { 
 				$("#preview-title").html(data.title);
-				$("#preview-img").empty().append("<img src='" + data.image + "'/>");
+				$("#preview-img").empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" );
 				$("#preview-desc").html(data.description);
 			} 
 		}); 
@@ -28,7 +30,7 @@
 					timeout = null
 					load($("#link").val())
 				}
-			,5000)
+			,600)
 
 		});
 
