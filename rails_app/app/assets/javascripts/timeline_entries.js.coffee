@@ -79,7 +79,8 @@ class TimelineEntry extends Backbone.Model
 class TimelineEntryCollection extends Backbone.Collection
 	model:TimelineEntry
 	url: '/timeline_entries'
-	
+	initialize:()->
+		
 	# Update to a collection can be made with extra parameters.
 	update: (params)->
 		latest = new Date("1000-01-01") # let's assume some time
@@ -141,7 +142,7 @@ class TimelineEntryView extends Backbone.View
 				<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
 					
 				<p>Date:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
-				<p><input type='submit' value='submit'/></p>
+				<p><input type='submit' value='변경'/></p>
 			</form>"
 		# Create a new model with default values if not supplied in the argument.
 		model = new TimelineEntry({comment:"",url:"",posted_at:new Date().toISOString()}) if !model
@@ -212,6 +213,8 @@ class TimelineEntryView extends Backbone.View
 		@$el.remove() if @hasEl
 
 
+createLegend = (value, text, href)->
+	$("<div class='tm-legend'><a href='#{href}'>#{text}</a></div>")
 
 # TimelineEntrySlider
 # =====================================================
@@ -224,7 +227,8 @@ class TimelineEntryView extends Backbone.View
 class TimelineEntrySlider extends Backbone.View
 	initialize:(options)->
 		@$el = $("<div class='tm-slider'>Slider</div>")
-		@$el.append("<div class='tm-legend'>#{options.legend}</div>") if options and options.legend
+		legend = createLegend(options.position, options.legend, options.href)
+		@$el.append(legend)
 
 	addEntry:(view)->
 		view.appendTo(@$el)
@@ -270,7 +274,11 @@ class TimelineView extends Backbone.Events
 	constructor:(@collection)->
 		@sliders = {}
 		@collection.on("add", @onEntryAdd)
-		@$el = $("<div class='timeline-view'>Timeline</div>")
+		@$el = $("<div class='timeline-view'></div>")
+		@setStart(@epoch())
+		# if @collection is already loaded somehow
+		@collection.each (entry)=>
+			@drawEntry(entry)
 	
 	fetch:(options)->
 		@collection.fetch(options)
@@ -297,18 +305,20 @@ class TimelineView extends Backbone.Events
 		for pos,sl of @sliders
 			delete @sliders[pos] if sl == slider
 	
-
-	onEntryAdd:(entry)=>
+	drawEntry: (entry)->
 		pos = @calcPosition(entry.get("posted_at"))
 		slider = @sliders[pos]
 		if !slider
-			slider = new TimelineEntrySlider({legend:pos})
+			slider = new TimelineEntrySlider({pos:pos,legend:@legendText(pos),href:@legendHref(pos)})
 			@addSlider(slider, pos)
-			slider.css({"left":"#{(pos-2009)*210}px"})
+			slider.css({"left":"#{(pos-@epoch())*210}px"})
 
 		view = new TimelineEntryView({model:entry})
 		slider.addEntry(view)
 
+	onEntryAdd:(entry)=>
+		@drawEntry(entry)
+		
 	onEntryRemove:(slider, entryView, entry)=>
 		if slider.isEmpty()
 			@removeSlider(slider)
@@ -321,9 +331,9 @@ class TimelineView extends Backbone.Events
 			if slider.isEmpty()
 				@removeSlider(slider)
 			if !newSlider
-				newSlider = new TimelineEntrySlider()
+				newSlider = new TimelineEntrySlider({legend:pos})
 				@addSlider(newSlider, pos)
-				newSlider.css({"left":"#{(pos-2009)*210}px"})
+				newSlider.css({"left":"#{(pos-@epoch())*210}px"})
 			newSlider.addEntry(entryView)
 
 	# You can let the view updated automatically.
@@ -338,6 +348,25 @@ class TimelineView extends Backbone.Events
 	
 	update: (params)->
 		@collection.update(params)
+
+	goLeft: ()->
+		return if @moving
+		left = @$el.css("left")
+		left = if left == 'auto' then 0 else left
+		@$el.animate({left:parseInt(left) - 210},{easing:'linear',complete:()=>
+			@moving = false
+		})
+		@moving = true
+
+	goRight: ()->
+		return if @moving
+		left = @$el.css("left")
+		left = if left == 'auto' then 0 else left
+		@$el.animate({left:parseInt(left) + 210},{easing:'linear',complete:()=>
+			@moving = false
+		})
+		@moving = true
+
 		
 
 class AllView extends TimelineView
@@ -358,11 +387,51 @@ class AllView extends TimelineView
 
 	calcPosition: (date)->
 		year = new Date(date).getFullYear()
+	
+	legendText: (pos)->
+		pos + "년"
+	
+	legendHref: (pos)->
+		"#year/#{pos}"
+
+	epoch: ()->
+		# TODO: 4 is selected as the number of entries can be shown on screen
+		return new Date().getFullYear()-4
+	
+	setStart: (year)->
+		@$el.css("left", (year-@epoch())*210)
 
 
 
 class YearView extends TimelineView
 	@scale : "year"
+	@unit : "quarter"
+
+	calcPosition: (date)->
+		d = new Date(date)
+		year = d.getFullYear()
+		month = d.getMonth()
+		return year*12+month
+	
+	legendText: (pos)->
+		year = parseInt(pos/12)
+		month = pos % 12+1
+		return "#{year}년 #{month}월"
+	
+	legendHref: (pos)->
+		year = parseInt(pos/12)
+		month = pos % 12+1
+		return "#month/#{year}/#{month}"
+	
+	epoch: ()->
+		today = new Date()
+		return today.getFullYear()*12 + today.getMonth()-4
+
+	setStart: (pos)->
+		year = parseInt(pos/12)
+		month = pos %12
+		console.log("left:" + -(year*12+month-@epoch())*210)
+		@$el.css("left", -(year*12+month-@epoch())*210)
 
 class QuarterView extends TimelineView
 
@@ -390,13 +459,21 @@ class TimelineController
 	constructor: ()->
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		@collection.on "add", (model)->
+			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
+		@collection.on "remove", (model)->
+			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
+		
+		@collection.on "change", (model)->
+			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
+
 		@views = {}
 		# Default scale view (year) is created on object creation
 		allView = new Views["all"](@collection)
 		@currentScale = @views["all"] = allView
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
-	changeScale: (scaleName)->
+	changeScale: (scaleName, start)->
 		oldScale = @currentScale
 		if @views[scaleName]
 			@currentScale = @views[scaleName]
@@ -405,19 +482,26 @@ class TimelineController
 			@currentScale.appendTo(@$el)
 
 		# Transition between oldScale and currentScale (may simple be a `show()` and a `hide()`)
-
 		if oldScale
 			oldScale.stopAutoUpdate() if @autoUpdate
 			oldScale.hide()
 
+		@currentScale.setStart(start) if typeof start != 'undefined'
 		@currentScale.show()
 		@currentScale.startAutoUpdate() if @autoUpdate
 	
 	# The timeline will be visible after appending it to an html element (argument is preferably a referencing jquery object).
 	appendTo: ($el)->
+		
 		@$el = $el
 		for key,view of @views
 			view.appendTo(@$el)
+		$(@$el).mousewheel (e, delta)=>
+			e.preventDefault()
+			if delta < -0.4
+				@currentScale.goLeft()
+			else if delta > 0.4
+				@currentScale.goRight()
 
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
