@@ -43,4 +43,38 @@ class Politician #정치인 모델
   def total_replies
     self.tweets.map {|t| t.tweet_replies}.flatten
   end
+
+  def most_good_link
+    timeline_entries.where(:is_good => true).desc("like").limit(1)
+  end
+
+  def most_bad_link
+    timeline_entries.where(:is_good => false).desc("like").limit(1)
+  end
+
+  def initiate_bills_categories
+    bills_commitees = initiate_bills.map {|b| b.commitee}.sort
+
+    return {} if bills_commitees.count == 0
+    return {"#{bills_commitees[0]}" => 1} if bills_commitees.count == 1
+
+    cnt = 0
+    h = {}
+    0.upto(bills_commitees.count-2) do |i|
+      if bills_commitees[i] == bills_commitees[i+1]
+        cnt +=1
+      else
+        h[bills_commitees[i]] = cnt+1
+        cnt = 0
+      end
+    end
+
+    if bills_commitees[-1] == bills_commitees[-2]
+      h[bills_commitees[-1]] = cnt+1
+    else
+      h[bills_commitees[-1]] = 1
+    end
+
+    h
+  end
 end

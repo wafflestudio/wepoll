@@ -6,6 +6,15 @@ class DistrictController < ApplicationController
     raise "#{@district} 후보 수 != 2" if politicians.count != 2
     @p1 = politicians.first
     @p2 = politicians.last
+
+    p1_bill_categories = @p1.initiate_bills_categories
+    p2_bill_categories = @p2.initiate_bills_categories
+
+    @p1_bill_counts = p1_bill_categories.values
+    @p1_bill_categories = p1_bill_categories.keys
+
+    @p2_bill_counts = p2_bill_categories.values
+    @p2_bill_categories = p2_bill_categories.keys
   end
 
   protected

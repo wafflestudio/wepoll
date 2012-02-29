@@ -45,10 +45,10 @@
       console.log(indx + ", "+ district.name);
       var bezier = new $.path.bezier({
         start:{
-          x:district.x,y:district.y, angle:30
+          x:district.x,y:district.y, angle:50, length:0.4
         },
         end:{
-          x:700,y:120, angle:30
+          x:700,y:120, angle:50, length:0.4
         }
       });
 
@@ -109,6 +109,8 @@
       isCanvas = isCanvasSupported();
       $("#vs-container").css("visibility","hidden");
 
+      /* for dev */
+      /************************/
       for (i in district_positions) {
         var district = district_positions[i];
         var $div = $("<div/>");
@@ -125,6 +127,11 @@
         .addClass("district-center");
         $("#seoul-map").append($div);
       }
+      /************************/
+
+      //TODO : according to cookie value, select map which not shown
+      $("#busan-map").removeClass("selected");
+      $("#seoul-map").addClass("selected");
 
       $(".district-center").hover(function() {
         var $this = $(this);
@@ -140,35 +147,61 @@
       $("#region-selector .region").click(function() {
         $("#region-selector .region").removeClass("selected");
         $(this).addClass("selected");
+
+        var region = $(this).attr("id").split("-")[0];
+        $(".small-map").removeClass("selected");
+        $("#"+region+"-small-map").addClass("selected");
+
+        $(".map").removeClass("selected");
+        $("#"+region+"-map").addClass("selected");
       });
     });
   </script>
 <% end -%>
 
-<div id="bubble">
-  <div id="bubble-text">
-    서울시 지도에<br />
-    마우스를 올려보세요!
-  </div>
-</div>
 
-<div id="seoul-map">
+<div id="seoul-map" class="map">
+  <div id="seoul-map-bubble" class="bubble">
+    <div class="bubble-text">
+      서울시 지도에<br />
+      마우스를 올려보세요!
+    </div>
+  </div>
+
   <%= image_tag '/assets/dummy_map.gif' %>
   <!--  <div id="dest" style="position:absolute;left:690px;top:100px;width:10px;height:10px;background-color:red;"></div>-->
-  <canvas id="line-canvas" width="752" height="795"></canvas>
+  <canvas id="line-canvas" width="752" height="639"></canvas>
 
   <div id="arrow-header">
     <%= image_tag "/assets/arrow_hd.gif" %>
   </div>
 </div>
 
+<div id="busan-map" class="map">
+  <div id="busan-map-bubble" class="bubble">
+    <div class="bubble-text">
+      부산시 지도에<br />
+      마우스를 올려보세요!
+    </div>
+  </div>
+
+  <%= image_tag '/assets/dummy_busan_map.png' %>
+</div>
+
 <% content_for :sidebar do -%>
   <div id="region-selector">
     <div class="clearfix">
-      <%= link_to "서울", '#', :class => "region selected" %>
-      <%= link_to "부산", '#', :class => "region" %>
+      <%= link_to "서울", '#', :id => "seoul-region", :class => "region selected" %>
+      <%= link_to "부산", '#', :id => "busan-region", :class => "region" %>
     </div>
     <div class="small-map-container">
+      <a class="small-map selected" id="seoul-small-map" href="#">
+        <%= image_tag '/assets/seoul_map_small.gif' %>
+      </a>
+
+      <a class="small-map" id="busan-small-map" href="#">
+        <%= image_tag '/assets/busan_map_small.gif' %>
+      </a>
     </div>
   </div>
 
@@ -199,9 +232,5 @@
     <h3 id="vs-district">지역구</h3>
     <div class="vs-part alpha"></div>
     <div class="vs-part omega"></div>
-  </div>
-
-  <div id="busan-map" class="small-map">
-    <%= image_tag '/assets/busan_map_small.png' %>
   </div>
 <% end -%>
