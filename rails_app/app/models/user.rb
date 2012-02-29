@@ -70,6 +70,9 @@ class User
 
   has_many :tweet_replies
 
+  #timeline entry
+  has_many :timeline_entries
+
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token.extra.raw_info
 

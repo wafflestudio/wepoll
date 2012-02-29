@@ -136,6 +136,11 @@
         $("#vs-container").css("visibility","hidden");
         clearCurve();
       });
+
+      $("#region-selector .region").click(function() {
+        $("#region-selector .region").removeClass("selected");
+        $(this).addClass("selected");
+      });
     });
   </script>
 <% end -%>
@@ -158,6 +163,38 @@
 </div>
 
 <% content_for :sidebar do -%>
+  <div id="region-selector">
+    <div class="clearfix">
+      <%= link_to "서울", '#', :class => "region selected" %>
+      <%= link_to "부산", '#', :class => "region" %>
+    </div>
+    <div class="small-map-container">
+    </div>
+  </div>
+
+  <h3 class="link-section-header">최신링크 <small><%= link_to '더보기', '#'%></small></h3>
+  <div class="links-container grid_4 alpha omega" id="recent-links">
+    <% @recent_timeline_entries.each do |link| -%>
+      <%= render :partial => 'link', :locals => {:link => link } %>
+    <% end -%>
+
+    <% if @recent_timeline_entries.empty? -%>
+      <%= render :partial => 'link', :locals => {:link => nil, :empty => true } %>
+    <% end -%>
+  </div>
+
+  <h3 class="link-section-header">인기링크 <small><%= link_to '더보기', '#'%></small></h3>
+  <div class="links-container grid_4 alpha omega" id="popular-links">
+    <% @popular_timeline_entries.each do |link| -%>
+      <%= render :partial => 'link', :locals => {:link => link} %>
+    <% end -%>
+
+    <% if @recent_timeline_entries.empty? -%>
+      <%= render :partial => 'link', :locals => {:link => nil, :empty => true} %>
+    <% end -%>
+  </div>
+
+  <!-- vs-container is absolute positioned -->
   <div id="vs-container" class="clearfix">
     <h3 id="vs-district">지역구</h3>
     <div class="vs-part alpha"></div>

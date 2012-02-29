@@ -82,8 +82,9 @@
   width:320px - 80px;
   height:260px - 60px;
   background:url(/assets/bg_vs.png) no-repeat;
-  margin-top:75px;
-  margin-left:-70px;
+  top:75px;
+  left:-70px;
+  position:absolute;
 }
 
 #vs-district {
@@ -124,11 +125,8 @@
 #arrow-header {
   width:0px;
   height:0px;
-//  background:url(/assets/arrow_hd.gif) no-repeat;
   position:absolute;
-//  left:660px;
-//  top:96px;
-  left:681px + 21px;
+  left:702px;
   top:118px;
   display:none;
 }
@@ -136,4 +134,88 @@
 #arrow-header img {
   margin-left:-41px;
   margin-top:-27px;
+}
+
+.link-section-header {
+  font-size:11pt;
+  padding-left:15px;
+  padding-bottom:15px;
+  margin-bottom:18px;
+  border-bottom:3px solid #606366;
+  color:#606636;
+
+  small a {
+    text-decoration:none;
+    color:#606636;
+    font-size:8.5pt;
+    margin-left:100px;
+  }
+}
+
+.links-container {
+  background-color:white;
+  border-radius:10px;
+  padding-bottom:30px;
+  margin-bottom:40px;
+}
+
+.link-excerpt {
+  height:75px - 1px;
+  border-bottom:1px dashed #bdbbbc;
+//  margin-top:15px;
+  margin: 15px 15px 0 15px;
+//  padding:0 15px;
+  font-size:10pt;
+
+  .support-count {
+    color:#7a7a7a;
+    width:40%;
+    float:left;
+  }
+
+  .nickname {
+    width:40%;
+    float:right;
+    color:#c29f01;
+    text-align:right;
+    a {
+      color:#c29f01;
+      text-decoration:none;
+    }
+  }
+
+  .meta-info {
+    margin-bottom:15px;
+  }
+
+  .title {
+    color:black;
+    margin-bottom:20px;
+    min-height:30px;
+  }
+}
+
+
+#region-selector {
+  margin-top:20px;
+}
+
+.region {
+  text-decoration:none;
+  display:block;
+  float:left;
+  border-bottom:3px solid #d7c67a;
+  width:43px - 6px;
+  font-size:9pt;
+  color:#d7c67a;
+  padding-left:6px;
+}
+
+.region.selected {
+  color:#7a7862;
+  border-bottom:3px solid #7a7862;
+}
+
+.small-map-container {
+  height:200px;
 }

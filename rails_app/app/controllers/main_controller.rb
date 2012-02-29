@@ -5,6 +5,10 @@ class MainController < ApplicationController
   before_filter :before_search
   def index
     @politicians = Politician.all.asc('name').limit(10)
+    @recent_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
+    #TODO : 인기 링크 정렬 방식 고민
+    @popular_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
+
   end
 
   # XXX:for just debugging!
