@@ -113,12 +113,64 @@ class ApiController < ApplicationController
 			result[:title] = doc.xpath('//meta[@name="title"]').first['content']
 			result[:image] = ''
 			result[:description] = doc.xpath('//div[@class="txt_frame"]/p').text.gsub(/\r/, '')
+		elsif target_link.match('news\.naver\.com') #naver
+			result[:created_at] = doc.xpath('//div[@class="article_header"]/div/span[@class="t11"]').text
+			result[:title] = get_og_title doc
+			result[:image] = get_og_image doc
+			result[:description] = get_og_description doc
+		elsif target_link.match('media\.daum\.net') #daum 
+			url_time = get_og_url doc 
+			url_time = url_time.match(/[\d]+/).to_s
+			result[:created_at] = url_time[0,4] + '.' + url_time[4,2] + '.' + url_time[6,2] + ' ' + url_time[8,2] + ':' + url_time[10,2]
+			result[:title ] = get_og_title doc
+			result[:image] = get_og_image doc
+			result[:description] = get_og_description doc
+		elsif target_link.match('news\.nate\.com')  #nate
+		  url_time = target_link.match(/[\d]+/).to_s
+	    #result[:created_at] = doc.xpath('//span[@class="firstDate"]').text
+	    result[:created_at] = url_time[0,4] + '.' + url_time[4,2] + '.' + url_time[6,2] 	    
+	    result[:title] = doc.title()
+	    result[:description] = doc.xpath('//meta[@name="description"]').first['content']
+	    result[:image] = doc.xpath('//div[@id="articleImage0"]/span/img').first['src'] if doc.xpath('//div[@id="articleImage0"]/span/img').count > 0
 		else
 			result[:title] = doc.title()
 			result[:image] = doc.xpath('//meta[@property="og:image"]').first['content'] if doc.xpath('//meta[@property="og:image"]').count > 0
 			result[:description] = doc.xpath('//meta[@property="og:description"]').first['content'] if doc.xpath('//meta[@property="og:description"]').count > 0
 		end
 		render :xml => result.to_json
+	end
+
+private
+	def get_og_title doc
+		if  doc.xpath('//meta[@property="og:title"]').count > 0
+			return doc.xpath('//meta[@property="og:title"]').first['content']
+		else
+		  return ''
+		end
+	end
+
+	def get_og_image doc
+		if  doc.xpath('//meta[@property="og:image"]').count > 0
+			return doc.xpath('//meta[@property="og:image"]').first['content']
+		else
+		  return ''
+		end
+	end
+
+	def get_og_description doc
+		if  doc.xpath('//meta[@property="og:description"]').count > 0
+			return doc.xpath('//meta[@property="og:description"]').first['content']
+		else
+		  return ''
+		end
+	end
+
+	def get_og_url doc
+		if  doc.xpath('//meta[@property="og:url"]').count > 0
+			return doc.xpath('//meta[@property="og:url"]').first['content']
+		else
+		  return ''
+		end
 	end
 
 end
