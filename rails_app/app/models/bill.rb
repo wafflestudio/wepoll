@@ -21,6 +21,11 @@ class Bill #법안모델
   field :summary, type: String
   field :tags, type: Array #comma separated된 값들
 
+  #아래 값들은 타임라인 상에서 보이는건데, 이중 keyword는 tags에 포함될수도 있음.
+  #개념정리가 좀 필요함
+  field :keyword, type: String #issue 축약형
+  field :issue, type: String #법안이 무슨 이슈에 관련된것인가? : ex) '출자총액제한 폐지', '사학법 개정'
+
   #=== Association ===
   belongs_to :initiator, class_name: "Politician", inverse_of: :initiate_bills #대표발의자
   has_and_belongs_to_many :coactors, class_name: "Politician" #공동발의자

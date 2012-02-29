@@ -104,4 +104,10 @@ class MainController < ApplicationController
       #redirect_to back
     end
   end
+
+  def vs_district
+    @politicians = Politician.where(:district => params[:district_name]) #params[:district_name] should be normalized
+    #TODO : serialize only intersted items
+    render :json => @politicians
+  end
 end

@@ -104,10 +104,29 @@
   margin-left:10px;
 }
 
+#seoul-map {
+  position:relative;
+}
 
 .small-map {
   width:200px;
   height:200px;
   margin-top:170px;
   margin-left:50px;
+}
+
+#line-canvas {
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+#arrow-header {
+  width:42px;
+  height:54px;
+  background:url(/assets/arrow_hd.gif) no-repeat;
+  position:absolute;
+  left:660px;
+  top:96px;
+  display:none;
 }
