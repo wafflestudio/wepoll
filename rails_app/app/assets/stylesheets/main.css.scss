@@ -122,11 +122,18 @@
 }
 
 #arrow-header {
-  width:42px;
-  height:54px;
-  background:url(/assets/arrow_hd.gif) no-repeat;
+  width:0px;
+  height:0px;
+//  background:url(/assets/arrow_hd.gif) no-repeat;
   position:absolute;
-  left:660px;
-  top:96px;
+//  left:660px;
+//  top:96px;
+  left:681px + 21px;
+  top:118px;
   display:none;
+}
+
+#arrow-header img {
+  margin-left:-41px;
+  margin-top:-27px;
 }

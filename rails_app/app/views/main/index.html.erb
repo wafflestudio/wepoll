@@ -52,8 +52,10 @@
         }
       });
 
+      var tx1,tx2,ty1,ty2;
       for (var t=0; ;t+=0.1) {
-        if (t>0.95) break;
+
+        if (t>0.9) break;
 
         var o = bezier.css(t);
         var x1 = parseFloat(o.left);
@@ -63,7 +65,11 @@
         var x2 = parseFloat(o.left);
         var y2 = parseFloat(o.top);
 
-//        console.log("("+x1+","+y1+")->("+x2+","+y2+")");
+        if (t > 0.8) {
+          tx1 = x1; ty1 = y1;
+          tx2 = x2; ty2 = y2;
+          console.log("("+tx1+","+ty1+")->("+tx2+","+ty2+")");
+        }
 
         context.beginPath();
         context.strokeStyle="#4f4f50";
@@ -74,9 +80,23 @@
         context.stroke();
       }
 
-      //TODO:arrow head rotation
-      $("#arrow-header").css("-webkit-transform", "rotate(40deg);");
       $("#arrow-header").show();
+
+      var rotate_angle = Math.atan2(ty1-ty2, tx1-tx2);
+      console.log("rot: "+rotate_angle);
+
+//      $("#arrow-header").css("left", "660px");
+//      $("#arrow-header").css("top", "96px");
+
+      $("#arrow-header").css("-webkit-transform", "rotate("+rotate_angle+"rad)");
+      $("#arrow-header").css("-o-transform", "rotate("+rotate_angle+"rad)");
+      $("#arrow-header").css("-moz-transform", "rotate("+rotate_angle+"rad)");
+      $("#arrow-header").css("-ms-transform", "rotate("+rotate_angle+"rad)");
+
+//      $("#arrow-header").css("-webkit-transform", "translate("+rotate_angle+"rad)");
+//      $("#arrow-header").css("-o-transform", "translate("+rotate_angle+"rad)");
+//      $("#arrow-header").css("-moz-transform", "translate("+rotate_angle+"rad)");
+//      $("#arrow-header").css("-ms-transform", "translate("+rotate_angle+"rad)");
     }
 
     var canvas;
@@ -132,7 +152,9 @@
   <!--  <div id="dest" style="position:absolute;left:690px;top:100px;width:10px;height:10px;background-color:red;"></div>-->
   <canvas id="line-canvas" width="752" height="795"></canvas>
 
-  <div id="arrow-header"></div>
+  <div id="arrow-header">
+    <%= image_tag "/assets/arrow_hd.gif" %>
+  </div>
 </div>
 
 <% content_for :sidebar do -%>
