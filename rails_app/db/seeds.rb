@@ -235,34 +235,3 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
     end
   end
 end
-
-# Make search input
-## type
-  # 0 : district
-  # 1 : name
-  # 2 : dong
-##
-f = File.open(Rails.root+"app/assets/javascripts/search.js", "w")
-f.write "var search_source=["
-Politician.all.each do |member|
-  # [
-  # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"},
-  # ...
-  # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"}
-  # ]
-  s = "{'form':'#{member.name}','query':'#{member._id.to_s}','type':'1','label':'#{member.name}(#{member.party})'},"
-  f.write s
-end
-CSV.foreach(Rails.root + "init_data/district.csv", :encoding => "UTF-8") do |csv|
-  # district
-  district = csv[0]
-  s = "{'form':'#{district}','query':'#{district}','type':'0','label':'#{district}'},"
-  f.write s
-  # dong
-  csv[3].split(" ").each do |dong|
-    s = "{'form':'#{dong}','query':'#{district}','type':'2','label':'#{dong}(#{district})'},"
-    f.write s
-  end
-end
-f.write "]"
-f.close

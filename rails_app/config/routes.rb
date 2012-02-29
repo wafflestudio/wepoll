@@ -66,4 +66,7 @@ Wepoll::Application.routes.draw do
   match 'main/fb_test_callback' => 'main#facebook_test_callback', :as => :fb_test_callback
 
   match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
+  match 'api/article_parse' => 'api#article_parsing'
+
 end
+
