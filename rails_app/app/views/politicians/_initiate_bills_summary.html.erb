@@ -1,0 +1,13 @@
+<div><%= @politician.initiate_bills.count %>개</div>
+<a href="<%= init_bills_by_politician_path(@politician) %>" class="init-bills-link">
+<div id="<%= @politician.id %>-bill-graph" class="bill-graph">
+  <!-- TODO : canvas를 쓸 수 있는지 없는지 구분해서 raphael을 쓸지 말지 결정 -->
+</div>
+</a>
+
+<script type="text/javascript">
+  var bill_counts_<%= @politician.id%> = [<%= @bill_counts.join(",") %>];
+  var bill_categories_<%=@politician.id %> = $.parseJSON('<%=raw @bill_categories.to_json %>');
+  Raphael("<%= @politician.id %>-bill-graph", 176, 176).pieChart(176/2,176/2,80, bill_counts_<%= @politician.id%>, bill_categories_<%= @politician.id%>, "#fff");
+  $(".init-bills-link").colorbox();
+</script>

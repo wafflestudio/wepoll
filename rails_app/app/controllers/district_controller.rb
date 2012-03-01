@@ -10,11 +10,11 @@ class DistrictController < ApplicationController
     p1_bill_categories = @p1.initiate_bills_categories
     p2_bill_categories = @p2.initiate_bills_categories
 
-    @p1_bill_counts = p1_bill_categories.values
-    @p1_bill_categories = p1_bill_categories.keys
+    @p1_bill_counts = p1_bill_categories.map {|c,n| n}
+    @p1_bill_categories = p1_bill_categories.map {|c,n| c}
 
-    @p2_bill_counts = p2_bill_categories.values
-    @p2_bill_categories = p2_bill_categories.keys
+    @p2_bill_counts = p2_bill_categories.map {|c,n| n}
+    @p2_bill_categories = p2_bill_categories.map {|c,n| c}
   end
 
   protected

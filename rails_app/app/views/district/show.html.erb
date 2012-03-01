@@ -1,31 +1,56 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
 
+    function loadTab(id) {
+      if (!id) return;
+      $(".tab-section").hide();
+      var $tab_section = $("#"+id);
+      if ($tab_section.length > 0) {
+        $tab_section.show();
+        return;
+      }
+
+      $tab_section = $('<div class="grid_8 alpha omega tab-section"></div>');
+      $tab_section.attr('id', id);
+
+      var $col1 = $('<div class="grid_3 alpha"></div>');
+      var $col2 = $('<div class="grid_3 omega"></div>');
+      var $ccol = $('<div class="grid_2"></div>');
+
+      var url1 = "";
+      var url2 = "";
+      if (id === "bill-activity") {
+        url1 = "<%= bill_activities_of_politician_path(@p1) %>";
+        url2 = "<%= bill_activities_of_politician_path(@p2) %>";
+      }
+      else if (id === "profile") {
+        url1 = "<%= profile_of_politician_path(@p1) %>";
+        url2 = "<%= profile_of_politician_path(@p2) %>";
+      }
+      else if (id === "promise") {
+        url1 = "<%= promises_of_politician_path(@p1) %>";
+        url2 = "<%= promises_of_politician_path(@p2) %>";
+      }
+      else
+        return;
+
+      $col1.load(url1);
+      $col2.load(url2);
+
+      $tab_section.append($col1).append($ccol).append($col2);
+      $("#tab-sections-container").append($tab_section);
+    }
+
     $(document).ready(function() {
       $(".bar-graph").simpleBarGraph({
-        width:176, 
+        width:176,
         height:5
       });
 
-      $(".tab-section").hide();
       $(".tab").click(function() {
-        var $this = $(this);
-        var id = $this.attr("data-id");
-        var $tab_section = $("#"+id);
-        $(".tab-section").hide();
-        $tab_section.show();
+        loadTab($(this).attr('data-id'));
       });
       $(".tab").eq(0).click();
-
-      //draw pie chart
-      var p1_bill_counts = [<%= @p1_bill_counts.join(",") %>];
-      var p1_bill_categories = $.parseJSON('<%=raw @p1_bill_categories.to_json %>');
-
-      var p2_bill_counts = [<%= @p2_bill_counts.join(",")%>];
-      var p2_bill_categories = $.parseJSON('<%=raw @p2_bill_categories %>');
-      Raphael("p1-bill-graph", 176, 176).pieChart(176/2,176/2,80, p1_bill_counts, p1_bill_categories, "#fff");
-      Raphael("p2-bill-graph", 176, 176).pieChart(176/2,176/2,80, p2_bill_counts, p2_bill_categories, "#fff");
-
     });
   </script>
 <% end -%>
@@ -92,145 +117,12 @@
 
 <div class="grid_12 alpha omega">
   <div class="grid_2 alpha tabs">
-    <%= link_to 'BEST 영상','#', :class => 'tab', "data-id" => "best-video" %>
-    <%= link_to 'BEST 기사','#', :class => 'tab', "data-id" => "best-article" %>
     <%= link_to '국회활동','#', :class => 'tab', "data-id" => "bill-activity" %>
-    <%= link_to '신상','#', :class => 'tab', "data-id" => "profile" %>
+    <%= link_to '신상','#', :class => 'tab', "data-id" => "profile"%>
     <%= link_to '공약','#', :class => 'tab', "data-id" => "promise" %>
   </div>
 
-  <div class="grid_8">
-    <div class="grid_8 alpha omega tab-section" id="best-video">
-      베스트 영상
-    </div>
-
-    <div class="grid_8 alpha omega tab-section" id="best-article">
-      베스트 기사
-    </div>
-
-    <!-- 대표 링크들 -->
-    <div class="grid_8 alpha omega tab-section" id="most-links">
-      <div class="grid_4 alpha">
-        <h4>칭찬</h4>
-        <%= render :partial => "/timeline_entries/entry", :locals => {:link => @p1.most_good_link} %>
-        <h4>지적</h4>
-        <%= render :partial => "/timeline_entries/entry", :locals => {:link => @p1.most_bad_link} %>
-      </div>
-
-      <div class="grid_4 omega">
-        <h4>칭찬</h4>
-        <%= render :partial => "/timeline_entries/entry", :locals => {:link => @p2.most_good_link} %>
-        <h4>지적</h4>
-        <%= render :partial => "/timeline_entries/entry", :locals => {:link => @p2.most_bad_link} %>
-      </div>
-    </div>
-
-    <!-- 의정활동-->
-    <div class="grid_8 alpha omega tab-section" id="bill-activity">
-      <div class="grid_8 alpha omega row">
-        <div class="grid_3 alpha">?/??</div>
-        <div class="grid_2">공약이행</div>
-        <div class="grid_3 omega">?/??</div>
-      </div>
-
-      <div class="grid_8 alpha omega row">
-        <div class="grid_3 alpha">
-          <%= render :partial => "initiate_bills_summary", :locals => {:politician => @p1, :div_id => "p1-bill-graph"} %>
-        </div>
-        <div class="grid_2">대표발의법안</div>
-        <div class="grid_3 omega">
-          <%= render :partial => "initiate_bills_summary", :locals => {:politician => @p2, :div_id => "p2-bill-graph"} %>
-        </div>
-      </div>
-
-      <div class="grid_8 alpha omega row">
-        <div class="grid_3 alpha">
-          <%= render :partial => "top_join_initiate", :locals => {:politician => @p1} %>
-        </div>
-        <div class="grid_2">국회인맥</div>
-        <div class="grid_3 omega">
-          <%= render :partial => "top_join_initiate", :locals => {:politician => @p2} %>
-        </div>
-      </div>
-
-      <div class="grid_8 alpha omega row">
-        <div class="grid_3 alpha">
-          <div id="p2-bad-link" class="bar-graph"
-            data-color="red"
-            data-total="100"
-            data-float="right"
-            data-value="70">
-          </div>
-        </div>
-        <div class="grid_2">본회의출석률</div>
-        <div class="grid_3 omega">
-          <div id="p2-bad-link" class="bar-graph"
-            data-color="red"
-            data-total="100"
-            data-value="50">
-          </div>
-        </div>
-      </div>
-    </div><!-- end of 의정활동 -->
-
-    <!-- 신상 -->
-    <div class="grid_8 alpha omega tab-section" id="profile">
-      <div class="grid_8 alpha omega row"> <!-- 생일 -->
-        <div class="grid_3 alpha">
-          <% if @p1.birthday -%>
-            <%= @p1.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - @p1.birthday.year+1%>)
-          <% else -%>
-            정보없음
-          <% end -%>
-        </div>
-        <div class="grid_2">출생</div>
-        <div class="grid_3 omega">
-          <% if @p2.birthday -%>
-            <%= @p2.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - @p2.birthday.year+1%>)
-          <% else -%>
-            정보없음
-          <% end -%>
-        </div>
-      </div>
-
-
-      <div class="grid_8 alpha omega row"> <!-- 본인병역 -->
-        <div class="grid_3 alpha"><%= @p1.military || "정보없음"%></div>
-        <div class="grid_2">본인병역</div>
-        <div class="grid_3 omega"><%= @p2.military || "정보없음"%></div>
-      </div>
-
-
-      <div class="grid_8 alpha omega row"> <!-- 현직 -->
-        <div class="grid_3 alpha"><%= @p1.job || "정보없음"%></div>
-        <div class="grid_2">현직</div>
-        <div class="grid_3 omega"><%= @p2.job || "정보없음"%></div>
-      </div>
-
-      <div class="grid_8 alpha omega row"> <!-- 학력 -->
-        <div class="grid_3 alpha"><%= @p1.education || "정보없음"%></div>
-        <div class="grid_2">학력</div>
-        <div class="grid_3 omega"><%= @p2.education || "정보없음"%></div>
-      </div>
-
-      <div class="grid_8 alpha omega row"> <!-- 주요경력 -->
-        <div class="grid_3 alpha"><%= @p1.experiences || "정보없음"%></div>
-        <div class="grid_2">주요경력</div>
-        <div class="grid_3 omega"><%= @p2.experiences || "정보없음"%></div>
-      </div>
-
-    </div> <!-- end of 신상 -->
-
-    <!-- 공약 -->
-    <div class="grid_8 alpha omega tab-section" id="promise">
-      <% 0.upto(2) do |i| -%>
-        <div class="grid_8 alpha omega row">
-          <div class="grid_3 alpha"><%=@p1.promises[i] || "정보없음" %></div>
-          <div class="grid_2">공약<%=i+1%></div>
-          <div class="grid_3 omega"><%=@p2.promises[i] || "정보없음"%></div>
-        </div>
-      <% end -%>
-    </div>
+  <div class="grid_8" id="tab-sections-container">
   </div> <!-- end of tab conainer -->
 
   <div class="grid_2 omega">
