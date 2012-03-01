@@ -19,12 +19,17 @@ class DistrictController < ApplicationController
 
   protected
   def simplify_district_name
-    str = params[:name]
-    if str && (%w(구 시).include? str[-2]) && (%w(갑 을 병 정 무 기 경 신 임 계).include? str[-1])
-      if str.length-2 >= 2
-        str = str[0...-2]+str[-1]
+    if !params[:name].nil?
+      str = params[:name]
+      if str && (%w(구 시).include? str[-2]) && (%w(갑 을 병 정 무 기 경 신 임 계).include? str[-1])
+        if str.length-2 >= 2
+          str = str[0...-2]+str[-1]
+        end
       end
+      @district = str
+    elsif !params[:politician_id].nil?
+      p = Politician.find(params[:politician_id])
+      @district = p.district
     end
-    @district = str
   end
 end
