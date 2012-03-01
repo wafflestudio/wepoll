@@ -1,6 +1,7 @@
 // Place all the styles related to the main controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//= require forum
 
 #main-pages-container {
   position:relative;
@@ -19,13 +20,11 @@
   box-shadow: 15px 0px 10px -5px #e7cb4f;
 //  background:url(/assets/bg_left.gif);
   width:752px;
-  margin-right:0;
   min-height:300px;
 }
 
 #sidebar {
 ///  background:url(/assets/bg_right.gif);
-  margin-left:0;
   width:256px - 16px;
   padding-left:0;
   min-height:300px;

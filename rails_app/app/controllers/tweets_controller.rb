@@ -22,8 +22,6 @@ class TweetsController < ApplicationController
 
   end
 
-
-
   def recommend
     @tweet = Tweet.find(params[:tweet_id])
     ip = request.remote_ip

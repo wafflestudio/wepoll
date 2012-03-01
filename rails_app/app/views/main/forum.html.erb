@@ -6,44 +6,69 @@
       $('#reply_box form').eq(0).attr('action','/tweets/'+this.id+'/tweet_replies');
     });
 
-
   });
 </script>
 <% end -%>
-<div class="grid_16 alpha omega">
-  <div class="grid_8 alpha">
-    <div class="grid_8 alpha omega">
-      <%= @politician.name %>
+
+<div class="grid_10 push_1 alpha">
+  <div id="politician_box" class="grid_10 alpha omega">
+    <div id="politician_profile_picture" class="grid_2 alpha">
       <%= image_tag @politician.profile_photo.url %>
+    </div>
+    <div id="politician_info" class="grid_8 omega">
+      <h2><%= @politician.name %></h2>
+      <h3>@<%= @politician.tweet_name %></h3>
       <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
     </div>
-    <div class="grid_8 alpha omega">
-      <% @politician.tweets.desc('created_at').each do |t| %>
-        <div class="tweet_item">
-          <%= t.created_at %>
-          <%= t.content %><br />
-          <%= link_to 'recommend', tweet_recommend_path(t) %>
-          <%= link_to 'opposite', tweet_opposite_path(t) %>
-          <button id=<%= t.id %> class="reply_btn">reply</button>
-        </div>
-      <% end -%>
-    </div>
-  </div>
-
-  <div class="grid_8 omega">
-    <!--<div id="reply_box" class="grid_8 alpha omega">-->
-      <%#= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
-        <%#= text_area_tag(:content) %>
-        <%#= submit_tag 'reply' %>
-      <% #end -%>
-    <!--</div>-->
-    <% @politician.total_replies.sort{|a,b| a.created_at <=> b.created_at}.each do |r| %>
-      <%= r.created_at %>
-      <%= r.content %>
-      <%= r.tweet.content.slice(0..10) %>...
-      <%= link_to 'recommend', tweet_reply_recommend_path(r) %>
-      <%= link_to 'opposite', tweet_reply_opposite_path(r) %>
-      <%= link_to 'report', tweet_reply_report_path(r) %>
-    <% end -%>
   </div>
 </div>
+
+<div id="tweets_wrapper" class="grid_12 alpha omega">
+  <% @politician.tweets.desc('created_at').each do |t| %>
+    <div class="tweet_item clearfix">
+      <div class="count">
+        <%= t.recommend_count %>
+      </div>
+      <div class="content">
+        <div>
+          <span class="tweet_author"><%= t.name if t.name? %> <%= "@#{t.screen_name}" if t.screen_name? %></span>
+          <button id=<%= t.id %> class="reply_btn">reply</button>
+        </div>
+        <div class="tweet_message">
+          <%= t.content %>
+        </div>
+        <div>
+          <%= t.created_at %> 댓글<%= t.tweet_replies.count %>개
+        </div>
+        <%= link_to 'recommend', tweet_recommend_path(t) %>
+        <%= link_to 'opposite', tweet_opposite_path(t) %>
+      </div>
+    </div>
+  <% end -%>
+</div>
+
+<%= content_for :sidebar do %>
+  <div id="reply_box" class="grid_4 alpha omega">
+    <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+      <%= text_area_tag(:content) %>
+      <%= check_box_tag(:tweet) %>
+      <%= check_box_tag(:facebook) %>
+      <%= submit_tag 'reply' %>
+    <% end -%>
+  </div>
+  <div id="replies_wrapper" class="grid_4 alpha omega">
+    <% @politician.total_replies.sort{|a,b| a.created_at <=> b.created_at}.each do |r| %>
+      <div class="reply_item">
+        <p><%= r.user.nickname %> <%= r.content %></p>
+        <span class="reply_date"><%= r.created_at.strftime("%Y-%m-%d") %></span>
+        <p class="links">
+        <%= link_to '신고', tweet_reply_report_path(r) %>
+        <%= link_to '공감'+r.recommend_count.to_s, tweet_reply_recommend_path(r) %>
+        </p>
+      </div>
+    <% end -%>
+  </div>
+  <div id="pop_links">
+    <div id="pop_links_header">인기링크<a href="#">더보기</a></div>
+  </div>
+<% end -%>

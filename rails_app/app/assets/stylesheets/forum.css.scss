@@ -1,0 +1,82 @@
+#politician_box {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  h2 {
+    font-size: 20pt;
+  }
+  h3 {
+    font-size: 15pt;
+    color: #666666;
+  }
+}
+#tweets_wrapper {
+  .tweet_item {
+    padding: 5px;
+    margin-bottom: 10px;
+
+    .count {
+      float: left;
+      width: 140px;
+      background-image: url(forum/count_back.png);
+      height: 140px;
+      margin-right: 20px;
+    }
+
+    .content {
+      float: left;
+      width: 500px;
+      padding: 10px;
+      background-color: #F3F3F3;
+      border: 10px solid white;
+      border-radius: 25px;
+
+      .tweet_message {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+#replies_wrapper {
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: white;
+  border-radius: 25px;
+
+  .reply_item {
+    font-size: 11pt;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px dotted #BCBCBC;
+    
+    .reply_date {
+      color: #C7A412;
+      font-size: 10pt;
+    }
+    p.links {
+      margin-bottom: 10px;
+      a {
+        color: #707070;
+        float: right;
+        margin-left: 20px;
+        font-size: 10pt;
+      }
+    }
+  }
+}
+
+#pop_links {
+  #pop_links_header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #606467;
+    a {
+      padding-top: 5px;
+      font-size: 9pt;
+      float: right;
+    }
+  }
+}
