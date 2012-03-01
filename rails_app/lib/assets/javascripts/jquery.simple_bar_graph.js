@@ -27,17 +27,24 @@
 				r = value/total;
 			}
 
-			var w = r*width;
+			var w = Math.round(r*width);
 
 			//make bar
 			var $bar = $("<div></div>");
-			$bar.css("width", Math.round(w)+"px");
+			$bar.css("width", w + "px");
 			$bar.css("height", options.height + "px");
 			$bar.css("background-color", color);
-			$bar.css("float", floating);
 
-			//XXX: 임시방편으로 clearfix사용
-			$this.addClass("clearfix");
+			if (floating === 'left') {
+				$bar.css("margin-left", 0);
+			}
+			else if (floating === 'right') {
+				$bar.css("margin-left", (width - w) + "px" );
+			}
+			else if (floating === 'center') {
+				$bar.css("margin-left", "auto");
+				$bar.css("margin-right", "auto");
+			}
 
 			$this.append($bar);
 		});
