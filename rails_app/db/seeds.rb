@@ -122,6 +122,7 @@ puts "-------- csv 파일에서 생성 --------"
 CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do |csv|
   name = csv[4]
   p = Politician.where(:name => name).first #XXX : 동명이인 어떻게 처리
+  puts "#{name} doesn't exist!! " if p.nil?
   name_romanize = name.romanize
   csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name_romanize}.csv")[0]
   printf "#{name}(#{c2+=1}) 발의한 법안..."
@@ -143,7 +144,11 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
       age-=1
     end
 
-    next if p.elections.nil? || !p.elections.include?(age)
+    if p.nil?
+      puts "Politician is nil!!"
+    end
+
+    next if p.elections.nil? || !(p.elections.include?(age))
 
     complete_date = csv2[7]
     result = ""
@@ -185,7 +190,9 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
     end
 
     #XXX : 동명이인 어떻게 처리
-    coactors = coactors.map {|name| Politician.where(:name => name).first}.reject {|p| p.nil?}
+    #XXX : 이름만 등록된 껍데기 국회의원을 만든다
+    only_names = []
+    coactors = coactors.map {|name| p1 = Politician.where(:name => name).first; only_names << name if p1.nil?; p1}.reject {|p2| p2.nil? || p.id == p2.id }
 
     b = Bill.new(:title => title,
                  :initiated_at => Date.parse(init_date),
@@ -195,6 +202,7 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
                  :number => number,
                  :code => code,
                  :coactors => coactors,
+                 :unregistered_coactor_names => only_names,
                  :initiator => p,
                  :summary => summary)
     b.voted_at = Date.parse(complete_date) unless (complete_date.nil? || complete_date.length == 0)
@@ -235,3 +243,5 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
     end
   end
 end
+
+Politician.calculate_joint_initiate

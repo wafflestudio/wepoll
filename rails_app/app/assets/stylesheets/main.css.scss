@@ -40,7 +40,7 @@
   }
 }
 
-#bubble {
+.bubble {
   position:absolute;
   left:20px;
   top:70px;
@@ -49,7 +49,7 @@
   background:url(/assets/bubble1.gif) no-repeat;
 }
 
-#bubble-text {
+.bubble-text {
   text-align:center;
   margin-top:50px;
   font-size:11pt;
@@ -106,13 +106,6 @@
 
 #seoul-map {
   position:relative;
-}
-
-.small-map {
-  width:200px;
-  height:200px;
-  margin-top:170px;
-  margin-left:50px;
 }
 
 #line-canvas {
@@ -188,6 +181,10 @@
   }
 
   .title {
+    a {
+      color:black;
+      text-decoration:none;
+    }
     color:black;
     margin-bottom:20px;
     min-height:30px;
@@ -217,4 +214,24 @@
 
 .small-map-container {
   height:200px;
+}
+
+.small-map-container {
+  position:relative;
+  .small-map {
+    position:absolute;
+    display:block;
+  }
+
+  .small-map.selected {
+    display:none;
+  }
+}
+
+.map {
+  display:none;
+}
+
+.map.selected {
+  display:block;
 }

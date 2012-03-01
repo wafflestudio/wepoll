@@ -1,21 +1,130 @@
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+
+    function loadTab(id) {
+      if (!id) return;
+      $(".tab-section").hide();
+      var $tab_section = $("#"+id);
+      if ($tab_section.length > 0) {
+        $tab_section.show();
+        return;
+      }
+
+      $tab_section = $('<div class="grid_8 alpha omega tab-section"></div>');
+      $tab_section.attr('id', id);
+
+      var $col1 = $('<div class="grid_3 alpha"></div>');
+      var $col2 = $('<div class="grid_3 omega"></div>');
+      var $ccol = $('<div class="grid_2"></div>');
+
+      var url1 = "";
+      var url2 = "";
+      if (id === "bill-activity") {
+        url1 = "<%= bill_activities_of_politician_path(@p1) %>";
+        url2 = "<%= bill_activities_of_politician_path(@p2) %>";
+      }
+      else if (id === "profile") {
+        url1 = "<%= profile_of_politician_path(@p1) %>";
+        url2 = "<%= profile_of_politician_path(@p2) %>";
+      }
+      else if (id === "promise") {
+        url1 = "<%= promises_of_politician_path(@p1) %>";
+        url2 = "<%= promises_of_politician_path(@p2) %>";
+      }
+      else
+        return;
+
+      $col1.load(url1);
+      $col2.load(url2);
+
+      $tab_section.append($col1).append($ccol).append($col2);
+      $("#tab-sections-container").append($tab_section);
+    }
+
+    $(document).ready(function() {
+      $(".bar-graph").simpleBarGraph({
+        width:176,
+        height:5
+      });
+
+      $(".tab").click(function() {
+        loadTab($(this).attr('data-id'));
+      });
+      $(".tab").eq(0).click();
+    });
+  </script>
+<% end -%>
 <h1><%=@district %></h1>
 
 <div id="name-cards" class="grid_12 alpha omega">
   <div class="grid_6 alpha name-card">
-    <div class="grid_2 alpha tweet">
+    <div class="grid_3 alpha tweet">
       last tweet of <%= @p1.tweet_name%>
     </div>
-    <div class="grid_4 omega">
-    <%= image_tag @p1.profile_photo.url(:square100) %>
+    <div class="grid_3 omega">
+      <%= image_tag @p1.profile_photo.url(:square100) %>
     </div>
+    <div class="clear"></div>
+    <div class="grid_3 alpha">
+      <div id="p1-good-link" class="bar-graph"
+        data-color="green"
+        data-total="-1"
+        data-ref="#p1-bad-link"
+        data-float="right"
+        data-value="50">
+      </div>
 
+      <div id="p1-bad-link" class="bar-graph"
+        data-color="red"
+        data-total="-1"
+        data-ref="#p1-good-link"
+        data-float="right"
+        data-value="100">
+      </div>
+    </div>
+    <div class="grid_3 omega">
+      <a href="#">링크등록</a>
+    </div>
   </div>
 
-  <div class="grid_4 name-card">
-    <%= image_tag @p2.profile_photo.url(:square100) %>
-  </div>
-  <div class="grid_2 alpha tweet omega">
-    last tweet of <%=@p2.tweet_name%>
+  <div class="grid_6 omega name-card">
+    <div class="grid_3 alpha">
+      <%= image_tag @p2.profile_photo.url(:square100) %>
+    </div>
+    <div class="grid_3 alpha tweet omega">
+      last tweet of <%=@p2.tweet_name%>
+    </div>
+    <div class="clear"></div>
+    <div class="grid_3 omega">
+      <a href="#">링크등록</a>
+    </div>
+    <div class="grid_3 alpha">
+      <div id="p2-good-link" class="bar-graph"
+        data-color="green"
+        data-total="-1"
+        data-ref="#p2-bad-link"
+        data-value="80">
+      </div>
+      <div id="p2-bad-link" class="bar-graph"
+        data-color="red"
+        data-total="-1"
+        data-ref="#p2-good-link"
+        data-value="200">
+      </div>
+    </div>
   </div>
 </div>
 
+<div class="grid_12 alpha omega">
+  <div class="grid_2 alpha tabs">
+    <%= link_to '국회활동','#', :class => 'tab', "data-id" => "bill-activity" %>
+    <%= link_to '신상','#', :class => 'tab', "data-id" => "profile"%>
+    <%= link_to '공약','#', :class => 'tab', "data-id" => "promise" %>
+  </div>
+
+  <div class="grid_8" id="tab-sections-container">
+  </div> <!-- end of tab conainer -->
+
+  <div class="grid_2 omega">
+  </div>
+</div>

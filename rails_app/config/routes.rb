@@ -55,7 +55,15 @@ Wepoll::Application.routes.draw do
   end
 
 
-  match 'district/:name' => "district#show"
+  match 'district/:politician_id' => 'district#show' ,:constraints => {:politician_id => /[a-z0-9]+/}, :as => :district_politician
+  match 'district/:name' => "district#show", :as => :district_name
+
+  resources :politicians do
+    get 'initiate_bills', :on => :member, :as => :init_bills_by
+    get 'bill_activities', :on => :member, :as => :bill_activities_of
+    get 'profile', :on => :member, :as => :profile_of
+    get 'promises', :on => :member, :as => :promises_of
+  end
 
   match "/search" => "main#search"
   root :to => 'main#index'

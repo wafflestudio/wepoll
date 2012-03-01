@@ -1,0 +1,13 @@
+<div class="grid_4 alpha omega timeline-entry-excerpt">
+  <div class="grid_1 alpha"><%= image_tag 'http://placehold.it/48x48'%></div>
+  <div class="grid_3 omega title">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam tristique, turpis sed</div>
+  <div class="grid_4 tags">
+    <% %w(tag1 tag2 tag3).each do |t| -%>
+      <%= link_to t, '#' %>
+    <% end -%>
+  </div>
+  <div class="grid_4 counts">
+    공감 <%= 100 %> | 
+    댓글 <%= 5 %>
+  </div>
+</div>
