@@ -12,15 +12,33 @@
   }
 }
 #tweets_wrapper {
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
   .tweet_item {
+    cursor: pointer;
     padding: 5px;
     margin-bottom: 10px;
 
+    &.today_best {
+      .count {
+        background-image: url(forum/tbest_back.png);
+      }
+    }
+    &.best {
+      .count {
+        background-image: url(forum/best_back.png);
+      }
+    }
     .count {
+      padding-top: 70px;
+      text-align: center;
       float: left;
       width: 140px;
       background-image: url(forum/count_back.png);
-      height: 140px;
+      height: 70px;
       margin-right: 20px;
     }
 
@@ -32,6 +50,12 @@
       border: 10px solid white;
       border-radius: 25px;
 
+      .tweet_author {
+        float: left;
+      }
+      .reply_btn {
+        margin-left: 100px;
+      }
       .tweet_message {
         margin-top: 5px;
         margin-bottom: 5px;
@@ -40,7 +64,48 @@
   }
 }
 
+#reply_box {
+  z-index: 1;
+  position: absolute;
+  display: none;
+  font-size: 11pt;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 25px;
+
+  #reply_close {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    cursor: pointer;
+  }
+  label {
+    font-size: 9pt;
+    margin-left: 20px;
+  }
+  #reply_check {
+    margin-right: 15px;
+    float: right;
+  }
+  #reply_text_box {
+    margin-left: 20px;
+    width: 200px;
+    height: 140px;
+    background-color: #ECEEED;
+    border: none;
+  }
+  #reply_submit_btn {
+    margin-right: 15px;
+    float: right;
+    background-color: #FDDF49;
+    border: none;
+    border-radius: 5px;
+  }
+}
 #replies_wrapper {
+  margin-top: 160px;
   padding: 10px;
   margin-bottom: 20px;
   background-color: white;
@@ -77,6 +142,35 @@
       padding-top: 5px;
       font-size: 9pt;
       float: right;
+    }
+  }
+
+  #links_wrapper {
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 25px;
+
+    .link_item {
+      font-size: 11pt;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      border-bottom: 2px dotted #BCBCBC;
+      
+      .link_author {
+        color: #C7A412;
+        float: right;
+        font-size: 10pt;
+      }
+      p.link_links {
+        margin-bottom: 10px;
+        a {
+          color: #707070;
+          float: left;
+          margin-left: 20px;
+          font-size: 10pt;
+        }
+      }
     }
   }
 }

@@ -40,4 +40,9 @@ class TweetsController < ApplicationController
       render :json => {:status => "error", :message => "이미 투표하셨습니다."}
     end
   end
+
+  def replies
+    @tweet = Tweet.find(params[:tweet_id])
+    @replies = @tweet.tweet_replies
+  end
 end

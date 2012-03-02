@@ -47,6 +47,7 @@ Wepoll::Application.routes.draw do
     match '/recommend' => 'tweets#recommend', :as => :recommend
     match '/opposite' => 'tweets#opposite', :as => :opposite
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
+    get 'twwet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend

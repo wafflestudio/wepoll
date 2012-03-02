@@ -69,7 +69,5 @@ class TweetRepliesController < ApplicationController
       render :json => {:status => "error", :message => "이미 투표하셨습니다."}
     end
   end
-
-
   
 end
