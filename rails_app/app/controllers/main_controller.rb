@@ -46,6 +46,9 @@ class MainController < ApplicationController
 
   def forum
     @politician = Politician.find(params[:politician_id])
+    @best = @politician.tweets.desc('recommend_count').first
+    @today_best = @politician.tweets.desc('today_recommend_count').first
+    @links = TimelineEntry.asc('like')
   end
 
   def before_search

@@ -1,49 +1,59 @@
-<%= content_for :scripts do %>
-<script type="text/javascript">
-  $(function() {
-    $('.reply_btn').click(function() {
-      console.log(this.id);
-      $('#reply_box form').eq(0).attr('action','/tweets/'+this.id+'/tweet_replies');
-    });
-
-
-  });
-</script>
-<% end -%>
-<div class="grid_16 alpha omega">
-  <div class="grid_8 alpha">
-    <div class="grid_8 alpha omega">
-      <%= @politician.name %>
+<div class="grid_10 push_1 alpha">
+  <div id="politician_box" class="grid_10 alpha omega">
+    <div id="politician_profile_picture" class="grid_2 alpha">
       <%= image_tag @politician.profile_photo.url %>
+    </div>
+    <div id="politician_info" class="grid_8 omega">
+      <h2><%= @politician.name %></h2>
+      <h3>@<%= @politician.tweet_name %></h3>
       <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
     </div>
-    <div class="grid_8 alpha omega">
-      <% @politician.tweets.desc('created_at').each do |t| %>
-        <div class="tweet_item">
-          <%= t.created_at %>
-          <%= t.content %><br />
-          <%= link_to 'recommend', tweet_recommend_path(t) %>
-          <%= link_to 'opposite', tweet_opposite_path(t) %>
-          <button id=<%= t.id %> class="reply_btn">reply</button>
+  </div>
+</div>
+
+<div id="tweets_wrapper" class="grid_12 alpha omega">
+  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} %>
+  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} %>
+  <% @politician.tweets.desc('created_at').each do |t| %>
+    <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
+  <% end -%>
+</div>
+
+<%= content_for :sidebar do %>
+  <div id="reply_box" class="grid_4 alpha omega">
+    <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+      <div id="reply_close">
+        X
+      </div>
+      <div id="reply_check">
+        <%= check_box_tag(:tweet) %>
+        <%= check_box_tag(:facebook) %>
+      </div>
+      <%= label_tag :reply_text_box, @politician.name+'후보의 트윗에 한마디.' %>
+      <%= text_area_tag :content, nil, :id => "reply_text_box" %>
+      <%= submit_tag '등록', :id => "reply_submit_btn" %>
+    <% end -%>
+  </div>
+  <div id="replies_wrapper" class="grid_4 alpha omega">
+    <%= render :partial => "tweet_replies", :locals => { :replies => @politician.total_replies } %> 
+  </div>
+  <div id="pop_links">
+    <div id="pop_links_header">인기링크<a href="#">더보기</a></div>
+    <div id="links_wrapper" class="grid_4 alpha omega">
+      <% if @links.count == 0 %>
+        <div class="link_item">
+          등록된 링크가 없습니다.
+        </div>
+      <% end -%>
+      <% @links.each do |r| %>
+        <div class="link_item">
+          <p><%= r.title %></p>
+          <span class="link_author"><%= r.user.nickname %></span>
+          <p class="link_links">
+          <%= link_to '공감'+r.like.to_s, '#' %>
+          </p>
         </div>
       <% end -%>
     </div>
   </div>
-
-  <div class="grid_8 omega">
-    <!--<div id="reply_box" class="grid_8 alpha omega">-->
-      <%#= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
-        <%#= text_area_tag(:content) %>
-        <%#= submit_tag 'reply' %>
-      <% #end -%>
-    <!--</div>-->
-    <% @politician.total_replies.sort{|a,b| a.created_at <=> b.created_at}.each do |r| %>
-      <%= r.created_at %>
-      <%= r.content %>
-      <%= r.tweet.content.slice(0..10) %>...
-      <%= link_to 'recommend', tweet_reply_recommend_path(r) %>
-      <%= link_to 'opposite', tweet_reply_opposite_path(r) %>
-      <%= link_to 'report', tweet_reply_report_path(r) %>
-    <% end -%>
-  </div>
-</div>
+<% end -%>
