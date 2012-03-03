@@ -50,7 +50,7 @@ class TimelineEntriesController < ApplicationController
   # POST /timeline_entries
   # POST /timeline_entries.json
   def create
-    @timeline_entry = TimelineEntry.new(params[:timeline_entry], :user_id => current_user.id)
+    @timeline_entry = TimelineEntry.new(params[:timeline_entry])#, :user_id => current_user.id)
 
     respond_to do |format|
       if @timeline_entry.save

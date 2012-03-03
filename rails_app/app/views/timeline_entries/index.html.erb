@@ -32,24 +32,49 @@ $(function() {
 			"all" : "showAll",
 			"year" : "showYear",
 			"year/:year" : "showYear",
-			"year/:year/m:month" : "showYear",
+			"quarter" : "showQuarter",
+			"quarter/:year" : "showQuarter",
+			"quarter/:year/:quarter" : "showQuarter",
+			"month" : "showMonth",
+			"month/:year" : "showMonth",
+			"month/:year/:month" : "showMonth",
+			"week" : "showWeek",
+			"week/:year" : "showWeek",
+			"week/:year/:month" : "showWeek",
+			"week/:year/:month/:week" : "showWeek"
 
 		},
 		index: function() {
 			console.log('DEFAULT')
-			timelineController.changeScale('all')
+			timelineController.changeScale('year')
 		},
 		showAll: function() {
 			console.log('ALL')
 			timelineController.changeScale('all')
 		},
-		showYear: function(year,month) {
+		showYear: function(year) {
 			if(year)
-				timelineController.changeScale('year',year*12+(month ? month-1 : 0))
+				timelineController.changeScale('year',year)
 			else
 				timelineController.changeScale('year')
 		},
-		showMonth: function(year,month,week)  {
+		showQuarter: function(year,quarter)  {
+			if(typeof year =='undefined')
+				timelineController.changeScale('quarter')
+			else
+				timelineController.changeScale('quarter',{year:year,quarter:quarter})
+		},
+		showMonth: function(year,month)  {
+			if(typeof year =='undefined')
+				timelineController.changeScale('month')
+			else
+				timelineController.changeScale('month',{year:year,month:month})
+		},
+		showWeek: function(year,month,week)  {
+			if(typeof year =='undefined')
+				timelineController.changeScale('week')
+			else
+				timelineController.changeScale('week',{year:year,month:month,week:week})
 		}
 
 	});
@@ -67,11 +92,26 @@ position:relative;
 overflow:hidden;
 width:1024px;
 height:400px;
-background-color:#ccc;
+/*background-color:#ccc;*/
 z-index:10;
 }
 
 .timeline-view {
+	position:absolute;
+	overflow:hidden;
+	width:3000px;/*** quirky measure. **/
+}
+
+.tm-vgroup {
+	position:relative;
+	float:left;
+	margin-left:100px;
+	width: 200px;
+	height: 200px;
+	/*background-color:#222;*/
+}
+
+.tm-vg-holder {
 	position:absolute;
 }
 
@@ -80,9 +120,14 @@ z-index:10;
 	width:200px;
 	height:200px;
 }
+
+.tm-sl-nav {
+	position:absolute;
+	width:200px;
+}
 .tm-entry {
 	position:absolute;
-	top:0px;
+	top:40px;
 	left:0px;
 	background-color:white;
 }
@@ -111,9 +156,11 @@ z-index:10;
 	<div id='tm-entry-new'></div>
 </div>
 <div id="timeline-nav">
-<a href="#">All</a>
-<a href="#year">Year</a>
-Month
+<a href="#all">전체</a>
+<a href="#year">연</a>
+<a href="#quarter">분기</a>
+<a href="#month">월</a>
+<a href="#week">주</a>
 </div>
 <div id="timeline">
 </div>
