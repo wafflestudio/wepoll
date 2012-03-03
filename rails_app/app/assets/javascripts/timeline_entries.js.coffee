@@ -236,6 +236,51 @@ class TimelineEntryView extends Backbone.View
 		@$el.remove() if @hasEl
 
 
+class TimelineEntryNav extends Backbone.View
+	initialize:(options)->
+		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'>P</a><span class='tm-sl-cntnt'></span>
+		<a href='#' class='tm-sl-nav-n'>N</a></div>")
+			
+		@$pbutton = @$el.find('.tm-sl-nav-p').click @prev
+		@$nbutton = @$el.find('.tm-sl-nav-n').click @next
+		@$content = @$el.find('.tm-sl-cntnt')
+		@setProperties(options)
+
+	setProperties:(options)->
+		@numPages = options.num if options.num?
+		@currentPage = options.current if options.current?
+		
+		@currentPage = @numPages if @currentPage > @numPages
+
+		if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
+
+		if @currentPage+1 >= @numPages
+			@$nbutton.hide()
+		else
+			@$nbutton.show()
+		
+		if @currentPage == 0
+			@$pbutton.hide()
+		else
+			@$pbutton.show()
+	
+	appendTo:(target)->
+		@$el.appendTo(target)
+		
+	prev:()=>
+		return false if @currentPage <= 0
+		@setProperties({current:@currentPage-1})
+		@trigger('prev')
+		@trigger('changePage', @currentPage)
+		return false
+
+	next:()=>
+		return false if @currentPage+1 >= @numPages
+		@setProperties({current:@currentPage+1})
+		@trigger('prev')
+		@trigger('changePage', @currentPage)
+		return false
+
 createLegend = (value, text, href)->
 	$("<div class='tm-legend'><a href='#{href}'>#{text}</a></div>")
 
@@ -249,20 +294,32 @@ createLegend = (value, text, href)->
 #
 class TimelineEntrySlider extends Backbone.View
 	initialize:(options)->
-		@$el = $("<div class='tm-slider'>Slider</div>").data('slider', this)
+		@$el = $("<div class='tm-slider'></div>").data('slider', this)
+		@$holder = $("<div class='tm-sl-holder'></div>").appendTo(@$el)
+
+		@nav = new TimelineEntryNav({current:0,num:0})
+		@nav.appendTo(@$holder)
+		@nav.on "changePage", (page)=>
+			@$holder.find('.tm-entry').each (index,el)=>
+				if index == page then $(el).show() else $(el).hide()
+		
 		legend = createLegend(options.pos, options.legend, options.href)
 		@pos = options.pos
+		
 		@$el.append(legend)
 
 	addEntry:(view)->
-		view.appendTo(@$el)
+		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
 		view.on("destroy", @onEntryDestroy)
+
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 		
 	removeEntry:(view)->
 		view.off("dateChange", @onEntryDateChange)
 		view.off("destroy", @onEntryDestroy)
 		view.detach()
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -271,10 +328,11 @@ class TimelineEntrySlider extends Backbone.View
 		@trigger("entryDateChange", this, view, model)
 	
 	onEntryDestroy:(view,model)=>
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 		@trigger("entryDestroy", this, view, model)
 	
 	isEmpty: ()->
-		return @$el.children(".tm-entry").length == 0
+		return @$holder.children(".tm-entry").length == 0
 
 	destroy:()->
 		@$el.remove()
@@ -412,7 +470,6 @@ class TimelineView extends Backbone.Events
 		if !found
 			@$el.append(group.$el)
 	
-
 	prepareGroup:(pos)->
 
 		if @groups[pos]
@@ -786,11 +843,11 @@ class TimelineController
 	constructor: ()->
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		# Growl
 		@collection.on "add", (model)->
 			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
 		@collection.on "remove", (model)->
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
-		
+			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})	
 		@collection.on "change", (model)->
 			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
 
