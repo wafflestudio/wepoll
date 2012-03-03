@@ -103,7 +103,7 @@
   position: absolute;
   display: none;
   font-size: 11pt;
-  padding-top: 20px;
+  padding-top: 30px;
   padding-bottom: 10px;
   background-color: white;
   border: 5px solid black;
@@ -179,5 +179,33 @@
         font-size: 10pt;
       }
     }
+  }
+}
+
+#reply_check .checkbox {
+  input {
+    display: none;
+  }
+  padding:10px;
+  cursor:pointer;
+}
+.checked {
+  &.tweet {
+    background-image: url(forum/t-color.png);
+    background-repeat: no-repeat;
+  }
+  &.facebook {
+    background-image: url(forum/f-color.png);
+    background-repeat: no-repeat;
+  }
+}
+.unchecked {
+  &.tweet {
+    background-image: url(forum/t-grayscale.png);
+    background-repeat: no-repeat;
+  }
+  &.facebook {
+    background-image: url(forum/f-grayscale.png);
+    background-repeat: no-repeat;
   }
 }

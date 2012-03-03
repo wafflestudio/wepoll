@@ -1,3 +1,23 @@
+<%= content_for :scripts do %>
+<script type="text/javascript">
+$(function() {
+$('span.checkbox').addClass("unchecked");
+  $(".checkbox").click(function(){
+    if($(this).children("input").attr("checked")){
+      // uncheck
+      $(this).children("input").removeAttr("checked");
+      $(this).removeClass("checked");
+      $(this).addClass("unchecked");
+    }else{
+      // check
+      $(this).children("input").attr({checked: "checked"});
+      $(this).removeClass("unchecked");
+      $(this).addClass("checked");
+    }
+  });
+});
+</script>
+<% end  -%>
 <div class="grid_10 push_1 alpha">
   <div id="politician_box" class="grid_10 alpha omega">
     <div id="politician_profile_picture" class="grid_2 alpha">
@@ -27,8 +47,8 @@
         X
       </div>
       <div id="reply_check">
-        <%= check_box_tag :tweet %>
-        <%= check_box_tag :facebook %>
+        <span class="checkbox tweet"><input name="tweet" type="checkbox" /></span>
+        <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
       </div>
       <%= label_tag :reply_text_box, @politician.name+'후보의 트윗에 한마디.' %>
       <%= text_area_tag :content, nil, :id => "reply_text_box", :placeholder => "댓글을 입력해주세요." %>
