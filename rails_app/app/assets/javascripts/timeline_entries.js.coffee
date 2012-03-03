@@ -236,6 +236,51 @@ class TimelineEntryView extends Backbone.View
 		@$el.remove() if @hasEl
 
 
+class TimelineEntryNav extends Backbone.View
+	initialize:(options)->
+		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'>P</a><span class='tm-sl-cntnt'></span>
+		<a href='#' class='tm-sl-nav-n'>N</a></div>")
+			
+		@$pbutton = @$el.find('.tm-sl-nav-p').click @prev
+		@$nbutton = @$el.find('.tm-sl-nav-n').click @next
+		@$content = @$el.find('.tm-sl-cntnt')
+		@setProperties(options)
+
+	setProperties:(options)->
+		@numPages = options.num if options.num?
+		@currentPage = options.current if options.current?
+		
+		@currentPage = @numPages if @currentPage > @numPages
+
+		if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
+
+		if @currentPage+1 >= @numPages
+			@$nbutton.hide()
+		else
+			@$nbutton.show()
+		
+		if @currentPage == 0
+			@$pbutton.hide()
+		else
+			@$pbutton.show()
+	
+	appendTo:(target)->
+		@$el.appendTo(target)
+		
+	prev:()=>
+		return false if @currentPage <= 0
+		@setProperties({current:@currentPage-1})
+		@trigger('prev')
+		@trigger('changePage', @currentPage)
+		return false
+
+	next:()=>
+		return false if @currentPage+1 >= @numPages
+		@setProperties({current:@currentPage+1})
+		@trigger('prev')
+		@trigger('changePage', @currentPage)
+		return false
+
 createLegend = (value, text, href)->
 	$("<div class='tm-legend'><a href='#{href}'>#{text}</a></div>")
 
@@ -249,19 +294,32 @@ createLegend = (value, text, href)->
 #
 class TimelineEntrySlider extends Backbone.View
 	initialize:(options)->
-		@$el = $("<div class='tm-slider'>Slider</div>")
-		legend = createLegend(options.position, options.legend, options.href)
+		@$el = $("<div class='tm-slider'></div>").data('slider', this)
+		@$holder = $("<div class='tm-sl-holder'></div>").appendTo(@$el)
+
+		@nav = new TimelineEntryNav({current:0,num:0})
+		@nav.appendTo(@$holder)
+		@nav.on "changePage", (page)=>
+			@$holder.find('.tm-entry').each (index,el)=>
+				if index == page then $(el).show() else $(el).hide()
+		
+		legend = createLegend(options.pos, options.legend, options.href)
+		@pos = options.pos
+		
 		@$el.append(legend)
 
 	addEntry:(view)->
-		view.appendTo(@$el)
+		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
 		view.on("destroy", @onEntryDestroy)
+
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 		
 	removeEntry:(view)->
 		view.off("dateChange", @onEntryDateChange)
 		view.off("destroy", @onEntryDestroy)
 		view.detach()
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -270,17 +328,97 @@ class TimelineEntrySlider extends Backbone.View
 		@trigger("entryDateChange", this, view, model)
 	
 	onEntryDestroy:(view,model)=>
+		@nav.setProperties({num:@$holder.children('.tm-entry').length})
 		@trigger("entryDestroy", this, view, model)
 	
 	isEmpty: ()->
-		return @$el.children(".tm-entry").length == 0
+		return @$holder.children(".tm-entry").length == 0
 
 	destroy:()->
 		@$el.remove()
+		@trigger("destroy", this)
 	
-	css:(hash)->
-		@$el.css(hash)
+	css:(obj, value)->
+		if typeof obj == 'string'
+			if typeof value !='undefined'
+				@$el.css(obj, value)
+			else
+				return @$el.css(obj)
+		else if obj
+			@$el.css(obj)
+
+	getPos:()->
+		return @pos
 	
+
+class TimelineVisualGroup extends Backbone.Events
+	constructor: (pos)->
+		@$el = $("<div class='tm-vgroup'/>").data("pos", pos)
+		@$holder = $("<div class='tm-vg-holder'/>").appendTo(@$el)
+		@pos = pos
+		@epoch = pos
+		@setSpan(0)
+		
+		# DEBUG
+		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
+	
+	appendTo:(target)->
+		@$el.appendTo(target)
+
+	setPos:(pos)->
+		@pos = pos
+		@$el.data("pos",pos)
+		# DEBUG
+		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
+		@$holder.animate({left: (@epoch - @pos)*TimelineView.EntryWidth},{queue:false})
+
+	
+	setSpan:(span)->
+		if @span != span
+			@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
+		@span = span
+		# DEBUG
+		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
+		
+
+	addSlider:(slider,pos)->
+		slider.appendTo(@$holder)
+		slider.css("left","#{(pos-@epoch)*TimelineView.EntryWidth}px")
+		slider.on "destroy", @onSliderDestroy
+
+		@setSpan(@span + 1)
+	
+	appendBulk:(elements, shift)->
+		console.log("shift:#{shift}")
+		for element in elements
+			@$holder.append(element)
+			$(element).css("left", parseInt(element.css("left"))+shift*TimelineView.EntryWidth)
+			$(element).data("slider").on "destroy", @onSliderDestroy
+
+		@setSpan(@span + elements.length)
+
+	collapse:(startpos)->
+		
+		elements = []
+		@$holder.children('.tm-slider').each (index,element)=>
+			return if startpos != 'undefined' and $(element).data("slider").pos < startpos
+			$(element).data("slider").off "destroy", @onSliderDestroy
+			$(element).detach()
+			elements.push($(element))
+
+		@setSpan(@$holder.children('.tm-slider').length)
+
+		return elements
+	
+	onSliderDestroy:(slider)=>
+		@setSpan(@span-1)
+
+	destroy:()->
+		@$el.remove()
+		
+
+
+
 # TimelineView
 # =====================================================
 # A **TimelineView** represents an overlapping page regarding a specific time scale.
@@ -294,14 +432,18 @@ class TimelineEntrySlider extends Backbone.View
 # 	If none of the existing `TimelineEntrySlider` held in the view matches the position, create new slider and attch the entry view on it.
 #
 class TimelineView extends Backbone.Events
+	@EntryWidth: 210
+
 	constructor:(@collection)->
 		@sliders = {}
+		@groups = {}
 		@collection.on("add", @onEntryAdd)
 		@$el = $("<div class='timeline-view'></div>")
 		@setStart(@epoch())
 		# if @collection is already loaded somehow
 		@collection.each (entry)=>
 			@drawEntry(entry)
+
 	
 	fetch:(options)->
 		@collection.fetch(options)
@@ -314,19 +456,101 @@ class TimelineView extends Backbone.Events
 
 	hide:()->
 		@$el.hide()
+	
+	# VGroup is added according to its position, not at the end of array
+	addGroup:(group)->
+		# search from $@el for proper position
+		found = false
+		@$el.children(".tm-vgroup").each (index, el)=>
+			if $(el).data("pos") > group.pos
+				$(el).before(group.$el) if !found
+				found = true
+
+		# if none found
+		if !found
+			@$el.append(group.$el)
+	
+	prepareGroup:(pos)->
+
+		if @groups[pos]
+			throw "pos already occupied, which shouldn't happen"
+		# [pos-1] [pos+1]: merge to both left and right
+		else if @groups[pos-1] && @groups[pos+1]
+			console.log("merged to left-right")
+			# move right elements to left
+			@groups[pos-1].appendBulk(@groups[pos+1].collapse(), @groups[pos-1].span+1)
+			# clear right side, as we won't need it any more
+			oldRight = @groups[pos+1]
+			@groups[pos] = @groups[pos-1]
+			i = pos + 1
+			while @groups[i] == oldRight
+				@groups[i] = @groups[pos-1]
+				i++
+			oldRight.destroy()
+		else if @groups[pos-1] # [pos-1] [pos+2] merge to left
+			console.log("merged to left")
+			@groups[pos] = @groups[pos-1]
+			#@groups[pos].setSpan(@groups[pos].span+1)
+		else if @groups[pos+1] # merge to right
+			console.log("merged to right")
+			@groups[pos] = @groups[pos+1]
+			@groups[pos].setPos(pos)
+			#@groups[pos].setSpan(@groups[pos].span+1)
+
+		else # none exists nearby
+			@groups[pos] = new TimelineVisualGroup(pos)
+			@addGroup(@groups[pos])
+
+		return @groups[pos]
+	
+	
+	# When a slider is removed, we can compress space between sliders in between. 
+	onSliderDestroy:(slider)=>
+		pos = slider.pos
+
+		if !@groups[pos]
+			throw "group of pos(#{pos}) doesn't exist ()"
+		else if @groups[pos-1] && @groups[pos+1] # split into two
+			console.log('split')
+			leftGroup = @groups[pos-1]
+			# create new for right
+			rightGroup = new TimelineVisualGroup(pos+1)
+			@addGroup(rightGroup)
+			# move some from left to right [] [] x [] [] (span:5->pos-epoch) pos-1 
+			rightGroup.appendBulk(leftGroup.collapse(pos+1), -(leftGroup.span+1))#pos+1-leftGroup.epoch)
+
+		else if @groups[pos-1]
+			# set span
+			console.log('right removal')
+			#@groups[pos-1].setSpan(@groups[pos-1].span-1)
+
+		else if @groups[pos+1]
+			console.log('left removal')
+			@groups[pos+1].setPos(pos+1)
+			#@groups[pos+1].setSpan(@groups[pos+1].span-1)
+		else # actually remove 
+			console.log('self removal')
+			@groups[pos].destroy()
+
+		delete @groups[pos]
+
 
 	addSlider: (slider,pos)->
-		slider.appendTo(@$el)
+		group = @prepareGroup(pos)
+		console.log("slider added at #{pos}")
+		group.addSlider(slider,pos)
+
 		slider.on("entryDateChange", @onEntryDateChange)
 		slider.on("entryDestroy", @onEntryRemove)
+		slider.on("destroy",@onSliderDestroy)
 		@sliders[pos] = slider
 
 	removeSlider: (slider)->
 		slider.off("entryDateChange", @onEntryDateChange)
 		slider.off("entryDestroy", @onEntryRemove)
+		delete @sliders[slider.pos]
 		slider.destroy()
-		for pos,sl of @sliders
-			delete @sliders[pos] if sl == slider
+		slider.off("destroy",@onSliderDestroy)
 	
 	drawEntry: (entry)->
 		pos = @calcPosition(entry.get("posted_at"))
@@ -334,7 +558,6 @@ class TimelineView extends Backbone.Events
 		if !slider
 			slider = new TimelineEntrySlider({pos:pos,legend:@legendText(pos),href:@legendHref(pos)})
 			@addSlider(slider, pos)
-			slider.css({"left":"#{(pos-@epoch())*210}px"})
 
 		view = new TimelineEntryView({model:entry})
 		slider.addEntry(view)
@@ -354,9 +577,8 @@ class TimelineView extends Backbone.Events
 			if slider.isEmpty()
 				@removeSlider(slider)
 			if !newSlider
-				newSlider = new TimelineEntrySlider({legend:pos})
+				newSlider = new TimelineEntrySlider({pos:pos, legend:@legendText(pos),href:@legendHref(pos)})
 				@addSlider(newSlider, pos)
-				newSlider.css({"left":"#{(pos-@epoch())*210}px"})
 			newSlider.addEntry(entryView)
 
 	# You can let the view updated automatically.
@@ -365,6 +587,12 @@ class TimelineView extends Backbone.Events
 		@timer = setInterval ()=>
 			@update()
 		, 10000
+
+	setStart:(pos)->
+		if @groups[pos]
+			pos = @groups[pos].pos
+		@$el.css("left", -(pos-@epoch())*TimelineView.EntryWidth)
+		
 
 	stopAutoUpdate: ()->
 		clearTimeout(@timer)
@@ -376,7 +604,7 @@ class TimelineView extends Backbone.Events
 		return if @moving
 		left = @$el.css("left")
 		left = if left == 'auto' then 0 else left
-		@$el.animate({left:parseInt(left) - 210},{easing:'linear',complete:()=>
+		@$el.animate({left:parseInt(left) - TimelineView.EntryWidth},{complete:()=>
 			@moving = false
 		})
 		@moving = true
@@ -385,50 +613,120 @@ class TimelineView extends Backbone.Events
 		return if @moving
 		left = @$el.css("left")
 		left = if left == 'auto' then 0 else left
-		@$el.animate({left:parseInt(left) + 210},{easing:'linear',complete:()=>
+		@$el.animate({left:parseInt(left) + TimelineView.EntryWidth},{complete:()=>
 			@moving = false
 		})
 		@moving = true
 
 		
 
-class AllView extends TimelineView
-	@scale : "all"
-	@unit : "year"
+class TermView extends TimelineView
+	@unit : "term"
 
 	constructor: (@collection)->
 		super(@collection)
 		
-	fetch: (startYear, endYear)->
+	fetch: (startTerm, endTerm)->
 		options =
-			scope: 'all'
-			start: startYear
-			end:   endYear
-			unit:  'year'
+			start: startTerm
+			end:   endTerm
+			unit:  'term'
 		
 		super(options)
 
 	calcPosition: (date)->
-		year = new Date(date).getFullYear()
+		#year = new Date(date).getFullYear()
+		term = parseInt((new Date(date).getFullYear()-1936)/4)
 	
 	legendText: (pos)->
-		pos + "년"
+		year = parseInt(pos*4)+1936
+		"#{year}년~#{year+3}년"
 	
 	legendHref: (pos)->
-		"#year/#{pos}"
+		year = parseInt(pos*4)+1936
+		"#year/#{year}"
 
 	epoch: ()->
-		# TODO: 4 is selected as the number of entries can be shown on screen
-		return new Date().getFullYear()-4
-	
-	setStart: (year)->
-		@$el.css("left", (year-@epoch())*210)
+		# TODO:일단 16대부터
+		return 16
+
+	#setStart: (year)->
+	#	@$el.css("left", (year-@epoch())*TimelineView.EntryWidth)
 
 
 
 class YearView extends TimelineView
-	@scale : "year"
+	@unit : "year"
+
+	calcPosition: (date)->
+		d = new Date(date)
+		year = d.getFullYear()
+		return year
+	
+	legendText: (pos)->
+		return "#{pos}년"
+	
+	legendHref: (pos)->
+		return "#quarter/#{pos}"
+	
+	epoch: ()->
+		today = new Date()
+		return today.getFullYear()-4
+###
+	setStart: (pos)->
+		year = parseInt(pos/12)
+		month = pos %12
+		console.log(year,month,@epoch(),"left:" + -(year*12+month-@epoch())*TimelineView.EntryWidth)
+		@$el.css("left", -(year*12+month-@epoch())*TimelineView.EntryWidth)
+###
+class QuarterView extends TimelineView
 	@unit : "quarter"
+
+	calcPosition: (date)->
+		d = new Date(date)
+		year = d.getFullYear()
+		quarter = parseInt(d.getMonth()/4)
+		return year*4 + quarter
+	
+	legendText: (pos)->
+		year = parseInt(pos/4)
+		quarter = pos%4
+		return "#{year}년 #{quarter+1}분기"
+	
+	legendHref: (pos)->
+		return "#month/#{pos}"
+	
+	epoch: ()->
+		today = new Date()
+		return today.getFullYear()*4-4
+	
+	setStart: (pos)->
+		console.log("setStart #{pos}")
+		if typeof pos == 'object'
+			pos = pos.year *4 + pos.quarter
+		super(pos)
+
+
+
+getFirstDayOfYear = (date)->
+	year = if typeof date == 'number' then date else new Date(date).getFullYear()
+	return new Date("#{year}-01-01")
+
+normalizeDate = (date)->
+	month = date.getMonth()+1
+	day = date.getDate()
+	return new Date("#{date.getFullYear()}-#{if month < 10 then "0#{month}" else month}-#{if day < 10 then "0#{day}" else day}")
+
+getDayOfYear = (date)->
+	d = normalizeDate(new Date(date))
+	epoch = getFirstDayOfYear(d)
+	return (d.getTime()-epoch.getTime())/1000/60/60/24
+
+
+
+
+class MonthView extends TimelineView
+	@unit : "month"
 
 	calcPosition: (date)->
 		d = new Date(date)
@@ -444,29 +742,92 @@ class YearView extends TimelineView
 	legendHref: (pos)->
 		year = parseInt(pos/12)
 		month = pos % 12+1
-		return "#month/#{year}/#{month}"
+		return "#week/#{year}/#{month}"
 	
 	epoch: ()->
 		today = new Date()
 		return today.getFullYear()*12 + today.getMonth()-4
-
+	
 	setStart: (pos)->
-		year = parseInt(pos/12)
-		month = pos %12
-		console.log("left:" + -(year*12+month-@epoch())*210)
-		@$el.css("left", -(year*12+month-@epoch())*210)
-
-class QuarterView extends TimelineView
-
-class MonthView extends TimelineView
+		console.log("setStart #{pos}")
+		if typeof pos == 'object'
+			pos = pos.year *12 + pos.month
+		super(pos)
 
 class WeekView extends TimelineView
+	@unit : "week"
+
+	calcPosition: (date)->
+		d = new Date(date)
+		year = d.getFullYear()
+		week = parseInt(getDayOfYear(d)/7)
+		return year*53+week
+	
+	legendText: (pos)->
+		year = parseInt(pos/53)
+		week = (pos % 53)
+		console.log(year,week)
+		date = new Date(getFirstDayOfYear(year).getTime()+week*7*24*60*60*1000)
+		endDate = new Date(getFirstDayOfYear(year).getTime()+(week*7+6)*24*60*60*1000)
+		
+		return "#{date.getFullYear()}.#{date.getMonth()+1}.#{date.getDate()}~#{endDate.getFullYear()}.#{endDate.getMonth()+1}.#{endDate.getDate()}"
+	
+	legendHref: (pos)->
+		console.log('href'+pos)
+		year = parseInt(pos/53)
+		week = (pos % 53)
+		date = new Date(getFirstDayOfYear(year).getTime()+week*7*24*60*60*1000)
+
+		return "#day/#{year}/#{date.getMonth()+1}/#{date.getDate()}"
+	
+	epoch: ()->
+		today = new Date()
+		return today.getFullYear()*7 + today.getMonth()-4
+	
+	setStart: (pos)->
+		console.log("setStart #{pos}")
+		if typeof pos == 'object'
+			pos = pos.year *12 + pos.month
+		super(pos)
+
 
 class DayView extends TimelineView
+	@unit : "day"
+
+	calcPosition: (date)->
+		d = new Date(date)
+		year = d.getFullYear()
+		dayofyear = getDayOfYear(d)
+		return year*366+dayofyear
+	
+	legendText: (pos)->
+		d = new Date(date)
+		year = parseInt(pos/366)
+		dayofyear = pos%366
+		date = new Date(getFirstDayOfYear(date).getTime()+dayofyear*24*60*60*1000)
+
+		return "#{date.getFullYear()}.#{date.getMonth()+1}.#{date.getDate()}"
+	
+	legendHref: (pos)->
+		year = parseInt(pos/12/31)
+		month = (pos % 31)+1
+		day = (pos % (12*31))+1
+		return "#day/#{year}/#{month}/#{week}"
+	
+	epoch: ()->
+		today = new Date()
+		return today.getFullYear()*12 + today.getMonth()-4
+	
+	setStart: (pos)->
+		console.log("setStart #{pos}")
+		if typeof pos == 'object'
+			pos = pos.year *12 + pos.month
+		super(pos)
+
 
 
 Views =
-	all:     AllView
+	all:     TermView
 	year:    YearView
 	quarter: QuarterView
 	month:   MonthView
@@ -482,11 +843,11 @@ class TimelineController
 	constructor: ()->
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		# Growl
 		@collection.on "add", (model)->
 			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
 		@collection.on "remove", (model)->
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
-		
+			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})	
 		@collection.on "change", (model)->
 			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
 
@@ -501,11 +862,12 @@ class TimelineController
 		if @views[scaleName]
 			@currentScale = @views[scaleName]
 		else
-			@currentScale = new Views[scaleName](@collection)
+			@currentScale = @views[scaleName] = new Views[scaleName](@collection)
+			
 			@currentScale.appendTo(@$el)
 
 		# Transition between oldScale and currentScale (may simple be a `show()` and a `hide()`)
-		if oldScale
+		if oldScale != @currentScale
 			oldScale.stopAutoUpdate() if @autoUpdate
 			oldScale.hide()
 
@@ -521,10 +883,10 @@ class TimelineController
 			view.appendTo(@$el)
 		$(@$el).mousewheel (e, delta)=>
 			e.preventDefault()
-			if delta < -0.4
-				@currentScale.goLeft()
-			else if delta > 0.4
+			if delta > -0.4 && delta < 0
 				@currentScale.goRight()
+			else if delta < 0.4  && delta >0
+				@currentScale.goLeft()
 
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
