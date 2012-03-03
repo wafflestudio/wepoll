@@ -238,6 +238,6 @@ Devise.setup do |config|
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end
   #
-  config.omniauth :facebook, FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret], :scope => 'email,read_stream,publish_stream'
+  config.omniauth :facebook, FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret], :scope => 'email,read_stream,publish_stream', :display => "popup"
   config.omniauth :twitter, TWITTER_CLIENT[:key], TWITTER_CLIENT[:secret]
 end

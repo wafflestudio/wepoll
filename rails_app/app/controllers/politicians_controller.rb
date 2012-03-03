@@ -1,10 +1,15 @@
 class PoliticiansController < ApplicationController
   def initiate_bills
     @politician = Politician.find(params[:id])
+
     @bills = @politician.initiate_bills.page(params[:page]).per(8)
 
-    @bill_categories = @politician.initiate_bills_categories
-
+    respond_to do |format|
+      format.html do 
+        @bill_categories = @politician.initiate_bills_categories
+      end
+      format.js {}
+    end
     render :layout => false
   end
 

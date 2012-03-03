@@ -10,4 +10,5 @@
   var bill_categories_<%=@politician.id %> = $.parseJSON('<%=raw @bill_categories.to_json %>');
   Raphael("<%= @politician.id %>-bill-graph", 176, 176).pieChart(176/2,176/2,80, bill_counts_<%= @politician.id%>, bill_categories_<%= @politician.id%>, "#fff");
   $(".init-bills-link").colorbox();
+
 </script>

@@ -25,6 +25,7 @@ Wepoll::Application.routes.draw do
     :registrations => "users/registrations",
     :sessions => "users/sessions"} do
     match 'users/sign_up/link_sns/:id' => 'users/registrations#link_sns', :via => :get, :as => 'new_user_link_sns'
+    match '/auth_completed' => 'users/registrations#after_auth', :as => :after_auth
   end
 
   match 'users/auth/twitter/callback' => 'users/omniauth_callbacks#twitter'
@@ -66,6 +67,7 @@ Wepoll::Application.routes.draw do
   end
 
   match "/search" => "main#search"
+
   root :to => 'main#index'
 
 
