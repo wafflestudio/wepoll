@@ -208,9 +208,9 @@
     });
   </script>
 <script>
-  var paper = Raphael("seoul-map-image", 1000, 800, function () {
+  var paper = Raphael("seoul-map-image", 800, 600, function () {
     var r = this;
-    r.rect(-150, 0, 900, 800).attr({
+    r.rect(-150, 100, 850, 850).attr({
       stroke: "none",
     });
     var over = function () {
@@ -232,14 +232,17 @@
       y1 = y + len * Math.sin(Math.PI / 4 + alpha);
 
       x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
-      y2 = end_y - len* Math.sin(Math.PI / 4 + alpha);
+      y2 = end_y - len * Math.sin(Math.PI / 4 + alpha);
 
       this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
       this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+      this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+      this.arrow.rotate((Math.PI / 4 + alpha) * 180);
       //drawCurve(this.id-1);
     },
     out = function () {
       this.curve.remove();
+      this.arrow.remove();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
@@ -265,7 +268,7 @@
         lon: (x - 465.4) / 2.6938
       };
     };
-    r.setViewBox(-94,-15,860,860,false)
+    r.setViewBox(-94,95,500,640,false)
   })
 </script>
 <% end -%>
