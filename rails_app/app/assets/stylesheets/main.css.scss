@@ -108,6 +108,12 @@
   position:relative;
 }
 
+#seoul-map-image {
+  position:absolute;
+  top: -100px;
+  z-index: 1000; 
+}
+
 #line-canvas {
   position:absolute;
   top:0;
