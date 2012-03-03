@@ -2,10 +2,16 @@
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
-    politicians = Politician.where(:district => @district)
-    raise "#{@district} 후보 수 != 2" if politicians.count != 2
-    @p1 = politicians.first
-    @p2 = politicians.last
+    @politicians = Politician.where(:district => @district).desc(:good_link_count)
+    raise "politicians.count < 2" if @politicians.count < 2
+
+    if (params[:p1_id] && params[:p2_id])
+      @p1 = @politicians.where(:_id => params[:p1_id]).first
+      @p2 = @politicians.where(:_id => params[:p2_id]).first
+    else
+      @p1 = @politicians[0]
+      @p2 = @politicians[1]
+    end
 
     p1_bill_categories = @p1.initiate_bills_categories
     p2_bill_categories = @p2.initiate_bills_categories
@@ -15,6 +21,8 @@ class DistrictController < ApplicationController
 
     @p2_bill_counts = p2_bill_categories.map {|c,n| n}
     @p2_bill_categories = p2_bill_categories.map {|c,n| c}
+
+    @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
   end
 
   protected

@@ -5,7 +5,11 @@
 			width:200,
 			color:"red",
 			total:100,
-			floating:"left"
+			floating:"left",
+			labelClass:"bar-label",
+			label:function(x, fx) {
+				return x+"";
+			}
 		}, prop);
 
 		this.each(function() {
@@ -13,7 +17,7 @@
 			var color = $this.attr('data-color') || options.color;
 			var value = parseFloat($this.attr("data-value"));
 			var total = parseFloat(($this.attr("data-total") || options.total));
-			var width = parseInt(($this.attr('data-width') || options.width));
+			var width = parseInt(($this.attr('data-width') || options.width)) - options.labelWidth;
 			var floating = $this.attr('data-float') || options.floating;
 
 			var r = 0;
@@ -31,24 +35,41 @@
 
 			//make bar
 			var $bar = $("<div></div>");
-			$bar.css("width", w + "px");
+			var $lbl = $("<div></div>");
+			$lbl.attr('class', options.labelClass);
+
 			$bar.css("height", options.height + "px");
 			$bar.css("background-color", color);
 
 			if (floating === 'left') {
-				$bar.css("margin-left", 0);
+				$bar.css("float","left");
+				$lbl.css("float","left");
+				
+//				$bar.css("margin-left", 0);
 			}
 			else if (floating === 'right') {
-				$bar.css("margin-left", (width - w) + "px" );
+				$bar.css("float","right");
+				$lbl.css("float","right");
+//				$bar.css("margin-left", (width - w) + "px" );
 			}
 			else if (floating === 'center') {
 				$bar.css("margin-left", "auto");
 				$bar.css("margin-right", "auto");
 			}
 
+			$this.css("width", width + options.labelWidth);
 			$this.append($bar);
-		});
+			$this.append($lbl);
+			$this.addClass("clearfix");
 
+			$bar.delay(500).animate({width:w}, {
+				duration:3000,
+				easing:"swing",
+				step:function(now, fx) {
+					$lbl.text(options.label(now/w*value), fx);
+				}
+			});
+		});
 		return this;
 	}
 })(jQuery);

@@ -52,71 +52,157 @@
     }
 
     $(document).ready(function() {
-      $(".bar-graph").simpleBarGraph({
-        width:176,
-        height:5
-      });
+      var common_options = { width:624/2-33/2, height:14, labelWidth:48};
+      $("#p1-good-link").simpleBarGraph(
+        $.extend({
+          labelClass:"good bar-label right",
+          label:function(x, fx) {
+            return "칭찬 " + Math.round(x);
+          }
+        },
+        common_options)
+      );
+      $("#p1-bad-link").simpleBarGraph(
+        $.extend({
+          labelClass:"bad bar-label right",
+          label:function(x, fx) {
+            return "지적 " + Math.round(x);
+          }
+        },
+        common_options)
+      );
+      $("#p2-good-link").simpleBarGraph(
+        $.extend({
+          labelClass:"good bar-label left",
+          label:function(x, fx) {
+            return "칭찬 " + Math.round(x);
+          }
+        },
+        common_options)
+      );
+      $("#p2-bad-link").simpleBarGraph(
+        $.extend({
+          labelClass:"bad bar-label left",
+          label:function(x, fx) {
+            return "지적 " + Math.round(x);
+          }
+        },
+        common_options)
+      );
 
       $(".tab").click(function() {
         loadTab($(this).attr('data-id'));
       });
       $(".tab").eq(0).click();
+
+      $(".politician-select").change(function() {
+        var $this = $(this);
+        if ($this.attr("value") == "<%= @p1.id%>" || 
+        $this.attr("value") == "<%= @p2.id%>") {
+
+          if ($this.attr("id") == "politician1") 
+            $this.val("<%= @p1.id %>");
+          if ($this.attr("id") == "politician2") 
+            $this.val("<%= @p2.id %>");
+
+          return false;
+        }
+
+        var ids = $(".politician-select").map(function(i, select) {
+          var $select = $(select);
+          return $select.attr("value");
+        });
+
+        var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
+        $(location).attr('href',url);
+      });
     });
   </script>
 <% end -%>
-<h1><%=@district %></h1>
 
 <div id="name-cards" class="grid_12 alpha omega">
-  <div class="grid_6 alpha name-card">
-    <div class="grid_3 alpha tweet">
-      last tweet of <%= @p1.tweet_name%>
+  <div class="clearfix" id="name-cards-inner-wrapper">
+    <div class="name-card">
+      <div class="tweet left">
+        last tweet of <%= @p1.tweet_name%>
+      </div>
+      <div class="photo-frame" style="margin-left:5px;">
+        <%= image_tag @p1.profile_photo.url(:square100) %>
+        <div class="back">
+        </div>
+      </div>
+      <div class="candidate-selector left">
+        <% if @politicians.any? -%>
+          <%= select_tag 'politician1', options_from_collection_for_select(@politicians, 'id', 'name', @p1.id.to_s), :class => "politician-select" %>
+        <% else -%>
+          <%= @p1.name%>
+        <% end -%>
+      </div>
+      <div class="clear"></div>
     </div>
-    <div class="grid_3 omega">
-      <%= image_tag @p1.profile_photo.url(:square100) %>
+
+    <div class="vs-bar">
+      <div style="height:40px;margin-bottom:12px">&nbsp;</div>
+      <div class="district-label">
+        <%= @district%>
+      </div>
+
+      <div class="vs-mark">
+      </div>
     </div>
-    <div class="clear"></div>
-    <div class="grid_3 alpha">
+
+    <div class="name-card">
+      <div class="tweet right">
+        last tweet of <%=@p2.tweet_name%>
+      </div>
+
+      <div class="candidate-selector right">
+        <% if @politicians.any? -%>
+          <%= select_tag 'politician2', options_from_collection_for_select(@politicians, 'id', 'name', @p2.id.to_s), :class => "politician-select" %>
+        <% else -%>
+          <%= @p2.name%>
+        <% end -%>
+      </div>
+
+      <div class="photo-frame">
+        <%= image_tag @p2.profile_photo.url(:square100) %>
+        <div class="back"></div>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <div class="link-graph-wrapper clearfix">
       <div id="p1-good-link" class="bar-graph"
-        data-color="green"
+        data-color="#f1376f"
         data-total="-1"
         data-ref="#p1-bad-link"
         data-float="right"
         data-value="50">
       </div>
+      <div class="bar-splitter">
+      <%= image_tag "/assets/icn_smile.png" %>
+      </div>
+      <div id="p2-good-link" class="bar-graph"
+        data-color="#f1376f"
+        data-total="-1"
+        data-ref="#p2-bad-link"
+        data-value="80">
+      </div>
+    </div>
 
+    <div class="link-graph-wrapper clearfix">
       <div id="p1-bad-link" class="bar-graph"
-        data-color="red"
+        data-color="#4f4f50"
         data-total="-1"
         data-ref="#p1-good-link"
         data-float="right"
         data-value="100">
       </div>
-    </div>
-    <div class="grid_3 omega">
-      <a href="#">링크등록</a>
-    </div>
-  </div>
-
-  <div class="grid_6 omega name-card">
-    <div class="grid_3 alpha">
-      <%= image_tag @p2.profile_photo.url(:square100) %>
-    </div>
-    <div class="grid_3 alpha tweet omega">
-      last tweet of <%=@p2.tweet_name%>
-    </div>
-    <div class="clear"></div>
-    <div class="grid_3 omega">
-      <a href="#">링크등록</a>
-    </div>
-    <div class="grid_3 alpha">
-      <div id="p2-good-link" class="bar-graph"
-        data-color="green"
-        data-total="-1"
-        data-ref="#p2-bad-link"
-        data-value="80">
+      <div class="bar-splitter">
+      <%= image_tag "/assets/icn_frown.png" %>
       </div>
       <div id="p2-bad-link" class="bar-graph"
-        data-color="red"
+        data-color="#4f4f50"
         data-total="-1"
         data-ref="#p2-good-link"
         data-value="200">

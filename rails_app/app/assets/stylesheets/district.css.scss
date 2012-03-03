@@ -33,3 +33,154 @@
   display:block;
 
 }
+
+#name-cards {
+  margin:0 auto;
+  position:relative;
+  float:left;
+  width:688px - 60px;
+  height:329px - 30px;
+  border: 30px solid #feeda0;
+  border-radius:15px;
+}
+
+#name-cards-inner-wrapper {
+  position:absolute;
+  width:658px;
+  height:329px;
+  margin-left:-15px;
+  margin-top:-15px;
+  border-radius:15px;
+  background-color:#fff5c8;
+}
+
+.name-card {
+  width:257px;
+  margin:0;
+  position:relative;
+  float:left;
+}
+
+.tweet {
+  background:url(/assets/bubble_right.gif) no-repeat;
+  height:134px - 70px;
+  width:176px - 40px;
+  padding:30px 20px 40px 20px;
+  position:relative;
+  margin:13px 16px 0 16px;
+}
+
+.tweet.left {
+  float:left;
+  background:url(/assets/bubble_left.gif) no-repeat;
+}
+.tweet.right {
+  float:right;
+}
+
+.vs-bar {
+  width:144px;
+  position:relative;
+  float:left;
+}
+
+.photo-frame {
+  width:123px;
+  height:123px;
+  position:relative;
+  float:left;
+
+  .back {
+    width:123px;
+    height:123px;
+    position:absolute;
+    background:url(/assets/vs_photo_frame.png);
+  }
+
+  img {
+    position:absolute;
+    width:110px;
+    height:110px;
+    top:6px;
+    left:6px;
+  }
+}
+
+.district-label {
+  width:129px - 20px;
+  height:59px - 40px;
+  margin:0 auto 65px auto;
+  text-align:center;
+  padding:20px 10px;
+  background:url(/assets/district_border.gif) no-repeat;
+  font-size:20pt;
+}
+
+.vs-mark {
+  background:url(/assets/vs_mark.gif) no-repeat;
+  height:71px;
+  width:136px;
+  margin:0 auto;
+}
+
+.link-graph-wrapper {
+  width:624px;
+  margin:0 auto;
+  .bar-graph {
+    float:left;
+  }
+  margin-bottom:5px;
+}
+
+.bar-label {
+  padding-top:3px;
+  width:45px;
+  font-size:7pt;
+}
+.bar-label.right {
+  text-align:right;
+  margin-right:3px;
+}
+.bar-label.left {
+  text-align:left;
+  margin-left:3px;
+}
+
+.bar-label.good {
+  color:#f1376f;
+}
+
+.bar-label.bad {
+  color:#4f4f50;
+}
+
+.bar-splitter {
+  margin-left:5px;
+  margin-right:5px;
+  width:23px;
+  float:left;
+  margin-top:-3px;
+}
+
+.candidate-selector {
+  select {
+    border:2px solid #4f4f50;
+    padding:0;
+    width:112px - 4px;
+    height:25px;
+    margin:0;
+    background:white;
+  }
+  margin-top:50px;
+  width:112px;
+}
+.candidate-selector.right {
+  float:left;
+  margin-right:16px;
+}
+
+.candidate-selector.left {
+  float:right;
+  margin-left:16px;
+}
+
