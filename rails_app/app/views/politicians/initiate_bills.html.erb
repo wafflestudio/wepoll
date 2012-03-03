@@ -1,0 +1,41 @@
+<div class="container_16 clearfix">
+  <div class="grid_2">
+    <%= image_tag @politician.profile_photo? ? @politician.profile_photo.url(:square100) : "http://placehold.it/100"%>
+  </div>
+  <div class="grid_14">
+    <h3>대표발의 <%= @bills.count%>건 본회의 통과 <%= @bills.where(:result => Bill::RESULT_APPROVED).count%>건</h3>
+    <% @bill_categories.each do |c, n| -%>
+      <span><%= c%> <%= n%>건</span>
+    <% end -%>
+  </div>
+
+  <div class="grid_16">
+    <%= @politician.name %>
+    <% if @politician.elections.count > 0 -%>
+      <%= @politician.elections.sort {|x,y| y<=>x}.join(",")%>대 국회의원
+    <% else -%>
+      전직 국회의원 정보없음
+    <% end -%>
+  </div>
+
+  <table class="grid_16">
+    <tr>
+      <th>제안일</th>
+      <th>이슈</th>
+      <th>법안명</th>
+      <th>처리결과</th>
+    </tr>
+    <% @bills.each do |bill| -%>
+      <tr>
+        <td><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
+        <td><%= bill.issue %></td>
+        <td><%= bill.title %></td>
+        <td><%= bill.complete ? "처리" : "계류"%></td>
+      </tr>
+    <% end -%>
+  </table>
+
+  <div class="grid_16">
+  <%= paginate @bills %>
+  </div>
+</div>

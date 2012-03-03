@@ -5,6 +5,10 @@ class MainController < ApplicationController
   before_filter :before_search
   def index
     @politicians = Politician.all.asc('name').limit(10)
+    @recent_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
+    #TODO : 인기 링크 정렬 방식 고민
+    @popular_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
+
   end
 
   # XXX:for just debugging!
@@ -42,6 +46,9 @@ class MainController < ApplicationController
 
   def forum
     @politician = Politician.find(params[:politician_id])
+    @best = @politician.tweets.desc('recommend_count').first
+    @today_best = @politician.tweets.desc('today_recommend_count').first
+    @links = TimelineEntry.asc('like')
   end
 
   def before_search
@@ -103,5 +110,11 @@ class MainController < ApplicationController
       redirect_to root_url 
       #redirect_to back
     end
+  end
+
+  def vs_district
+    @politicians = Politician.where(:district => params[:district_name]) #params[:district_name] should be normalized
+    #TODO : serialize only intersted items
+    render :json => @politicians
   end
 end

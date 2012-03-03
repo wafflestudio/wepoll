@@ -47,6 +47,7 @@ Wepoll::Application.routes.draw do
     match '/recommend' => 'tweets#recommend', :as => :recommend
     match '/opposite' => 'tweets#opposite', :as => :opposite
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
+    get 'twwet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend
@@ -54,6 +55,16 @@ Wepoll::Application.routes.draw do
     match '/report' => 'tweet_replies#report', :as => :report
   end
 
+
+  match 'district/:politician_id' => 'district#show' ,:constraints => {:politician_id => /[a-z0-9]+/}, :as => :district_politician
+  match 'district/:name' => "district#show", :as => :district_name
+
+  resources :politicians do
+    get 'initiate_bills', :on => :member, :as => :init_bills_by
+    get 'bill_activities', :on => :member, :as => :bill_activities_of
+    get 'profile', :on => :member, :as => :profile_of
+    get 'promises', :on => :member, :as => :promises_of
+  end
 
   match "/search" => "main#search"
   root :to => 'main#index'

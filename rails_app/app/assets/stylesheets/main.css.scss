@@ -1,6 +1,7 @@
 // Place all the styles related to the main controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//= require forum
 
 #main-pages-container {
   position:relative;
@@ -19,17 +20,14 @@
   box-shadow: 15px 0px 10px -5px #e7cb4f;
 //  background:url(/assets/bg_left.gif);
   width:752px;
-  margin-right:0;
   min-height:300px;
 }
 
 #sidebar {
 ///  background:url(/assets/bg_right.gif);
-  margin-left:0;
   width:256px - 16px;
   padding-left:0;
   min-height:300px;
-
 }
 
 #login-actions {
@@ -42,13 +40,20 @@
   }
 }
 
-#bubble {
+.bubble {
   position:absolute;
   left:20px;
   top:70px;
-  width:214px;
-  height:165px;
-  background:url(/assets/bubble1.gif);
+  width:207px;
+  height:157px;
+  background:url(/assets/bubble1.gif) no-repeat;
+}
+
+.bubble-text {
+  text-align:center;
+  margin-top:50px;
+  font-size:11pt;
+  line-height:120%;
 }
 
 #login-btn {
@@ -69,4 +74,164 @@
     color:white;
     text-decoration:none;
   }
+}
+
+#vs-container {
+  padding:30px 40px 30px 40px;
+  width:320px - 80px;
+  height:260px - 60px;
+  background:url(/assets/bg_vs.png) no-repeat;
+  top:75px;
+  left:-70px;
+  position:absolute;
+}
+
+#vs-district {
+  text-align:center;
+  margin-top:10px;
+}
+
+.vs-part {
+  float:left;
+  width:110px;
+}
+
+.vs-part.alpha {
+  margin-right:10px;
+}
+
+.vs-part.omega {
+  margin-left:10px;
+}
+
+#seoul-map {
+  position:relative;
+}
+
+#line-canvas {
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+#arrow-header {
+  width:0px;
+  height:0px;
+  position:absolute;
+  left:702px;
+  top:118px;
+  display:none;
+}
+
+#arrow-header img {
+  margin-left:-41px;
+  margin-top:-27px;
+}
+
+.link-section-header {
+  font-size:11pt;
+  padding-left:15px;
+  padding-bottom:15px;
+  margin-bottom:18px;
+  border-bottom:3px solid #606366;
+  color:#606636;
+
+  small a {
+    text-decoration:none;
+    color:#606636;
+    font-size:8.5pt;
+    margin-left:100px;
+  }
+}
+
+.links-container {
+  background-color:white;
+  border-radius:10px;
+  padding-bottom:30px;
+  margin-bottom:40px;
+}
+
+.link-excerpt {
+  height:75px - 1px;
+  border-bottom:1px dashed #bdbbbc;
+//  margin-top:15px;
+  margin: 15px 15px 0 15px;
+//  padding:0 15px;
+  font-size:10pt;
+
+  .support-count {
+    color:#7a7a7a;
+    width:40%;
+    float:left;
+  }
+
+  .nickname {
+    width:40%;
+    float:right;
+    color:#c29f01;
+    text-align:right;
+    a {
+      color:#c29f01;
+      text-decoration:none;
+    }
+  }
+
+  .meta-info {
+    margin-bottom:15px;
+  }
+
+  .title {
+    a {
+      color:black;
+      text-decoration:none;
+    }
+    color:black;
+    margin-bottom:20px;
+    min-height:30px;
+  }
+}
+
+
+#region-selector {
+  margin-top:20px;
+}
+
+.region {
+  text-decoration:none;
+  display:block;
+  float:left;
+  border-bottom:3px solid #d7c67a;
+  width:43px - 6px;
+  font-size:9pt;
+  color:#d7c67a;
+  padding-left:6px;
+}
+
+.region.selected {
+  color:#7a7862;
+  border-bottom:3px solid #7a7862;
+}
+
+.small-map-container {
+  height:200px;
+}
+
+.small-map-container {
+  position:relative;
+  .small-map {
+    position:absolute;
+    display:block;
+  }
+
+  .small-map.selected {
+    display:none;
+  }
+}
+
+.map {
+  display:none;
+}
+
+.map.selected {
+  display:block;
 }

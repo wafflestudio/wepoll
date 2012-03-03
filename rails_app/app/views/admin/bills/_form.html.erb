@@ -57,6 +57,14 @@
         <td><%= text_field_tag :bill_tags, (@bill.tags || []).join(",")%></td>
       </tr>
       <tr>
+        <td><strong>키워드</strong></td>
+        <td><%= f.text_field :keyword%></td>
+      </tr>
+      <tr>
+        <td><strong>이슈</strong></td>
+        <td><%= f.text_field :issue%></td>
+      </tr>
+      <tr>
         <td><strong>발의일자</strong></td>
         <td><%= f.date_select :initiated_at%></td>
       </tr>

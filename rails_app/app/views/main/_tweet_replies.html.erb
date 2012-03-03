@@ -1,0 +1,15 @@
+<% if replies.count == 0 %>
+  <div class="reply_item">
+    등록된 댓글이 없습니다.
+  </div>
+<% end -%>
+<% replies.sort{|a,b| b.created_at <=> a.created_at}.each do |r| %>
+  <div class="reply_item">
+    <p><%= r.user.nickname unless r.user.nil? %> <%= r.content %></p>
+    <span class="reply_date"><%= r.created_at.strftime("%Y-%m-%d") %></span>
+    <p class="links">
+    <%= link_to '신고', tweet_reply_report_path(r), :class => "report_link" %>
+    <%= link_to '공감'+r.recommend_count.to_s, tweet_reply_recommend_path(r), :class => "recommend_link" %>
+    </p>
+  </div>
+<% end -%>

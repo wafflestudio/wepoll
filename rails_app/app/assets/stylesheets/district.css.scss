@@ -1,0 +1,31 @@
+// Place all the styles related to the district controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.timeline-entry-excerpt {
+  font-size:10pt;
+  .title {
+  }
+
+  .tags {
+    a {
+      text-decoration:none;
+      font-color:#555;
+      font-size:9pt;
+    }
+  }
+  border:1px solid #333;
+}
+
+.tabs .tab {
+  display:block;
+}
+
+.tab-section {
+  border: 2px solid #888;
+}
+
+.bill-graph {
+  width:176px; height:176px;
+}
+

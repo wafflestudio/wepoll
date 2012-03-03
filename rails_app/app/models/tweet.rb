@@ -1,6 +1,8 @@
 class Tweet
   include Mongoid::Document
 
+  field :name
+  field :screen_name
   field :content, type: String
   field :created_at, type: DateTime
 

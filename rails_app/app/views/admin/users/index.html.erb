@@ -5,16 +5,16 @@
 <div class="table">
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
-      <th>이름</th>
+      <th>닉네임</th>
       <th>이메일</th>
       <th>facebook</th>
       <th>twitter</th>
     </tr>
     <% @users.each do |user| -%>
       <tr>
-        <td><%= link_to user.name, admin_user_path(user)%></td>
+        <td><%= link_to user.nickname, admin_user_path(user)%></td>
         <td><%= user.email%></td>
-        <td><%= user.facebook_token.uid if user.facebook_connected?%></td>
+        <td><%= link_to user.facebook_token.uid, "https://facebook.com/#{user.facebook_token.uid}" if user.facebook_connected?%></td>
         <td><%= user.twitter_token.uid if user.twitter_connected?%></td>
       </tr>
     <% end -%>
