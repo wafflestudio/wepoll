@@ -44,26 +44,15 @@ class TweetRepliesController < ApplicationController
 
   def recommend
     @re = TweetReply.find(params[:tweet_reply_id])
-    ip = request.remote_ip
-    if @re.recommend(ip)
+    if @re.recommend(current_user)
       render :json => {:status => "ok", :count => @re.recommend_count }
-    else
-      render :json => {:status => "error", :message => "이미 투표하셨습니다."}
-    end
-  end
-  def opposite
-    @re = TweetReply.find(params[:tweet_reply_id])
-    ip = request.remote_ip
-    if @re.opposite(ip)
-      render :json => {:status => "ok", :count => @re.opposite_count }
     else
       render :json => {:status => "error", :message => "이미 투표하셨습니다."}
     end
   end
   def report
     @re = TweetReply.find(params[:tweet_reply_id])
-    ip = request.remote_ip
-    if @re.report(ip)
+    if @re.report(current_user)
       render :json => {:status => "ok", :count => @re.report_count }
     else
       render :json => {:status => "error", :message => "이미 투표하셨습니다."}

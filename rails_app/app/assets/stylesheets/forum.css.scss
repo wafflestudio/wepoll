@@ -12,53 +12,87 @@
   }
 }
 #tweets_wrapper {
+  max-height: 800px;
+  overflow: scroll;
 
   a {
     color: black;
     text-decoration: none;
   }
+  #tweet_divider {
+    border-bottom: 1px dotted white;
+    margin-bottom: 10px;
+  }
+
   .tweet_item {
-    cursor: pointer;
+    position: relative;
     padding: 5px;
     margin-bottom: 10px;
 
     &.today_best {
       .count {
-        background-image: url(forum/tbest_back.png);
+        height: 80px;
+        padding-top: 60px;
+        background-image: url(forum/tweet_best_today.png);
+        background-repeat: no-repeat;
+      }
+      .content {
+        margin-top: 40px;
       }
     }
     &.best {
       .count {
-        background-image: url(forum/best_back.png);
+        height: 80px;
+        padding-top: 60px;
+        background-image: url(forum/tweet_best1.png);
+        background-repeat: no-repeat;
+      }
+      .content {
+        margin-top: 40px;
       }
     }
     .count {
-      padding-top: 70px;
+      height: 90px;
+      padding-top: 30px;
+      font-size: 30pt;
       text-align: center;
       float: left;
       width: 140px;
-      background-image: url(forum/count_back.png);
-      height: 70px;
+      background-image: url(forum/tweet_bubble.png);
+      background-repeat: no-repeat;
+      background-position: center center;
       margin-right: 20px;
     }
 
     .content {
+      cursor: pointer;
       float: left;
       width: 500px;
       padding: 10px;
-      background-color: #F3F3F3;
-      border: 10px solid white;
+      background-color: white;
+      border: 5px solid black;
       border-radius: 25px;
-
+      &:hover {
+        background-color: #F3F3F3;
+      }
       .tweet_author {
         float: left;
       }
-      .reply_btn {
+      .reply_btn, .tweet_recommend_btn {
+        color: #F86D70;
         margin-left: 100px;
+      }
+      .tweet_recommend_btn {
+        margin-left: 20px;
       }
       .tweet_message {
         margin-top: 5px;
         margin-bottom: 5px;
+      }
+    }
+    &:hover {
+      .reply_btn, .tweet_recommend_btn {
+        color: #A66EE9;
       }
     }
   }
@@ -88,6 +122,19 @@
   #reply_check {
     margin-right: 15px;
     float: right;
+
+    #tweet {
+      background-image: url(forum/t-color.png);
+      &:checked {
+        background-image: url(forum/t-grayscale.png);
+      }
+    }
+    #facebook {
+      background-image: url(forum/f-color.png);
+      &:checked {
+        background-image: url(forum/f-grayscale.png);
+      }
+    }
   }
   #reply_text_box {
     margin-left: 20px;
@@ -105,6 +152,8 @@
   }
 }
 #replies_wrapper {
+  overflow: scroll;
+  max-height: 800px;
   margin-top: 160px;
   padding: 10px;
   margin-bottom: 20px;
@@ -128,48 +177,6 @@
         float: right;
         margin-left: 20px;
         font-size: 10pt;
-      }
-    }
-  }
-}
-
-#pop_links {
-  #pop_links_header {
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #606467;
-    a {
-      padding-top: 5px;
-      font-size: 9pt;
-      float: right;
-    }
-  }
-
-  #links_wrapper {
-    padding: 10px;
-    margin-bottom: 20px;
-    background-color: white;
-    border-radius: 25px;
-
-    .link_item {
-      font-size: 11pt;
-      margin-top: 10px;
-      padding-bottom: 10px;
-      border-bottom: 2px dotted #BCBCBC;
-      
-      .link_author {
-        color: #C7A412;
-        float: right;
-        font-size: 10pt;
-      }
-      p.link_links {
-        margin-bottom: 10px;
-        a {
-          color: #707070;
-          float: left;
-          margin-left: 20px;
-          font-size: 10pt;
-        }
       }
     }
   }
