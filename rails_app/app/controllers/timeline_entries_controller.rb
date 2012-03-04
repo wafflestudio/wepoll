@@ -68,6 +68,7 @@ class TimelineEntriesController < ApplicationController
   def create
     @timeline_entry = TimelineEntry.new(params[:timeline_entry], :user_id => current_user.id)
 
+
     respond_to do |format|
       if @timeline_entry.save
         format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
@@ -98,7 +99,7 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1
   # DELETE /timeline_entries/1.json
   def destroy
-    @timeline_entry = TimelineEntry.find(params[:id])
+    @timeline_entry = TimelineEntry.find(params[:id],:user_id => current_user.id)
     # rather than @timeline_entry.destroy, we mark deleted
     @timeline_entry.deleted = true
     @timeline_entry.save
