@@ -85,6 +85,8 @@ class TimelineEntryCollection extends Backbone.Collection
 	update: (params)->
 		latest = new Date("1000-01-01") # let's assume some time
 		updated = new TimelineEntryCollection()
+		updated.pol1 = @pol1
+		updated.pol2 = @pol2
 
 		this.each (model)->
 			date = new Date(model.get("updated_at"))
@@ -92,6 +94,8 @@ class TimelineEntryCollection extends Backbone.Collection
 
 		params ?= {}
 		params.from = latest.toISOString()
+		params.pol1 = @pol1 if @pol1
+		params.pol2 = @pol2 if @pol2
 		
 		updated.fetch({ data: $.param(params), success: ()=>
 			# Once update is fetched, the client-side collection is updated according to insertion/update/deletion actions per model.
@@ -136,7 +140,7 @@ class TimelineEntryView extends Backbone.View
 				<p>Comment: #{model.escape('comment')}<p>
 				<p>Link: #{model.escape('url')}</p>
 				<p>Date: #{model.escape('posted_at')}</p>
-				<p><a href='#'>Edit</a></p>
+				#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 			</div>"
 		element = $(template)
 		element.find('a').click (evt)=>
@@ -147,9 +151,10 @@ class TimelineEntryView extends Backbone.View
 	# The `createForm` class method definition is exposed for new/edit form creation.
 	# `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
 	# the returned object exposes *save* event to listen to.
-	@createForm: (model)->
+	@createForm: (model,pol)->
 		template = "<form method='post' action='/timeline_entries/#{if model then model.id else 'new'}' accept-charset='UTF-8'>
 				<input type='hidden' name='_method' value='#{if model then 'put' else 'post'}'/>
+				<input type='hidden' name='politician_id' value='#{if model then model.politician_id else pol}'/>
 				<p>Comment:</p>
 				<p><textarea name='comment' rows='2' cols='16'>#{if model then model.escape('comment') else ''}</textarea></p>
 				<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
@@ -340,7 +345,7 @@ class TimelineEntrySlider extends Backbone.View
 	
 	css:(obj, value)->
 		if typeof obj == 'string'
-			if typeof value !='undefined'
+			if value?
 				@$el.css(obj, value)
 			else
 				return @$el.css(obj)
@@ -401,7 +406,7 @@ class TimelineVisualGroup extends Backbone.Events
 		
 		elements = []
 		@$holder.children('.tm-slider').each (index,element)=>
-			return if startpos != 'undefined' and $(element).data("slider").pos < startpos
+			return if startpos? and $(element).data("slider").pos < startpos
 			$(element).data("slider").off "destroy", @onSliderDestroy
 			$(element).detach()
 			elements.push($(element))
@@ -650,8 +655,6 @@ class TermView extends TimelineView
 		# TODO:일단 16대부터
 		return 16
 
-	#setStart: (year)->
-	#	@$el.css("left", (year-@epoch())*TimelineView.EntryWidth)
 
 
 
@@ -672,13 +675,7 @@ class YearView extends TimelineView
 	epoch: ()->
 		today = new Date()
 		return today.getFullYear()-4
-###
-	setStart: (pos)->
-		year = parseInt(pos/12)
-		month = pos %12
-		console.log(year,month,@epoch(),"left:" + -(year*12+month-@epoch())*TimelineView.EntryWidth)
-		@$el.css("left", -(year*12+month-@epoch())*TimelineView.EntryWidth)
-###
+
 class QuarterView extends TimelineView
 	@unit : "quarter"
 
@@ -840,15 +837,28 @@ Views =
 # The **TimelineController** keeps all the timeline collection used in its sub-components.
 #
 class TimelineController
-	constructor: ()->
+	@displayEdit : false
+
+	constructor: (options)->
+		
+		TimelineController.displayEdit = options.edit if options && options.edit
+		@pol1 = options.pol1 if options.pol1
+		@pol2 = options.pol2 if options.pol2
+
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		@collection.pol1 = @pol1
+		@collection.pol2 = @pol2
+
 		# Growl
 		@collection.on "add", (model)->
+			console.log('added')
 			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
 		@collection.on "remove", (model)->
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})	
+			console.log('removed')
+			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
 		@collection.on "change", (model)->
+			console.log('changed')
 			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
 
 		@views = {}
@@ -871,7 +881,7 @@ class TimelineController
 			oldScale.stopAutoUpdate() if @autoUpdate
 			oldScale.hide()
 
-		@currentScale.setStart(start) if typeof start != 'undefined'
+		@currentScale.setStart(start) if start?
 		@currentScale.show()
 		@currentScale.startAutoUpdate() if @autoUpdate
 	
@@ -900,8 +910,8 @@ class TimelineController
 	addEntry: (model)->
 		@collection.add(model)
 	
-	@getForm: ()->
-		return TimelineEntryView.createForm()
+	@getForm: (pol)->
+		return TimelineEntryView.createForm(null,pol)
 	
 
 # And finally, make sure it is available outside the file.

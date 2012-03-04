@@ -1,19 +1,35 @@
 class TimelineEntriesController < ApplicationController
+  
+	before_filter :authenticate_user!, :except => [:index,:show]
+  
   # GET /timeline_entries
   # GET /timeline_entries.json
   def index
 		
-		#conditions = {}
-		#[:start, :end, :unit]
+		#[:start, :end, :unit, :pol1, :pol2]
+	
+		# politician (1 or 2)
+		q_pol = {}
+		if params[:pol1] and params[:pol2]
+			q_pol = {'$or' => [{:politician_id => params[:pol1]}, {:politician_id => params[:pol2]}]}
+			@politicians = Politician.find([params[:pol1], params[:pol2]])
+		elsif params[:pol1]
+			q_pol = {:politician_id => params[:pol1]}
+			@politicians = Politician.find(params[:pol1])
+		end
 
-  	if params[:from]
-	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gte' => params[:from]})
-	  elsif params[:after]
-	    @timeline_entries = TimelineEntry.where(:updated_at => {'$gt' => params[:after]})
-	  else
-	    @timeline_entries = TimelineEntry.where(:deleted => false)
-	  end
+		# updated_at
+		if params[:from]
+			q_time = {:updated_at => {'$gte' => params[:from]}}
+		elsif params[:after]
+			q_time = {:updated_at => {'$gt' => params[:after]}}
+		else
+			q_time = {:deleted => false} # (all except deleted)
+		end
 
+	  @timeline_entries = TimelineEntry.where(q_time)
+	 	@timeline_entries.where(q_pol) if q_pol	 
+		
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @timeline_entries }
@@ -50,7 +66,7 @@ class TimelineEntriesController < ApplicationController
   # POST /timeline_entries
   # POST /timeline_entries.json
   def create
-    @timeline_entry = TimelineEntry.new(params[:timeline_entry])#, :user_id => current_user.id)
+    @timeline_entry = TimelineEntry.new(params[:timeline_entry], :user_id => current_user.id)
 
     respond_to do |format|
       if @timeline_entry.save
