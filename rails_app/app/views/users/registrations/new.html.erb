@@ -36,7 +36,14 @@
     <%= check_box_tag :agree_provision %>
   </div>
 
+  <div>
+    <div id="friends"></div>
+    친구들에게 위폴을 소개합니다
+    <%= check_box_tag :agree_send_requests %>
+  </div>
+
   <div><%= f.submit "Sign up" %></div>
 <% end %>
 
 <%= render "links" %>
+

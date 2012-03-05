@@ -1,0 +1,21 @@
+<h3 class="link-section-header">최신링크 <small><%= link_to '더보기', '#'%></small></h3>
+<div class="links-container grid_4 alpha omega" id="recent-links">
+  <% @recent_timeline_entries.each do |link| -%>
+    <%= render :partial => '/main/link', :locals => {:link => link } %>
+  <% end -%>
+
+  <% if @recent_timeline_entries.empty? -%>
+    <%= render :partial => '/main/link', :locals => {:link => nil} %>
+  <% end -%>
+</div>
+
+<h3 class="link-section-header">인기링크 <small><%= link_to '더보기', '#'%></small></h3>
+<div class="links-container grid_4 alpha omega" id="popular-links">
+  <% @popular_timeline_entries.each do |link| -%>
+    <%= render :partial => '/main/link', :locals => {:link => link} %>
+  <% end -%>
+
+  <% if @recent_timeline_entries.empty? -%>
+    <%= render :partial => '/main/link', :locals => {:link => nil }%>
+  <% end -%>
+</div>

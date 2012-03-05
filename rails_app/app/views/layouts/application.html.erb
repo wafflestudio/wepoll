@@ -24,8 +24,8 @@
     <script src="//connect.facebook.net/en_US/all.js"></script>
     <script>
       FB.init({
-        appId      : '148897555227851', // App ID
-        channelUrl : '//ruby.snu.ac.kr:7789/channel.html', // Channel File
+        appId      : '<%= FACEBOOK_CLIENT[:key]%>', // App ID
+        channelUrl : '//wepoll.dev/channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
@@ -38,17 +38,7 @@
     <div id="container" class="container_16 clearfix">
 
       <div class="grid_16 clearfix">
-        <!-- notification bars -->
-        <% [:notice, :error, :alert].each do |level| %>
-          <% unless flash[level].blank? %>
-            <div class="grid_16">
-              <div data-alert="alert" class="alert alert-<%= flash_class(level) %> fade in">
-                <a class="close" data-dismiss="alert" href="#">&times;</a>
-                <%= content_tag :p, flash[level] %>
-              </div>
-            </div>
-          <% end %>
-        <% end %> <!-- end of alert levels -->
+
         <div id="main-content" class="grid_12 alpha">
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
@@ -78,6 +68,9 @@
           <div class="clear"></div>
 
           <%= yield :sidebar %>
+          <% if @recent_timeline_entries && @popular_timeline_entries %>
+            <%= render :partial => '/main/recent_links' %>
+          <% end -%>
         </div>
 
       </div> <!-- end of content -->
@@ -95,6 +88,14 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
+      $(document).ready(function() {
+        //notification bars
+        <% [:notice, :error, :alert].each do |level| %>
+          <% unless flash[level].blank? %>
+            $.gritter.add({title:" ",text:"<%= flash[level]%>"});
+          <% end %>
+        <% end %>
+      });
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 
