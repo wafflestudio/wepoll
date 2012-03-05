@@ -118,6 +118,8 @@ class TimelineEntryCollection extends Backbone.Collection
 			})
 
 
+formatDate = (d)->
+	"#{d.getFullYear()}.#{d.getMonth()+1}.#{d.getDate()}"
 
 
 
@@ -140,7 +142,7 @@ class TimelineEntryView extends Backbone.View
 		template = "<div class='tm-entry-view'>
 				<p>Comment: #{model.escape('comment')}<p>
 				<p>Link: #{model.escape('url')}</p>
-				<p>Date: #{model.escape('posted_at')}</p>
+				<p>Date: #{formatDate(new Date(model.escape('posted_at')))}</p>
 				#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 			</div>"
 		element = $(template)
@@ -201,14 +203,21 @@ class TimelineEntryView extends Backbone.View
 			edit = TimelineEntryView.createForm(@model)
 			view = TimelineEntryView.createView(@model)
 			element = $("<div class='tm-entry'/>").append(edit).append(view)
-			edit.css('display','none')
+			edit.hide()
 
 			view.on "changeMode", ()=>
-				view.css('display','none')
-				edit.css('display','')
+				view.hide()
+				edit.show()
 			edit.on "save", ()=>
-				edit.css('display','none')
-				view.css('display', '')
+				view.remove()
+				view = TimelineEntryView.createView(@model)
+				element.append(view)
+				view.on "changeMode", () =>
+					view.hide()
+					edit.show()
+				edit.hide()
+				view.show()
+
 
 			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
@@ -305,26 +314,32 @@ class TimelineEntrySlider extends Backbone.View
 
 		@nav = new TimelineEntryNav({current:0,num:0})
 		@nav.appendTo(@$holder)
-		@nav.on "changePage", (page)=>
-			@$holder.find('.tm-entry').each (index,el)=>
-				if index == page then $(el).show() else $(el).hide()
-		
+		@nav.on "changePage", @showPage
 		@pos = options.pos
 		@vpos = options.vpos
 		
+
+	
 		
-	addEntry:(view)->
+	addEntry:(view)=>
 		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
 		view.on("destroy", @onEntryDestroy)
 
 		@nav.setProperties({num:@$holder.children('.tm-entry').length})
+		@showPage(@$holder.find('.tm-entry').length-1)
 		
 	removeEntry:(view)->
 		view.off("dateChange", @onEntryDateChange)
 		view.off("destroy", @onEntryDestroy)
 		view.detach()
 		@nav.setProperties({num:@$holder.children('.tm-entry').length})
+
+		#@showPage(@$holder.find('.tm-entry').length)
+
+	showPage: (page)=>
+		@$holder.find('.tm-entry').each (index,el)=>
+			if index == page then $(el).show() else $(el).hide()
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -367,7 +382,6 @@ class VerticalGroup
 		@$el.append(legend)
 
 
-
 	appendTo:($target)->
 		@$el.appendTo($target)
 
@@ -379,6 +393,7 @@ class VerticalGroup
 		slider.css("top", 220) if vpos
 		slider.on "destroy", @onSliderDestroy
 		@num = @num + 1
+
 
 
 	onSliderDestroy:(slider)=>

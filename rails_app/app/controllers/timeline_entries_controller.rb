@@ -9,9 +9,9 @@ class TimelineEntriesController < ApplicationController
 		#[:start, :end, :unit, :pol1, :pol2]
 	
 		# politician (1 or 2)
-		q_pol = {}
+		q_pol = nil
 		if params[:pol1] and params[:pol2]
-			q_pol = {'$or' => [{:politician_id => params[:pol1]}, {:politician_id => params[:pol2]}]}
+			q_pol = {:politician_id.in => [params[:pol1], params[:pol2]]}
 			@politicians = Politician.find([params[:pol1], params[:pol2]])
 		elsif params[:pol1]
 			q_pol = {:politician_id => params[:pol1]}
@@ -28,9 +28,9 @@ class TimelineEntriesController < ApplicationController
 		end
 
 	  @timeline_entries = TimelineEntry.where(q_time)
-	 	@timeline_entries.where(q_pol) if q_pol	 
+	 	@timeline_entries = @timeline_entries.where(q_pol) if q_pol 
 		
-		@politicians = Politician.limit(2) if @politicians.nil?
+		@politicians = Politician.order_by(:name).limit(2) if @politicians.nil?
 
     respond_to do |format|
       format.html # index.html.erb

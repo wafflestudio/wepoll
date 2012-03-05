@@ -99,10 +99,24 @@ $(function() {
 })
 </script>
 <style type="text/css">
+
+#politician1{
+	position:relative;
+	height:200px;
+}
+
+.photo-holder {
+	position:relative;
+	width:100px;
+	height:100px;
+}
+
+
+
+
 #timeline {
 position:relative;
 overflow:hidden;
-width:1024px;
 height:600px;
 /*background-color:#ccc;*/
 z-index:10;
@@ -170,19 +184,56 @@ z-index:10;
 <% end %>
 
 <% if user_signed_in? %> 
-<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry 1</a>
-<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry 2</a>
+
 
 <div style='display:none'>	
 	<div id='tm-entry-new'></div>
 </div>
 <% end %>
-<div id="timeline-nav">
-<a href="#all">전체</a>
-<a href="#year">연</a>
-<a href="#quarter">분기</a>
-<a href="#month">월</a>
-<a href="#week">주</a>
+
+<div id="timeline-nav" style='display:none'>
+	<a href="#all">전체</a>
+	<a href="#year">연</a>
+	<a href="#quarter">분기</a>
+	<a href="#month">월</a>
+	<a href="#week">주</a>
 </div>
-<div id="timeline">
+<div id="timeline-all" class="container_16">
+	<div class="grid_14">
+		<div id="lsidebar" class="grid_3 alpha">
+			<div id='politician1'>
+				<div class="grid_3">
+					<div class="photo-holder">
+					<%= image_tag @politicians[0].profile_photo.url(:square100) %>
+					</div>
+				</div>
+
+				<div class="grid_3">
+					<%= @politicians[0].name %>
+
+					<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+				</div>
+
+			</div>
+			
+			<div class='clear'></div>
+			
+			<div id='politician2'>
+				<div class="grid_3">
+					<div class="photo-holder">
+					<%= image_tag @politicians[1].profile_photo.url(:square100) %>
+					</div>
+				</div>
+				<div class='clear'></div>
+				<div class="grid_3">
+					<%= @politicians[1].name %>
+					<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+
+			</div>
+
+			</div>
+		</div>
+		<div id="timeline" class="grid_11 omega"></div>
+	</div>
+	<div id="rsidebar" class="grid_2">슬라이더</div>
 </div>
