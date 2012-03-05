@@ -29,8 +29,11 @@ class TimelineEntriesController < ApplicationController
 
 	  @timeline_entries = TimelineEntry.where(q_time)
 	 	@timeline_entries = @timeline_entries.where(q_pol) if q_pol 
-		
-		@politicians = Politician.order_by(:name).limit(2) if @politicians.nil?
+	
+		if @politicians.nil?
+			@politicians = Politician.order_by(:name).limit(2)
+			@timeline_entries = @timeline_entries.where(:politician_id.in =>[@politicians[0].id, @politicians[1].id])
+		end
 
     respond_to do |format|
       format.html # index.html.erb

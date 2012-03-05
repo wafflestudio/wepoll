@@ -95,8 +95,8 @@ class TimelineEntryCollection extends Backbone.Collection
 
 		params ?= {}
 		params.from = latest.toISOString()
-		params.pol1 = @pol1 if @pol1
-		params.pol2 = @pol2 if @pol2
+		params.pol1 = @pol1._id if @pol1
+		params.pol2 = @pol2._id if @pol2
 		
 		updated.fetch({ data: $.param(params), success: ()=>
 			# Once update is fetched, the client-side collection is updated according to insertion/update/deletion actions per model.
@@ -646,10 +646,9 @@ class TimelineView
 
 	getVpos: (entry)->
 		pid = entry.get("politician_id")
-		console.log(entry, pid,@collection.pol1, @collection.pol2)
-		if pid == @collection.pol1
+		if pid == @collection.pol1._id
 			return 0
-		else if pid == @collection.pol2
+		else if pid == @collection.pol2._id
 			return 1
 		return 2
 	
@@ -1101,8 +1100,10 @@ class TimelineController
 
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
-		@collection.pol1 = @pol1
-		@collection.pol2 = @pol2
+		@collection.pol1 = @pol1 if @pol1
+		@collection.pol2 = @pol2 if @pol2
+	
+		
 
 		# Growl
 		@collection.on "add", (model)->
@@ -1119,6 +1120,13 @@ class TimelineController
 		# Default scale view (year) is created on object creation
 		allView = new Views["all"](@collection )
 		@currentScale = @views["all"] = allView
+		
+		# bootstrap initial data
+		if options.entries
+			for entry in options.entries
+				@collection.add(entry)
+
+
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
 	changeScale: (scaleName, start)->

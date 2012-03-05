@@ -11,11 +11,14 @@ Backbone.Model.prototype.toJSON = function() {
 
 //TODO: FEED IN DATA HERE
 
-var pol1 = "<%= @politicians[0].id %>";
-var pol2 = "<%= @politicians[1].id %>";
+//var pol1 = "<%= @politicians[0].id %>";
+//var pol2 = "<%= @politicians[1].id %>";
+var pol1 = <%= @politicians[0].to_json.html_safe %>
+var pol2 = <%= @politicians[1].to_json.html_safe %>
+var entries = <%= @timeline_entries.to_json.html_safe %>
 
 $(function() {
-	timelineController = new modules.TimelineController({pol1:pol1,pol2:pol2<%= if user_signed_in? then ",edit:true" else "" end%>})
+	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
 	timelineController.appendTo($("#timeline"))
 	
@@ -24,7 +27,7 @@ $(function() {
 		$(el).click(function() {
 			$("#tm-entry-new").empty()
 
-			$(modules.TimelineController.getForm([pol1,pol2][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
 				timelineController.addEntry(model)
 				$.colorbox.close()
 			}
