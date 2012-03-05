@@ -309,12 +309,10 @@ class TimelineEntrySlider extends Backbone.View
 			@$holder.find('.tm-entry').each (index,el)=>
 				if index == page then $(el).show() else $(el).hide()
 		
-		legend = createLegend(options.pos, options.legend, options.href)
 		@pos = options.pos
 		@vpos = options.vpos
 		
-		@$el.append(legend)
-
+		
 	addEntry:(view)->
 		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
@@ -360,10 +358,15 @@ class TimelineEntrySlider extends Backbone.View
 
 
 class VerticalGroup
-	constructor:(@pos) ->
+	constructor:(pos,legendfuncs) ->
 		_.extend(this, Backbone.Events)
+		@pos = pos
 		@$el = $("<div class='tm-vgroup'></div>").data("vgroup",this)
 		@num = 0
+		legend = createLegend(pos, legendfuncs.legendText(pos), legendfuncs.legendHref(pos))
+		@$el.append(legend)
+
+
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -399,7 +402,7 @@ class VerticalGroup
 
 
 class HorizontalGroup
-	constructor: (pos)->
+	constructor: (pos,legendfuncs)->
 		_.extend(this, Backbone.Events)
 		@vgroups = {}
 		@$el = $("<div class='tm-hgroup'/>").data("pos", pos)
@@ -408,6 +411,7 @@ class HorizontalGroup
 		@pos = pos
 		@epoch = pos
 		@setSpan(0)
+		[@legendText,@legendHref] = [legendfuncs.legendText,legendfuncs.legendHref]
 		
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
@@ -438,7 +442,7 @@ class HorizontalGroup
 	
 	prepareVGroup:(pos)->
 		if !@vgroups[pos]
-			@vgroups[pos] = new VerticalGroup(pos)
+			@vgroups[pos] = new VerticalGroup(pos,{legendText:@legendText, legendHref:@legendHref})
 			@vgroups[pos].on "destroy", @onVGroupDestroy
 			@vgroups[pos].appendTo(@$holder)
 			@setSpan(@span + 1)
@@ -568,7 +572,7 @@ class TimelineView
 			#@groups[pos].setSpan(@groups[pos].span+1)
 
 		else # none exists nearby
-			@groups[pos] = new HorizontalGroup(pos)
+			@groups[pos] = new HorizontalGroup(pos, {legendText:@legendText, legendHref:@legendHref})
 			@addGroup(@groups[pos])
 
 		return @groups[pos]
@@ -586,7 +590,8 @@ class TimelineView
 			console.log('split')
 			leftGroup = @groups[pos-1]
 			# create new for right
-			rightGroup = new HorizontalGroup(pos+1)
+			rightGroup = new HorizontalGroup(pos+1,{legendText:@legendText, legendHref:@legendHref})
+
 			@addGroup(rightGroup)
 			# move some from left to right [] [] x [] [] (span:5->pos-epoch) pos-1 
 			rightGroup.appendBulk(leftGroup.collapse(pos+1), -(leftGroup.span+1))#pos+1-leftGroup.epoch)
@@ -638,7 +643,7 @@ class TimelineView
 		vpos = @getVpos(entry)
 		slider = @sliders[vpos][pos]
 		if !slider
-			slider = new TimelineEntrySlider({pos:pos,vpos:vpos,legend:@legendText(pos),href:@legendHref(pos)})
+			slider = new TimelineEntrySlider({pos:pos,vpos:vpos})
 			@addSlider(slider, pos, vpos)
 
 		view = new TimelineEntryView({model:entry})
@@ -661,7 +666,7 @@ class TimelineView
 			if slider.isEmpty()
 				@removeSlider(slider)
 			if !newSlider
-				newSlider = new TimelineEntrySlider({pos:pos,vpos:vpos, legend:@legendText(pos),href:@legendHref(pos)})
+				newSlider = new TimelineEntrySlider({pos:pos,vpos:vpos})
 				@addSlider(newSlider, pos, vpos)
 			newSlider.addEntry(entryView)
 
