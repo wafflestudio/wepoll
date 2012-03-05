@@ -32,8 +32,8 @@ $('span.checkbox').addClass("unchecked");
 </div>
 
 <div id="tweets_wrapper" class="grid_12 alpha omega">
-  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} %>
-  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} %>
+  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} unless @best.nil? %>
+  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} unless @today_best.nil? %>
   <div id="tweet_divider"></div>
   <% @politician.tweets.desc('created_at').each do |t| %>
     <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
@@ -42,7 +42,7 @@ $('span.checkbox').addClass("unchecked");
 
 <%= content_for :sidebar do %>
   <div id="reply_box" class="grid_4 alpha omega">
-    <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+    <%= form_tag('/tweets/', :method => "post") do %>
       <div id="reply_close">
         X
       </div>
