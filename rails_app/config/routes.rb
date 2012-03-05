@@ -61,9 +61,9 @@ Wepoll::Application.routes.draw do
 
   resources :politicians do
     get 'initiate_bills', :on => :member, :as => :init_bills_by
-    get 'bill_activities', :on => :member, :as => :bill_activities_of
-    get 'profile', :on => :member, :as => :profile_of
-    get 'promises', :on => :member, :as => :promises_of
+    get 'bill_activities', :on => :collection, :as => :bill_activities_of
+    get 'profile', :on => :collection, :as => :profiles_of
+    get 'promises', :on => :collection, :as => :promises_of
   end
 
   match "/search" => "main#search"

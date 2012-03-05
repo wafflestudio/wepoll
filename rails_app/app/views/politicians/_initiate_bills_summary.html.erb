@@ -1,14 +1,35 @@
-<div><%= @politician.initiate_bills.count %>개</div>
-<a href="<%= init_bills_by_politician_path(@politician) %>" class="init-bills-link">
-<div id="<%= @politician.id %>-bill-graph" class="bill-graph">
+<a href="<%= init_bills_by_politician_path(politician) %>" class="init-bills-link">
+<div id="<%= politician.id %>-bill-graph" class="bill-graph" style="float:<%=index==0?"right":"left" %>; margin-<%=index==0?"right":"left" %>:10px">
   <!-- TODO : canvas를 쓸 수 있는지 없는지 구분해서 raphael을 쓸지 말지 결정 -->
 </div>
 </a>
+<div class="clear"></div>
+<div class="bill-bar-graph" id="<%= politician.id%>-bill-bar-graph"
+  data-value="<%= count%>"
+  data-height="19"
+  data-total="<%= count>count2 ? count : count2%>"
+  data-color="<%= index==0?"#29cf4f":"#bb262c" %>"
+  data-float="<%= index==0?"right":"left"%>"
+  >
+</div>
 
 <script type="text/javascript">
-  var bill_counts_<%= @politician.id%> = [<%= @bill_counts.join(",") %>];
-  var bill_categories_<%=@politician.id %> = $.parseJSON('<%=raw @bill_categories.to_json %>');
-  Raphael("<%= @politician.id %>-bill-graph", 176, 176).pieChart(176/2,176/2,80, bill_counts_<%= @politician.id%>, bill_categories_<%= @politician.id%>, "#fff");
+  var bill_counts_<%= politician.id%> = [<%= bill_counts.join(",") %>];
+  var bill_categories_<%=politician.id %> = $.parseJSON('<%=raw bill_categories.to_json %>');
+  Raphael("<%= politician.id %>-bill-graph", 230, 109).donutChart(230/2,109/2,50,25, bill_counts_<%= politician.id%>, bill_categories_<%= politician.id%>, "#FFF5C8", 1, <%= index%>);
   $(".init-bills-link").colorbox();
+
+  $("#<%= politician.id%>-bill-bar-graph").simpleBarGraph({
+    width:200,
+    height:15,
+    labelWidth:30,
+    backgroundColor:"#fff",
+    animate:false,
+    labelPosition:"inside",
+    labelClass:"bill-label",
+    label:function(x,fx) {
+      return x+"개";
+    }
+  });
 
 </script>

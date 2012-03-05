@@ -17,16 +17,90 @@
   border:1px solid #333;
 }
 
-.tabs .tab {
+#tab-wrapper {
+  background-color:#feeda0;
+  border-radius:15px;
+  width:607px;
+  margin-left:51px;
+  margin-top:15px;
+  padding:15px;
+}
+
+#tabs {
+  float:left;
+  width:75px;
+  margin-left:-75px;
+  margin-top:10px;
+}
+
+#tab-sections-container {
+// position:absolute;
+  width:607px;
+  margin:0;
+  border-radius:15px;
+  background-color:#fff5c8;
+}
+#tabs .tab {
   display:block;
+  width:75px;
+  height:37px - 12px;
+  background-color:#ffefa6;
+  margin-bottom:6px;
+  border-radius:8px;
+  border-bottom-right-radius:0;
+  border-top-right-radius:0;
+  padding-top:12px;
+  text-align:center;
+  font-size:9pt;
+  text-decoration:none;
+  color:#999375;
+}
+
+#tabs .tab.selected {
+  background-color:#fff5c8;
+  color:#68665d;
+
+  -moz-box-shadow: 2px 2px 1px #666;
+  -webkit-box-shadow: 2px 2px 1px #666;
+  box-shadow: 2px 2px 1px #666;
+
 }
 
 .tab-section {
-  border: 2px solid #888;
+  margin:15px auto 0 23px;
+}
+
+.subsection {
+  border:1px solid #5a5958;
+  border-radius:7px;
+  margin-bottom:12px;
+  padding: 3px 0;
+
+  .left {
+    width:240px - 2px;
+    border-right:2px dashed #a7a28c;
+    float:left;
+  }
+  .right {
+    width:240px - 2px;
+    border-left:2px dashed #a7a28c;
+    float:left;
+  }
+
+  .subsection-label {
+    float:left;
+    font-size:8.5pt;
+    width:80px;
+    text-align:center;
+    font-weight:bold;
+  }
 }
 
 .bill-graph {
-  width:176px; height:176px;
+  width:240px - 10px; height:109px;
+}
+.init-bills-link{
+  text-decoration:none;
 }
 
 .labels span {
@@ -35,21 +109,18 @@
 }
 
 #name-cards {
+  background-color:#feeda0;
   margin:0 auto;
+  padding:15px;
   position:relative;
   float:left;
-  width:688px - 60px;
-  height:329px - 30px;
-  border: 30px solid #feeda0;
+  width:688px - 30px;
   border-radius:15px;
 }
 
 #name-cards-inner-wrapper {
-  position:absolute;
   width:658px;
   height:329px;
-  margin-left:-15px;
-  margin-top:-15px;
   border-radius:15px;
   background-color:#fff5c8;
 }
@@ -184,3 +255,37 @@
   margin-left:16px;
 }
 
+.joint-politician {
+  float:left;
+  margin:0 5px;
+}
+
+.joint-politician.alpha {
+  margin-left:13px;
+}
+
+.joint-politician.omega {
+  margin-right:0px;
+}
+
+.att-bar-graph {
+  border:1px solid #4f4f50;
+  margin:0 3px;
+}
+.att-label {
+  color:white;
+  font-size:9pt;
+  padding-top:3px;
+}
+
+.bill-bar-graph {
+  border:1px solid #4f4f50;
+  margin:0 auto;
+  margin-top:10px;
+}
+
+.bill-label {
+  color:white;
+  font-size:9pt;
+  padding-top:2px;
+}

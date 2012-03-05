@@ -1,4 +1,5 @@
 class PoliticiansController < ApplicationController
+  before_filter :prepare_politicians, :except => [:initiate_bills]
   def initiate_bills
     @politician = Politician.find(params[:id])
 
@@ -14,10 +15,11 @@ class PoliticiansController < ApplicationController
   end
 
   def bill_activities
-    @politician = Politician.find(params[:id])
-    bill_categories = @politician.initiate_bills_categories
-    @bill_counts = bill_categories.map {|c,n| n}
-    @bill_categories = bill_categories.map {|c,n| c}
+    bill_categories = @politicians.map {|p| p.initiate_bills_categories}
+
+    @bill_counts = bill_categories.map {|bc| bc.map {|c,n| n}}
+    @bill_categories = bill_categories.map {|bc| bc.map {|c,n| "#{c} #{n}"}}
+
     render :layout => false
   end
 
@@ -30,5 +32,10 @@ class PoliticiansController < ApplicationController
     @politician = Politician.find(params[:id])
     @promises = @politician.promises[0...3]
     render :layout => false
+  end
+
+  protected
+  def prepare_politicians
+    @politicians = [Politician.find(params[:id1]), Politician.find(params[:id2])]
   end
 end

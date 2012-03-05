@@ -4,3 +4,4 @@
 # =require jquery.simple_bar_graph
 # =require raphael-min
 # =require raphael-piechart
+# =require raphael-donutchart

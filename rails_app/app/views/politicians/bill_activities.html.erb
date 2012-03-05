@@ -1,25 +1,47 @@
-<div class="subsection">?/??</div> <!-- 공약이행률 -->
+<div class="grid_9 alpha omega subsection clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%=i==0 ? "left":"right" %>">
+      <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
+    </div>
 
-<div class="subsection"> <!-- 대표발의법안 -->
-  <%= render :partial => "initiate_bills_summary" %>
+    <% if i==0 -%><div class="subsection-label">대표법안</div><% end -%>
+  <% end -%>
 </div>
 
-<div class="clearfix subsection"> <!-- 공동발의일치 -->
-  <%= render :partial => "top_joint_initiate" %>
+<div class="grid_9 alpha omega subsection clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
+    </div>
+
+    <% if i==0 -%><div class="subsection-label">국회인맥</div><% end -%>
+  <% end -%>
 </div>
 
-<div class="subsection"> <!-- 본회의출석률 -->
-  <div id="attendance_<%= @politician.id %>" class="bar-graph"
-    data-color="red"
-    data-total="100"
-    data-value="50">
-  </div>
+<div class="grid_9 alpha omega subsection clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <div class="att-bar-graph" 
+        data-value="<%= i==0?30:50%>"
+        data-total="100"
+        data-float="<%= i==0?"right":"left"%>"
+        data-color="<%= i==0?"#29cf4f":"#bb262c"%>"
+        style="<%= i==0?"float:right":"float:left" %>">
+      </div>
+    </div>
+    <% if i==0 -%><div class="subsection-label">본회의출석률</div><% end -%>
+  <% end -%>
 </div>
 
 <script type="text/javascript">
-  $("#attendance_<%= @politician.id %>").simpleBarGraph({
-    width:176,
-    height:5
+  $(".att-bar-graph").simpleBarGraph({
+    width:224-2,
+    height:21-2,
+    labelWidth:30,
+    animate:false,
+    backgroundColor:"#fff",
+    labelPosition:"inside", labelClass:"att-label", label:function(x,fx) {
+      return x+"%";
+    }
   });
 </script>
-

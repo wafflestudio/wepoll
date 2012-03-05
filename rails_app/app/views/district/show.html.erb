@@ -1,7 +1,8 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
 
-    function loadTab(id) {
+    function loadTab($obj) {
+      var id = $obj.attr('data-id');
       if (!id) return;
       $(".tab-section").hide();
       var $tab_section = $("#"+id);
@@ -10,44 +11,11 @@
         return;
       }
 
-      $tab_section = $('<div class="grid_8 alpha omega tab-section"></div>');
+      $tab_section = $('<div class="grid_9 alpha omega tab-section"></div>');
       $tab_section.attr('id', id);
 
-      var $col1 = $('<div class="grid_3 alpha"></div>');
-      var $col2 = $('<div class="grid_3 omega"></div>');
-      var $ccol = $('<div class="grid_2 labels"></div>');
+      $tab_section.load($obj.attr('href'));
 
-      var url1 = "";
-      var url2 = "";
-      if (id === "bill-activity") {
-        url1 = "<%= bill_activities_of_politician_path(@p1) %>";
-        url2 = "<%= bill_activities_of_politician_path(@p2) %>";
-
-        $ccol.html("<span>공약이행률</span><span>대표발의법안</span><span>국회인맥</span><span>본회의출석률</span>");
-      }
-      else if (id === "profile") {
-        url1 = "<%= profile_of_politician_path(@p1) %>";
-        url2 = "<%= profile_of_politician_path(@p2) %>";
-        $ccol.html("<span>생년월일</span><span>본인병역</span><span>현직</span><span>학력</span><span>주요경력</span>");
-      }
-      else if (id === "promise") {
-        url1 = "<%= promises_of_politician_path(@p1) %>";
-        url2 = "<%= promises_of_politician_path(@p2) %>";
-        $ccol.html("<span>공약1</span><span>공약2</span><span>공약3</span>");
-      }
-      else
-        return;
-
-      $col1.load(url1, function() {
-        $col2.load(url2, function() {
-          $("span", $ccol).each(function(i, span) {
-            var taller = Math.max($(".subsection", $col1).eq(i).height(), $(".subsection", $col2).eq(i).height());
-            $(span).height(taller);
-          });
-        });
-      });
-
-      $tab_section.append($col1).append($ccol).append($col2);
       $("#tab-sections-container").append($tab_section);
     }
 
@@ -91,7 +59,10 @@
       );
 
       $(".tab").click(function() {
-        loadTab($(this).attr('data-id'));
+        loadTab($(this));
+        $(".tab").removeClass("selected");
+        $(this).addClass("selected");
+        return false;
       });
       $(".tab").eq(0).click();
 
@@ -211,14 +182,14 @@
   </div>
 </div>
 
-<div class="grid_12 alpha omega">
-  <div class="grid_2 alpha tabs">
-    <%= link_to '국회활동','#', :class => 'tab', "data-id" => "bill-activity" %>
-    <%= link_to '신상','#', :class => 'tab', "data-id" => "profile"%>
-    <%= link_to '공약','#', :class => 'tab', "data-id" => "promise" %>
+<div class="grid_12 alpha omega" id="tab-wrapper">
+  <div id="tabs" class="clearfix">
+    <%= link_to '국회활동', bill_activities_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "bill-activity" %>
+    <%= link_to '신상', profiles_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "profile"%>
+    <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "promise" %>
   </div>
 
-  <div class="grid_8" id="tab-sections-container">
+  <div class="grid_8 clearfix" id="tab-sections-container">
   </div> <!-- end of tab conainer -->
 
   <div class="grid_2 omega">
