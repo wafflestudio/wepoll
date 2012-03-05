@@ -11,8 +11,8 @@ Backbone.Model.prototype.toJSON = function() {
 
 //TODO: FEED IN DATA HERE
 
-var pol1 = "4f41b4d6efd18c7f560000d6";
-var pol2 = "4f41b4daefd18c7f56000109";
+var pol1 = "<%= @politicians[0].id %>";
+var pol2 = "<%= @politicians[1].id %>";
 
 $(function() {
 	timelineController = new modules.TimelineController({pol1:pol1,pol2:pol2<%= if user_signed_in? then ",edit:true" else "" end%>})

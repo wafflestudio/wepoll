@@ -30,6 +30,8 @@ class TimelineEntriesController < ApplicationController
 	  @timeline_entries = TimelineEntry.where(q_time)
 	 	@timeline_entries.where(q_pol) if q_pol	 
 		
+		@politicians = Politician.limit(2) if @politicians.nil?
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @timeline_entries }
