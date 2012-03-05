@@ -70,6 +70,7 @@ class TimelineEntry extends Backbone.Model
 			console.log("Error on model (_id:#{model.id})")
 	# (validation functionality is to be implemented)
 	validate: (attrs)->
+		return false
 
 
 
@@ -83,8 +84,10 @@ class TimelineEntryCollection extends Backbone.Collection
 		
 	# Update to a collection can be made with extra parameters.
 	update: (params)->
-		latest = new Date("1000-01-01") # let's assume some time
+		latest = new Date(1000,0,1) # let's assume some time
 		updated = new TimelineEntryCollection()
+		updated.pol1 = @pol1
+		updated.pol2 = @pol2
 
 		this.each (model)->
 			date = new Date(model.get("updated_at"))
@@ -92,6 +95,8 @@ class TimelineEntryCollection extends Backbone.Collection
 
 		params ?= {}
 		params.from = latest.toISOString()
+		params.pol1 = @pol1 if @pol1
+		params.pol2 = @pol2 if @pol2
 		
 		updated.fetch({ data: $.param(params), success: ()=>
 			# Once update is fetched, the client-side collection is updated according to insertion/update/deletion actions per model.
@@ -136,7 +141,7 @@ class TimelineEntryView extends Backbone.View
 				<p>Comment: #{model.escape('comment')}<p>
 				<p>Link: #{model.escape('url')}</p>
 				<p>Date: #{model.escape('posted_at')}</p>
-				<p><a href='#'>Edit</a></p>
+				#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 			</div>"
 		element = $(template)
 		element.find('a').click (evt)=>
@@ -147,9 +152,10 @@ class TimelineEntryView extends Backbone.View
 	# The `createForm` class method definition is exposed for new/edit form creation.
 	# `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
 	# the returned object exposes *save* event to listen to.
-	@createForm: (model)->
+	@createForm: (model,pol)->
 		template = "<form method='post' action='/timeline_entries/#{if model then model.id else 'new'}' accept-charset='UTF-8'>
 				<input type='hidden' name='_method' value='#{if model then 'put' else 'post'}'/>
+				<input type='hidden' name='politician_id' value='#{if model then model.escape('politician_id') else pol}'/>
 				<p>Comment:</p>
 				<p><textarea name='comment' rows='2' cols='16'>#{if model then model.escape('comment') else ''}</textarea></p>
 				<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
@@ -235,7 +241,7 @@ class TimelineEntryView extends Backbone.View
 		@model.off "change:posted_at", @onDateChange
 		@$el.remove() if @hasEl
 
-
+# EntryView,EntryNav -> Slider -> VGroup -> HGroup -> TimelineView
 class TimelineEntryNav extends Backbone.View
 	initialize:(options)->
 		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'>P</a><span class='tm-sl-cntnt'></span>
@@ -303,11 +309,10 @@ class TimelineEntrySlider extends Backbone.View
 			@$holder.find('.tm-entry').each (index,el)=>
 				if index == page then $(el).show() else $(el).hide()
 		
-		legend = createLegend(options.pos, options.legend, options.href)
 		@pos = options.pos
+		@vpos = options.vpos
 		
-		@$el.append(legend)
-
+		
 	addEntry:(view)->
 		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
@@ -340,7 +345,7 @@ class TimelineEntrySlider extends Backbone.View
 	
 	css:(obj, value)->
 		if typeof obj == 'string'
-			if typeof value !='undefined'
+			if value?
 				@$el.css(obj, value)
 			else
 				return @$el.css(obj)
@@ -349,21 +354,70 @@ class TimelineEntrySlider extends Backbone.View
 
 	getPos:()->
 		return @pos
-	
 
-class TimelineVisualGroup extends Backbone.Events
-	constructor: (pos)->
-		@$el = $("<div class='tm-vgroup'/>").data("pos", pos)
-		@$holder = $("<div class='tm-vg-holder'/>").appendTo(@$el)
+
+
+class VerticalGroup
+	constructor:(pos,legendfuncs) ->
+		_.extend(this, Backbone.Events)
+		@pos = pos
+		@$el = $("<div class='tm-vgroup'></div>").data("vgroup",this)
+		@num = 0
+		legend = createLegend(pos, legendfuncs.legendText(pos), legendfuncs.legendHref(pos))
+		@$el.append(legend)
+
+
+
+	appendTo:($target)->
+		@$el.appendTo($target)
+
+	getLength: ()->
+		return @num
+
+	addSlider:(slider, vpos)->
+		slider.appendTo(@$el)
+		slider.css("top", 220) if vpos
+		slider.on "destroy", @onSliderDestroy
+		@num = @num + 1
+
+
+	onSliderDestroy:(slider)=>
+		@num = @num - 1
+		if @$el.children('.tm-slider').length == 0
+			@destroy()
+
+	destroy:()->
+		@$el.remove()
+		@trigger('destroy',this)
+	
+	css:(obj, value)->
+		if typeof obj == 'string'
+			if value?
+				@$el.css(obj, value)
+			else
+				return @$el.css(obj)
+		else if obj
+			@$el.css(obj)
+
+
+
+class HorizontalGroup
+	constructor: (pos,legendfuncs)->
+		_.extend(this, Backbone.Events)
+		@vgroups = {}
+		@$el = $("<div class='tm-hgroup'/>").data("pos", pos)
+		# holder is to make shift possible
+		@$holder = $("<div class='tm-hg-holder'/>").appendTo(@$el)
 		@pos = pos
 		@epoch = pos
 		@setSpan(0)
+		[@legendText,@legendHref] = [legendfuncs.legendText,legendfuncs.legendHref]
 		
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 	
-	appendTo:(target)->
-		@$el.appendTo(target)
+	appendTo:($target)->
+		@$el.appendTo($target)
 
 	setPos:(pos)->
 		@pos = pos
@@ -372,6 +426,12 @@ class TimelineVisualGroup extends Backbone.Events
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 		@$holder.animate({left: (@epoch - @pos)*TimelineView.EntryWidth},{queue:false})
 
+	getLeft:()->
+		return parseInt(@$el.position().left)+parseInt(@$holder.css("left"))
+
+	getLength:(pos)->
+		return -1 if !@vgroups[pos]
+		return @vgroups[pos].getLength()
 	
 	setSpan:(span)->
 		if @span != span
@@ -379,40 +439,47 @@ class TimelineVisualGroup extends Backbone.Events
 		@span = span
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
-		
+	
+	prepareVGroup:(pos)->
+		if !@vgroups[pos]
+			@vgroups[pos] = new VerticalGroup(pos,{legendText:@legendText, legendHref:@legendHref})
+			@vgroups[pos].on "destroy", @onVGroupDestroy
+			@vgroups[pos].appendTo(@$holder)
+			@setSpan(@span + 1)
 
-	addSlider:(slider,pos)->
-		slider.appendTo(@$holder)
-		slider.css("left","#{(pos-@epoch)*TimelineView.EntryWidth}px")
-		slider.on "destroy", @onSliderDestroy
+		return @vgroups[pos]
 
-		@setSpan(@span + 1)
+	addSlider:(slider,pos, vpos)->
+		vgroup = @prepareVGroup(pos)
+		vgroup.addSlider(slider,vpos)
+		vgroup.css("left","#{(slider.pos-@epoch)*TimelineView.EntryWidth}px")
 	
 	appendBulk:(elements, shift)->
 		console.log("shift:#{shift}")
 		for element in elements
 			@$holder.append(element)
 			$(element).css("left", parseInt(element.css("left"))+shift*TimelineView.EntryWidth)
-			$(element).data("slider").on "destroy", @onSliderDestroy
+			$(element).data("vgroup").on "destroy", @onVGroupDestroy
 
 		@setSpan(@span + elements.length)
 
 	collapse:(startpos)->
 		
 		elements = []
-		@$holder.children('.tm-slider').each (index,element)=>
-			return if startpos != 'undefined' and $(element).data("slider").pos < startpos
-			$(element).data("slider").off "destroy", @onSliderDestroy
+		@$holder.children('.tm-vgroup').each (index,element)=>
+			return if startpos? and $(element).data("vgroup").pos < startpos
+			$(element).data("vgroup").off "destroy", @onVGroupDestroy
 			$(element).detach()
 			elements.push($(element))
 
-		@setSpan(@$holder.children('.tm-slider').length)
+		@setSpan(@$holder.children('.tm-vgroup').length)
 
 		return elements
 	
-	onSliderDestroy:(slider)=>
-		@setSpan(@span-1)
-
+	onVGroupDestroy:(vgroup)=>
+		delete @vgroups[vgroup.pos]
+		@setSpan(@$holder.children('.tm-vgroup').length)
+	
 	destroy:()->
 		@$el.remove()
 		
@@ -431,11 +498,13 @@ class TimelineVisualGroup extends Backbone.Events
 # 
 # 	If none of the existing `TimelineEntrySlider` held in the view matches the position, create new slider and attch the entry view on it.
 #
-class TimelineView extends Backbone.Events
+class TimelineView
 	@EntryWidth: 210
 
 	constructor:(@collection)->
-		@sliders = {}
+
+		_.extend(this, Backbone.Events)
+		@sliders = [{},{}]
 		@groups = {}
 		@collection.on("add", @onEntryAdd)
 		@$el = $("<div class='timeline-view'></div>")
@@ -443,6 +512,9 @@ class TimelineView extends Backbone.Events
 		# if @collection is already loaded somehow
 		@collection.each (entry)=>
 			@drawEntry(entry)
+	
+	getWidth:()->
+		return if @$el.parent() then @$el.parent().width() else @$el.width()
 
 	
 	fetch:(options)->
@@ -457,11 +529,11 @@ class TimelineView extends Backbone.Events
 	hide:()->
 		@$el.hide()
 	
-	# VGroup is added according to its position, not at the end of array
+	# Group is added according to its position, not at the end of array
 	addGroup:(group)->
 		# search from $@el for proper position
 		found = false
-		@$el.children(".tm-vgroup").each (index, el)=>
+		@$el.children(".tm-hgroup").each (index, el)=>
 			if $(el).data("pos") > group.pos
 				$(el).before(group.$el) if !found
 				found = true
@@ -470,10 +542,11 @@ class TimelineView extends Backbone.Events
 		if !found
 			@$el.append(group.$el)
 	
-	prepareGroup:(pos)->
+	prepareGroup:(pos, vpos)->
 
 		if @groups[pos]
-			throw "pos already occupied, which shouldn't happen"
+			console.log('do nothing')
+			#throw "pos already occupied, which shouldn't happen"
 		# [pos-1] [pos+1]: merge to both left and right
 		else if @groups[pos-1] && @groups[pos+1]
 			console.log("merged to left-right")
@@ -495,10 +568,11 @@ class TimelineView extends Backbone.Events
 			console.log("merged to right")
 			@groups[pos] = @groups[pos+1]
 			@groups[pos].setPos(pos)
+			console.log(vpos)
 			#@groups[pos].setSpan(@groups[pos].span+1)
 
 		else # none exists nearby
-			@groups[pos] = new TimelineVisualGroup(pos)
+			@groups[pos] = new HorizontalGroup(pos, {legendText:@legendText, legendHref:@legendHref})
 			@addGroup(@groups[pos])
 
 		return @groups[pos]
@@ -508,13 +582,16 @@ class TimelineView extends Backbone.Events
 	onSliderDestroy:(slider)=>
 		pos = slider.pos
 
+		return if @groups[pos].getLength(pos)  > 0
+
 		if !@groups[pos]
 			throw "group of pos(#{pos}) doesn't exist ()"
 		else if @groups[pos-1] && @groups[pos+1] # split into two
 			console.log('split')
 			leftGroup = @groups[pos-1]
 			# create new for right
-			rightGroup = new TimelineVisualGroup(pos+1)
+			rightGroup = new HorizontalGroup(pos+1,{legendText:@legendText, legendHref:@legendHref})
+
 			@addGroup(rightGroup)
 			# move some from left to right [] [] x [] [] (span:5->pos-epoch) pos-1 
 			rightGroup.appendBulk(leftGroup.collapse(pos+1), -(leftGroup.span+1))#pos+1-leftGroup.epoch)
@@ -535,50 +612,62 @@ class TimelineView extends Backbone.Events
 		delete @groups[pos]
 
 
-	addSlider: (slider,pos)->
-		group = @prepareGroup(pos)
-		console.log("slider added at #{pos}")
-		group.addSlider(slider,pos)
+	addSlider: (slider,pos,vpos)->
+		group = @prepareGroup(pos,vpos)
+		console.log("slider added at #{pos},#{vpos}")
+		group.addSlider(slider,pos,vpos)
 
 		slider.on("entryDateChange", @onEntryDateChange)
 		slider.on("entryDestroy", @onEntryRemove)
 		slider.on("destroy",@onSliderDestroy)
-		@sliders[pos] = slider
+		@sliders[if vpos? then vpos else 0][pos] = slider
 
 	removeSlider: (slider)->
 		slider.off("entryDateChange", @onEntryDateChange)
 		slider.off("entryDestroy", @onEntryRemove)
-		delete @sliders[slider.pos]
+		delete @sliders[slider.vpos][slider.pos]
 		slider.destroy()
 		slider.off("destroy",@onSliderDestroy)
+
+	getVpos: (entry)->
+		pid = entry.get("politician_id")
+		console.log(entry, pid,@collection.pol1, @collection.pol2)
+		if pid == @collection.pol1
+			return 0
+		else if pid == @collection.pol2
+			return 1
+		return 2
 	
 	drawEntry: (entry)->
 		pos = @calcPosition(entry.get("posted_at"))
-		slider = @sliders[pos]
+		vpos = @getVpos(entry)
+		slider = @sliders[vpos][pos]
 		if !slider
-			slider = new TimelineEntrySlider({pos:pos,legend:@legendText(pos),href:@legendHref(pos)})
-			@addSlider(slider, pos)
+			slider = new TimelineEntrySlider({pos:pos,vpos:vpos})
+			@addSlider(slider, pos, vpos)
 
 		view = new TimelineEntryView({model:entry})
 		slider.addEntry(view)
 
 	onEntryAdd:(entry)=>
 		@drawEntry(entry)
+		@setStart(@epoch()) if !@startSet
 		
 	onEntryRemove:(slider, entryView, entry)=>
 		if slider.isEmpty()
 			@removeSlider(slider)
 	
 	onEntryDateChange:(slider, entryView, entry)=>
+		vpos = @getVpos(entry)
 		pos = @calcPosition(entry.get('posted_at'))
-		newSlider = @sliders[pos]
+		newSlider = @sliders[vpos][pos] if @sliders[vpos]
 		if newSlider != slider
 			slider.removeEntry(entryView)
 			if slider.isEmpty()
 				@removeSlider(slider)
 			if !newSlider
-				newSlider = new TimelineEntrySlider({pos:pos, legend:@legendText(pos),href:@legendHref(pos)})
-				@addSlider(newSlider, pos)
+				newSlider = new TimelineEntrySlider({pos:pos,vpos:vpos})
+				@addSlider(newSlider, pos, vpos)
 			newSlider.addEntry(entryView)
 
 	# You can let the view updated automatically.
@@ -589,10 +678,19 @@ class TimelineView extends Backbone.Events
 		, 10000
 
 	setStart:(pos)->
-		if @groups[pos]
-			pos = @groups[pos].pos
-		@$el.css("left", -(pos-@epoch())*TimelineView.EntryWidth)
+		newPos = null
+		if !@groups[pos]
+			for p,group of @groups
+				if group.pos <= pos && pos < group.pos + group.span
+					newPos = group.pos
+					break
 		
+		return if !@groups[pos] && !newPos? # bad case
+		@startSet = true
+		@$el.css("left", -@groups[pos].getLeft())#+@getWidth()/2)
+
+	setCenterAt:(entry)->
+		console.log('')
 
 	stopAutoUpdate: ()->
 		clearTimeout(@timer)
@@ -600,23 +698,150 @@ class TimelineView extends Backbone.Events
 	update: (params)->
 		@collection.update(params)
 
+	getLeft:()->
+		return -parseInt(@$el.css("left"))
+
+	setLeft:(left)->
+		@moving = true
+		@$el.animate({left:-left},{complete:()=>
+			@moving = false
+		,queue:false})
+
+	getRight:()->
+		return @getWidth()-parseInt(@$el.css("left"))
+
+	setRight:(right)->
+		@moving = true
+		@$el.animate({left:-right+@getWidth()},{complete:()=>
+			@moving = false
+		,queue:false})
+
+	getCenter:()->
+		return -parseInt(@$el.css("left"))+@getWidth()/2
+
+	setCenter:(center)->
+		@moving = true
+		@$el.animate({left:-center+@getWidth()/2},{complete:()=>
+			@moving = false
+		,queue:false})
+
+
+	getPrev:()->
+		curPos = @getCenter()
+		
+		found = false
+		nearest = 0
+
+		for p, group of @groups
+			lmost = group.getLeft() + TimelineView.EntryWidth/2
+			rmost = lmost + (group.span-1)*TimelineView.EntryWidth
+			console.log("prev",lmost,curPos, rmost)
+			if lmost >= curPos # x []
+				continue
+
+			# lmost < curPos
+			if  curPos <= rmost  #  100 (150 200 250 300) 300
+				left = lmost + (Math.ceil((curPos-lmost)/TimelineView.EntryWidth)-1)*TimelineView.EntryWidth
+				console.log('prev','in:' + left)
+				return left# - @getWidth()/2
+			else    # ] x
+				if nearest < rmost || !found
+					nearest = rmost
+					found = true
+
+		if found
+			console.log('prev','near:' + (nearest))# - @getWidth()/2))
+			return nearest# - @getWidth()/2
+		
+		console.log('prev','not found')
+		return null
+
+	
+	getNext:()->
+		curPos = @getCenter()
+		
+		found = false
+		nearest = 0
+
+		for p, group of @groups
+			lmost = group.getLeft() + TimelineView.EntryWidth/2
+			rmost = lmost +  (group.span-1)*TimelineView.EntryWidth
+
+			console.log("next",lmost,curPos,rmost)
+			if rmost <= curPos #  [] x
+				continue
+
+			# rmost > curPos   [x] or  x []
+			if  curPos >= lmost  #  [x]
+				left = lmost+(Math.ceil((curPos-lmost)/TimelineView.EntryWidth)+1)*TimelineView.EntryWidth
+				console.log('next','in:' + left)
+				return left
+			else   #  x [
+				if nearest > lmost || !found
+					nearest = lmost
+					found = true
+		if found
+			console.log('next','near:' + (nearest))# - @getWidth()/2))
+			return nearest# - @getWidth()/2
+		
+		console.log('next','not found')
+		return null
+	
+	
+	getBounds:()->
+		lbound = null
+		rbound = null
+		#center = (lbound + rbound)/2
+		
+		found = false
+		nearest = 0
+
+		# get lbound and rbound
+		for p, group of @groups
+			lmost = group.getLeft()+100 # 100 for margin
+			rmost = lmost +  group.span*TimelineView.EntryWidth
+
+			lbound = lmost if !lbound? or lbound > lmost
+			rbound = rmost if !rbound? or rbound < rmost
+	
+		if !lbound? || !rbound?
+			console.log(null)
+			return null
+
+		center = (lbound + rbound)/2
+
+		console.log(lbound, center, rbound)
+		return [lbound,center,rbound]
+
+	
 	goLeft: ()->
 		return if @moving
-		left = @$el.css("left")
-		left = if left == 'auto' then 0 else left
-		@$el.animate({left:parseInt(left) - TimelineView.EntryWidth},{complete:()=>
-			@moving = false
-		})
-		@moving = true
+		lbound = @getBounds()[0]
+		
+		left = @getLeft()
 
+		if left-TimelineView.EntryWidth <= lbound
+			console.log("left to: bound #{lbound}")
+			@setLeft(lbound)
+		else
+			console.log("left to: #{left-TimelineView.EntryWidth}")
+			@setLeft(left-TimelineView.EntryWidth)
+
+
+		#newPos =  @getPrev()
+		#return if !newPos?
+		#@setCenter(newPos)
+		
 	goRight: ()->
 		return if @moving
-		left = @$el.css("left")
-		left = if left == 'auto' then 0 else left
-		@$el.animate({left:parseInt(left) + TimelineView.EntryWidth},{complete:()=>
-			@moving = false
-		})
-		@moving = true
+		rbound = @getBounds()[2]
+		right = @getRight()
+		if right+TimelineView.EntryWidth >= rbound
+			console.log("right to: bound #{rbound}")
+			@setRight(rbound)
+		else
+			console.log("right to: #{right+TimelineView.EntryWidth}")
+			@setRight(right+TimelineView.EntryWidth)
 
 		
 
@@ -650,8 +875,10 @@ class TermView extends TimelineView
 		# TODO:일단 16대부터
 		return 16
 
-	#setStart: (year)->
-	#	@$el.css("left", (year-@epoch())*TimelineView.EntryWidth)
+
+	setStart:(pos)->
+		console.log("setStart #{pos}T")
+		super(pos)
 
 
 
@@ -672,20 +899,19 @@ class YearView extends TimelineView
 	epoch: ()->
 		today = new Date()
 		return today.getFullYear()-4
-###
-	setStart: (pos)->
-		year = parseInt(pos/12)
-		month = pos %12
-		console.log(year,month,@epoch(),"left:" + -(year*12+month-@epoch())*TimelineView.EntryWidth)
-		@$el.css("left", -(year*12+month-@epoch())*TimelineView.EntryWidth)
-###
+
+	setStart:(pos)->
+		console.log("setStart #{pos}Y")
+		super(pos)
+
+
 class QuarterView extends TimelineView
 	@unit : "quarter"
 
 	calcPosition: (date)->
 		d = new Date(date)
 		year = d.getFullYear()
-		quarter = parseInt(d.getMonth()/4)
+		quarter = parseInt(d.getMonth()/3) # not 4!
 		return year*4 + quarter
 	
 	legendText: (pos)->
@@ -701,7 +927,7 @@ class QuarterView extends TimelineView
 		return today.getFullYear()*4-4
 	
 	setStart: (pos)->
-		console.log("setStart #{pos}")
+		console.log("setStart #{pos}Q")
 		if typeof pos == 'object'
 			pos = pos.year *4 + pos.quarter
 		super(pos)
@@ -710,12 +936,12 @@ class QuarterView extends TimelineView
 
 getFirstDayOfYear = (date)->
 	year = if typeof date == 'number' then date else new Date(date).getFullYear()
-	return new Date("#{year}-01-01")
+	return new Date(year,0,1,0,0,0) # y m d h m s
 
 normalizeDate = (date)->
 	month = date.getMonth()+1
 	day = date.getDate()
-	return new Date("#{date.getFullYear()}-#{if month < 10 then "0#{month}" else month}-#{if day < 10 then "0#{day}" else day}")
+	return new Date(date.getFullYear(),month-1,day, 0, 0, 0)
 
 getDayOfYear = (date)->
 	d = normalizeDate(new Date(date))
@@ -749,7 +975,7 @@ class MonthView extends TimelineView
 		return today.getFullYear()*12 + today.getMonth()-4
 	
 	setStart: (pos)->
-		console.log("setStart #{pos}")
+		console.log("setStart #{pos}M")
 		if typeof pos == 'object'
 			pos = pos.year *12 + pos.month
 		super(pos)
@@ -782,12 +1008,22 @@ class WeekView extends TimelineView
 	
 	epoch: ()->
 		today = new Date()
-		return today.getFullYear()*7 + today.getMonth()-4
+		week = parseInt(getDayOfYear(@getDefaultDate(today.getFullYear(),today.getMonth()+1))/7)
+		return today.getFullYear()*53 + week-4
+
+	getDefaultDate: (year,month)->
+		d = new Date(0)
+		d.setFullYear(parseInt(year))
+		d.setMonth(parseInt(month)-1) if month?
+		return d
 	
 	setStart: (pos)->
-		console.log("setStart #{pos}")
+		console.log("setStart #{pos}w")
 		if typeof pos == 'object'
-			pos = pos.year *12 + pos.month
+			week = parseInt(getDayOfYear(@getDefaultDate(pos.year,pos.month))/7)
+			pos = parseInt(pos.year)*53 + week
+			
+		console.log("epoch",@epoch(),pos)
 		super(pos)
 
 
@@ -840,20 +1076,33 @@ Views =
 # The **TimelineController** keeps all the timeline collection used in its sub-components.
 #
 class TimelineController
-	constructor: ()->
+	@displayEdit : false
+
+	constructor: (options)->
+		
+		TimelineController.displayEdit = options.edit if options && options.edit
+		@pol1 = options.pol1 if options.pol1
+		@pol2 = options.pol2 if options.pol2
+
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		@collection.pol1 = @pol1
+		@collection.pol2 = @pol2
+
 		# Growl
 		@collection.on "add", (model)->
+			console.log('added')
 			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
 		@collection.on "remove", (model)->
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})	
+			console.log('removed')
+			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
 		@collection.on "change", (model)->
+			console.log('changed')
 			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
 
 		@views = {}
 		# Default scale view (year) is created on object creation
-		allView = new Views["all"](@collection)
+		allView = new Views["all"](@collection )
 		@currentScale = @views["all"] = allView
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
@@ -871,7 +1120,7 @@ class TimelineController
 			oldScale.stopAutoUpdate() if @autoUpdate
 			oldScale.hide()
 
-		@currentScale.setStart(start) if typeof start != 'undefined'
+		@currentScale.setStart(start) if start?
 		@currentScale.show()
 		@currentScale.startAutoUpdate() if @autoUpdate
 	
@@ -881,12 +1130,13 @@ class TimelineController
 		@$el = $el
 		for key,view of @views
 			view.appendTo(@$el)
-		$(@$el).mousewheel (e, delta)=>
+		$(@$el).mousewheel (e, delta, deltax,deltay)=>
 			e.preventDefault()
-			if delta > -0.4 && delta < 0
+			if delta > -0.5 && delta < 0
 				@currentScale.goRight()
-			else if delta < 0.4  && delta >0
+			else if delta < 0.5  && delta >0
 				@currentScale.goLeft()
+			return false
 
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
@@ -900,8 +1150,8 @@ class TimelineController
 	addEntry: (model)->
 		@collection.add(model)
 	
-	@getForm: ()->
-		return TimelineEntryView.createForm()
+	@getForm: (pol)->
+		return TimelineEntryView.createForm(null,pol)
 	
 
 # And finally, make sure it is available outside the file.

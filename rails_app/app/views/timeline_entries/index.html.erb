@@ -9,21 +9,33 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
+//TODO: FEED IN DATA HERE
+
+var pol1 = "<%= @politicians[0].id %>";
+var pol2 = "<%= @politicians[1].id %>";
+
 $(function() {
-	timelineController = new modules.TimelineController()
+	timelineController = new modules.TimelineController({pol1:pol1,pol2:pol2<%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
 	timelineController.appendTo($("#timeline"))
 	
-	
-	$("#link-new").click(function() {
-		$("#tm-entry-new").empty()
-		$(modules.TimelineController.getForm()).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-			timelineController.addEntry(model)
-			$.colorbox.close()
-		}
-		)
-		$(this).colorbox({inline:true,open:true})
+	<% if user_signed_in? %>
+	$(".link-new").each(function(index, el) {
+		$(el).click(function() {
+			$("#tm-entry-new").empty()
+
+			$(modules.TimelineController.getForm([pol1,pol2][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+				timelineController.addEntry(model)
+				$.colorbox.close()
+			}
+			)
+			$(this).colorbox({inline:true,open:true})
+		})
 	})
+
+	
+	<% end %>
+
 	//$("#link-new").colorbox({inline:true});
 
 	var AppRouter = Backbone.Router.extend({
@@ -91,7 +103,7 @@ $(function() {
 position:relative;
 overflow:hidden;
 width:1024px;
-height:400px;
+height:600px;
 /*background-color:#ccc;*/
 z-index:10;
 }
@@ -99,20 +111,26 @@ z-index:10;
 .timeline-view {
 	position:absolute;
 	overflow:hidden;
+	left:0px;
 	width:3000px;/*** quirky measure. **/
 }
 
-.tm-vgroup {
+.tm-hgroup {
 	position:relative;
 	float:left;
 	margin-left:100px;
 	width: 200px;
-	height: 200px;
+	height: 500px;
 	/*background-color:#222;*/
 }
 
-.tm-vg-holder {
+.tm-hg-holder {
 	position:absolute;
+	left:0px;
+}
+
+.tm-vgroup {
+	position:absolute
 }
 
 .tm-slider {
@@ -140,7 +158,8 @@ z-index:10;
 
 .tm-legend {
 	position:absolute;
-	bottom:0px;
+	width:200px;
+	top:200px;
 }
 
 #tm-entry-new {
@@ -150,11 +169,14 @@ z-index:10;
 </style>
 <% end %>
 
-<a id="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry</a>
+<% if user_signed_in? %> 
+<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry 1</a>
+<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry 2</a>
 
 <div style='display:none'>	
 	<div id='tm-entry-new'></div>
 </div>
+<% end %>
 <div id="timeline-nav">
 <a href="#all">전체</a>
 <a href="#year">연</a>
