@@ -376,7 +376,7 @@ class VerticalGroup
 
 	addSlider:(slider, vpos)->
 		slider.appendTo(@$el)
-		slider.css("top", 200) if vpos
+		slider.css("top", 220) if vpos
 		slider.on "destroy", @onSliderDestroy
 		@num = @num + 1
 
@@ -698,6 +698,24 @@ class TimelineView
 	update: (params)->
 		@collection.update(params)
 
+	getLeft:()->
+		return -parseInt(@$el.css("left"))
+
+	setLeft:(left)->
+		@moving = true
+		@$el.animate({left:-left},{complete:()=>
+			@moving = false
+		,queue:false})
+
+	getRight:()->
+		return @getWidth()-parseInt(@$el.css("left"))
+
+	setRight:(right)->
+		@moving = true
+		@$el.animate({left:-right+@getWidth()},{complete:()=>
+			@moving = false
+		,queue:false})
+
 	getCenter:()->
 		return -parseInt(@$el.css("left"))+@getWidth()/2
 
@@ -768,20 +786,63 @@ class TimelineView
 		
 		console.log('next','not found')
 		return null
+	
+	
+	getBounds:()->
+		lbound = null
+		rbound = null
+		#center = (lbound + rbound)/2
+		
+		found = false
+		nearest = 0
+
+		# get lbound and rbound
+		for p, group of @groups
+			lmost = group.getLeft()+100 # 100 for margin
+			rmost = lmost +  group.span*TimelineView.EntryWidth
+
+			lbound = lmost if !lbound? or lbound > lmost
+			rbound = rmost if !rbound? or rbound < rmost
+	
+		if !lbound? || !rbound?
+			console.log(null)
+			return null
+
+		center = (lbound + rbound)/2
+
+		console.log(lbound, center, rbound)
+		return [lbound,center,rbound]
 
 	
 	goLeft: ()->
 		return if @moving
-		newPos =  @getPrev()
-		return if !newPos?
-		@setCenter(newPos)
+		lbound = @getBounds()[0]
+		
+		left = @getLeft()
+
+		if left-TimelineView.EntryWidth <= lbound
+			console.log("left to: bound #{lbound}")
+			@setLeft(lbound)
+		else
+			console.log("left to: #{left-TimelineView.EntryWidth}")
+			@setLeft(left-TimelineView.EntryWidth)
+
+
+		#newPos =  @getPrev()
+		#return if !newPos?
+		#@setCenter(newPos)
 		
 	goRight: ()->
 		return if @moving
-		newPos =  @getNext()
-		return if !newPos?
-		@setCenter(newPos)
-	
+		rbound = @getBounds()[2]
+		right = @getRight()
+		if right+TimelineView.EntryWidth >= rbound
+			console.log("right to: bound #{rbound}")
+			@setRight(rbound)
+		else
+			console.log("right to: #{right+TimelineView.EntryWidth}")
+			@setRight(right+TimelineView.EntryWidth)
+
 		
 
 class TermView extends TimelineView
