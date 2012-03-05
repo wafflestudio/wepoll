@@ -1,3 +1,23 @@
+<%= content_for :scripts do %>
+<script type="text/javascript">
+$(function() {
+$('span.checkbox').addClass("unchecked");
+  $(".checkbox").click(function(){
+    if($(this).children("input").attr("checked")){
+      // uncheck
+      $(this).children("input").removeAttr("checked");
+      $(this).removeClass("checked");
+      $(this).addClass("unchecked");
+    }else{
+      // check
+      $(this).children("input").attr({checked: "checked"});
+      $(this).removeClass("unchecked");
+      $(this).addClass("checked");
+    }
+  });
+});
+</script>
+<% end  -%>
 <div class="grid_10 push_1 alpha">
   <div id="politician_box" class="grid_10 alpha omega">
     <div id="politician_profile_picture" class="grid_2 alpha">
@@ -14,6 +34,7 @@
 <div id="tweets_wrapper" class="grid_12 alpha omega">
   <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} %>
   <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} %>
+  <div id="tweet_divider"></div>
   <% @politician.tweets.desc('created_at').each do |t| %>
     <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
   <% end -%>
@@ -26,34 +47,15 @@
         X
       </div>
       <div id="reply_check">
-        <%= check_box_tag(:tweet) %>
-        <%= check_box_tag(:facebook) %>
+        <span class="checkbox tweet"><input name="tweet" type="checkbox" /></span>
+        <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
       </div>
       <%= label_tag :reply_text_box, @politician.name+'후보의 트윗에 한마디.' %>
-      <%= text_area_tag :content, nil, :id => "reply_text_box" %>
+      <%= text_area_tag :content, nil, :id => "reply_text_box", :placeholder => "댓글을 입력해주세요." %>
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
     <% end -%>
   </div>
   <div id="replies_wrapper" class="grid_4 alpha omega">
     <%= render :partial => "tweet_replies", :locals => { :replies => @politician.total_replies } %> 
-  </div>
-  <div id="pop_links">
-    <div id="pop_links_header">인기링크<a href="#">더보기</a></div>
-    <div id="links_wrapper" class="grid_4 alpha omega">
-      <% if @links.count == 0 %>
-        <div class="link_item">
-          등록된 링크가 없습니다.
-        </div>
-      <% end -%>
-      <% @links.each do |r| %>
-        <div class="link_item">
-          <p><%= r.title %></p>
-          <span class="link_author"><%= r.user.nickname %></span>
-          <p class="link_links">
-          <%= link_to '공감'+r.like.to_s, '#' %>
-          </p>
-        </div>
-      <% end -%>
-    </div>
   </div>
 <% end -%>
