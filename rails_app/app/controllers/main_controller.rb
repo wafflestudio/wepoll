@@ -19,7 +19,7 @@ class MainController < ApplicationController
 
     redirect_to oauth_client.authorize_url({
       :client_id => FACEBOOK_CLIENT[:key],
-      :redirect_uri => "http://ruby.snu.ac.kr:7789/main/fb_test_callback/",
+      :redirect_uri => "http://wepoll.dev/main/fb_test_callback/",
       :scope => 'email,read_stream,publish_stream'
     })
   end
@@ -32,15 +32,13 @@ class MainController < ApplicationController
       token = client.get_token(:client_id => FACEBOOK_CLIENT[:key],
                                :client_secret => FACEBOOK_CLIENT[:secret],
                                :code => params[:code],
-                               :redirect_uri => "http://ruby.snu.ac.kr:7789/main/fb_test_callback/")
+                               :redirect_uri => "http://wepoll.dev/main/fb_test_callback/")
       @graph = Koala::Facebook::API.new(token.token)
-      @graph.put_object("me","feed",:message => 'Using koala')
+      @graph.put_object("me","feed",:message => '포스팅돼라')
 
 
 #      token.post("/#{current_user.facebook_token.uid}/feed?access_token=#{token.token}&message=hihi", :message => "hihi", :link => 'http://google.com')
       render :text => 'hello'
-
-
   end
 
 
