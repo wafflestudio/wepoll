@@ -19,23 +19,20 @@
   </div>
 
   <table class="grid_16">
-    <tr>
-      <th>제안일</th>
-      <th>이슈</th>
-      <th>법안명</th>
-      <th>처리결과</th>
-    </tr>
-    <% @bills.each do |bill| -%>
+    <thead>
       <tr>
-        <td><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
-        <td><%= bill.issue %></td>
-        <td><%= bill.title %></td>
-        <td><%= bill.complete ? "처리" : "계류"%></td>
+        <th>제안일</th>
+        <th>이슈</th>
+        <th>법안명</th>
+        <th>처리결과</th>
       </tr>
-    <% end -%>
+    </thead>
+    <tbody id="bills">
+      <%= render @bills %>
+    </tbody>
   </table>
 
-  <div class="grid_16">
-  <%= paginate @bills %>
+  <div class="grid_16" id="paginator">
+    <%= paginate @bills, :remote => true %>
   </div>
 </div>

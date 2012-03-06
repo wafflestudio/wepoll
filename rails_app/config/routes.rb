@@ -25,6 +25,7 @@ Wepoll::Application.routes.draw do
     :registrations => "users/registrations",
     :sessions => "users/sessions"} do
     match 'users/sign_up/link_sns/:id' => 'users/registrations#link_sns', :via => :get, :as => 'new_user_link_sns'
+    match '/auth_completed' => 'users/registrations#after_auth', :as => :after_auth
   end
 
   match 'users/auth/twitter/callback' => 'users/omniauth_callbacks#twitter'
@@ -45,28 +46,28 @@ Wepoll::Application.routes.draw do
 
   resources :tweets do
     match '/recommend' => 'tweets#recommend', :as => :recommend
-    match '/opposite' => 'tweets#opposite', :as => :opposite
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
     get 'twwet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend
-    match '/opposite' => 'tweet_replies#opposite', :as => :opposite
     match '/report' => 'tweet_replies#report', :as => :report
   end
 
 
+  match 'district/:name/:p1_id/:p2_id' => 'district#show' ,:constraints => {:p1_id => /[a-z0-9]+/, :p2_id => /[a-z0-9]+/}, :as => :district_vs_politicians
   match 'district/:politician_id' => 'district#show' ,:constraints => {:politician_id => /[a-z0-9]+/}, :as => :district_politician
   match 'district/:name' => "district#show", :as => :district_name
 
   resources :politicians do
     get 'initiate_bills', :on => :member, :as => :init_bills_by
-    get 'bill_activities', :on => :member, :as => :bill_activities_of
-    get 'profile', :on => :member, :as => :profile_of
-    get 'promises', :on => :member, :as => :promises_of
+    get 'bill_activities', :on => :collection, :as => :bill_activities_of
+    get 'profile', :on => :collection, :as => :profiles_of
+    get 'promises', :on => :collection, :as => :promises_of
   end
 
   match "/search" => "main#search"
+
   root :to => 'main#index'
 
 

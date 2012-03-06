@@ -32,6 +32,9 @@ class User
 
   field :nickname, :type => String
 
+  ## Facebook 친구에게 앱 리퀘스트 보내는 리스트
+  field :fb_req_friend_ids, type: Array, default: []
+
   validates :agree_provision,:inclusion => {:in => [true]}
 
   def email_required?
@@ -69,6 +72,9 @@ class User
   # tweet forum association
 
   has_many :tweet_replies
+  has_and_belongs_to_many :recommend_replies, :class_name => "TweetReply", :inverse_of => :recommend_users
+  has_and_belongs_to_many :report_replies, :class_name => "TweetReply", :inverse_of => :report_users
+  has_and_belongs_to_many :recommend_tweets, :class_name => "Tweet", :inverse_of => :recommend_users
 
   #timeline entry
   has_many :timeline_entries
