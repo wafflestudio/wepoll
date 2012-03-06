@@ -33,7 +33,6 @@ $ ->
         $(obj).text "공감"+data.count
     false
   $('.reply_btn').click (e) ->
-    console.log e.clientY
     $reply_box.css 'top', e.clientY-60
     $reply_box.show()
     $('#reply_box form').eq(0).attr 'action','/tweets/'+this.id+'/tweet_replies'
@@ -41,6 +40,9 @@ $ ->
   $('#reply_submit_btn').live 'click', ->
     $form = $('#reply_box form')
     $.post $form[0].action, $form.serialize(), (data) ->
+      console.log data
+      if data.status == "error"
+      	alert data.message
       $('#reply_close').click()
       $('#reply_text_box').val("")
       return
