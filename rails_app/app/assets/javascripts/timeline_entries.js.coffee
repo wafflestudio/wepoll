@@ -95,8 +95,8 @@ class TimelineEntryCollection extends Backbone.Collection
 
 		params ?= {}
 		params.from = latest.toISOString()
-		params.pol1 = @pol1 if @pol1
-		params.pol2 = @pol2 if @pol2
+		params.pol1 = @pol1._id if @pol1
+		params.pol2 = @pol2._id if @pol2
 		
 		updated.fetch({ data: $.param(params), success: ()=>
 			# Once update is fetched, the client-side collection is updated according to insertion/update/deletion actions per model.
@@ -118,6 +118,8 @@ class TimelineEntryCollection extends Backbone.Collection
 			})
 
 
+formatDate = (d)->
+	"#{d.getFullYear()}.#{d.getMonth()+1}.#{d.getDate()}"
 
 
 
@@ -140,7 +142,7 @@ class TimelineEntryView extends Backbone.View
 		template = "<div class='tm-entry-view'>
 				<p>Comment: #{model.escape('comment')}<p>
 				<p>Link: #{model.escape('url')}</p>
-				<p>Date: #{model.escape('posted_at')}</p>
+				<p>Date: #{formatDate(new Date(model.escape('posted_at')))}</p>
 				#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 			</div>"
 		element = $(template)
@@ -201,14 +203,21 @@ class TimelineEntryView extends Backbone.View
 			edit = TimelineEntryView.createForm(@model)
 			view = TimelineEntryView.createView(@model)
 			element = $("<div class='tm-entry'/>").append(edit).append(view)
-			edit.css('display','none')
+			edit.hide()
 
 			view.on "changeMode", ()=>
-				view.css('display','none')
-				edit.css('display','')
+				view.hide()
+				edit.show()
 			edit.on "save", ()=>
-				edit.css('display','none')
-				view.css('display', '')
+				view.remove()
+				view = TimelineEntryView.createView(@model)
+				element.append(view)
+				view.on "changeMode", () =>
+					view.hide()
+					edit.show()
+				edit.hide()
+				view.show()
+
 
 			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
@@ -288,7 +297,7 @@ class TimelineEntryNav extends Backbone.View
 		return false
 
 createLegend = (value, text, href)->
-	$("<div class='tm-legend'><a href='#{href}'>#{text}</a></div>")
+	$("<div class='tm-legend'> #{if href then "<a href='#{href}'>#{text}</a>" else text }</div>")
 
 # TimelineEntrySlider
 # =====================================================
@@ -305,26 +314,32 @@ class TimelineEntrySlider extends Backbone.View
 
 		@nav = new TimelineEntryNav({current:0,num:0})
 		@nav.appendTo(@$holder)
-		@nav.on "changePage", (page)=>
-			@$holder.find('.tm-entry').each (index,el)=>
-				if index == page then $(el).show() else $(el).hide()
-		
+		@nav.on "changePage", @showPage
 		@pos = options.pos
 		@vpos = options.vpos
 		
+
+	
 		
-	addEntry:(view)->
+	addEntry:(view)=>
 		view.appendTo(@$holder)
 		view.on("dateChange", @onEntryDateChange)
 		view.on("destroy", @onEntryDestroy)
 
 		@nav.setProperties({num:@$holder.children('.tm-entry').length})
+		@showPage(0)
 		
 	removeEntry:(view)->
 		view.off("dateChange", @onEntryDateChange)
 		view.off("destroy", @onEntryDestroy)
 		view.detach()
 		@nav.setProperties({num:@$holder.children('.tm-entry').length})
+
+		#@showPage(@$holder.find('.tm-entry').length)
+
+	showPage: (page)=>
+		@$holder.find('.tm-entry').each (index,el)=>
+			if index == page then $(el).show() else $(el).hide()
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -367,7 +382,6 @@ class VerticalGroup
 		@$el.append(legend)
 
 
-
 	appendTo:($target)->
 		@$el.appendTo($target)
 
@@ -379,6 +393,7 @@ class VerticalGroup
 		slider.css("top", 220) if vpos
 		slider.on "destroy", @onSliderDestroy
 		@num = @num + 1
+
 
 
 	onSliderDestroy:(slider)=>
@@ -631,10 +646,9 @@ class TimelineView
 
 	getVpos: (entry)->
 		pid = entry.get("politician_id")
-		console.log(entry, pid,@collection.pol1, @collection.pol2)
-		if pid == @collection.pol1
+		if pid == @collection.pol1._id
 			return 0
-		else if pid == @collection.pol2
+		else if pid == @collection.pol2._id
 			return 1
 		return 2
 	
@@ -1037,18 +1051,16 @@ class DayView extends TimelineView
 		return year*366+dayofyear
 	
 	legendText: (pos)->
-		d = new Date(date)
 		year = parseInt(pos/366)
 		dayofyear = pos%366
+
+		date = new Date(year,0,1,0,0)
 		date = new Date(getFirstDayOfYear(date).getTime()+dayofyear*24*60*60*1000)
 
 		return "#{date.getFullYear()}.#{date.getMonth()+1}.#{date.getDate()}"
 	
 	legendHref: (pos)->
-		year = parseInt(pos/12/31)
-		month = (pos % 31)+1
-		day = (pos % (12*31))+1
-		return "#day/#{year}/#{month}/#{week}"
+		return null
 	
 	epoch: ()->
 		today = new Date()
@@ -1057,7 +1069,9 @@ class DayView extends TimelineView
 	setStart: (pos)->
 		console.log("setStart #{pos}")
 		if typeof pos == 'object'
-			pos = pos.year *12 + pos.month
+			d = new Date(pos.year,pos.month-1, pos.day, 0,0,0)
+			dayofyear = getDayOfYear(d)
+			pos = pos.year *366 + dayofyear
 		super(pos)
 
 
@@ -1068,7 +1082,7 @@ Views =
 	quarter: QuarterView
 	month:   MonthView
 	week:    WeekView
-
+	day:     DayView
 
 
 # TimelineController
@@ -1086,8 +1100,10 @@ class TimelineController
 
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
-		@collection.pol1 = @pol1
-		@collection.pol2 = @pol2
+		@collection.pol1 = @pol1 if @pol1
+		@collection.pol2 = @pol2 if @pol2
+	
+		
 
 		# Growl
 		@collection.on "add", (model)->
@@ -1104,6 +1120,13 @@ class TimelineController
 		# Default scale view (year) is created on object creation
 		allView = new Views["all"](@collection )
 		@currentScale = @views["all"] = allView
+		
+		# bootstrap initial data
+		if options.entries
+			for entry in options.entries
+				@collection.add(entry)
+
+
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
 	changeScale: (scaleName, start)->
