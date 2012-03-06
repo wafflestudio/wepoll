@@ -1,6 +1,5 @@
 #coding:utf-8
 class TweetRepliesController < ApplicationController
-  #before_filter :authenticate_user!, :only => [:create]
 
   def create
     @re = TweetReply.new(params[:tweet_reply])
@@ -55,9 +54,16 @@ class TweetRepliesController < ApplicationController
   end
 
   def post_after_create
-    true
+    @facebook_cookies ||= Koala::Facebook::OAuth.new(FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret]).get_user_info_from_cookie(cookies)
+    unless @facebook_cookies.nil?
+      @access_token = @facebook_cookies["access_token"]
+      @graph = Koala::Facebook::GraphAPI.new(@access_token)
+      @graph.put_object("me","feed",:message => params[:content])
+      true
+    else
+      false
+    end
   end
-    
 
   def recommend
     @re = TweetReply.find(params[:tweet_reply_id])

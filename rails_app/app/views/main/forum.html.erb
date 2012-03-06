@@ -18,6 +18,32 @@ $('span.checkbox').addClass("unchecked");
 });
 </script>
 <% end  -%>
+<!--   FACEBOOK facebook javascript sdk -->
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '369053339792936', // App ID
+      channelUrl : '//choco.wafflestudio.net:3082/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
+
+
 <div class="grid_10 push_1 alpha">
   <div id="politician_box" class="grid_10 alpha omega">
     <div id="politician_profile_picture" class="grid_2 alpha">
@@ -32,8 +58,8 @@ $('span.checkbox').addClass("unchecked");
 </div>
 
 <div id="tweets_wrapper" class="grid_12 alpha omega">
-  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} %>
-  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} %>
+  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} unless @best.nil? %>
+  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} unless @today_best.nil? %>
   <div id="tweet_divider"></div>
   <% @politician.tweets.desc('created_at').each do |t| %>
     <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
@@ -42,7 +68,7 @@ $('span.checkbox').addClass("unchecked");
 
 <%= content_for :sidebar do %>
   <div id="reply_box" class="grid_4 alpha omega">
-    <%= form_tag(tweet_tweet_replies_path(@politician.tweets.first), :method => "post") do %>
+    <%= form_tag('/tweets/', :method => "post") do %>
       <div id="reply_close">
         X
       </div>

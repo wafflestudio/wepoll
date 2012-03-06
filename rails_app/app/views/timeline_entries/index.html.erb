@@ -9,21 +9,37 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
+//TODO: FEED IN DATA HERE
+
+//var pol1 = "<%= @politicians[0].id %>";
+//var pol2 = "<%= @politicians[1].id %>";
+var pol1 = <%= @politicians[0].to_json.html_safe %>
+var pol2 = <%= @politicians[1].to_json.html_safe %>
+var entries = <%= @timeline_entries.to_json.html_safe %>
+
 $(function() {
-	timelineController = new modules.TimelineController()
+	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
 	timelineController.appendTo($("#timeline"))
 	
-	
-	$("#link-new").click(function() {
-		$("#tm-entry-new").empty()
-		$(modules.TimelineController.getForm()).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-			timelineController.addEntry(model)
-			$.colorbox.close()
-		}
-		)
-		$(this).colorbox({inline:true,open:true})
+	<% if user_signed_in? %>
+	$(".link-new").each(function(index, el) {
+		$(el).click(function() {
+			$("#tm-entry-new").empty()
+
+			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+				timelineController.addEntry(model)
+				$.colorbox.close()
+			}
+			)
+			$(this).colorbox({inline:true,open:true})
+
+		})
 	})
+
+	
+	<% end %>
+
 	//$("#link-new").colorbox({inline:true});
 
 	var AppRouter = Backbone.Router.extend({
@@ -41,7 +57,9 @@ $(function() {
 			"week" : "showWeek",
 			"week/:year" : "showWeek",
 			"week/:year/:month" : "showWeek",
-			"week/:year/:month/:week" : "showWeek"
+			"week/:year/:month/:week" : "showWeek",
+			"day" : "showDay",
+			"day/:year/:month/:day" : "showDay"
 
 		},
 		index: function() {
@@ -75,6 +93,13 @@ $(function() {
 				timelineController.changeScale('week')
 			else
 				timelineController.changeScale('week',{year:year,month:month,week:week})
+		},
+		showDay: function(year,month,day)  {
+			if(typeof year =='undefined')
+				timelineController.changeScale('day')
+			else
+				timelineController.changeScale('day',{year:year,month:month,day:day})
+
 		}
 
 	});
@@ -87,11 +112,25 @@ $(function() {
 })
 </script>
 <style type="text/css">
+
+#politician1{
+	position:relative;
+	height:200px;
+}
+
+.photo-holder {
+	position:relative;
+	width:100px;
+	height:100px;
+}
+
+
+
+
 #timeline {
 position:relative;
 overflow:hidden;
-width:1024px;
-height:400px;
+height:600px;
 /*background-color:#ccc;*/
 z-index:10;
 }
@@ -99,20 +138,26 @@ z-index:10;
 .timeline-view {
 	position:absolute;
 	overflow:hidden;
+	left:0px;
 	width:3000px;/*** quirky measure. **/
 }
 
-.tm-vgroup {
+.tm-hgroup {
 	position:relative;
 	float:left;
 	margin-left:100px;
 	width: 200px;
-	height: 200px;
+	height: 500px;
 	/*background-color:#222;*/
 }
 
-.tm-vg-holder {
+.tm-hg-holder {
 	position:absolute;
+	left:0px;
+}
+
+.tm-vgroup {
+	position:absolute
 }
 
 .tm-slider {
@@ -140,7 +185,8 @@ z-index:10;
 
 .tm-legend {
 	position:absolute;
-	bottom:0px;
+	width:200px;
+	top:200px;
 }
 
 #tm-entry-new {
@@ -150,17 +196,61 @@ z-index:10;
 </style>
 <% end %>
 
-<a id="link-new" href="#tm-entry-new" title="New Timeline Entry">new Timeline Entry</a>
+<% if user_signed_in? %> 
+
 
 <div style='display:none'>	
 	<div id='tm-entry-new'></div>
 </div>
+<% end %>
+
 <div id="timeline-nav">
-<a href="#all">전체</a>
-<a href="#year">연</a>
-<a href="#quarter">분기</a>
-<a href="#month">월</a>
-<a href="#week">주</a>
+	<a href="#all">전체</a>
+	<a href="#year">연</a>
+	<a href="#quarter">분기</a>
+	<a href="#month">월</a>
+	<a href="#week">주</a>
+	<a href="#day">일</a>
 </div>
-<div id="timeline">
+<div id="timeline-all" class="container_16">
+	<div class="grid_14">
+		<div id="lsidebar" class="grid_3 alpha">
+			<div id='politician1'>
+				<div class="grid_3">
+					<div class="photo-holder">
+					<%= image_tag @politicians[0].profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다' %>
+					</div>
+				</div>
+
+				<div class="grid_3">
+					<%= @politicians[0].name %>
+					<% if user_signed_in? %>
+						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% end %>
+				</div>
+
+			</div>
+			
+			<div class='clear'></div>
+			
+			<div id='politician2'>
+				<div class="grid_3">
+					<div class="photo-holder">
+					<%= image_tag @politicians[1].profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다' %>
+					</div>
+				</div>
+				<div class='clear'></div>
+				<div class="grid_3">
+					<%= @politicians[1].name %>
+					<% if user_signed_in? %>
+						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% end %>
+
+			</div>
+
+			</div>
+		</div>
+		<div id="timeline" class="grid_11 omega"></div>
+	</div>
+	<div id="rsidebar" class="grid_2">슬라이더</div>
 </div>

@@ -39,7 +39,13 @@ $ ->
     return
   $('#reply_submit_btn').live 'click', ->
     $form = $('#reply_box form')
-    $.post $form[0].action, $form.serialize(), reset_box()
+    $.post $form[0].action, $form.serialize(), (data) ->
+      console.log data
+      if data.status == "error"
+      	alert data.message
+      $('#reply_close').click()
+      $('#reply_text_box').val("")
+      return
     false
 
   $('#reply_close').click ->

@@ -1,10 +1,10 @@
 <% unless user_signed_in? -%>
 <div class="">
   <div class="grid_1 alpha" style="width:30px;">
-    <%= link_to image_tag('/assets/btn_fb.png'), "/users/auth/facebook"%>
+    <%= link_to image_tag('/assets/btn_fb.png'), "/users/auth/facebook", :class => "popup-auth"%>
   </div>
   <div class="grid_1" style="width:30px; margin-right:32px;">
-    <%= link_to image_tag('/assets/btn_tw.png'), "/users/auth/twitter"%>
+    <%= link_to image_tag('/assets/btn_tw.png'), "/users/auth/twitter", :class => "popup-auth"%>
   </div>
   <div class="grid_1 alpha omega" style="width:30px;">
     <%= link_to image_tag('/assets/btn_wepoll.png'), "#"%>
@@ -22,6 +22,13 @@
     }
 
     $(document).ready(function() {
+
+      $(".popup-auth").click(function() {
+        var $this = $(this);
+        var href = $this.attr("href");
+        window.open(href, "authWindow", "width=600,height=400,menubar=0,location=0,toolbar=0,modal=yes,alwaysRaised=yes");
+        return false;
+      });
     });
   </script>
 <% end -%>

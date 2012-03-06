@@ -1,0 +1,13 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      if (window.opener) {
+        window.opener.location = "<%=new_user_registration_url(:token => params[:token])%>";
+        window.close();
+      }
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
