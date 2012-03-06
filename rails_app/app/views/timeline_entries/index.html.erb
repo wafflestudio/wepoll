@@ -33,6 +33,7 @@ $(function() {
 			}
 			)
 			$(this).colorbox({inline:true,open:true})
+
 		})
 	})
 
@@ -56,7 +57,9 @@ $(function() {
 			"week" : "showWeek",
 			"week/:year" : "showWeek",
 			"week/:year/:month" : "showWeek",
-			"week/:year/:month/:week" : "showWeek"
+			"week/:year/:month/:week" : "showWeek",
+			"day" : "showDay",
+			"day/:year/:month/:day" : "showDay"
 
 		},
 		index: function() {
@@ -90,6 +93,13 @@ $(function() {
 				timelineController.changeScale('week')
 			else
 				timelineController.changeScale('week',{year:year,month:month,week:week})
+		},
+		showDay: function(year,month,day)  {
+			if(typeof year =='undefined')
+				timelineController.changeScale('day')
+			else
+				timelineController.changeScale('day',{year:year,month:month,day:day})
+
 		}
 
 	});
@@ -194,12 +204,13 @@ z-index:10;
 </div>
 <% end %>
 
-<div id="timeline-nav" style='display:none'>
+<div id="timeline-nav">
 	<a href="#all">전체</a>
 	<a href="#year">연</a>
 	<a href="#quarter">분기</a>
 	<a href="#month">월</a>
 	<a href="#week">주</a>
+	<a href="#day">일</a>
 </div>
 <div id="timeline-all" class="container_16">
 	<div class="grid_14">
@@ -207,14 +218,15 @@ z-index:10;
 			<div id='politician1'>
 				<div class="grid_3">
 					<div class="photo-holder">
-					<%= image_tag @politicians[0].profile_photo.url(:square100) %>
+					<%= image_tag @politicians[0].profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다' %>
 					</div>
 				</div>
 
 				<div class="grid_3">
 					<%= @politicians[0].name %>
-
-					<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% if user_signed_in? %>
+						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% end %>
 				</div>
 
 			</div>
@@ -224,13 +236,15 @@ z-index:10;
 			<div id='politician2'>
 				<div class="grid_3">
 					<div class="photo-holder">
-					<%= image_tag @politicians[1].profile_photo.url(:square100) %>
+					<%= image_tag @politicians[1].profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다' %>
 					</div>
 				</div>
 				<div class='clear'></div>
 				<div class="grid_3">
 					<%= @politicians[1].name %>
-					<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% if user_signed_in? %>
+						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+					<% end %>
 
 			</div>
 

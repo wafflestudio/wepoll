@@ -297,7 +297,7 @@ class TimelineEntryNav extends Backbone.View
 		return false
 
 createLegend = (value, text, href)->
-	$("<div class='tm-legend'><a href='#{href}'>#{text}</a></div>")
+	$("<div class='tm-legend'> #{if href then "<a href='#{href}'>#{text}</a>" else text }</div>")
 
 # TimelineEntrySlider
 # =====================================================
@@ -327,7 +327,7 @@ class TimelineEntrySlider extends Backbone.View
 		view.on("destroy", @onEntryDestroy)
 
 		@nav.setProperties({num:@$holder.children('.tm-entry').length})
-		@showPage(@$holder.find('.tm-entry').length-1)
+		@showPage(0)
 		
 	removeEntry:(view)->
 		view.off("dateChange", @onEntryDateChange)
@@ -1051,18 +1051,16 @@ class DayView extends TimelineView
 		return year*366+dayofyear
 	
 	legendText: (pos)->
-		d = new Date(date)
 		year = parseInt(pos/366)
 		dayofyear = pos%366
+
+		date = new Date(year,0,1,0,0)
 		date = new Date(getFirstDayOfYear(date).getTime()+dayofyear*24*60*60*1000)
 
 		return "#{date.getFullYear()}.#{date.getMonth()+1}.#{date.getDate()}"
 	
 	legendHref: (pos)->
-		year = parseInt(pos/12/31)
-		month = (pos % 31)+1
-		day = (pos % (12*31))+1
-		return "#day/#{year}/#{month}/#{week}"
+		return null
 	
 	epoch: ()->
 		today = new Date()
@@ -1071,7 +1069,9 @@ class DayView extends TimelineView
 	setStart: (pos)->
 		console.log("setStart #{pos}")
 		if typeof pos == 'object'
-			pos = pos.year *12 + pos.month
+			d = new Date(pos.year,pos.month-1, pos.day, 0,0,0)
+			dayofyear = getDayOfYear(d)
+			pos = pos.year *366 + dayofyear
 		super(pos)
 
 
@@ -1082,7 +1082,7 @@ Views =
 	quarter: QuarterView
 	month:   MonthView
 	week:    WeekView
-
+	day:     DayView
 
 
 # TimelineController
