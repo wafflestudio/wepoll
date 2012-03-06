@@ -68,7 +68,7 @@
           <div class="clear"></div>
 
           <%= yield :sidebar %>
-          <% if @recent_timeline_entries && @popular_timeline_entries %>
+          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries)%>
             <%= render :partial => '/main/recent_links' %>
           <% end -%>
         </div>

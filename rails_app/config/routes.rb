@@ -55,6 +55,7 @@ Wepoll::Application.routes.draw do
     match '/report' => 'tweet_replies#report', :as => :report
   end
 
+  match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback
 
   match 'district/:name/:p1_id/:p2_id' => 'district#show' ,:constraints => {:p1_id => /[a-z0-9]+/, :p2_id => /[a-z0-9]+/}, :as => :district_vs_politicians
   match 'district/:politician_id' => 'district#show' ,:constraints => {:politician_id => /[a-z0-9]+/}, :as => :district_politician
