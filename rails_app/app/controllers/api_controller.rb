@@ -17,6 +17,11 @@ class ApiController < ApplicationController
 	#											output : title, image, description // json형식
 	def article_parsing
 		target_link = params[:url]
+	 # short url 처리 
+		response = Net::HTTP.get_response(URI(target_link))	
+		if response == Net::HTTPRedirection then
+			target_link = response['location']
+		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
 		if preview != nil
