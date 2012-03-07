@@ -123,9 +123,10 @@ formatDate = (d)->
 
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<p>Comment: #{model.escape('comment')}<p>
-			<p>Link: #{model.escape('url')}</p>
-			<p>Date: #{formatDate(new Date(model.escape('posted_at')))}</p>
+			<h3>#{model.escape('title')}</h3>
+			<p>링크: #{model.escape('url')}</p>
+			<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>
+			<p>코멘트: #{model.escape('comment')}<p>
 			#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 		</div>"
 	element = $(template)
@@ -141,11 +142,12 @@ createForm = (model,pol)->
 	template = "<form method='post' action='/timeline_entries/#{if model then model.id else 'new'}' accept-charset='UTF-8'>
 			<input type='hidden' name='_method' value='#{if model then 'put' else 'post'}'/>
 			<input type='hidden' name='politician_id' value='#{if model then model.escape('politician_id') else pol}'/>
-			<p>Comment:</p>
+			<p>제목:<input type='text' name='title' value='#{if model then model.escape('title') else ''}'/></input><p>
+			<p>링크 주소:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
+			<p>코멘트:</p>
 			<p><textarea name='comment' rows='2' cols='16'>#{if model then model.escape('comment') else ''}</textarea></p>
-			<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
-				
-			<p>Date:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
+	
+			<p>날짜:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
 			<p><input type='submit' value='Done'/></p>
 		</form>"
 	# Create a new model with default values if not supplied in the argument.
@@ -153,17 +155,44 @@ createForm = (model,pol)->
 	element = $(template)
 	# A datepicker is supplied.
 	$(element).find('input[name="posted_at"]').datepicker()
+	
+	timeout = 0
 
+	url_input = $(element).find("input[name='url']")
+
+	load = ()->
+		$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent($(url_input).val()), type: 'POST', dataType: 'json', success:
+			(data)->
+				$(element).find("input[name='title']").val(data.title)
+				#$(element).find("input[name='posted_at']").val(new Date(data.created_at)) if new Date(data.created_at)
+				#$(element).find("#preview-img").empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" )
+				$(element).find("textarea[name='comment']").val(data.description)
+
+	url_input.keydown ()->
+		if timeout
+			clearTimeout(timeout)
+
+		timeout = setTimeout( ()->
+			timeout = null
+			load($(url_input).val())
+		,1000)
+
+	.focusout ()->
+			load($(url_input).val())
+	
+
+		
 	# The model is saved on clicking the submit button.
 	$(element).find('input[type="submit"]').click (evt)=>
+		attrs = {}
 		$(element).find('[name!="_method"]').each (index, el)=>
 			name = $(el).attr('name')
 			if name == 'posted_at'
-				model.set(name, new Date($(el).val()).toISOString())
+				attrs[name] = new Date($(el).val()).toISOString()
 			else
-				model.set(name,$(el).val())
+				attrs[name] = $(el).val()
 		# If the save was successful, the tangled element emits a *save* event for others to get notified.
-		model.save(null, {success: ()->
+		model.save(attrs, {success: ()->
 			$(element).trigger("save", [model])
 		,error: ()->
 			console.log("error while saving model")
@@ -422,6 +451,9 @@ class HorizontalGroup
 		@$el = $("<div class='tm-hgroup'/>").data("pos", pos)
 		# holder is to make shift possible
 		@$holder = $("<div class='tm-hg-holder'/>").appendTo(@$el)
+		@$canvas = $("<div class='timeline-canvas'></div>").appendTo(@$el).css("left",-50)
+		@$paper = Raphael(@$canvas.get(0), 3000,300)
+
 		@pos = pos
 		@epoch = pos
 		@setSpan(0)
@@ -432,10 +464,13 @@ class HorizontalGroup
 	
 	appendTo:($target)->
 		@$el.appendTo($target)
+		console.log(@$el.css('overflow'))
 
 	setPos:(pos)->
 		@pos = pos
 		@$el.data("pos",pos)
+
+		console.log(@$el.css('overflow'))
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 		@$holder.animate({left: (@epoch - @pos)*TimelineView.EntryWidth},{queue:false})
@@ -449,8 +484,13 @@ class HorizontalGroup
 	
 	setSpan:(span)->
 		if @span != span
-			@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
+			#@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
+			@$el.css({width: span*TimelineView.EntryWidth})
+			@$paper.clear()
+			@$paper.path("M#{0},180L#{span*TimelineView.EntryWidth+100},180").attr({stroke:'#000',fill:'#fff'})
+			
 		@span = span
+
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 	
@@ -541,10 +581,7 @@ class TimelineView
 		@collection.each (entry)=>
 			@drawEntry(entry)
 		
-		@$canvas = $("<div class='timeline-canvas'></div>").appendTo(@$el)
-		@$paper = Raphael(@$canvas.get(0), 3000,300)
-		@$paper.path("M-10,200L1000,200").attr({fill:'#fff'})
-
+		
 	
 	getWidth:()->
 		if !@$el.parent()
@@ -1150,13 +1187,13 @@ class TimelineController
 		# Growl
 		@collection.on "add", (model)->
 			console.log('Entry added to collection')
-			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
+			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
 		@collection.on "remove", (model)->
 			console.log('Entry removed from collection')
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
+			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
 		@collection.on "change", (model)->
 			console.log('Entry changed in collection')
-			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
+			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
 
 
 	
@@ -1197,9 +1234,9 @@ class TimelineController
 			
 		@currentScale.setStart(100000000,false)
 
-		$("<div class='timeline-navigator'></div>").css({left:0,top:210}).html('left').appendTo(@$el).click ()->
+		$("<div class='timeline-navigator'></div>").css({left:0,top:210,zIndex:2}).html('left').appendTo(@$el).click ()=>
 			@currentScale.goLeft()
-		$("<div class='timeline-navigator'></div>").css({right:0,top:210}).html('right').appendTo(@$el).click ()->
+		$("<div class='timeline-navigator'></div>").css({right:0,top:210,zIndex:2}).html('right').appendTo(@$el).click ()=>
 			@currentScale.goRight()
 
 	# You can let the timeline updated automatically.
