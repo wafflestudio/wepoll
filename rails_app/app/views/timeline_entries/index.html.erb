@@ -111,6 +111,7 @@ $(function() {
 </script>
 <style type="text/css">
 
+
 #politician1{
 	position:relative;
 	height:200px;
@@ -126,11 +127,23 @@ $(function() {
 
 
 #timeline {
+font-size:11px;
 position:relative;
 overflow:hidden;
 height:600px;
 /*background-color:#ccc;*/
 z-index:10;
+}
+
+.timeline-navigator {
+	position:absolute;
+}
+
+.timeline-canvas {
+	position:absolute;
+	left:0px;
+	right:0px;
+	z-index:-1;
 }
 
 .timeline-view {
@@ -146,7 +159,7 @@ z-index:10;
 	margin-left:100px;
 	width: 200px;
 	height: 500px;
-	background-color:#222;
+	/*background-color:#222;*/
 }
 
 .tm-hg-holder {
@@ -185,6 +198,8 @@ z-index:10;
 	position:absolute;
 	width:200px;
 	top:200px;
+
+	z-index:2;
 }
 
 #tm-entry-new {
@@ -212,15 +227,15 @@ z-index:10;
 </div>
 <div id="timeline-all" class="container_16">
 	<div class="grid_14">
-		<div id="lsidebar" class="grid_3 alpha">
+		<div id="lsidebar" class="grid_2 alpha">
 			<div id='politician1'>
-				<div class="grid_3">
+				<div class="grid_2">
 					<div class="photo-holder">
 					<%= image_tag @politicians[0].profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다' %>
 					</div>
 				</div>
 
-				<div class="grid_3">
+				<div class="grid_2">
 					<%= @politicians[0].name %>
 					<% if user_signed_in? %>
 						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
@@ -232,13 +247,13 @@ z-index:10;
 			<div class='clear'></div>
 			
 			<div id='politician2'>
-				<div class="grid_3">
+				<div class="grid_2">
 					<div class="photo-holder">
 					<%= image_tag @politicians[1].profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다' %>
 					</div>
 				</div>
 				<div class='clear'></div>
-				<div class="grid_3">
+				<div class="grid_2">
 					<%= @politicians[1].name %>
 					<% if user_signed_in? %>
 						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
@@ -248,7 +263,7 @@ z-index:10;
 
 			</div>
 		</div>
-		<div id="timeline" class="grid_11 omega"></div>
+		<div id="timeline" class="grid_12 omega"></div>
 	</div>
 	<div id="rsidebar" class="grid_2">슬라이더</div>
 </div>
