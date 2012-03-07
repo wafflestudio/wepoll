@@ -133,6 +133,17 @@ height:600px;
 z-index:10;
 }
 
+.timeline-navigator {
+	position:absolute;
+}
+
+.timeline-canvas {
+	position:absolute;
+	left:0px;
+	right:0px;
+	z-index:-1;
+}
+
 .timeline-view {
 	position:absolute;
 	overflow:hidden;
@@ -146,7 +157,7 @@ z-index:10;
 	margin-left:100px;
 	width: 200px;
 	height: 500px;
-	background-color:#222;
+	/*background-color:#222;*/
 }
 
 .tm-hg-holder {
@@ -184,7 +195,8 @@ z-index:10;
 .tm-legend {
 	position:absolute;
 	width:200px;
-	top:200px;
+	top:180px;
+	z-index:2;
 }
 
 #tm-entry-new {
