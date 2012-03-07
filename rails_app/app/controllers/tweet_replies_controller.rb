@@ -1,9 +1,8 @@
 #coding:utf-8
 class TweetRepliesController < ApplicationController
-  before_filter :user_signed_in?, :only => [:create, :tweet_after_create]
 
   def create
-    @re = TweetReply.new(:content => params[:content])
+    @re = TweetReply.new(params[:tweet_reply])
     @re.user = current_user
     @tweet = Tweet.find(params[:tweet_id])
     res = {}
@@ -16,18 +15,18 @@ class TweetRepliesController < ApplicationController
         res = {:status => "ok", :reply => @re}
         if(params[:tweet])
           if tweet_after_create
-            res[:status][:tweet] = "ok"
+            res[:tweet] = "ok"
           else
             res[:status] = "error"
-            res[:message][:tweet] = "tweet을 게시하는데 오류가 발생했습니다."
+            res[:message] = "tweet을 게시하는데 오류가 발생했습니다."
           end
         end
         if(params[:facebook])
           if post_after_create
-            res[:status][:facebook] = "ok"
+            res[:facebook] = "ok"
           else
             res[:status] = "error"
-            res[:message][:facebook] = "facebook에 포스팅하는데 오류가 발생했습니다."
+            res[:message] = "facebook에 포스팅하는데 오류가 발생했습니다."
           end
         end
         render :json => res
@@ -40,7 +39,7 @@ class TweetRepliesController < ApplicationController
   end
 
   def tweet_after_create
-    if current_user && current_user.twitter_token
+    if current_user.twitter_token
       Twitter.configure do |config|
         config.consumer_key = TWITTER_CLIENT[:key]
         config.consumer_secret = TWITTER_CLIENT[:secret]
@@ -55,13 +54,16 @@ class TweetRepliesController < ApplicationController
   end
 
   def post_after_create
-    if current_user && current_user.facebook_token
+    @facebook_cookies ||= Koala::Facebook::OAuth.new(FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret]).get_user_info_from_cookie(cookies)
+    unless @facebook_cookies.nil?
+      @access_token = @facebook_cookies["access_token"]
+      @graph = Koala::Facebook::GraphAPI.new(@access_token)
+      @graph.put_object("me","feed",:message => params[:content])
       true
     else
       false
     end
   end
-    
 
   def recommend
     @re = TweetReply.find(params[:tweet_reply_id])

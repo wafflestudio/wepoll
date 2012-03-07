@@ -19,260 +19,95 @@
 //        alert("not logged in");
       }
     });
-
   </script>
   <script type="text/javascript">
-    var district_positions = [
-{name:"종로",x:365,y:254},
-{name:"도봉갑",x:470,y:142},
-{name:"도봉을",x:453,y:84},
-{name:"노원병",x:520,y:90},
-{name:"노원을",x:523,y:140},
-{name:"노원갑",x:528,y:189},
-{name:"강북을",x:450,y:200},
-{name:"성북을",x:475,y:231},
-{name:"중랑을",x:554,y:228},
-{name:"중랑갑",x:550,y:274},
-{name:"동대문을",x:506,y:295},
-{name:"은평을",x:310,y:172},
-{name:"은평갑",x:281,y:249},
-{name:"서대문을",x:324,y:255},
-{name:"서대문갑",x:321,y:300},
-{name:"성북갑",x:412,y:230},
-{name:"동대문갑",x:485,y:266},
-{name:"중구",x:400,y:320},
-{name:"성동을",x:400,y:320},
-{name:"성동갑",x:400,y:320},
-{name:"광진을",x:531,y:363},
-{name:"광진갑",x:553,y:329},
-{name:"강동갑",x:659,y:319},
-{name:"강동을",x:618,y:362},
-{name:"송파갑",x:579,y:402},
-{name:"송파병",x:620,y:449},
-{name:"송파을",x:542,y:420},
-{name:"강남갑",x:474,y:408},
-{name:"서초을",x:439,y:485},
-{name:"동작을",x:361,y:442},
-{name:"서초갑",x:410,y:430},
-{name:"용산",x:380,y:375},
-{name:"마포갑",x:313,y:347},
-{name:"마포을",x:244,y:314},
-{name:"양천갑",x:209,y:383},
-{name:"영등포을",x:278,y:413},
-{name:"동작갑",x:307,y:427},
-{name:"관악갑",x:345,y:490},
-{name:"관악을",x:307,y:508},
-{name:"금천",x:256,y:513},
-{name:"구로을",x:224,y:446},
-{name:"구로갑",x:153,y:455},
-{name:"영등포갑",x:254,y:389},
-{name:"양천을",x:156,y:401},
-{name:"강서갑",x:169,y:358},
-{name:"강서을",x:110,y:295},
-{name:"강북갑",x:407,y:145},
-{name:"강남을",x:537,y:466}
-];
-    var isCanvas;
-    function isCanvasSupported(){
-      var elem = document.createElement('canvas');
-      return !!(elem.getContext && elem.getContext('2d'));
-    }
-
-    function clearCurve() {
-      if (isCanvas) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-      }
-
-      $("#arrow-header").hide();
-    }
-
-    function drawCurve(indx) {
-      //context.clearRect(0, 0, canvas.width, canvas.height);
-      clearCurve();
-      console.log("draw-curve");
-      var district = district_positions[indx];
-      console.log(indx + ", "+ district.name);
-      var bezier = new $.path.bezier({
-        start:{
-          x:district.x,y:district.y, angle:50, length:0.4
-        },
-
-        end:{
-          x:700,y:120, angle:50, length:0.4
-        }
-      });
-
-      var tx1,tx2,ty1,ty2;
-      for (var t=0; ;t+=0.1) {
-
-        if (t>0.9) break;
-
-        var o = bezier.css(t);
-        var x1 = parseFloat(o.left);
-        var y1 = parseFloat(o.top);
-
-        o = bezier.css(t+0.03);
-        var x2 = parseFloat(o.left);
-        var y2 = parseFloat(o.top);
-
-        if (t > 0.8) {
-          tx1 = x1; ty1 = y1;
-          tx2 = x2; ty2 = y2;
-          console.log("("+tx1+","+ty1+")->("+tx2+","+ty2+")");
-        }
-
-        context.beginPath();
-        context.strokeStyle="#4f4f50";
-        context.moveTo(x1, y1);
-        context.lineTo(x2, y2);
-        context.lineWidth=5;
-        context.lineCap = 'round';
-        context.stroke();
-      }
-
-      $("#arrow-header").show();
-
-      var rotate_angle = Math.atan2(ty1-ty2, tx1-tx2);
-      console.log("rot: "+rotate_angle);
-
-//      $("#arrow-header").css("left", "660px");
-//      $("#arrow-header").css("top", "96px");
-
-      $("#arrow-header").css("-webkit-transform", "rotate("+rotate_angle+"rad)");
-      $("#arrow-header").css("-o-transform", "rotate("+rotate_angle+"rad)");
-      $("#arrow-header").css("-moz-transform", "rotate("+rotate_angle+"rad)");
-      $("#arrow-header").css("-ms-transform", "rotate("+rotate_angle+"rad)");
-
-//      $("#arrow-header").css("-webkit-transform", "translate("+rotate_angle+"rad)");
-//      $("#arrow-header").css("-o-transform", "translate("+rotate_angle+"rad)");
-//      $("#arrow-header").css("-moz-transform", "translate("+rotate_angle+"rad)");
-//      $("#arrow-header").css("-ms-transform", "translate("+rotate_angle+"rad)");
-    }
-
-    var canvas;
-    var context;
-
-    canvas = document.getElementById("line-canvas");
-    context = canvas.getContext("2d");
-
     $(document).ready(function() {
-      isCanvas = isCanvasSupported();
-      $("#vs-container").css("visibility","hidden");
-
-      /* for dev */
-      /************************/
-      for (i in district_positions) {
-        var district = district_positions[i];
-        var $div = $("<div/>");
-        $div.css("left",district.x-10+"px")
-        .css("top", district.y-10+"px")
-        .css("width", "20px")
-        .css("height", "20px")
-        .css("background-color", "#eee")
-        .css("position","absolute")
-        .attr("data-x", district.x)
-        .attr("data-y", district.y)
-        .attr("data-index", i)
-        .attr("data-name", district.name)
-        .addClass("district-center");
-        $("#seoul-map").append($div);
-      }
-      /************************/
-
-      //TODO : according to cookie value, select map which not shown
-      $("#busan-map").removeClass("selected");
-      $("#seoul-map").addClass("selected");
-
-      $(".district-center").hover(function() {
-        var $this = $(this);
-        var x = parseInt($this.attr("data-x"));
-        var y = parseInt($this.attr("data-y"));
-        $("#vs-container").css("visibility","visible");
-        drawCurve(parseInt($this.attr("data-index")));
-      }, function() {
+        // vs-container start
         $("#vs-container").css("visibility","hidden");
-        clearCurve();
-      });
 
-      $("#region-selector .region").click(function() {
-        $("#region-selector .region").removeClass("selected");
-        $(this).addClass("selected");
+        //TODO : according to cookie value, select map which not shown
+        $("#busan-map").removeClass("selected");
+        $("#seoul-map").addClass("selected");
 
-        var region = $(this).attr("id").split("-")[0];
-        $(".small-map").removeClass("selected");
-        $("#"+region+"-small-map").addClass("selected");
+        $("#region-selector .region").click(function() {
+          $("#region-selector .region").removeClass("selected");
+          $(this).addClass("selected");
 
-        $(".map").removeClass("selected");
-        $("#"+region+"-map").addClass("selected");
-      });
-    });
-  </script>
-<script>
-  var paper = Raphael("seoul-map-image", 800, 600, function () {
+          var region = $(this).attr("id").split("-")[0];
+          $(".small-map").removeClass("selected");
+          $("#"+region+"-small-map").addClass("selected");
+
+          $(".map").removeClass("selected");
+          $("#"+region+"-map").addClass("selected");
+          });
+        });
+// vs-container end
+</script>
+<script type="text/javascript">
+
+// draw arrow start
+var paper = Raphael("seoul-map-image", 800, 600, function () {
     var r = this;
     r.rect(-150, 100, 850, 850).attr({
-      stroke: "none",
-    });
+stroke: "none",
+});
     var over = function () {
-      this.c = this.c || this.attr("fill");
-      this.stop().animate({fill: "#64C8CB"}, 200);
+    this.c = this.c || this.attr("fill");
+    this.stop().animate({fill: "#64C8CB"}, 200);
 
-      coordinates = worldmap.points[this.id].split(" ");
+    coordinates = worldmap.points[this.id].split(" ");
 
-      x = parseInt(coordinates[0]) - 50;
-      y = parseInt(coordinates[1]) + 95;
-      end_x = 700;
-      end_y = 120;
+    x = parseInt(coordinates[0]) - 50;
+    y = parseInt(coordinates[1]) + 95;
+    end_x = 635;
+    end_y = 120;
 
-      len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
-      len /= 2.5;
-      alpha = Math.atan((end_y - y) / (end_x - x));
+    len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
+    len /= 2.5;
+    alpha = Math.atan((end_y - y) / (end_x - x));
 
-      x1 = x + len * Math.cos(Math.PI / 4 + alpha);
-      y1 = y + len * Math.sin(Math.PI / 4 + alpha);
+    x1 = x + len * Math.cos(Math.PI / 4 + alpha);
+    y1 = y + len * Math.sin(Math.PI / 4 + alpha);
 
-      x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
-      y2 = end_y - len * Math.sin(Math.PI / 4 + alpha);
+    x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
+    y2 = end_y - len * Math.sin(Math.PI / 4 + alpha);
 
-      this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
-      this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
-      this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
-      this.arrow.rotate((Math.PI / 4 + alpha) * 180);
-      //drawCurve(this.id-1);
+    this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
+    this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+
+    endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
+    beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+    this.arrow.rotate(beta);
+    console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
+    $("#vs-container").css("visibility","");
     },
     out = function () {
       this.curve.remove();
       this.arrow.remove();
+      $("#vs-container").css("visibility","hidden");
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
-      alert(worldmap.names[this.id] + this.id);
+      if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
+        $(location).attr('href',$(location).attr('origin')+"/district/"+worldmap.names[this.id]);
+      }
     };
-    r.setStart();
-    for (var country in worldmap.shapes) {
-      //r.path(worldmap.shapes[country]).attr({stroke: "#ccc6ae", fill: "#f0efeb", "stroke-opacity": 0.25});
-      r.path(worldmap.shapes[country]).attr({stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1});
-    }
-    var world = r.setFinish();
-    world.hover(over, out);
-    world.click(click);
-    world.getXY = function (lat, lon) {
-      return {
-        cx: lon * 2.6938 + 465.4,
-        cy: lat * -2.6938 + 227.066
-      };
-    };
-    world.getLatLon = function (x, y) {
-      return {
-        lat: (y - 227.066) / -2.6938,
-        lon: (x - 465.4) / 2.6938
-      };
-    };
-    r.setViewBox(-94,95,500,640,false)
+r.setStart();
+for (var country in worldmap.shapes) {
+  //r.path(worldmap.shapes[country]).attr({stroke: "#ccc6ae", fill: "#f0efeb", "stroke-opacity": 0.25});
+  r.path(worldmap.shapes[country]).attr({stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1});
+}
+var world = r.setFinish();
+world.hover(over, out);
+world.click(click);
+r.setViewBox(-94,95,500,640,false)
   })
+// draw arrow end
 </script>
 <% end -%>
 
+<%= link_to 'test link', forum_path(Politician.first) %>
 <div id="seoul-map" class="map">
   <div id="seoul-map-bubble" class="bubble">
     <div class="bubble-text">
@@ -318,28 +153,6 @@
         <%= image_tag '/assets/busan_map_small.gif' %>
       </a>
     </div>
-  </div>
-
-  <h3 class="link-section-header">최신링크 <small><%= link_to '더보기', '#'%></small></h3>
-  <div class="links-container grid_4 alpha omega" id="recent-links">
-    <% @recent_timeline_entries.each do |link| -%>
-      <%= render :partial => 'link', :locals => {:link => link } %>
-    <% end -%>
-
-    <% if @recent_timeline_entries.empty? -%>
-      <%= render :partial => 'link', :locals => {:link => nil} %>
-    <% end -%>
-  </div>
-
-  <h3 class="link-section-header">인기링크 <small><%= link_to '더보기', '#'%></small></h3>
-  <div class="links-container grid_4 alpha omega" id="popular-links">
-    <% @popular_timeline_entries.each do |link| -%>
-      <%= render :partial => 'link', :locals => {:link => link} %>
-    <% end -%>
-
-    <% if @recent_timeline_entries.empty? -%>
-      <%= render :partial => 'link', :locals => {:link => nil }%>
-    <% end -%>
   </div>
 
   <!-- vs-container is absolute positioned -->

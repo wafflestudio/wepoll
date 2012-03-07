@@ -32,6 +32,9 @@ class User
 
   field :nickname, :type => String
 
+  ## Facebook 친구에게 앱 리퀘스트 보내는 리스트
+  field :fb_req_friend_ids, type: Array, default: []
+
   validates :agree_provision,:inclusion => {:in => [true]}
 
   def email_required?

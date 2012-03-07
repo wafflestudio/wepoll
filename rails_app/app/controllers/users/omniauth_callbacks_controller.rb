@@ -86,6 +86,9 @@ class Users::OmniauthCallbacksController < ApplicationController
     Rails.logger.info "==========="
 
     render :text => 'fail'
+  end
 
+  def after_sign_in_path_for(resource)
+    after_auth_path
   end
 end

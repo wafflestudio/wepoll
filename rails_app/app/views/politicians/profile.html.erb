@@ -1,11 +1,11 @@
-<div class="grid_3">
+<div class="subsection">
   <% if @politician.birthday -%>
     <%= @politician.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - @politician.birthday.year+1%>)
   <% else -%>
     정보없음
   <% end -%>
 </div>
-<div class="grid_3"><%= @politician.military || "정보없음"%></div>
-<div class="grid_3"><%= @politician.job || "정보없음"%></div>
-<div class="grid_3"><%= @politician.education || "정보없음"%></div>
-<div class="grid_3"><%= @politician.experiences || "정보없음"%></div>
+<div class="subsection"><%= @politician.military || "정보없음"%></div>
+<div class="subsection"><%= @politician.job || "정보없음"%></div>
+<div class="subsection"><%= @politician.education || "정보없음"%></div>
+<div class="subsection"><%= @politician.experiences || "정보없음"%></div>
