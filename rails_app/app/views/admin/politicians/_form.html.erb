@@ -96,6 +96,10 @@
         <td><strong>병역</strong></td>
         <td colspan="2"><%= f.text_field :military%></td>
       </tr>
+      <tr>
+        <td><strong>공약</strong></td>
+        <td colspan="2"><%= text_area_tag :promises, YAML::dump(@politician.promises)%></td>
+      </tr>
     </table>
   </div>
 
