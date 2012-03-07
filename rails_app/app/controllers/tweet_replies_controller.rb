@@ -1,7 +1,12 @@
 #coding:utf-8
 class TweetRepliesController < ApplicationController
+  before_filter :authenticate_user!, :only => [:create]
 
   def create
+    if current_user.nil?
+      render :json => {:status => "error", :message => "로그인 해 주십시오"}
+      return
+    end
     @re = TweetReply.new(params[:tweet_reply])
     @re.user = current_user
     @tweet = Tweet.find(params[:tweet_id])
@@ -26,7 +31,7 @@ class TweetRepliesController < ApplicationController
             res[:facebook] = "ok"
           else
             res[:status] = "error"
-            res[:message] = "facebook에 포스팅하는데 오류가 발생했습니다."
+            res[:message] += "facebook에 포스팅하는데 오류가 발생했습니다."
           end
         end
         render :json => res
@@ -46,7 +51,8 @@ class TweetRepliesController < ApplicationController
         config.oauth_token = current_user.twitter_token.access_token
         config.oauth_token_secret  = current_user.twitter_token.access_token_secret
       end
-      Twitter.update(params[:content])
+
+      Twitter.update(params[:tweet_reply][:content])
       true
     else
       false

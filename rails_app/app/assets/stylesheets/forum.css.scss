@@ -80,13 +80,13 @@
       }
       .reply_btn, .tweet_recommend_btn {
         color: #F86D70;
-        margin-left: 100px;
-      }
-      .tweet_recommend_btn {
+        float: right;
         margin-left: 20px;
       }
+      .tweet_recommend_btn {
+      }
       .tweet_message {
-        margin-top: 5px;
+        margin-top: 10px;
         margin-bottom: 5px;
       }
     }

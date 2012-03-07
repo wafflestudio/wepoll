@@ -1,6 +1,7 @@
 class Tweet
   include Mongoid::Document
 
+  field :status_id
   field :name
   field :screen_name
   field :content, type: String

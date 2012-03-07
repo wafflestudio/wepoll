@@ -3,7 +3,6 @@ class TweetsController < ApplicationController
 
   def get_tweet
     # TODO get former tweets
-
     screen_name = params[:screen_name]
     politician = Politician.where(:tweet_name => screen_name).first
 
@@ -13,7 +12,7 @@ class TweetsController < ApplicationController
       Twitter.user_timeline(screen_name).sort{|a,b| a.created_at <=> b.created_at}.each do |t|
         #save tweet if tweet is not saved in former times
         if (politician.tweets == [] || t.created_at > politician.tweets.desc('created_at').first.created_at)
-          tweet = Tweet.create(:created_at => t.created_at, :content => t.text)
+          tweet = Tweet.create(:created_at => t.created_at, :content => t.text, :status_id => t.id, :name => t.user.name, :screen_name => t.user.screen_name)
           politician.tweets << tweet
         end
       end

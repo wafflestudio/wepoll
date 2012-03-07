@@ -78,6 +78,7 @@ $('span.checkbox').addClass("unchecked");
       </div>
       <%= label_tag :reply_text_box, @politician.name+'후보의 트윗에 한마디.' %>
       <%= text_area_tag 'tweet_reply[content]', nil, :id => "reply_text_box", :placeholder => "댓글을 입력해주세요." %>
+      <%= hidden_field_tag :in_reply_to_status_id %>
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
     <% end -%>
   </div>

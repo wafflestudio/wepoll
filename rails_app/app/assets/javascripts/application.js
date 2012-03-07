@@ -21,3 +21,4 @@
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
 //= require_tree . exclude: "admin"
+//= require cssrefresh
