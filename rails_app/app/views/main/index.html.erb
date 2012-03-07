@@ -86,7 +86,30 @@ stroke: "none",
     $("#vs-container").css("visibility","");
     //load politicians
     console.log("id = " + $(this).attr('id'));
+
+    var $img1 = $(".winner-photo-wrapper img");
+    var $img2 = $(".loser-photo-wrapper img");
+
+    if ($img1.length == 0) {
+      $img1 = $("<img class=\"profile-image\" />");
+      $(".winner-photo-wrapper").prepend($img1);
+    }
+    if ($img2.length == 0) {
+      $img2 = $("<img class=\"profile-image\" />");
+      $(".loser-photo-wrapper").prepend($img2);
+    }
+
+    if ($("#vs-container").attr("data-district") == worldmap.names[this.id]) {
+      return;
+    }
+    else {
+      $img1.attr("src","");
+      $img2.attr("src","");
+    }
+
     $.getJSON("/district/" + worldmap.names[this.id], function(data) {
+      $("#vs-container").attr("data-district", worldmap.names[this.id]);
+
       var p1 = data[0];
       var p2 = data[1];
 
@@ -94,17 +117,6 @@ stroke: "none",
       var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
       var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
 
-      var $img1 = $(".winner-photo-wrapper img");
-      var $img2 = $(".loser-photo-wrapper img");
-
-      if ($img1.length == 0) {
-        $img1 = $("<img class=\"profile-image\" />");
-        $(".winner-photo-wrapper").prepend($img1);
-      }
-      if ($img2.length == 0) {
-        $img2 = $("<img class=\"profile-image\" />");
-        $(".loser-photo-wrapper").prepend($img2);
-      }
 
       if (photourl1 === "")  {
         $img1.fadeOut();
