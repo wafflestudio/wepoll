@@ -89,6 +89,44 @@
       });
     });
   </script>
+
+  <script type="text/javascript">
+    function law_title_click($elem, id) {
+      //show box
+      var $div = $("#bill-summary-popup");
+      var index = $elem.index();
+      if ($div.length == 0) {
+        $div = $("<div id=\"bill-summary-popup\"><div id=\"summary-popup-content\"></div>");
+        var $a = $("<a id=\"bill-popup-close\" href=\"#\">x</a>");
+        $a.click(function() {
+          $div.slideUp();
+          return false;
+        });
+        $div.append($a);
+        $div.appendTo("#bills-wrapper");
+        $div.hide();
+      }
+
+      //caculate offset
+//      var offset_y = 30;
+//      var y = index*17 + offset_y;
+//      console.log("y = " + y + ", index = " + index);
+//
+//      $div.css("top", y);
+//      $div.css("left", 0);
+//      $div.css("position", "absolute");
+
+      //slide
+      $div.stop().slideDown();
+
+      //load html
+      $("#summary-popup-content").load("/bills/"+ id);
+
+      return false;
+    }
+
+  </script>
+
 <% end -%>
 
 <div id="name-cards" class="grid_12 alpha omega">

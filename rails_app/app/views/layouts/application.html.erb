@@ -45,7 +45,7 @@
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
             </div>
 
-            <div id="search-bar-wrapper" class="prefix_1 grid_5">
+            <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
                 <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>

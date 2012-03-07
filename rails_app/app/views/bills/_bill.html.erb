@@ -1,7 +1,7 @@
-<tr>
-  <td><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
-  <td><%= bill.issue %></td>
-  <td><%= bill.title %></td>
-  <td><%= bill.complete ? "처리" : "계류"%></td>
+<tr class="<%=@bills.first == bill ? "space-under" : "" %>">
+  <td class="cell-date"><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
+  <td class="cell-commitee"><%= bill.commitee %></td>
+  <td class="cell-title"><%=link_to_function bill.title, "law_title_click($(this), '#{bill.id}')", :class => 'show-bill' %></td>
+  <td class="cell-result"><%= bill.complete ? "처리" : "계류"%></td>
 </tr>
 
