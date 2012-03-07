@@ -1,11 +1,48 @@
-<div class="subsection">
-  <% if @politician.birthday -%>
-    <%= @politician.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - @politician.birthday.year+1%>)
-  <% else -%>
-    정보없음
+<div class="grid_9 alpha omega subsection profile clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <% if politician.birthday -%>
+        <%= politician.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - politician.birthday.year+1%>세)
+      <% else -%>
+        정보없음
+      <% end -%>
+    </div>
+    <% if i==0 -%><div class="subsection-label">출생</div><% end -%>
   <% end -%>
 </div>
-<div class="subsection"><%= @politician.military || "정보없음"%></div>
-<div class="subsection"><%= @politician.job || "정보없음"%></div>
-<div class="subsection"><%= @politician.education || "정보없음"%></div>
-<div class="subsection"><%= @politician.experiences || "정보없음"%></div>
+
+<div class="grid_9 alpha omega subsection profile clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <%= politician.military || "정보없음" %>
+    </div>
+    <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
+  <% end -%>
+</div>
+
+<div class="grid_9 alpha omega subsection profile clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <%= politician.job || "정보없음" %>
+    </div>
+    <% if i==0 -%><div class="subsection-label">현직</div><% end -%>
+  <% end -%>
+</div>
+
+<div class="grid_9 alpha omega subsection profile clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <%= politician.education || "정보없음"%>
+    </div>
+    <% if i==0 -%><div class="subsection-label">학력</div><% end -%>
+  <% end -%>
+</div>
+
+<div class="grid_9 alpha omega subsection profile clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="<%= i==0?"left":"right"%>">
+      <%= politician.experiences || "정보없음"%>
+    </div>
+    <% if i==0 -%><div class="subsection-label">주요경력</div><% end -%>
+  <% end -%>
+</div>

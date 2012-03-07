@@ -74,7 +74,7 @@
   border:1px solid #5a5958;
   border-radius:7px;
   margin-bottom:12px;
-  padding: 3px 0;
+  padding: 7px 0;
 
   .left {
     width:240px - 2px;
@@ -258,6 +258,12 @@
 .joint-politician {
   float:left;
   margin:0 5px;
+
+  .joint-info {
+    font-size:9pt;
+    text-align:center;
+    color:black;
+  }
 }
 
 .joint-politician.alpha {
@@ -485,4 +491,72 @@
 
 #bills-wrapper {
   position:relative;
+}
+
+ol.promises li {
+  padding-left:45px;
+  background-repeat:no-repeat;
+  margin-bottom:30px;
+  min-height:53px + 12px;
+  padding-top:12px;
+
+  .promise-title {
+    color:#f34f7b;
+    font-size:10pt;
+    margin-bottom:10px;
+    margin-top:5px;
+  }
+
+  .promise-content {
+    color:#4f4f50;
+    font-size:9pt;
+  }
+}
+
+li.promise_1 {
+  background-image:url(/assets/icn_finger_1.gif);
+}
+li.promise_2 {
+  background-image:url(/assets/icn_finger_2.gif);
+}
+li.promise_3 {
+  background-image:url(/assets/icn_finger_3.gif);
+}
+
+div.promise.right {
+  border:0;
+  margin-left:24px;
+}
+div.promise.left {
+  border-right:2px dashed #565655;
+  margin-right:24px;
+  margin-left:12px;
+}
+
+div.subsection.noborder {
+  border:0;
+}
+
+div.profile.subsection {
+  background-color:#fff3a0;
+  font-size:9pt;
+}
+
+.profile.subsection .left, .profile.subsection .right {
+  padding: 10px 0;
+  text-align:center;
+}
+
+.profile.subsection .subsection-label {
+  padding-top:10px;
+}
+
+#show-timeline {
+  background:url(/assets/btn_show_timeline.gif) no-repeat;
+  width:40px;
+  height:153px;
+  position:fixed;
+  top:150px;
+  left:0;
+  display:block;
 }

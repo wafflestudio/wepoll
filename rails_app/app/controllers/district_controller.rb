@@ -3,6 +3,11 @@ class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
     @politicians = Politician.where(:district => @district).desc(:good_link_count)
+
+    if @politicians.count < 2
+      render :json => []
+      return
+    end
     raise "politicians.count < 2" if @politicians.count < 2
 
     if (params[:p1_id] && params[:p2_id])
@@ -23,6 +28,11 @@ class DistrictController < ApplicationController
     @p2_bill_categories = p2_bill_categories.map {|c,n| c}
 
     @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
+
+    respond_to do |format|
+      format.html
+      format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
+    end
   end
 
   protected

@@ -41,6 +41,9 @@
           $("#"+region+"-map").addClass("selected");
           });
         });
+    function loadVSPoliticians(district) {
+
+    }
 // vs-container end
 </script>
 <script type="text/javascript">
@@ -81,12 +84,73 @@ stroke: "none",
     this.arrow.rotate(beta);
     console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
     $("#vs-container").css("visibility","");
+    //load politicians
+    console.log("id = " + $(this).attr('id'));
+
+    var $img1 = $(".winner-photo-wrapper img");
+    var $img2 = $(".loser-photo-wrapper img");
+
+    if ($img1.length == 0) {
+      $img1 = $("<img class=\"profile-image\" />");
+      $(".winner-photo-wrapper").prepend($img1);
+    }
+    if ($img2.length == 0) {
+      $img2 = $("<img class=\"profile-image\" />");
+      $(".loser-photo-wrapper").prepend($img2);
+    }
+
+    if ($("#vs-container").attr("data-district") == worldmap.names[this.id]) {
+      return;
+    }
+    else {
+      $img1.attr("src","");
+      $img2.attr("src","");
+    }
+
+    $.getJSON("/district/" + worldmap.names[this.id], function(data) {
+      $("#vs-container").attr("data-district", worldmap.names[this.id]);
+
+      var p1 = data[0];
+      var p2 = data[1];
+
+      //photo
+      var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
+      var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
+
+
+      if (photourl1 === "")  {
+        $img1.fadeOut();
+      }
+      else {
+        $img1.attr("src", photourl1);
+        $img1.fadeIn();
+      }
+
+      if (photourl2 === "")  {
+        $img2.fadeOut();
+      }
+      else {
+        $img2.attr("src", photourl2);
+        $img2.fadeIn();
+      }
+
+      $("#vs-politician1 .politician-name").text(p1 ? p1.party +" "+ p1.name :"");
+      $("#vs-politician2 .politician-name").text(p2 ? p2.party +" "+ p2.name :"");
+
+      $("#vs-politician1 .good_links").text(p1 ? p1.good_link_count : 0);
+      $("#vs-politician2 .good_links").text(p2 ? p2.good_link_count : 0);
+
+      $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
+      $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
+    });
+
     },
     out = function () {
       this.curve.remove();
       this.arrow.remove();
       $("#vs-container").css("visibility","hidden");
       this.stop().animate({fill: this.c}, 500);
+
     },
     click = function(e) {
       if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
@@ -159,7 +223,21 @@ r.setViewBox(-94,95,500,640,false)
   <!-- vs-container is absolute positioned -->
   <div id="vs-container" class="clearfix">
     <h3 id="vs-district">지역구</h3>
-    <div class="vs-part alpha"></div>
-    <div class="vs-part omega"></div>
+    <div class="vs-part alpha" id="vs-politician1">
+      <div class="winner-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links"></div>
+      <div class="bad_links"></div>
+    </div>
+    <div class="vs-part omega" id="vs-politician2">
+      <div class="loser-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links"></div>
+      <div class="bad_links"></div>
+    </div>
   </div>
 <% end -%>

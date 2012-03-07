@@ -7,7 +7,7 @@
       <%= link_to image_tag("http://placehold.it/48x48"), '#'%>
     <% end -%>
 
-    <div><%= p.nil? ? tmp[0] : p.name  %></div>
-    <div><%= "#{(tmp[1].to_f/politician.initiate_bills.count*100.0).round}%" %></div>
+    <div class="joint-info"><%= p.nil? ? tmp[0] : p.name  %><br />
+    <%= "#{(tmp[1].to_f/politician.initiate_bills.count*100.0).round}%" %></div>
   </div>
 <% end -%>

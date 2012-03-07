@@ -24,13 +24,11 @@ class PoliticiansController < ApplicationController
   end
 
   def profile
-    @politician = Politician.find(params[:id])
     render :layout => false
   end
 
   def promises
-    @politician = Politician.find(params[:id])
-    @promises = @politician.promises[0...3]
+    @promises = @politicians.map{|p| p.promises[0...3]}
     render :layout => false
   end
 

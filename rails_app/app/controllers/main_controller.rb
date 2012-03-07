@@ -5,6 +5,7 @@ class MainController < ApplicationController
   before_filter :before_search
   def index
     @politicians = Politician.all.asc('name').limit(10)
+    @big_header = true
   end
 
   # XXX:for just debugging!
