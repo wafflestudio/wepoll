@@ -487,7 +487,9 @@ class HorizontalGroup
 			#@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
 			@$el.css({width: span*TimelineView.EntryWidth})
 			@$paper.clear()
-			@$paper.path("M#{0},180L#{span*TimelineView.EntryWidth+100},180").attr({stroke:'#000',fill:'#fff'})
+
+			@$paper.path("M#{0},180L#{span*TimelineView.EntryWidth+100},180").attr({stroke:'#000',fill:'#fff',"stroke-dasharray":". "})
+			@$paper.path("M50,180L#{span*TimelineView.EntryWidth+50},180").attr({stroke:'#555',fill:'#fff'})
 			
 		@span = span
 
