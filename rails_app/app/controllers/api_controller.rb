@@ -147,7 +147,16 @@ class ApiController < ApplicationController
 			end
 			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 		end
-		render :xml => result.to_json
+		render :json => result.to_json
+	end
+
+	def youtube_parsing
+		target_url = params[:url]
+		doc = Nokogiri::HTML(open(target_url))
+		result = {}
+		result[:embed_url] = doc.xpath('//div[@id="content"]/div[@id="watch-container"]/link[@itemprop="embedURL"]').first['href']
+
+		render :json => result.to_json
 	end
 
 private

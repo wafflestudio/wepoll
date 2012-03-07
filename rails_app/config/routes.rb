@@ -74,6 +74,7 @@ Wepoll::Application.routes.draw do
 
   match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
   match 'api/article_parse' => 'api#article_parsing'
+  match 'api/youtube_parse' => 'api#youtube_parsing'
 
 end
 
