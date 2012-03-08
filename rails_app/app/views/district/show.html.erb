@@ -86,7 +86,15 @@
 
         var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
         $(location).attr('href',url);
+        
+
       });
+			$('#show-timeline').click( function() {
+				$('#timeline-container').jqmShow()
+			})
+
+			$('#timeline-container').jqm()
+			$('#timeline-container').jqmHide()
     });
   </script>
 
@@ -238,3 +246,4 @@
   <div class="grid_2 omega">
   </div>
 </div>
+<%= render 'timeline_entries/index'  %>

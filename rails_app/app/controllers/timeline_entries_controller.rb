@@ -35,8 +35,11 @@ class TimelineEntriesController < ApplicationController
 			@timeline_entries = @timeline_entries.where(:politician_id.in =>[@politicians[0].id, @politicians[1].id])
 		end
 
+		@p1 = @politicians[0]
+		@p2 = @politicians[1] if @politicians.length > 2
+
     respond_to do |format|
-      format.html # index.html.erb
+      #format.html # index.html.erb
       format.json { render json: @timeline_entries }
     end
   end

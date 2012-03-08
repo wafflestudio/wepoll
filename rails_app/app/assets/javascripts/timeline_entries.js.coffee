@@ -121,19 +121,35 @@ class TimelineEntryCollection extends Backbone.Collection
 formatDate = (d)->
 	"#{d.getFullYear()}.#{d.getMonth()+1}.#{d.getDate()}"
 
+#data: data.title, data.create_at, data.image, data.description
+loadPreview = (url, onload)->
+	$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
+		(data)->
+			onload(data)
+
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<h3>#{model.escape('title')}</h3>
-			<p>링크: #{model.escape('url')}</p>
-			<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>
-			<p>코멘트: #{model.escape('comment')}<p>
+			
+			<span>#{model.escape('title')}</span>
+			<!--<p>링크: #{model.escape('url')}</p>-->
+			<!--<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>-->
+			<!--<p>코멘트: #{model.escape('comment')}<p>-->
 			#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
 		</div>"
 	element = $(template)
 	element.find('a').click (evt)=>
 		$(element).trigger('changeMode')
 		return false
+
+	loadPreview model.get('url'), (data)->
+		image = $("<img class='preview-img'/>").attr('src', data.image).load ()=>
+			element.prepend(image)
+			#if this.complete && this.naturalWidth
+			#	element.prepend(image)
+			
 	return element
+
+			
 
 # The `createForm` class method definition is exposed for new/edit form creation.
 # `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
@@ -159,7 +175,7 @@ createForm = (model,pol)->
 	timeout = 0
 
 	url_input = $(element).find("input[name='url']")
-
+	
 	load = ()->
 		$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent($(url_input).val()), type: 'POST', dataType: 'json', success:
 			(data)->
@@ -343,11 +359,17 @@ class TimelineEntrySlider extends Backbone.View
 		@$el = $("<div class='tm-slider'></div>").data('slider', this)
 		@$holder = $("<div class='tm-sl-holder'></div>").appendTo(@$el)
 
+
 		@nav = new TimelineEntryNav({current:0,num:0})
 		@nav.appendTo(@$holder)
 		@nav.on "changePage", @showPage
 		@pos = options.pos
 		@vpos = options.vpos
+		
+		if @vpos == 0
+			@$el.addClass("tm-bubble#{parseInt(Math.random()*3)+1}")
+		else if @vpos ==1
+			@$el.addClass("tm-bubble#{parseInt(Math.random()*3)+4}")
 				
 	addEntryView:(view)=>
 		view.appendTo(@$holder)
@@ -418,7 +440,7 @@ class VerticalGroup
 
 	addSlider:(slider, vpos)->
 		slider.appendTo(@$el)
-		slider.css("top", 220) if vpos
+		slider.css("top", 250) if vpos
 		slider.on "destroy", @onSliderDestroy
 		@num = @num + 1
 
@@ -464,13 +486,11 @@ class HorizontalGroup
 	
 	appendTo:($target)->
 		@$el.appendTo($target)
-		console.log(@$el.css('overflow'))
 
 	setPos:(pos)->
 		@pos = pos
 		@$el.data("pos",pos)
 
-		console.log(@$el.css('overflow'))
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 		@$holder.animate({left: (@epoch - @pos)*TimelineView.EntryWidth},{queue:false})
@@ -488,8 +508,8 @@ class HorizontalGroup
 			@$el.css({width: span*TimelineView.EntryWidth})
 			@$paper.clear()
 
-			@$paper.path("M#{0},180L#{span*TimelineView.EntryWidth+100},180").attr({stroke:'#000',fill:'#fff',"stroke-dasharray":". "})
-			@$paper.path("M50,180L#{span*TimelineView.EntryWidth+50},180").attr({stroke:'#555',fill:'#fff'})
+			@$paper.path("M#{0},200L#{span*TimelineView.EntryWidth+100},200").attr({stroke:'#000',fill:'#fff',"stroke-dasharray":". "})
+			@$paper.path("M50,200L#{span*TimelineView.EntryWidth+50},200").attr({stroke:'#555',fill:'#fff'})
 			
 		@span = span
 
@@ -786,7 +806,9 @@ class TimelineView
 
 			pos = nearest
 		
-		[lbound,center,rbound] = @getBounds()
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
 		
 		left = @groups[pos].getLeft()+100 # 100 for margin
 		width = @getWidth()
@@ -879,7 +901,9 @@ class TimelineView
 	
 	goLeft: ()->
 		return if @moving
-		[lbound,center,rbound] = @getBounds()
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
 		
 		left = @getLeft()
 		width = @getWidth()
@@ -904,7 +928,9 @@ class TimelineView
 
 	goRight: ()->
 		return if @moving
-		[lbound,center,rbound] = @getBounds()
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
 
 		right = @getRight()
 		width = @getWidth()
@@ -1236,9 +1262,9 @@ class TimelineController
 			
 		@currentScale.setStart(100000000,false)
 
-		$("<div class='timeline-navigator'></div>").css({left:0,top:210,zIndex:2}).html('left').appendTo(@$el).click ()=>
+		$("<div class='timeline-navigator'></div>").css({left:0,top:165,zIndex:2}).addClass('tm-nav-left').appendTo(@$el).click ()=>
 			@currentScale.goLeft()
-		$("<div class='timeline-navigator'></div>").css({right:0,top:210,zIndex:2}).html('right').appendTo(@$el).click ()=>
+		$("<div class='timeline-navigator'></div>").css({right:0,top:165,zIndex:2}).addClass('tm-nav-right').appendTo(@$el).click ()=>
 			@currentScale.goRight()
 
 	# You can let the timeline updated automatically.

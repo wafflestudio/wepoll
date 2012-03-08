@@ -32,6 +32,18 @@ class DistrictController < ApplicationController
     @t1 = @p1.tweets.asc('created_at').first
     @t2 = @p2.tweets.asc('created_at').first
 
+		# Timeline => See timeline_controller.rb.
+		if params[:from]
+			q_time = {:updated_at => {'$gte' => params[:from]}}
+		elsif params[:after]
+			q_time = {:updated_at => {'$gt' => params[:after]}}
+		else
+			q_time = {:deleted => false} # (all except deleted)
+		end
+
+	  @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1.id,@p2.id])
+
+
     respond_to do |format|
       format.html
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
