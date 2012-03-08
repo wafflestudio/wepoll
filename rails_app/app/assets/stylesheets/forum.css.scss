@@ -5,10 +5,16 @@
   margin-bottom: 20px;
   h2 {
     font-size: 20pt;
+    margin-bottom: 10px;
   }
   h3 {
     font-size: 15pt;
     color: #666666;
+  }
+  #district_link {
+    float: right;
+    color: #5FBBFF;
+    font-size: 15pt;
   }
 }
 #tweets_wrapper {
@@ -111,8 +117,8 @@
 
   #reply_close {
     position: absolute;
-    top: 8px;
-    right: 15px;
+    top: 3px;
+    right: 10px;
     cursor: pointer;
   }
   label {
@@ -182,30 +188,34 @@
   }
 }
 
-#reply_check .checkbox {
-  input {
-    display: none;
+#reply_check {
+  .checkbox {
+    input {
+      display: none;
+    }
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 5px;
+    cursor:pointer;
   }
-  padding:10px;
-  cursor:pointer;
-}
-.checked {
-  &.tweet {
-    background-image: url(forum/t-color.png);
-    background-repeat: no-repeat;
+  .checked {
+    &.twitter {
+      background-image: url(forum/t-color.png);
+      background-repeat: no-repeat;
+    }
+    &.facebook {
+      background-image: url(forum/f-color.png);
+      background-repeat: no-repeat;
+    }
   }
-  &.facebook {
-    background-image: url(forum/f-color.png);
-    background-repeat: no-repeat;
-  }
-}
-.unchecked {
-  &.tweet {
-    background-image: url(forum/t-grayscale.png);
-    background-repeat: no-repeat;
-  }
-  &.facebook {
-    background-image: url(forum/f-grayscale.png);
-    background-repeat: no-repeat;
+  .unchecked {
+    &.twitter {
+      background-image: url(forum/t-grayscale.png);
+      background-repeat: no-repeat;
+    }
+    &.facebook {
+      background-image: url(forum/f-grayscale.png);
+      background-repeat: no-repeat;
+    }
   }
 }

@@ -26,4 +26,54 @@ class Tweet
       self.save
     end
   end
+
+  def self.get_tweet
+    # TODO get former tweets
+#    screen_name = params[:screen_name]
+#    politician = Politician.where(:tweet_name => screen_name).first
+    Politician.all.each do |p|
+      politician = p
+      screen_name = politician.tweet_name
+      #get tweet if politician's tweet isn't protected and politician isn't nil
+      unless (screen_name.nil? || Twitter.user(screen_name).protected?)
+        puts "start getting #{politician.name}'s tweet"
+        need_more = false
+        prev_last = politician.tweets.desc('created_at').first
+        will_be_saved = []
+        Twitter.user_timeline(screen_name,{:count => 200}).sort{|a,b| a.created_at <=> b.created_at}.each_with_index do |t,i|
+          if (politician.tweets == [] || t.created_at > prev_last.created_at)
+            tweet = Tweet.create(:created_at => t.created_at, :content => t.text, :status_id => t.id, :name => t.user.name, :screen_name => t.user.screen_name)
+            will_be_saved << tweet
+            if(i==0 && (politician.tweets != []))
+              puts "#{politician.name} need more tweet"
+              need_more = true
+              last_status_id = tweet.status_id
+            end
+          end
+        end
+        if need_more
+          puts "get more tweet for #{politician.name} "
+          all_tweets = get_tweet_more(prev_last.status_id, last_status_id)
+          all_tweets.each do |t|
+            tweet = Tweet.create(:created_at => t.created_at, :content => t.text, :status_id => t.id, :name => t.user.name, :screen_name => t.user.screen_name)
+            will_be_saved << tweet
+          end
+        end
+        puts "put tweets into #{politician.name}'s model"
+        politician.tweets.concat(will_be_saved)
+      end
+    end
+  end
+
+  def self.get_tweet_more(start_id, last_id) #트윗들 : Array
+    got_tweets = Twitter.user_timeline(screen_name, {:since_id => start_id, :max_id => last_date, :count => 200})
+    if got_tweets.nil?
+      return []
+    else
+      if got_tweets.count == 200
+        got_tweets << get_tweet_more(start_id, got_tweets_tweets.last.id)
+      end
+      return got_tweets
+    end
+  end
 end
