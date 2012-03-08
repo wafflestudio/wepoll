@@ -17,7 +17,7 @@ class TweetRepliesController < ApplicationController
     else
       @tweet.tweet_replies << @re
       if @re.save
-        res = {:status => "ok", :reply => @re}
+        res = {:status => "ok", :reply => @re, :message => "댓글달기가 완료되었습니다."}
         if(params[:tweet])
           if tweet_after_create
             res[:tweet] = "ok"
@@ -64,7 +64,7 @@ class TweetRepliesController < ApplicationController
     unless @facebook_cookies.nil?
       @access_token = @facebook_cookies["access_token"]
       @graph = Koala::Facebook::GraphAPI.new(@access_token)
-      @graph.put_object("me","feed",:message => params[:content])
+      @graph.put_object("me","feed",:message => params[:tweet_reply][:content])
       true
     else
       false

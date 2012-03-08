@@ -143,7 +143,7 @@
     <div class="name-card">
       <%= link_to forum_path(@p1), :class => "vs-forum-link" do %>
         <div class="tweet left">
-          <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,32]}..." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
+          <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,48]}.." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
         </div>
       <% end -%>
       <div class="photo-frame" style="margin-left:5px;">
@@ -174,7 +174,7 @@
     <div class="name-card">
       <%= link_to forum_path(@p2), :class => "vs-forum-link" do %>
         <div class="tweet right">
-          <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,32]}..." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
+          <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,48]}.." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
         </div>
       <% end -%>
 
