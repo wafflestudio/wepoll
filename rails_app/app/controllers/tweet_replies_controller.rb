@@ -1,6 +1,6 @@
 #coding:utf-8
 class TweetRepliesController < ApplicationController
-  before_filter :authenticate_user!, :only => [:create]
+  before_filter :authenticate_user!, :only => [:create, :recommend]
 
   def create
     if current_user.nil?
@@ -76,7 +76,7 @@ class TweetRepliesController < ApplicationController
     if @re.recommend(current_user)
       render :json => {:status => "ok", :count => @re.recommend_count }
     else
-      render :json => {:status => "error", :message => "이미 투표하셨습니다."}
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
     end
   end
   def report
@@ -84,7 +84,7 @@ class TweetRepliesController < ApplicationController
     if @re.report(current_user)
       render :json => {:status => "ok", :count => @re.report_count }
     else
-      render :json => {:status => "error", :message => "이미 투표하셨습니다."}
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
     end
   end
   

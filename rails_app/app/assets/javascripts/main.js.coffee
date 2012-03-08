@@ -16,7 +16,7 @@ $ ->
   # report btn 
   $('.reply_item p.links a.report_link').live 'click', ->
     obj = this
-    $.getJSON this.href, (data) ->
+    $.get this.href, (data) ->
       if data.status == "error"
         alert "이미 신고하셨습니다"
     false
@@ -24,9 +24,9 @@ $ ->
   # tweet recommend btn 
   $('.tweet_item a.tweet_recommend_btn').live 'click', ->
     obj = $(this).parent().parent().parent().children('.count')
-    $.getJSON this.href, (data) ->
+    $.get this.href, (data) ->
       if data.status == "error"
-        alert "이미 공감하셨습니다"
+        alert data.message
       else
         $(obj).text data.count
     false
@@ -34,9 +34,9 @@ $ ->
   # reply recommend btn
   $('.reply_item p.links a.recommend_link').live 'click', ->
     obj = this
-    $.getJSON this.href, (data) ->
+    $.get this.href, (data) ->
       if data.status == "error"
-        alert "이미 공감하셨습니다"
+        alert data.message
       else
         $(obj).text "공감"+data.count
     false

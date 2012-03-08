@@ -29,6 +29,9 @@ class DistrictController < ApplicationController
 
     @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
 
+    @t1 = @p1.tweets.asc('created_at').first
+    @t2 = @p2.tweets.asc('created_at').first
+
     respond_to do |format|
       format.html
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}

@@ -1,5 +1,6 @@
 #coding:utf-8
 class TweetsController < ApplicationController
+  before_filter :authenticate_user!, :only => [:recommend]
 
   def get_tweet
     # TODO get former tweets
@@ -26,7 +27,7 @@ class TweetsController < ApplicationController
     if @tweet.recommend(current_user)
       render :json => {:status => "ok", :count => @tweet.recommend_count }
     else
-      render :json => {:status => "error", :message => "이미 투표하셨습니다."}
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
     end
   end
 
