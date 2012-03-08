@@ -90,11 +90,12 @@
 
       });
 			$('#show-timeline').click( function() {
-				$('#timeline-container').jqmShow()
+				$('#timeline-container').jqmShow();
+				return false
 			})
 
-			$('#timeline-container').jqm()
-			$('#timeline-container').jqmHide()
+			$('#timeline-container').jqm();
+
     });
   </script>
 
@@ -246,4 +247,4 @@
   <div class="grid_2 omega">
   </div>
 </div>
-<%= render 'timeline_entries/index'  %>
+<%= render :file => 'timeline_entries/index'  %>
