@@ -154,7 +154,7 @@ stroke: "none",
     },
     click = function(e) {
       if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
-        $(location).attr('href',$(location).attr('origin')+"/district/"+worldmap.names[this.id]);
+        $(location).attr('href',"/district/"+worldmap.names[this.id]);
       }
     };
 r.setStart();

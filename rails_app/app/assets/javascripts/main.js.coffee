@@ -63,6 +63,9 @@ $ ->
   $('#reply_close').click ->
     $reply_box.hide()
     return
+  $('#login_close').live 'click', ->
+    $.colorbox.close()
+    return
 
   # function
   reset_box = ->
