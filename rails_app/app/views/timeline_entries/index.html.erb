@@ -21,21 +21,24 @@ $(function() {
 	timelineController.appendTo($("#timeline"))
 	
 	<% if user_signed_in? %>
-	$(".link-new").each(function(index, el) {
-		$(el).click(function() {
-			$("#tm-entry-new").empty()
-
-			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-				timelineController.addEntry(model)
-				$.colorbox.close()
-			}
-			)
-			$(this).colorbox({inline:true,open:true})
-
-		})
-		$('#timeline-container').corner('20px')
-		$('#timeline-container-border').corner('10px').css('z-index','auto')
-	})
+  $(".link-new").click(function() {
+    $(this).colorbox({title:false});
+  });
+//	$(".link-new").each(function(index, el) {
+//		$(el).click(function() {
+//			$("#tm-entry-new").empty()
+//
+//			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+//				timelineController.addEntry(model)
+//				$.colorbox.close()
+//			}
+//			)
+//			$(this).colorbox({inline:true,open:true})
+//
+//		})
+//		$('#timeline-container').corner('20px')
+//		$('#timeline-container-border').corner('10px').css('z-index','auto')
+//	})
 
 	
 	<% end %>
@@ -337,7 +340,7 @@ z-index:3;
 
 					<p class='pol-name'><%= @p1.name %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[+]</a>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
 					<% end %>
 					</p>
 				</div>
@@ -354,7 +357,7 @@ z-index:3;
 				<p class='pol-name'>
 					<%= @p2.name %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[+]</a>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p2.id)%>">[+]</a>
 				<% end %>
 				</p>
 
