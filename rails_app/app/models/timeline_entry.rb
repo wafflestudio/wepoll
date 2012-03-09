@@ -3,6 +3,7 @@ class TimelineEntry
   include Mongoid::Document
 	include Mongoid::Timestamps
 	include Mongoid::MultiParameterAttributes
+  include Mongoid::Paperclip
 
 	validates_associated :user
 	validates_presence_of :url,:posted_at
@@ -17,6 +18,13 @@ class TimelineEntry
   field :is_good, type: Boolean, default: true #칭찬링크: true, 지적링크: false
   field :like, type: Integer, default:0 #공감수
   field :tags, type: Array, default: []
+
+  #=== Mongoid attach ===
+  has_mongoid_attached_file :thumbnail,
+    :styles => {:square48 => "48x48#"},
+    :url => "/system/link_thumbnails/:id/:style.:extension",
+    :path => Rails.root.to_s+"/public/system/link_thumbnails/:id/:style.:extension",
+    :convert_options => { :all => '-strip -colorspace RGB'} #fucking IE
 
   #생성한 user
   belongs_to :user

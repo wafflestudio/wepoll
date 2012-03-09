@@ -1,5 +1,30 @@
-<p id="notice"><%= notice %></p>
+<div class="container_16" id="link-detail-wrapper">
+  <div class="grid_11 alpha omega">
+    <div class="grid_7 alpha">
+      <div class="grid_2 alpha" id="link-like-count">
+        <span id="like-count"><%= @timeline_entry.like%></span><br />
+        <span style="color:#48d822;font-size:9pt;">공감</span>
+      </div>
 
+      <div class="grid_5 omega">
+        <div class="grid_1 alpha"><%= @timeline_entry.thumbnail.url(:square48)%></div>
+        <div class="grid_4 omega">
+          <div id="link-title"><%= @timeline_entry.title %></div>
+          <div id="link-url"><%= @timeline_entry.url%></div>
+        </div>
+      </div>
 
-<%= link_to 'Edit', edit_timeline_entry_path(@timeline_entry) %> |
-<%= link_to 'Back', timeline_entries_path %>
+    </div>
+
+    <div class="grid_4 omega">
+      <div id="link-user">
+        <div style="color:#9b957c;font-size:8pt;">올린이</div>
+        <img src="<%=@timeline_entry.user.photo.url(:square50)%>" id="link-user-photo" />
+        <div id="link-user-info">
+          <span id="link-user-name"><%= @timeline_entry.user.nickname %></span><br />
+          <span id="link-time-ago"><%= time_ago_in_words @timeline_entry.created_at %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

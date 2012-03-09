@@ -107,6 +107,8 @@ stroke: "none",
       $img2.attr("src","");
     }
 
+    $("#vs-district").text(worldmap.names[this.id]);
+
     $.getJSON("/district/" + worldmap.names[this.id], function(data) {
       $("#vs-container").attr("data-district", worldmap.names[this.id]);
 
@@ -171,7 +173,7 @@ r.setViewBox(-94,95,500,640,false)
 </script>
 <% end -%>
 
-<%= link_to 'test link', forum_path(Politician.last) %>
+<%#= link_to 'test link', forum_path(Politician.last) %>
 
 <div id="seoul-map" class="map">
   <div id="seoul-map-bubble" class="bubble">

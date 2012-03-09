@@ -51,6 +51,7 @@ class TimelineEntriesController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @timeline_entry }
+      format.html
     end
   end
 

@@ -103,3 +103,40 @@ div.field {
   font-size:9pt;
   color:#929292;
 }
+
+#link-like-count {
+  background:url(/assets/bubble_like.gif);
+  width:88px;
+  height:68px;
+  text-align:center;
+}
+
+#like-count {
+  font-size: 13pt;
+}
+
+#link-user {
+  background-color:#fff4c4;
+  border-radius:7px;
+}
+
+#link-user-photo {
+  width:22px;
+  height:22px;
+  border:2px solid #fedc43;
+  display:block;
+  float:left;
+}
+
+#link-user-name {
+  font-size:9pt;
+}
+
+#link-time-ago {
+  font-size:8pt;
+}
+
+#link-detail-wrapper {
+  width:688px;
+  border:5px solid #4f4f50;
+}
