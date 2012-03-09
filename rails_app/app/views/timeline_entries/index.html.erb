@@ -9,12 +9,10 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
-//TODO: FEED IN DATA HERE
-
+// FEED IN DATA
 var pol1 = <%= @p1.to_json.html_safe %>
 var pol2 = <%= @p2.to_json.html_safe %>
 var entries = <%= @timeline_entries.to_json.html_safe %>
-
 $(function() {
 	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
@@ -119,7 +117,9 @@ $(function() {
 	padding-left:5px;
 	background-color:#555;
 	height:440px;
-	z-index:1;
+	z-index:2;
+	display:none;
+	position:fixed;
 }
 
 #timeline-container-border {
@@ -134,6 +134,9 @@ $(function() {
 
 #timeline-container a{
 	color:black;
+}
+
+#timeline-all {
 }
 
 #tm-politician1{

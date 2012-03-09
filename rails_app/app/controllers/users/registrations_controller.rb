@@ -2,7 +2,7 @@
 require 'open-uri'
 require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout false, :only => [:new, :create]
+  layout false, :only => [:new, :create, :after_auth]
   def new
     super
   end
@@ -101,6 +101,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_auth
-    render :layout => false
+    redirect_to root_path
   end
 end

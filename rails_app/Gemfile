@@ -40,6 +40,8 @@ gem 'rspec'
 gem 'kaminari'
 gem 'nokogiri'
 
+gem 'whenever', :require => false
+
 
 #bootstrap for scaffolding
 gem 'twitter-bootstrap-rails', :group => :assets

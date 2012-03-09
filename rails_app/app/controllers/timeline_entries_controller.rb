@@ -76,7 +76,11 @@ class TimelineEntriesController < ApplicationController
   # POST /timeline_entries.json
   def create
     @timeline_entry = TimelineEntry.new(params[:timeline_entry], :user_id => current_user.id)
-
+    politician = @timeline_entry.politician
+    if politician
+      politician.inc(:good_link_count, 1) if @timeline_entry.is_good
+      politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
+    end
 
     respond_to do |format|
       if @timeline_entry.save
