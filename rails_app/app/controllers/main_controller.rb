@@ -105,11 +105,14 @@ class MainController < ApplicationController
     end
 
     if !@politician.nil?
-      redirect_to forum_path(@politician._id)
+      if type != 1
+        redirect_to district_name_path(sub_query)
+      else
+        redirect_to forum_path(@politician._id)
+      end
     else
       flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
-      redirect_to root_url 
-      #redirect_to back
+      redirect_to back
     end
   end
 
