@@ -134,11 +134,18 @@ createView = (model)->
 			<!--<p>링크: #{model.escape('url')}</p>-->
 			<!--<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
-			#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
+			#{if TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
 		</div>"
 	element = $(template)
-	element.find('a').click (evt)=>
-		$(element).trigger('changeMode')
+	element.find('a').click (evt)->
+		url = "/timeline_entries/" + model.id + "/edit"
+		$.colorbox {href:url,onComplete: ()->
+			$('.tm-entry-form').submit ()->
+				submitTimelineEntryForm(this, model.id)
+				$.colorbox.close()
+				return false
+			}
+
 		return false
 
 	loadPreview model.get('url'), (data)->
@@ -246,29 +253,23 @@ class TimelineEntryView extends Backbone.View
 	
 	render: ()->
 		if !@hasEl
-			edit = createForm(@model)
 			view = createView(@model)
-			element = $("<div class='tm-entry'/>").append(edit).append(view)
-			edit.hide()
-
+			element = $("<div class='tm-entry' data-id='" + @model.id+ "'/>").append(view)
+			
 			view.on "changeMode", ()=>
-				view.hide()
-				edit.show()
-			edit.on "save", ()=>
-				view.remove()
-				view = createView(@model)
-				element.append(view)
-				view.on "changeMode", () =>
-					view.hide()
-					edit.show()
-				edit.hide()
-				view.show()
+				load('/timeline_entries/show', {politician_id:@model.get('politician_id')})
+
+			#edit.on "save", ()=>
+				#view.remove()
+				#view = createView(@model)
+				#element.append(view)
+				#view.on "changeMode", () =>
 
 
 			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
 
-			edit.append(delete_link)
+			#edit.append(delete_link)
 			@setElement(element)
 		@hasEl = true
 	
@@ -1278,6 +1279,17 @@ class TimelineController
 	
 	addEntry: (model)->
 		@collection.add(model)
+	
+	createEntry: (attrs, options)->
+		entry = new TimelineEntry()
+		options.silent = true
+		entry.save(attrs, options) # shouldn't dispatch as update
+		@collection.add(entry)
+
+	updateEntry: (id, attrs, options)->
+		entry = @collection.get(id)
+		entry.save(attrs, options)
+
 	
 	@getForm: (pol)->
 		return createForm(null,pol)

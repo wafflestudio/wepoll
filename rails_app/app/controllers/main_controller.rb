@@ -105,7 +105,7 @@ class MainController < ApplicationController
     end
 
     if !@politician.nil?
-      redirect_to forum_path(@politician._id)
+      redirect_to forum_path(:politician_id => @politician._id)
     else
       flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
       redirect_to root_url 

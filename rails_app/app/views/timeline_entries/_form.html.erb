@@ -1,21 +1,59 @@
-<%= form_for(@timeline_entry,:remote => true) do |f| %>
-  <% if @timeline_entry.errors.any? %>
-  <div id="error_explanation">
-      <h2><%= pluralize(@timeline_entry.errors.count, "error") %> prohibited this timeline_entry from being saved:</h2>
-
-      <ul>
-      <% @timeline_entry.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-	<p>Comment:</p>
-	<p><%= f.text_area :comment, :rows => 2, :cols => 20 %></p>
-  <p>Link:<%= f.text_field :url %></p>
-	<p>Date:<%= f.date_select :posted_at %></p> 	
-
-  <div class="actions">
-    <%= f.submit %>
+<%= form_for(@timeline_entry,:remote => true, :html =>{:class => 'link-form tm-entry-form'}) do |f| %>
+	<%= f.hidden_field :politician_id %>
+  <div class="prefix_2 grid_8 alpha omega field">
+    <div id="link-form-title"><%= current_user.nickname %>님이 <%= @politician.name %> 후보를</div>
+    <div class="link-type"><%= f.radio_button 'is_good', 'true' %> 칭찬합니다.</div>
+    <div class="link-type"><%= f.radio_button 'is_good', 'false' %> 지적합니다.</div>
   </div>
+
+  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+    <label class="grid_1 alpha">링크주소</label>
+    <div class="grid_6 omega"><%=f.text_field :url %></div>
+  </div>
+
+  <div class="prefix_1 grid_8 suffix_1 alpha omega field">
+    <label class="grid_1 alpha">제목</label>
+    <div class="grid_7 omega">
+      <%= check_box_tag :facebook_send %> <%= check_box_tag :twitter_send %>
+      <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
+    </div>
+
+    <label class="grid_1 alpha" id="wepoll-logo-square">로고</label>
+    <div class="grid_6"><%= f.text_area :title, :class => 'comment' %></div>
+    <div class="grid_1 omega" id="comment-length-indicator"><span id="comment-length">00</span>/50자</div>
+  </div>
+
+  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+    <label class="grid_1 alpha">링크날짜</label>
+    <div class="grid_6 omega">
+      <%= f.date_select('posted_at', :order => [:year, :month, :day])%>
+      <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>
+    </div>
+
+    <div class="prefix_1 grid_6 alpha omega">
+      날짜 bar
+    </div>
+  </div>
+
+  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+    <label class="grid_1 alpha">태그</label>
+    <div class="grid_6 omega"><%= f.text_field :tag_text, :placeholder => "한개이상 입력하세요" %></div>
+    <div class="prefix_1 grid_6 alpha omega note">
+      태그는 5개까지 입력할 수 있습니다.<br />
+      여러개를 입력할 경우 띄어쓰기로 구분해주세요.<br />
+      예) 등록금 FTA 저축은행특별법
+    </div>
+  </div>
+
+  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+    <label class="grid_1 alpha">인기태그</label>
+    <div class="grid_6 omega" id="popular-tags">태그1, 태그2, ...</div>
+  </div>
+
+  <div id="actions">
+    <a href="#" id="link-cancel" class="action">돌아가기</a>
+    <%= f.submit '등록하기', :id => 'link-post', :class => 'action' %>
+  </div>
+
+  <div class="note prefix_1 suffix_1 grid_8" id="post-warning">*타인의 명예를 훼손하거나 사생활을 침해하는 내용 등재 시 처벌의 대상이 될 수 있습니다.</div>
 <% end %>

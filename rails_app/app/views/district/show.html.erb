@@ -68,13 +68,13 @@
 
       $(".politician-select").change(function() {
         var $this = $(this);
-        if ($this.attr("value") == "<%= @p1.id%>" || 
-        $this.attr("value") == "<%= @p2.id%>") {
+        if ($this.attr("value") == "<%= @p1.nil? ? "" : @p1.id%>" || 
+        $this.attr("value") == "<%= @p2.nil? ? "" : @p2.id%>") {
 
           if ($this.attr("id") == "politician1") 
-            $this.val("<%= @p1.id %>");
+            $this.val("<%= @p1.nil? ? "" : @p1.id %>");
           if ($this.attr("id") == "politician2") 
-            $this.val("<%= @p2.id %>");
+            $this.val("<%= @p2.nil? ? "" : @p2.id %>");
 
           return false;
         }
@@ -84,9 +84,12 @@
           return $select.attr("value");
         });
 
+        <% if @p1 && @p1.district -%>
         var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
+        <% else -%>
+        var url = "";
+        <% end -%>
         $(location).attr('href',url);
-        
 
       });
 			$('#show-timeline').click( function() {
@@ -97,6 +100,13 @@
 			$('#timeline-container').jqm();
 
       $('#vs-fb-like-btn').attr('data-href',location.href);
+      $(".joint-politician img").hover(function() {
+        //show
+
+      },
+      function() {
+        //hide
+      });
 
     });
   </script>
@@ -144,13 +154,22 @@
 <div id="name-cards" class="grid_12 alpha omega">
   <div class="clearfix" id="name-cards-inner-wrapper">
     <div class="name-card">
-      <%= link_to forum_path(@p1), :class => "vs-forum-link" do %>
-        <div class="tweet left">
-          <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,48]}.." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
-        </div>
+      <% if @p1 -%>
+        <%= link_to forum_path(@p1), :class => "vs-forum-link" do %>
+          <div class="tweet left">
+            <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,48]}.." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
+          </div>
+        <% end -%>
+      <% else -%>
+        <div class="tweet left">최근 트윗이 없습니다."</div>
       <% end -%>
+
       <div class="photo-frame" style="margin-left:5px;">
-        <%= image_tag @p1.profile_photo.url(:square100) %>
+        <% if @p1 && @p1.profile_photo? -%>
+          <%= image_tag @p1.profile_photo.url(:square100) %>
+        <% else -%>
+          <%= image_tag "http://placehold.it/100" %>
+        <% end -%>
         <div class="back">
         </div>
       </div>
@@ -158,7 +177,7 @@
         <% if @politicians.any? -%>
           <%= select_tag 'politician1', options_from_collection_for_select(@politicians, 'id', 'name', @p1.id.to_s), :class => "politician-select" %>
         <% else -%>
-          <%= @p1.name%>
+          <%= @p1.nil? ? "" : @p1.name%>
         <% end -%>
       </div>
       <div class="clear"></div>
@@ -176,22 +195,30 @@
     </div>
 
     <div class="name-card">
-      <%= link_to forum_path(@p2), :class => "vs-forum-link" do %>
-        <div class="tweet right">
-          <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,48]}.." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
-        </div>
+      <% if @p2 -%>
+        <%= link_to forum_path(@p2), :class => "vs-forum-link" do %>
+          <div class="tweet right">
+            <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,48]}.." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
+          </div>
+        <% end -%>
+      <% else -%>
+        <div class="tweet right">최근 트윗이 없습니다.</div>
       <% end -%>
 
       <div class="candidate-selector right">
         <% if @politicians.any? -%>
           <%= select_tag 'politician2', options_from_collection_for_select(@politicians, 'id', 'name', @p2.id.to_s), :class => "politician-select" %>
         <% else -%>
-          <%= @p2.name%>
+          <%= @p2.nil? ? "" : @p2.name%>
         <% end -%>
       </div>
 
       <div class="photo-frame">
-        <%= image_tag @p2.profile_photo.url(:square100) %>
+        <% if @p2 && @p2.profile_photo? -%>
+          <%= image_tag @p2.profile_photo.url(:square100) %>
+        <% else -%>
+          <%= image_tag "http://placehold.it/100"%>
+        <% end -%>
         <div class="back"></div>
       </div>
       <div class="clear"></div>
@@ -239,9 +266,11 @@
 
 <div class="grid_12 alpha omega" id="tab-wrapper">
   <div id="tabs" class="clearfix">
-    <%= link_to '국회활동', bill_activities_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "bill-activity" %>
-    <%= link_to '신상', profiles_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "profile"%>
-    <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.id, :id2 => @p2.id), :class => 'tab', "data-id" => "promise" %>
+    <%= link_to '국회활동',
+      bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+      :class => 'tab', "data-id" => "bill-activity" %>
+    <%= link_to '신상', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
+    <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "promise" %>
   </div>
 
   <div class="grid_8 clearfix" id="tab-sections-container">

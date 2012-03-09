@@ -9,6 +9,42 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
+function submitTimelineEntryForm(element,id)  {
+
+	var attrs = {};
+	$(element).find('[name^="timeline_entry"]').each(function(index, el) {
+		var name = $(el).attr('name')
+		if(name.match("posted_at"))
+			return;
+		else  {
+			match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]")
+			if(match && match.length >= 2)
+				attrs[match[1]] = $(el).val()
+		}
+	});
+
+	var date = []
+	$(element).find('select[name^="timeline_entry[posted_at"]').each(function(index,el) {
+		date[index] = $(el).val()
+	})
+	if(date.length)
+		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
+
+	if(typeof id != 'undefined')  {
+		timelineController.updateEntry(id,attrs, {error: function() {
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+			}
+		})
+	}
+	else  {	
+		timelineController.createEntry(attrs, {error: function() {
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+			}
+		})
+	}
+}
+
+
 // FEED IN DATA
 var pol1 = <%= @p1.to_json.html_safe %>
 var pol2 = <%= @p2.to_json.html_safe %>
@@ -19,28 +55,31 @@ $(function() {
 	timelineController.appendTo($("#timeline"))
 	
 	<% if user_signed_in? %>
-	$(".link-new").each(function(index, el) {
-		$(el).click(function() {
-			$("#tm-entry-new").empty()
-			var form = modules.TimelineController.getForm([pol1._id,pol2._id][index])
-			$(form).appendTo('#tm-entry-new').bind("save", function(evt, model) {
-				timelineController.addEntry(model)
-				$.colorbox.close()
-			}
-			)
+  $(".link-new").click(function() {
 
-			$(this).colorbox({inline:true,open:true})
-			return false;
-		})
-	})
-	
+    $(this).colorbox({title:false,onComplete:function(){
+
+    		$('.tm-entry-form').submit( function() {
+					submitTimelineEntryForm(this)			
+					$.colorbox.close()
+    			// prevent actually changing the page
+					return false;
+				});
+    	}
+    });
+  });
+
 	$('#timeline-container').corner('20px')
 	$('#timeline-container-border').corner('10px').css('z-index','auto')
 
-	
 	<% end %>
 
-	//$("#link-new").colorbox({inline:true});
+
+  $(".tm-entry").click(function() {
+    var entry_id = $(this).attr('data-id');
+    var url = "/timeline_entries/"+entry_id;
+    $(this).colorbox({href:url});
+  });
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {
@@ -337,12 +376,12 @@ z-index:3;
 			<div id='tm-politician1'>
 				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+					<%= image_tag @p1.nil? ? "http://placehold.it/100" : @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
 					</div>
 
-					<p class='pol-name'><%= @p1.name %>
+					<p class='pol-name'><%= @p1 ? @p1.name : "" %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[+]</a>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
 					<% end %>
 					</p>
 				</div>
@@ -354,12 +393,12 @@ z-index:3;
 			<div id='tm-politician2'>
 				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @p2.profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+					<%= image_tag @p2 ? @p2.profile_photo.url(:square100) : nil,:alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
 					</div>
 				<p class='pol-name'>
-					<%= @p2.name %>
+					<%= @p2 ? @p2.name : "" %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[+]</a>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p2.id)%>">[+]</a>
 				<% end %>
 				</p>
 
