@@ -99,7 +99,6 @@
 
 			$('#timeline-container').jqm();
 
-      $('#vs-fb-like-btn').attr('data-href',location.href);
       $(".joint-politician img").hover(function() {
         //show
 
@@ -184,8 +183,8 @@
     </div>
 
     <div class="vs-bar">
-      <div style="height:40px;margin-bottom:12px">&nbsp;</div>
-      <div id="vs-fb-like-btn" class="fb-like" data-href="<%= request.url %>" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
+      <div style="height:40px;margin-bottom:12px"><div id="vs-fb-like-btn" class="fb-like" data-href="<%= request.url %>" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>&nbsp;</div>
+      
       <div class="district-label">
         <%= @district%>
       </div>
