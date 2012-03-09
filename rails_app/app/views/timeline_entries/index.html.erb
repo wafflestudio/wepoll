@@ -9,6 +9,42 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
+function submitTimelineEntryForm(element,id)  {
+
+	var attrs = {};
+	$(element).find('[name^="timeline_entry"]').each(function(index, el) {
+		var name = $(el).attr('name')
+		if(name.match("posted_at"))
+			return;
+		else  {
+			match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]")
+			if(match && match.length >= 2)
+				attrs[match[1]] = $(el).val()
+		}
+	});
+
+	var date = []
+	$(element).find('select[name^="timeline_entry[posted_at"]').each(function(index,el) {
+		date[index] = $(el).val()
+	})
+	if(date.length)
+		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
+
+	if(typeof id != 'undefined')  {
+		timelineController.updateEntry(id,attrs, {error: function() {
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+			}
+		})
+	}
+	else  {	
+		timelineController.createEntry(attrs, {error: function() {
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+			}
+		})
+	}
+}
+
+
 // FEED IN DATA
 var pol1 = <%= @p1.to_json.html_safe %>
 var pol2 = <%= @p2.to_json.html_safe %>
@@ -24,68 +60,25 @@ $(function() {
     $(this).colorbox({title:false,onComplete:function(){
 
     		$('.tm-entry-form').submit( function() {
-					var element = this;
-    			var attrs = {};
-    			$(element).find('[name^="timeline_entry"]').each(function(index, el) {
-						var name = $(el).attr('name')
-						if(name.match("posted_at"))
-							return;
-						else  {
-							match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]")
-							if(match && match.length >= 2)
-								attrs[match[1]] = $(el).val()
-						}
-					});
-
-					var date = []
-					$(element).find('select[name^="timeline_entry[posted_at"]').each(function(index,el) {
-						date[index] = $(el).val()
-					})
-					if(date.length)
-						attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
-
-				
-					timelineController.createEntry(attrs, {success: function () {
-						}
-						,error: function() {
-							$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
-						}
-					})
+					submitTimelineEntryForm(this)			
 					$.colorbox.close()
-
-
     			// prevent actually changing the page
 					return false;
 				});
     	}
     });
   });
-//	$(".link-new").each(function(index, el) {
-//		$(el).click(function() {
-//			$("#tm-entry-new").empty()
-//
-//			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-//				timelineController.addEntry(model)
-//				$.colorbox.close()
-//			}
-//			)
-//			$(this).colorbox({inline:true,open:true})
-//
-//		})
-//	})
 
 	$('#timeline-container').corner('20px')
 	$('#timeline-container-border').corner('10px').css('z-index','auto')
 
 	<% end %>
 
-	//$("#link-new").colorbox({inline:true});
 
   $(".tm-entry").click(function() {
     var entry_id = $(this).attr('data-id');
     var url = "/timeline_entries/"+entry_id;
     $(this).colorbox({href:url});
-
   });
 
 	var AppRouter = Backbone.Router.extend({
