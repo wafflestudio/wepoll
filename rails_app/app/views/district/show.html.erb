@@ -19,7 +19,7 @@
       $("#tab-sections-container").append($tab_section);
     }
 
-    $(document).ready(function() {
+    $(function() {
       var common_options = { width:624/2-33/2, height:14, labelWidth:48};
       $("#p1-good-link").simpleBarGraph(
         $.extend({
@@ -96,6 +96,8 @@
 
 			$('#timeline-container').jqm();
 
+      $('#vs-fb-like-btn').attr('data-href',location.href);
+
     });
   </script>
 
@@ -164,6 +166,7 @@
 
     <div class="vs-bar">
       <div style="height:40px;margin-bottom:12px">&nbsp;</div>
+      <div id="vs-fb-like-btn" class="fb-like" data-href="<%= request.url %>" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>
       <div class="district-label">
         <%= @district%>
       </div>
