@@ -27,10 +27,12 @@ $('span.checkbox').addClass("unchecked");
       <h2><%= @politician.name %></h2>
       <h3>@<%= @politician.tweet_name %></h3>
       <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+      <%= link_to "지역구 대결가기", district_politician_path(@politician) %>
     </div>
   </div>
 </div>
 
+<% if false %>
 <div id="tweets_wrapper" class="grid_12 alpha omega">
   <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} %>
   <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} %>
@@ -59,3 +61,4 @@ $('span.checkbox').addClass("unchecked");
     <%= render :partial => "tweet_replies", :locals => { :replies => @politician.total_replies } %> 
   </div>
 <% end -%>
+<% end %>
