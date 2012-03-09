@@ -3,6 +3,9 @@ class TweetReply
   include Mongoid::Timestamps
 
   field :content, type: String
+  field :in_reply_to_status_id, type: String
+  field :in_reply_to_user_id, type: String
+  field :in_reply_to_screen_name, type: String
 
   field :recommend_count, type: Integer, default: 0 # 추천
   field :report_count, type: Integer, default: 0    # 신고

@@ -2,7 +2,7 @@
 require 'open-uri'
 require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout false, :only => [:new]
+  layout false, :only => [:new, :create, :after_auth]
   def new
     super
   end
@@ -28,12 +28,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     params[:user][:agree_provision] = true if params[:agree_provision]
 
-    super
-  end
+    if params[:agree_send_requests]
+      params[:user][:fb_req_friend_ids] = params[:friend_ids]
+    end
 
-  def link_sns
-    #XXX
-    redirect_to root_path
+    super
   end
 
   protected
@@ -86,15 +85,22 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     session.keys.grep(/^user\_facebook/).each {|k| puts "delete #{k}";session.delete k}
     session.keys.grep(/^user\_twitter/).each {|k| puts "delete #{k}";session.delete k}
+
+    Rails.logger.info "after_sign_up_path_for"
+    render :layout => false
   end
 
   def after_sign_up_path_for(resource)
     link_sns
-    super
+#    super
   end
 
   def after_update_path_for(resource)
     link_sns
     super
+  end
+
+  def after_auth
+    redirect_to root_path
   end
 end

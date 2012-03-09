@@ -17,7 +17,10 @@ class Users::OmniauthCallbacksController < ApplicationController
         Rails.logger.info "============================="
 
         fb_data = request.env["omniauth.auth"]
-        uid = fb_data.extra.raw_info.uid
+        uid = fb_data.uid
+        Rails.logger.info "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        Rails.logger.info "uid is #{uid}"
+        Rails.logger.info "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         secret = fb_data.credentials.secret
         token = fb_data.credentials.token
 
@@ -35,7 +38,7 @@ class Users::OmniauthCallbacksController < ApplicationController
         session.delete "link_sns"
         redirect_to me_dashboard_path
       else
-        session["user_facebook_data"] = request.env["omniauth.auth"]
+        session["user_facebook_data"] = request.env["omniauth.auth"].except("extra")
         redirect_to new_user_registration_url
       end
     end
@@ -86,6 +89,10 @@ class Users::OmniauthCallbacksController < ApplicationController
     Rails.logger.info "==========="
 
     render :text => 'fail'
+  end
 
+  def after_sign_in_path_for(resource)
+    Rails.logger.info "omniauth callback action start"
+    after_auth_path
   end
 end

@@ -1,41 +1,46 @@
-<div class="container_16 clearfix">
-  <div class="grid_2">
-    <%= image_tag @politician.profile_photo? ? @politician.profile_photo.url(:square100) : "http://placehold.it/100"%>
+<div class="alpha omega clearfix" id="popup-bills">
+  <div id="popup-profile-photo">
+    <div class="photo">
+      <%= image_tag @politician.profile_photo? ? @politician.profile_photo.url(:square100) : "http://placehold.it/100"%>
+    </div>
+    <span class="name-label"><%= @politician.name %></span>
   </div>
-  <div class="grid_14">
-    <h3>대표발의 <%= @bills.count%>건 본회의 통과 <%= @bills.where(:result => Bill::RESULT_APPROVED).count%>건</h3>
+  <div id="popup-bills-categories">
+    <h3 class="bill-count">전체 <span class="bill-count"><%= @bills.count%></span>건</h3>
+    <h3 class="bill-count">본회의 통과 <span class="bill-count"><%= @bills.where(:result => Bill::RESULT_APPROVED).count%></span>건</h3>
+    <div class="clear"></div>
     <% @bill_categories.each do |c, n| -%>
-      <span><%= c%> <%= n%>건</span>
+      <div class="bill-category">
+        <span class="bill-category-name"><%= c%></span>
+        <span class="bill-count"><%= n%>건</span>
+      </div>
     <% end -%>
   </div>
-
-  <div class="grid_16">
-    <%= @politician.name %>
-    <% if @politician.elections.count > 0 -%>
-      <%= @politician.elections.sort {|x,y| y<=>x}.join(",")%>대 국회의원
-    <% else -%>
-      전직 국회의원 정보없음
-    <% end -%>
+  <div id="popup-bills-selector">
+  <div><%= radio_button_tag 'bills', 'all' %> 모든법안보기</div>
+  <div><%= radio_button_tag 'bills', 'accepted' %> 통과(가결)법안보기</div>
   </div>
 
-  <table class="grid_16">
-    <tr>
-      <th>제안일</th>
-      <th>이슈</th>
-      <th>법안명</th>
-      <th>처리결과</th>
-    </tr>
-    <% @bills.each do |bill| -%>
-      <tr>
-        <td><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
-        <td><%= bill.issue %></td>
-        <td><%= bill.title %></td>
-        <td><%= bill.complete ? "처리" : "계류"%></td>
-      </tr>
-    <% end -%>
-  </table>
+  <div class="clear"></div>
 
-  <div class="grid_16">
-  <%= paginate @bills %>
+  <div id="bill-update-info">최근 업데이트 <%= Time.now.strftime("%Y-%m-%d") %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="small">* 출처 : <a href="http://likms.assembly.go.kr/bill/">의안정보시스템</a></span></div>
+  <div id="bills-wrapper" class="clearfix">
+    <table id="bills">
+      <thead>
+        <tr>
+          <th class="header-date">제안일</th>
+          <th class="header-commitee">상임위</th>
+          <th class="header-title">법안명</th>
+          <th class="header-result">처리결과</th>
+        </tr>
+      </thead>
+      <tbody id="bills-content">
+        <%= render @bills %>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="bills-paginator">
+    <%= paginate @bills, :remote => true %>
   </div>
 </div>

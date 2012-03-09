@@ -1,5 +1,20 @@
-<% 0.upto(2) do |i| -%>
-  <div class="grid_3">
-    <%=@promises[i] || "정보없음" %>
-  </div>
-<% end -%>
+<div class="grid_9 alpha omega subsection noborder clearfix">
+  <% @politicians.each_with_index do |politician, i| -%>
+    <div class="promise <%= i == 0 ? "left" : "right" %>">
+      <ol class="promises">
+        <% 0.upto(2) do |i| -%>
+          <li class="promise_<%=i+1%>">
+          <% promise = politician.promises[i] -%> <!-- 공약은 해쉬 -->
+          <span style="color:#64b3b4;font-size:12pt;">공약</span>
+          <div class="promise-title">
+            <%= promise.nil? ? "" : promise["title"] %>
+          </div>
+          <div class="promise-content">
+            <%= promise.nil? ? "" : promise["content"] %>
+          </div>
+          </li>
+        <% end -%>
+      </ol>
+    </div>
+  <% end -%>
+</div>

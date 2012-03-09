@@ -24,8 +24,8 @@
     <script src="//connect.facebook.net/en_US/all.js"></script>
     <script>
       FB.init({
-        appId      : '148897555227851', // App ID
-        channelUrl : '//ruby.snu.ac.kr:7789/channel.html', // Channel File
+        appId      : '<%= FACEBOOK_CLIENT[:key]%>', // App ID
+        channelUrl : '//wepoll.dev/channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
@@ -38,25 +38,16 @@
     <div id="container" class="container_16 clearfix">
 
       <div class="grid_16 clearfix">
-        <!-- notification bars -->
-        <% [:notice, :error, :alert].each do |level| %>
-          <% unless flash[level].blank? %>
-            <div class="grid_16">
-              <div data-alert="alert" class="alert alert-<%= flash_class(level) %> fade in">
-                <a class="close" data-dismiss="alert" href="#">&times;</a>
-                <%= content_tag :p, flash[level] %>
-              </div>
-            </div>
-          <% end %>
-        <% end %> <!-- end of alert levels -->
+
         <div id="main-content" class="grid_12 alpha">
+          <% if @big_header -%>
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
               <%= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
 
-            <div id="search-bar-wrapper" class="prefix_1 grid_5">
+            <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
                 <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
@@ -65,8 +56,26 @@
                 <%= submit_tag "검색"%>
               <% end -%>
             </div>
-
           </div>
+          <% else -%>
+          <div id="header-small" class="clearfix">
+            <div id="logo-wrapper-small" class="grid_2">
+              <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
+            </div>
+
+            <div id="search-bar-wrapper-small" class="grid_5">
+              <%= form_tag "/search", :id => "main-search-bar" do |f| %>
+                <%= hidden_field_tag :search_pass, "true" %>
+                <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
+                <%= hidden_field_tag :query_hidden %>
+                <%= hidden_field_tag :query_type %>
+                <%= submit_tag "검색"%>
+              <% end -%>
+            </div>
+          </div>
+          <% end -%>
+
+
           <div class="grid_12 alpha omega">
             <%= yield %>
           </div>
@@ -79,6 +88,9 @@
           <div class="clear"></div>
 
           <%= yield :sidebar %>
+          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) %>
+            <%= render :partial => '/main/recent_links' %>
+          <% end -%>
         </div>
 
       </div> <!-- end of content -->
@@ -96,6 +108,14 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
+      $(document).ready(function() {
+        //notification bars
+        <% [:notice, :error, :alert].each do |level| %>
+          <% unless flash[level].blank? %>
+            $.gritter.add({title:" ",text:"<%= flash[level]%>"});
+          <% end %>
+        <% end %>
+      });
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 

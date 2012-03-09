@@ -1,3 +1,105 @@
 // Place all the styles related to the timeline_entries controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.link-form label {
+  font-size:9pt;
+  padding-top:4px;
+}
+
+@mixin full_width_text_field {
+  width:368px - 2px;
+  border:1px solid #aaa;
+  height:20px;
+}
+
+#timeline_entry_url {
+  @include full_width_text_field;
+}
+
+#timeline_tags {
+  @include full_width_text_field;
+}
+
+
+#link-form-title {
+  font-size:12pt;
+  margin-bottom:10px;
+}
+
+.link-type {
+  input {
+    margin-right:3px;
+  }
+  font-size:9pt;
+}
+
+#wepoll-logo-square {
+  width:48px;
+  height:48px;
+  background:url(/assets/logo_wepoll_square.gif) no-repeat;
+  text-indent:-999px;
+}
+
+textarea.comment {
+  height:50px;
+  width:368px - 2px;
+  border:1px solid #aaa;
+}
+
+#comment-length-indicator {
+  font-size:8.5pt;
+  margin-top:35px;
+  height:15px;
+}
+
+.note {
+  font-size:9pt;
+  color:#929292;
+  line-height:120%;
+}
+
+div.field {
+  margin-bottom:18px;
+}
+
+#link-form-wrapper {
+  width: 624px; //grid 10
+}
+
+#post-warning {
+  margin-top:15px;
+  text-align:center;
+}
+
+#actions {
+  margin:0 auto;
+  width:140px;
+}
+
+.action {
+  display:block;
+  float:left;
+  font-size:9pt;
+  width:70px;
+  height:33px;
+  text-align:center;
+  text-decoration:none;
+  color:black;
+}
+
+#link-post {
+  background:url(/assets/btn_link_post.gif);
+  border:0;
+}
+
+#link-cancel {
+  background:url(/assets/btn_link_cancel.gif);
+  padding-top:9px;
+  height:33px - 9px;
+}
+
+#popular-tags {
+  font-size:9pt;
+  color:#929292;
+}
