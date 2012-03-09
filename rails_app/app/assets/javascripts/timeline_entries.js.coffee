@@ -1279,6 +1279,11 @@ class TimelineController
 	addEntry: (model)->
 		@collection.add(model)
 	
+	createEntry: (attrs, options)->
+		entry = new TimelineEntry()
+		entry.save(attrs, options)
+		@collection.add(entry)
+	
 	@getForm: (pol)->
 		return createForm(null,pol)
 	

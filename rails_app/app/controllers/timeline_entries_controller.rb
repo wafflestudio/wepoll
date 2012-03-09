@@ -59,6 +59,7 @@ class TimelineEntriesController < ApplicationController
   def new
     @timeline_entry = TimelineEntry.new
     @politician = Politician.find(params[:politician_id])
+    @timeline_entry.politician = @politician
 
     respond_to do |format|
       format.html { render :layout => false }# new.html.erb
