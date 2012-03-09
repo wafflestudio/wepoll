@@ -51,7 +51,7 @@ class TimelineEntriesController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @timeline_entry }
-      format.html
+      format.html { render :layout => false }
     end
   end
 
@@ -60,6 +60,7 @@ class TimelineEntriesController < ApplicationController
   def new
     @timeline_entry = TimelineEntry.new
     @politician = Politician.find(params[:politician_id])
+    @timeline_entry.politician = @politician
 
     respond_to do |format|
       format.html { render :layout => false }# new.html.erb
@@ -76,7 +77,8 @@ class TimelineEntriesController < ApplicationController
   # POST /timeline_entries
   # POST /timeline_entries.json
   def create
-    @timeline_entry = TimelineEntry.new(params[:timeline_entry], :user_id => current_user.id)
+    @timeline_entry = TimelineEntry.new(params[:timeline_entry])
+    @timeline_entry.user_id = current_user.id
     politician = @timeline_entry.politician
     if politician
       politician.inc(:good_link_count, 1) if @timeline_entry.is_good

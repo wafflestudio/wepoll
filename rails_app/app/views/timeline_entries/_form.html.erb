@@ -1,8 +1,9 @@
-<%= form_for(@timeline_entry,:remote => true, :html =>{:class => 'link-form'}) do |f| %>
+<%= form_for(@timeline_entry,:remote => true, :html =>{:class => 'link-form tm-entry-form'}) do |f| %>
+	<%= f.hidden_field :politician_id %>
   <div class="prefix_2 grid_8 alpha omega field">
     <div id="link-form-title"><%= current_user.nickname %>님이 <%= @politician.name %> 후보를</div>
-    <div class="link-type"><%= radio_button_tag 'type', 'good' %> 칭찬합니다.</div>
-    <div class="link-type"><%= radio_button_tag 'type', 'bad' %> 지적합니다.</div>
+    <div class="link-type"><%= f.radio_button 'is_good', 'true' %> 칭찬합니다.</div>
+    <div class="link-type"><%= f.radio_button 'is_good', 'false' %> 지적합니다.</div>
   </div>
 
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
@@ -18,14 +19,14 @@
     </div>
 
     <label class="grid_1 alpha" id="wepoll-logo-square">로고</label>
-    <div class="grid_6"><%= f.text_area :comment, :class => 'comment' %></div>
+    <div class="grid_6"><%= f.text_area :title, :class => 'comment' %></div>
     <div class="grid_1 omega" id="comment-length-indicator"><span id="comment-length">00</span>/50자</div>
   </div>
 
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
     <label class="grid_1 alpha">링크날짜</label>
     <div class="grid_6 omega">
-      <%= date_select('date', 'post_date', :order => [:year, :month, :day])%>
+      <%= f.date_select('posted_at', :order => [:year, :month, :day])%>
       <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>
     </div>
 
@@ -36,7 +37,7 @@
 
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
     <label class="grid_1 alpha">태그</label>
-    <div class="grid_6 omega"><%= text_field_tag 'timeline_tags', nil, :placeholder => "한개이상 입력하세요" %></div>
+    <div class="grid_6 omega"><%= f.text_field :tag_text, :placeholder => "한개이상 입력하세요" %></div>
     <div class="prefix_1 grid_6 alpha omega note">
       태그는 5개까지 입력할 수 있습니다.<br />
       여러개를 입력할 경우 띄어쓰기로 구분해주세요.<br />

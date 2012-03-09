@@ -26,6 +26,18 @@ class TimelineEntry
     :path => Rails.root.to_s+"/public/system/link_thumbnails/:id/:style.:extension",
     :convert_options => { :all => '-strip -colorspace RGB'} #fucking IE
 
+  def tag_text
+  	text = ""
+  	self.tags.each do |tag|
+  		text += tag + "\n" 
+  	end
+  	text
+  end
+
+  def tag_text=(text)
+		self.tags = text.split("\n")	
+  end
+
   #생성한 user
   belongs_to :user
 

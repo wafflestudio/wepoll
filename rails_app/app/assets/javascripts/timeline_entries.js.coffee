@@ -248,7 +248,7 @@ class TimelineEntryView extends Backbone.View
 		if !@hasEl
 			edit = createForm(@model)
 			view = createView(@model)
-			element = $("<div class='tm-entry'/>").append(edit).append(view)
+			element = $("<div class='tm-entry' data-id='" + @model.get('_id')+ "'/>").append(edit).append(view)
 			edit.hide()
 
 			view.on "changeMode", ()=>
@@ -1278,6 +1278,11 @@ class TimelineController
 	
 	addEntry: (model)->
 		@collection.add(model)
+	
+	createEntry: (attrs, options)->
+		entry = new TimelineEntry()
+		entry.save(attrs, options)
+		@collection.add(entry)
 	
 	@getForm: (pol)->
 		return createForm(null,pol)
