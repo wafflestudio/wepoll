@@ -75,9 +75,11 @@ class User
   has_and_belongs_to_many :recommend_replies, :class_name => "TweetReply", :inverse_of => :recommend_users
   has_and_belongs_to_many :report_replies, :class_name => "TweetReply", :inverse_of => :report_users
   has_and_belongs_to_many :recommend_tweets, :class_name => "Tweet", :inverse_of => :recommend_users
+  has_and_belongs_to_many :recommend_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :recommend_users
+  has_and_belongs_to_many :report_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :report_users
 
   #timeline entry
-  has_many :timeline_entries
+  has_many :timeline_entries, :inverse_of => :user
 
   has_many :link_replies, :inverse_of => :user
 

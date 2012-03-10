@@ -440,7 +440,7 @@
 
   tbody {
     td {
-      font-size:8.5pt;
+      font-size:10pt;
       padding:3px 0 3px 10px;
 
       a {
@@ -454,22 +454,22 @@
 
     td.cell-date {
       padding:3px 0 3px 5px;
+      font-size:9pt;
     }
   }
 }
 
 #bill-summary-popup {
-  width:413px - 4px;
-  height:133px;
+  width:650px - 4px;
+  height:303px;
   border:2px solid #4f4f50;
   background-color:white;
   top:30px;
-  left:160px;
   position:absolute;
 }
 
 #summary-popup-content {
-  height:133px - 12px;
+  height:303px - 12px;
   overflow-x:hidden;
   overflow-y:scroll;
   padding:6px;

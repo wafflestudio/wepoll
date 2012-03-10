@@ -89,8 +89,8 @@
 
           <%= yield :sidebar %>
           <%# TODO 조건 검사? %>
-          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) %>
-            <%#= render :partial => '/main/recent_links' %>
+          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) && !current_page?(:controller => :dashboard) %>
+            <%= render :partial => '/main/recent_links' %>
           <% end -%>
         </div>
 
@@ -120,6 +120,7 @@
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 
+        max: 10,
         autoFocus: true,
         select: function(event, ui) {
         $("#query_hidden").val(ui.item.query);

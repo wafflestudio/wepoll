@@ -1,4 +1,6 @@
+#coding : utf-8
 class TimelineEntriesController < ApplicationController
+
   
 	before_filter :authenticate_user!, :except => [:index,:show]
   
@@ -73,6 +75,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1/edit
   def edit
     @timeline_entry = TimelineEntry.find(params[:id])
+    @politician = @timeline_entry.politician
     render :layout => false
   end
 
@@ -127,4 +130,14 @@ class TimelineEntriesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def recommend
+    @t = TimelineEntry.find(params[:timeline_entry_id])
+    if @t.recommend(current_user)
+      render :json => {:status => "ok", :count => @t.recommend_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+
 end
