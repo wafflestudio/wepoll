@@ -1,17 +1,10 @@
-<h2>Sign in</h2>
-
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :userid %><br />
-  <%= f.text_field :userid %></div>
-
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%>
-
-  <div><%= f.submit "Sign in" %></div>
-<% end %>
-
-<%= render "links" %>
+<div id="login">
+  <%= image_tag 'admin/hr.gif', :id => "login_close" %>
+  <div>
+    <h1>로그인 후 후보자를 칭찬/지적 할 수 있습니다.</h1>
+  </div>
+  <div id="login_links_box">
+    <%= link_to '페이스북으로 로그인하기', '/users/auth/facebook', :id => "fb_login_btn" %>
+    <%= link_to '트위터로 로그인하기', '/users/auth/twitter', :id => "twitter_login_btn" %>
+  </div>
+</div>

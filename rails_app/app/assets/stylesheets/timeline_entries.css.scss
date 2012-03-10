@@ -1,3 +1,157 @@
 // Place all the styles related to the timeline_entries controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.link-form label {
+  font-size:9pt;
+  padding-top:4px;
+}
+
+@mixin full_width_text_field {
+  width:368px - 2px;
+  border:1px solid #aaa;
+  height:20px;
+}
+
+#timeline_entry_url {
+  @include full_width_text_field;
+}
+
+#timeline_tags {
+  @include full_width_text_field;
+}
+
+
+#link-form-title {
+  font-size:12pt;
+  margin-bottom:10px;
+}
+
+.link-type {
+  input {
+    margin-right:3px;
+  }
+  font-size:9pt;
+}
+
+#wepoll-logo-square {
+  width:48px;
+  height:48px;
+  background:url(/assets/logo_wepoll_square.gif) no-repeat;
+  text-indent:-999px;
+}
+
+textarea.comment {
+  height:50px;
+  width:368px - 2px;
+  border:1px solid #aaa;
+}
+
+#comment-length-indicator {
+  font-size:8.5pt;
+  margin-top:35px;
+  height:15px;
+}
+
+.note {
+  font-size:9pt;
+  color:#929292;
+  line-height:120%;
+}
+
+div.field {
+  margin-bottom:18px;
+}
+
+#link-form-wrapper {
+  width: 624px; //grid 10
+}
+
+#post-warning {
+  margin-top:15px;
+  text-align:center;
+}
+
+#actions {
+  margin:0 auto;
+  width:140px;
+}
+
+.action {
+  display:block;
+  float:left;
+  font-size:9pt;
+  width:70px;
+  height:33px;
+  text-align:center;
+  text-decoration:none;
+  color:black;
+}
+
+#link-post {
+  background:url(/assets/btn_link_post.gif);
+  border:0;
+}
+
+#link-cancel {
+  background:url(/assets/btn_link_cancel.gif);
+  padding-top:9px;
+  height:33px - 9px;
+}
+
+#popular-tags {
+  font-size:9pt;
+  color:#929292;
+}
+
+#link-like-count {
+  background:url(/assets/bubble_like.gif);
+  width:88px;
+  height:55px;
+  padding-top:13px;
+  text-align:center;
+}
+
+#like-count {
+  font-size: 15pt;
+}
+
+#link-user {
+  background-color:#fff4c4;
+  border-radius:7px;
+}
+
+#link-user-photo {
+  width:22px;
+  height:22px;
+  border:2px solid #fedc43;
+  display:block;
+  float:left;
+}
+
+#link-user-name {
+  font-size:9pt;
+}
+
+#link-time-ago {
+  font-size:8pt;
+}
+
+#link-detail-wrapper {
+  width:688px;
+}
+
+#link-thumbnail {
+  display:block;
+}
+
+#link-title {
+  color:#3caea9;
+  font-size:10pt;
+}
+
+#link-url a {
+  color:#f87978;
+  text-decoration:none;
+  font-size:8pt;
+}

@@ -1,17 +1,22 @@
 <% unless user_signed_in? -%>
 <div class="">
+  <div class="grid_2 alpha login-notice" style="width:80px;">
+    소셜로그인
+  </div>
+  <div class="grid_2 omega login-notice" style="width:80px;">
+    위폴알리기
+  </div>
+  <div class="clear"></div>
   <div class="grid_1 alpha" style="width:30px;">
     <%= link_to image_tag('/assets/btn_fb.png'), "/users/auth/facebook", :class => "popup-auth"%>
   </div>
-  <div class="grid_1" style="width:30px; margin-right:32px;">
+  <div class="grid_1" style="width:30px; margin-right:20px;">
     <%= link_to image_tag('/assets/btn_tw.png'), "/users/auth/twitter", :class => "popup-auth"%>
   </div>
-  <div class="grid_1 alpha omega" style="width:30px;">
-    <%= link_to image_tag('/assets/btn_wepoll.png'), "#"%>
-  </div>
-  <div class="grid_1 omega" id="login-actions">
-    <%= link_to_function '회원가입', 'show_join_form()' %><br />
-    <%= link_to '비밀번호찾기', '#' %>
+  <div class="grid_1 alpha omega" style="width:80px;">
+    <div class="fb-like" data-href="http://wepoll.or.kr" data-send="false" data-layout="button_count" data-width="180" data-show-faces="false"></div>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="wepoll">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   </div>
 </div>
 
@@ -21,7 +26,7 @@
       $.colorbox({href:"<%= new_user_registration_path%>"});
     }
 
-    $(document).ready(function() {
+    $(function() {
 
       $(".popup-auth").click(function() {
         var $this = $(this);

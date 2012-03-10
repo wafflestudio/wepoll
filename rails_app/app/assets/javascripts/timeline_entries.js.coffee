@@ -121,49 +121,86 @@ class TimelineEntryCollection extends Backbone.Collection
 formatDate = (d)->
 	"#{d.getFullYear()}.#{d.getMonth()+1}.#{d.getDate()}"
 
+#data: data.title, data.create_at, data.image, data.description
+loadPreview = (url, onload)->
+	#$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
+	#	(data)->
+	#		onload(data)
+
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<p>Comment: #{model.escape('comment')}<p>
-			<p>Link: #{model.escape('url')}</p>
-			<p>Date: #{formatDate(new Date(model.escape('posted_at')))}</p>
-			#{if TimelineController.displayEdit then "<p><a href='#'>Edit</a></p>" else ""}
+			<div class='tm-entry-numlike'>공감 #{model.get('like')}</div>
+			<div class='tm-entry-numreply'>댓글0</div>
+			<div class='clear'></div>
+			<div class='tm-entry-content'>
+			<span>#{model.escape('title')}</span>
+			<!--<p>링크: #{model.escape('url')}</p>-->
+			<!--<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>-->
+			<!--<p>코멘트: #{model.escape('comment')}<p>-->
+			<p>#{model.escape('tag_text')}</p>
+			#{if TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
+			</div>
 		</div>"
 	element = $(template)
-	element.find('a').click (evt)=>
-		$(element).trigger('changeMode')
+	element.find('a').click (evt)->
+		url = "/timeline_entries/" + model.id + "/edit"
+		$.colorbox {href:url,width:'800px', height:'640px',onComplete: ()->
+			activateTimelineEntryForm()
+			$('.tm-entry-form').submit ()->
+				submitTimelineEntryForm(this, model.id)
+				element.html(createView(model))
+				$.colorbox.close()
+				return false
+		}
+
 		return false
+
+	#loadPreview model.get('url'), (data)->
+	if model.get('aux_url')
+		image = $("<img class='preview-img'/>").attr 'src', model.get('aux_url').load ()=>
+			image.prependTo($(element).find(".tm-entry-content"))
+			
 	return element
 
-# The `createForm` class method definition is exposed for new/edit form creation.
-# `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
-# the returned object exposes *save* event to listen to.
-createForm = (model,pol)->
-	template = "<form method='post' action='/timeline_entries/#{if model then model.id else 'new'}' accept-charset='UTF-8'>
-			<input type='hidden' name='_method' value='#{if model then 'put' else 'post'}'/>
-			<input type='hidden' name='politician_id' value='#{if model then model.escape('politician_id') else pol}'/>
-			<p>Comment:</p>
-			<p><textarea name='comment' rows='2' cols='16'>#{if model then model.escape('comment') else ''}</textarea></p>
-			<p>Link:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
-				
-			<p>Date:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
-			<p><input type='submit' value='Done'/></p>
-		</form>"
-	# Create a new model with default values if not supplied in the argument.
-	model = new TimelineEntry({comment:"",url:"",posted_at:new Date().toISOString()}) if !model
-	element = $(template)
-	# A datepicker is supplied.
-	$(element).find('input[name="posted_at"]').datepicker()
+			
 
+###
+	timeout = 0
+
+	url_input = $(element).find("input[name='url']")
+	
+	load = ()->
+		$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent($(url_input).val()), type: 'POST', dataType: 'json', success:
+			(data)->
+				$(element).find("input[name='title']").val(data.title)
+				#$(element).find("input[name='posted_at']").val(new Date(data.created_at)) if new Date(data.created_at)
+				#$(element).find("#preview-img").empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" )
+				$(element).find("textarea[name='comment']").val(data.description)
+
+	url_input.keydown ()->
+		if timeout
+			clearTimeout(timeout)
+
+		timeout = setTimeout( ()->
+			timeout = null
+			load($(url_input).val())
+		,1000)
+
+	.focusout ()->
+			load($(url_input).val())
+
+		
 	# The model is saved on clicking the submit button.
 	$(element).find('input[type="submit"]').click (evt)=>
+		attrs = {}
 		$(element).find('[name!="_method"]').each (index, el)=>
 			name = $(el).attr('name')
 			if name == 'posted_at'
-				model.set(name, new Date($(el).val()).toISOString())
+				attrs[name] = new Date($(el).val()).toISOString()
 			else
-				model.set(name,$(el).val())
+				attrs[name] = $(el).val()
 		# If the save was successful, the tangled element emits a *save* event for others to get notified.
-		model.save(null, {success: ()->
+		model.save(attrs, {success: ()->
 			$(element).trigger("save", [model])
 		,error: ()->
 			console.log("error while saving model")
@@ -173,7 +210,7 @@ createForm = (model,pol)->
 
 	return element
 
-
+###
 
 # TimelineEntryView
 # =====================================================
@@ -201,29 +238,14 @@ class TimelineEntryView extends Backbone.View
 	
 	render: ()->
 		if !@hasEl
-			edit = createForm(@model)
 			view = createView(@model)
-			element = $("<div class='tm-entry'/>").append(edit).append(view)
-			edit.hide()
-
-			view.on "changeMode", ()=>
-				view.hide()
-				edit.show()
-			edit.on "save", ()=>
-				view.remove()
-				view = createView(@model)
-				element.append(view)
-				view.on "changeMode", () =>
-					view.hide()
-					edit.show()
-				edit.hide()
-				view.show()
-
+			element = $("<div class='tm-entry' data-id='" + @model.id+ "'/>").append(view)
+			
 
 			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
 
-			edit.append(delete_link)
+			#edit.append(delete_link)
 			@setElement(element)
 		@hasEl = true
 	
@@ -255,8 +277,8 @@ class TimelineEntryView extends Backbone.View
 # EntryView,EntryNav -> Slider -> VGroup -> HGroup -> TimelineView
 class TimelineEntryNav extends Backbone.View
 	initialize:(options)->
-		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'>P</a><span class='tm-sl-cntnt'></span>
-		<a href='#' class='tm-sl-nav-n'>N</a></div>")
+		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'></a><span class='tm-sl-cntnt'></span>&nbsp;
+		<a href='#' class='tm-sl-nav-n'></a></div>")
 			
 		@$pbutton = @$el.find('.tm-sl-nav-p').click @prev
 		@$nbutton = @$el.find('.tm-sl-nav-n').click @next
@@ -269,17 +291,17 @@ class TimelineEntryNav extends Backbone.View
 		
 		@currentPage = @numPages if @currentPage > @numPages
 
-		if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
+		#if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
 
 		if @currentPage+1 >= @numPages
-			@$nbutton.hide()
+			@$nbutton.css('visibility','hidden')
 		else
-			@$nbutton.show()
+			@$nbutton.css('visibility','')
 		
 		if @currentPage == 0
-			@$pbutton.hide()
+			@$pbutton.css('visibility','hidden')
 		else
-			@$pbutton.show()
+			@$pbutton.css('visibility','')
 	
 	appendTo:(target)->
 		@$el.appendTo(target)
@@ -314,11 +336,17 @@ class TimelineEntrySlider extends Backbone.View
 		@$el = $("<div class='tm-slider'></div>").data('slider', this)
 		@$holder = $("<div class='tm-sl-holder'></div>").appendTo(@$el)
 
+
 		@nav = new TimelineEntryNav({current:0,num:0})
 		@nav.appendTo(@$holder)
 		@nav.on "changePage", @showPage
 		@pos = options.pos
 		@vpos = options.vpos
+		
+		if @vpos == 0
+			@$el.addClass("tm-bubble#{parseInt(Math.random()*3)+1}")
+		else if @vpos ==1
+			@$el.addClass("tm-bubble#{parseInt(Math.random()*3)+4}")
 				
 	addEntryView:(view)=>
 		view.appendTo(@$holder)
@@ -338,7 +366,7 @@ class TimelineEntrySlider extends Backbone.View
 
 	showPage: (page)=>
 		@$holder.find('.tm-entry').each (index,el)=>
-			if index == page then $(el).show() else $(el).hide()
+			if index == page then $(el).fadeIn(400).show() else $(el).fadeOut(400).hide()
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -389,7 +417,7 @@ class VerticalGroup
 
 	addSlider:(slider, vpos)->
 		slider.appendTo(@$el)
-		slider.css("top", 220) if vpos
+		slider.css("top", 250) if vpos
 		slider.on "destroy", @onSliderDestroy
 		@num = @num + 1
 
@@ -422,6 +450,9 @@ class HorizontalGroup
 		@$el = $("<div class='tm-hgroup'/>").data("pos", pos)
 		# holder is to make shift possible
 		@$holder = $("<div class='tm-hg-holder'/>").appendTo(@$el)
+		@$canvas = $("<div class='timeline-canvas'></div>").appendTo(@$el).css("left",-50)
+		@$paper = Raphael(@$canvas.get(0), 3000,300)
+
 		@pos = pos
 		@epoch = pos
 		@setSpan(0)
@@ -436,12 +467,13 @@ class HorizontalGroup
 	setPos:(pos)->
 		@pos = pos
 		@$el.data("pos",pos)
+
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 		@$holder.animate({left: (@epoch - @pos)*TimelineView.EntryWidth},{queue:false})
 
 	getLeft:()->
-		return parseInt(@$el.position().left)+parseInt(@$holder.css("left"))
+		return parseInt(@$el.position().left)
 
 	getLength:(pos)->
 		return -1 if !@vgroups[pos]
@@ -449,8 +481,15 @@ class HorizontalGroup
 	
 	setSpan:(span)->
 		if @span != span
-			@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
+			#@$el.animate({width: span*TimelineView.EntryWidth},{queue:false})
+			@$el.css({width: span*TimelineView.EntryWidth})
+			@$paper.clear()
+
+			@$paper.path("M#{0},200L#{span*TimelineView.EntryWidth+100},200").attr({stroke:'#000',fill:'#fff',"stroke-dasharray":". "})
+			@$paper.path("M50,200L#{span*TimelineView.EntryWidth+50},200").attr({stroke:'#555',fill:'#fff'})
+			
 		@span = span
+
 		# DEBUG
 		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 	
@@ -537,14 +576,22 @@ class TimelineView
 		@collection.on("add", @onEntryAdd)
 
 		@$el = $("<div class='timeline-view'></div>")
-		@setStart(@epoch())
 		# if @collection is already loaded somehow
 		@collection.each (entry)=>
-			@drawEntry(entry)
-
+			@drawEntry(entry)	
+		
 	
 	getWidth:()->
-		return if @$el.parent() then @$el.parent().width() else @$el.width()
+		if !@$el.parent()
+			console.log('no parent',@$el.width())
+			return @$el.width()
+		else if @$el.parent().width()
+			console.log('parent',@$el.parent().width())
+			return @$el.parent().width()
+		else
+			console.log('parent but no width',688)
+			return 688
+
 
 	
 	fetch:(options)->
@@ -686,7 +733,7 @@ class TimelineView
 	onEntryAdd:(entry)=>
 		console.log('TimelineView','event',"entry added, drawing")
 		@drawEntry(entry)
-		@setStart(@epoch()) if !@startSet
+
 		
 	onEntryRemove:(slider, entryView, entry)=>
 		console.log('TimelineView','event',"entry removed")
@@ -714,23 +761,47 @@ class TimelineView
 		@update()
 		@timer = setInterval ()=>
 			@update()
-		, 10000
+		, 30000
 
-	setStart:(pos)->
+	setStart:(pos, animate = true)->
 		newPos = null
 		if !@groups[pos]
 			for p,group of @groups
 				if group.pos <= pos && pos < group.pos + group.span
 					newPos = group.pos
 					break
+	
+		if !@groups[pos] && !newPos? # pos not found
+			found = false
+			nearest = 0
+			dist = null
+
+			# get lbound and rbound
+			for p, group of @groups
+				nearest = p if Math.abs(pos-p) < dist or !dist?
+
+			pos = nearest
 		
-		return if !@groups[pos] && !newPos? # bad case
-		@startSet = true
-		@$el.css("left", -@groups[pos].getLeft())#+@getWidth()/2)
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
+		
+		left = @groups[pos].getLeft()+100 # 100 for margin
+		width = @getWidth()
+		
+		if rbound-lbound <= width
+			lcap = width/2-(rbound-lbound)/2
+			@setX(lcap-left)
+		else
+			if rbound - left <= width
+				@setRight(rbound)
+			else
+				@setLeft(left)
 
-	setCenterAt:(entry)->
-		console.log('')
 
+	
+		# @$el.css("left", -@groups[pos].getLeft())
+	
 	stopAutoUpdate: ()->
 		clearTimeout(@timer)
 	
@@ -740,38 +811,45 @@ class TimelineView
 	getX:()->
 		return parseInt(@$el.css("left"))
 
-	setX:(x)->
-		@moving = true
-		@$el.animate({left:x},{complete:()=>
-			@moving = false
-		,queue:false})
+	setX:(x, animate=false)->
+		console.log('setX',x)
+		if animate
+			@moving = true
+			
+			@$el.animate({left:x},{complete:()=>
+				@moving = false
+			,queue:false})
+		else
+			@$el.css("left",x)
 
 	getLeft:()->
 		return -parseInt(@$el.css("left"))
 
-	setLeft:(left)->
-		@moving = true
-		@$el.animate({left:-left},{complete:()=>
-			@moving = false
-		,queue:false})
+	setLeft:(left, animate=false)->
+		console.log('setLeft',left)
+		if animate
+			@moving = true
+			
+			@$el.animate({left:-left},{complete:()=>
+				@moving = false
+			,queue:false})
+		else
+			@$el.css("left",-left)
+
 
 	getRight:()->
 		return @getWidth()-parseInt(@$el.css("left"))
 
-	setRight:(right)->
-		@moving = true
-		@$el.animate({left:-right+@getWidth()},{complete:()=>
-			@moving = false
-		,queue:false})
-
-	getCenter:()->
-		return -parseInt(@$el.css("left"))+@getWidth()/2
-
-	setCenter:(center)->
-		@moving = true
-		@$el.animate({left:-center+@getWidth()/2},{complete:()=>
-			@moving = false
-		,queue:false})
+	setRight:(right,animate=false)->
+		console.log('setRight',right)
+		if animate
+			@moving = true
+			
+			@$el.animate({left:-right+@getWidth()},{complete:()=>
+				@moving = false
+			,queue:false})
+		else
+			@$el.css("left",-right+@getWidth())
 
 
 	getBounds:()->
@@ -802,36 +880,36 @@ class TimelineView
 	
 	goLeft: ()->
 		return if @moving
-		[lbound,center,rbound] = @getBounds()
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
 		
 		left = @getLeft()
 		width = @getWidth()
 
 		if rbound-lbound <= width
-			lcap = width/2-(rbound-lbound)/2
+			lcap = width/2-(rbound-lbound)/2 # 344-210=134  134-310=-176
 			x = @getX()
 			
 			if (x+lbound)-TimelineView.EntryWidth <= lcap
-				@setX(lcap-lbound)
+				@setX(lcap-lbound,true)
 			else
-				@setX(x-TimelineView.EntryWidth)
+				@setX(x-TimelineView.EntryWidth,true)
 		else
 			#console.log('more',rbound-lbound,width)
 			if left-TimelineView.EntryWidth <= lbound
 				console.log("go left to: bound #{lbound}")
-				@setLeft(lbound)
+				@setLeft(lbound,true)
 			else
 				console.log("go left to: #{left-TimelineView.EntryWidth}")
-				@setLeft(left-TimelineView.EntryWidth)
+				@setLeft(left-TimelineView.EntryWidth,true)
 
 
-		#newPos =  @getPrev()
-		#return if !newPos?
-		#@setCenter(newPos)
-		
 	goRight: ()->
 		return if @moving
-		[lbound,center,rbound] = @getBounds()
+		bounds = @getBounds()
+		return if !bounds?
+		[lbound,center,rbound] = bounds
 
 		right = @getRight()
 		width = @getWidth()
@@ -841,18 +919,16 @@ class TimelineView
 			x = @getX()
 			
 			if (x+rbound)+TimelineView.EntryWidth >= rcap
-				@setX(rcap-rbound)
+				@setX(rcap-rbound,true)
 			else
-				@setX(x+TimelineView.EntryWidth)
+				@setX(x+TimelineView.EntryWidth,true)
 		else
-
-			#console.log('more',rbound-lbound,width)
 			if right+TimelineView.EntryWidth >= rbound
 				console.log("right to: bound #{rbound}")
-				@setRight(rbound)
+				@setRight(rbound,true)
 			else
 				console.log("right to: #{right+TimelineView.EntryWidth}")
-				@setRight(right+TimelineView.EntryWidth)
+				@setRight(right+TimelineView.EntryWidth,true)
 
 		
 
@@ -886,10 +962,9 @@ class TermView extends TimelineView
 		# TODO:일단 16대부터
 		return 16
 
-
-	setStart:(pos)->
+	setStart:(pos, animate = true)->
 		#console.log("setStart #{pos}T")
-		super(pos)
+		super(pos, animate)
 
 
 
@@ -910,10 +985,10 @@ class YearView extends TimelineView
 	epoch: ()->
 		today = new Date()
 		return today.getFullYear()-4
-
-	setStart:(pos)->
+		
+	setStart:(pos, animate = true)->
 		#console.log("setStart #{pos}Y")
-		super(pos)
+		super(pos, animate)
 
 
 class QuarterView extends TimelineView
@@ -937,11 +1012,11 @@ class QuarterView extends TimelineView
 		today = new Date()
 		return today.getFullYear()*4-4
 	
-	setStart: (pos)->
+	setStart: (pos,animate=true)->
 		#console.log("setStart #{pos}Q")
 		if typeof pos == 'object'
 			pos = pos.year *4 + pos.quarter
-		super(pos)
+		super(pos, animate)
 
 
 
@@ -985,11 +1060,11 @@ class MonthView extends TimelineView
 		today = new Date()
 		return today.getFullYear()*12 + today.getMonth()-4
 	
-	setStart: (pos)->
+	setStart: (pos, animate=true)->
 		#console.log("setStart #{pos}M")
 		if typeof pos == 'object'
 			pos = pos.year *12 + pos.month
-		super(pos)
+		super(pos, animate)
 
 class WeekView extends TimelineView
 	@unit : "week"
@@ -1028,14 +1103,14 @@ class WeekView extends TimelineView
 		d.setMonth(parseInt(month)-1) if month?
 		return d
 	
-	setStart: (pos)->
+	setStart: (pos, animate=true)->
 		#console.log("setStart #{pos}w")
 		if typeof pos == 'object'
 			week = parseInt(getDayOfYear(@getDefaultDate(pos.year,pos.month))/7)
 			pos = parseInt(pos.year)*53 + week
 			
 		#console.log("epoch",@epoch(),pos)
-		super(pos)
+		super(pos, animate)
 
 
 class DayView extends TimelineView
@@ -1063,13 +1138,13 @@ class DayView extends TimelineView
 		today = new Date()
 		return today.getFullYear()*12 + today.getMonth()-4
 	
-	setStart: (pos)->
+	setStart: (pos, animate=true)->
 		#console.log("setStart #{pos}")
 		if typeof pos == 'object'
 			d = new Date(pos.year,pos.month-1, pos.day, 0,0,0)
 			dayofyear = getDayOfYear(d)
 			pos = pos.year *366 + dayofyear
-		super(pos)
+		super(pos, animate)
 
 
 
@@ -1080,6 +1155,7 @@ Views =
 	month:   MonthView
 	week:    WeekView
 	day:     DayView
+
 
 
 # TimelineController
@@ -1103,27 +1179,32 @@ class TimelineController
 		
 		@views = {}
 		# Default scale view (year) is created on object creation
-		allView = new Views["all"](@collection )
-		@currentScale = @views["all"] = allView
+		allView = new Views["year"](@collection)
+		@currentScale = @views["year"] = allView
 	
-
 		console.log("initial scale is all")
 
 		# bootstrap initial data
 		if options.entries
 			for entry in options.entries
 				@collection.add(entry)
+		
+		
 
 		# Growl
 		@collection.on "add", (model)->
+			$("#timeline-msg-noentry").hide()
 			console.log('Entry added to collection')
-			$.gritter.add({title:'추가',text:"항목(#{model.id})이 추가되었습니다."})
+			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
 		@collection.on "remove", (model)->
+			if @collection.length == 0
+				$("#timeline-msg-noentry").show()
 			console.log('Entry removed from collection')
-			$.gritter.add({title:'삭제',text:"항목(#{model.id})이 삭제되었습니다."})
+			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
+
 		@collection.on "change", (model)->
 			console.log('Entry changed in collection')
-			$.gritter.add({title:'수정',text:"항목(#{model.id})이 수정되었습니다."})
+			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
 
 
 	
@@ -1145,13 +1226,12 @@ class TimelineController
 			oldScale.stopAutoUpdate() if @autoUpdate
 			oldScale.hide()
 
-		@currentScale.setStart(start) if start?
+		@currentScale.setStart((if start? then start else 100000), false)
 		@currentScale.show()
 		@currentScale.startAutoUpdate() if @autoUpdate
 	
 	# The timeline will be visible after appending it to an html element (argument is preferably a referencing jquery object).
 	appendTo: ($el)->
-		
 		@$el = $el
 		for key,view of @views
 			view.appendTo(@$el)
@@ -1162,6 +1242,17 @@ class TimelineController
 			else if delta < 0.5  && delta >0
 				@currentScale.goLeft()
 			return false
+			
+		@currentScale.setStart(100000000,false)
+
+		$("<div class='timeline-navigator'></div>").css({left:0,top:165,zIndex:2}).addClass('tm-nav-left').appendTo(@$el).click ()=>
+			@currentScale.goLeft()
+		$("<div class='timeline-navigator'></div>").css({right:0,top:165,zIndex:2}).addClass('tm-nav-right').appendTo(@$el).click ()=>
+			@currentScale.goRight()
+
+		$("<div id='timeline-msg-noentry'>항목이 없습니다.</div>").appendTo(@$el)
+		$("#timeline-msg-noentry").hide() if @collection.length > 0
+
 
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
@@ -1175,8 +1266,17 @@ class TimelineController
 	addEntry: (model)->
 		@collection.add(model)
 	
-	@getForm: (pol)->
-		return createForm(null,pol)
+	createEntry: (attrs, options)->
+		entry = new TimelineEntry()
+		options.silent = true
+		entry.save(attrs, options) # shouldn't dispatch as update
+		@collection.add(entry)
+
+	updateEntry: (id, attrs, options)->
+		entry = @collection.get(id)
+		entry.save(attrs, options)
+
+	
 	
 
 # And finally, make sure it is available outside the file.

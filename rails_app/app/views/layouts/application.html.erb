@@ -40,9 +40,11 @@
       <div class="grid_16 clearfix">
 
         <div id="main-content" class="grid_12 alpha">
+          <% if @big_header -%>
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
+              <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
@@ -54,8 +56,26 @@
                 <%= submit_tag "검색"%>
               <% end -%>
             </div>
-
           </div>
+          <% else -%>
+          <div id="header-small" class="clearfix">
+            <div id="logo-wrapper-small" class="grid_2">
+              <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
+            </div>
+
+            <div id="search-bar-wrapper-small" class="grid_5">
+              <%= form_tag "/search", :id => "main-search-bar" do |f| %>
+                <%= hidden_field_tag :search_pass, "true" %>
+                <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
+                <%= hidden_field_tag :query_hidden %>
+                <%= hidden_field_tag :query_type %>
+                <%= submit_tag "검색"%>
+              <% end -%>
+            </div>
+          </div>
+          <% end -%>
+
+
           <div class="grid_12 alpha omega">
             <%= yield %>
           </div>
@@ -68,7 +88,8 @@
           <div class="clear"></div>
 
           <%= yield :sidebar %>
-          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries)%>
+          <%# TODO 조건 검사? %>
+          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) && !current_page?(:controller => :dashboard) %>
             <%= render :partial => '/main/recent_links' %>
           <% end -%>
         </div>
@@ -99,6 +120,7 @@
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 
+        max: 10,
         autoFocus: true,
         select: function(event, ui) {
         $("#query_hidden").val(ui.item.query);

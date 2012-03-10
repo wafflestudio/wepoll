@@ -28,7 +28,7 @@ class Politician #정치인 모델
 
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
-    :styles => {:square100 => "100x100#"},
+    :styles => {:square100 => "100x100#", :square95 => "95x95#"},
     :url => "/system/politician_profile_photos/:id/:style.:extension",
     :path => Rails.root.to_s+"/public/system/politician_profile_photos/:id/:style.:extension",
     :convert_options => { :all => '-strip -colorspace RGB'} #fucking IE
@@ -66,15 +66,16 @@ class Politician #정치인 모델
   def self.calculate_joint_initiate
     puts "=== 공동발의 일치도 계산 ==="
     Politician.all.each do |politician|
+      print "#{politician.name}\t"
       h = {}
+
       politician.initiate_bills.each do |bill|
         bill.coactors.each {|coactor| h[coactor.id] = (h[coactor.id] || 0) + 1 }
-        bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1}
+        bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1} if !bill.unregistered_coactor_names.nil?
       end
 
       politician.joint_initiate_bill_politicians = h.to_a.sort {|x,y| y[1] <=> x[1]}
       politician.save
-      print "#{politician.name}\t"
     end
     puts "=== 공동발의 일치도 계산 완료 ==="
   end

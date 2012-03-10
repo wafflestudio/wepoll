@@ -1,5 +1,7 @@
 Wepoll::Application.routes.draw do
-  resources :timeline_entries
+  resources :timeline_entries do
+    match '/recommend' => 'timeline_entries#recommend', :as => :recommend
+  end
   resources :bills
 
   namespace :admin do
@@ -48,7 +50,7 @@ Wepoll::Application.routes.draw do
   resources :tweets do
     match '/recommend' => 'tweets#recommend', :as => :recommend
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
-    get 'twwet_replies' => 'tweets#replies', :as => :tweet_replies
+    get 'tweet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend

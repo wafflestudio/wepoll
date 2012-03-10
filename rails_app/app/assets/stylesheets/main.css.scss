@@ -241,3 +241,51 @@
 .map.selected {
   display:block;
 }
+
+.winner-photo-wrapper {
+  margin-left:3px;
+  width:103px;
+  height:104px;
+  position:relative;
+  .photo-frame {
+    position:absolute;
+    background:url(/assets/winner_frame.gif) no-repeat;
+  }
+}
+
+.loser-photo-wrapper {
+  margin-left:5px;
+  width:103px;
+  height:104px;
+  position:relative;
+  .photo-frame {
+    position:absolute;
+    background:url(/assets/loser_frame.gif) no-repeat;
+  }
+}
+
+.profile-image {
+  position:absolute;
+  width:95px;
+  height:95px;
+  top:5px;
+  left:5px;
+}
+
+.politician-name {
+  border:2px solid #514e51;
+  color:#514e51;
+  width:90px;
+  height:20px;
+  font-size:9pt;
+  text-align:center;
+  margin:0 auto;
+}
+
+#login_close {
+  cursor: pointer;
+}
+
+/* all */
+::-webkit-input-placeholder  { font-family: '돋움'; }
+input:-moz-placeholder { font-family: '돋움'; }

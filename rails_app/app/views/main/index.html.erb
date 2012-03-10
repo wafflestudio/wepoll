@@ -23,13 +23,14 @@
   <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
-        $("#vs-container").css("visibility","hidden");
+        $("#vs-container").hide();
 
         //TODO : according to cookie value, select map which not shown
         $("#busan-map").removeClass("selected");
         $("#seoul-map").addClass("selected");
 
         $("#region-selector .region").click(function() {
+          return false;
           $("#region-selector .region").removeClass("selected");
           $(this).addClass("selected");
 
@@ -41,6 +42,9 @@
           $("#"+region+"-map").addClass("selected");
           });
         });
+    function loadVSPoliticians(district) {
+
+    }
 // vs-container end
 </script>
 <script type="text/javascript">
@@ -59,6 +63,8 @@ stroke: "none",
 
     x = parseInt(coordinates[0]) - 50;
     y = parseInt(coordinates[1]) + 95;
+
+    if (parseInt(coordinates[2]) == 0) {
     end_x = 635;
     end_y = 120;
 
@@ -74,24 +80,115 @@ stroke: "none",
 
     this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
     this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+
     this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
 
     endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
     beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+    }
+    else {
+    end_x = 670;
+    end_y = 360;
+
+    len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
+    len /= 2.5;
+    alpha = Math.atan((end_y - y) / (end_x - x));
+
+    x1 = x + len * Math.cos(Math.PI / 4 + alpha);
+    y1 = y - len * Math.sin(Math.PI / 4 + alpha);
+
+    x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
+    y2 = end_y + len * Math.sin(Math.PI / 4 + alpha);
+
+    this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
+    this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+
+    endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
+    beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+    beta += 45;
+    beta *= -1;
+    }
     this.arrow.rotate(beta);
     console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
-    $("#vs-container").css("visibility","");
+    $("#vs-container").show();
+    //load politicians
+    console.log("id = " + $(this).attr('id'));
+
+    var $img1 = $(".winner-photo-wrapper img");
+    var $img2 = $(".loser-photo-wrapper img");
+
+    if ($img1.length == 0) {
+      $img1 = $("<img class=\"profile-image\" />");
+      $(".winner-photo-wrapper").prepend($img1);
+    }
+    if ($img2.length == 0) {
+      $img2 = $("<img class=\"profile-image\" />");
+      $(".loser-photo-wrapper").prepend($img2);
+    }
+
+    if ($("#vs-container").attr("data-district") == worldmap.names[this.id]) {
+      return;
+    }
+    else {
+      $img1.attr("src","");
+      $img2.attr("src","");
+    }
+
+    $("#vs-district").text(worldmap.names[this.id]);
+
+    $.getJSON("/district/" + worldmap.names[this.id], function(data) {
+      $("#vs-container").attr("data-district", worldmap.names[this.id]);
+
+      var p1 = data[0];
+      var p2 = data[1];
+
+      //photo
+      var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
+      var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
+
+      console.log(photourl1);
+      console.log(photourl2);
+
+      if (photourl1 === "")  {
+        $img1.fadeOut();
+      }
+      else {
+        $img1.attr("src", photourl1);
+        $img1.fadeIn();
+      }
+
+      if (photourl2 === "")  {
+        $img2.fadeOut();
+      }
+      else {
+        $img2.attr("src", photourl2);
+        $img2.fadeIn();
+      }
+
+      $("#vs-politician1 .politician-name").text(p1 ? p1.party +" "+ p1.name :"");
+      $("#vs-politician2 .politician-name").text(p2 ? p2.party +" "+ p2.name :"");
+
+      $("#vs-politician1 .good_links").text(p1 ? p1.good_link_count : 0);
+      $("#vs-politician2 .good_links").text(p2 ? p2.good_link_count : 0);
+
+      $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
+      $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
+    });
+    console.log("over");
+
     },
     out = function () {
       this.curve.remove();
       this.arrow.remove();
-      $("#vs-container").css("visibility","hidden");
+      $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
-      if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
-        $(location).attr('href',$(location).attr('origin')+"/district/"+worldmap.names[this.id]);
-      }
+      //if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
+        $(location).attr('href',"/district/"+worldmap.names[this.id]);
+      //}
     };
 r.setStart();
 for (var country in worldmap.shapes) {
@@ -107,7 +204,8 @@ r.setViewBox(-94,95,500,640,false)
 </script>
 <% end -%>
 
-<%= link_to 'test link', forum_path(Politician.first) %>
+<%#= link_to 'test link', forum_path(Politician.last) %>
+
 <div id="seoul-map" class="map">
   <div id="seoul-map-bubble" class="bubble">
     <div class="bubble-text">
@@ -116,7 +214,7 @@ r.setViewBox(-94,95,500,640,false)
     </div>
   </div>
 
-  <%= image_tag '/assets/dummy_map.gif' %>
+  <%= image_tag '/assets/dummy_map.png', :style => "margin: 30px 0 0 32px" %>
   <div id="seoul-map-image">
   </div>
   <!--  <div id="dest" style="position:absolute;left:690px;top:100px;width:10px;height:10px;background-color:red;"></div>-->
@@ -150,7 +248,8 @@ r.setViewBox(-94,95,500,640,false)
       </a>
 
       <a class="small-map" id="busan-small-map" href="#">
-        <%= image_tag '/assets/busan_map_small.gif' %>
+        <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6; position:absolute;" %>
+        <%= image_tag '/assets/comming_soon.png', :style => "position: absolute; width: 150px; top: 60px; margin-left: 50px;opacity: 0.8" %>
       </a>
     </div>
   </div>
@@ -158,7 +257,21 @@ r.setViewBox(-94,95,500,640,false)
   <!-- vs-container is absolute positioned -->
   <div id="vs-container" class="clearfix">
     <h3 id="vs-district">지역구</h3>
-    <div class="vs-part alpha"></div>
-    <div class="vs-part omega"></div>
+    <div class="vs-part alpha" id="vs-politician1">
+      <div class="winner-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links"></div>
+      <div class="bad_links"></div>
+    </div>
+    <div class="vs-part omega" id="vs-politician2">
+      <div class="loser-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links"></div>
+      <div class="bad_links"></div>
+    </div>
   </div>
 <% end -%>

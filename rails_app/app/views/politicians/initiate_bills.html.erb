@@ -1,3 +1,7 @@
+<%= javascript_tag do %>
+  all_url = "<%=j init_bills_by_politician_path(@politician) %>"
+  accepted_url = "<%=j init_bills_by_politician_path(@politician)+'?result=true' %>"
+<% end -%>
 <div class="alpha omega clearfix" id="popup-bills">
   <div id="popup-profile-photo">
     <div class="photo">

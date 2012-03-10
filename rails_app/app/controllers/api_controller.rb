@@ -17,8 +17,12 @@ class ApiController < ApplicationController
 	#											output : title, image, description // json형식
 	def article_parsing
 		target_link = params[:url]
+		if !target_link.match("^http://")
+			target_link = "http://" + target_link
+		end
+
 	 # short url 처리 
-		response = Net::HTTP.get_response(URI(target_link))	
+		response = Net::HTTP.get_response(URI(target_link))
 		if response == Net::HTTPRedirection then
 			target_link = response['location']
 		end
@@ -32,7 +36,7 @@ class ApiController < ApplicationController
 		else
 			doc = Nokogiri::HTML(open(target_link))
 			#무슨 기사인지 판별.  
-			if target_link.match('news\.chosu.\.com') != nil #조선일보 
+			if target_link.match('news\.chosun.\.com') != nil #조선일보 
 				result[:created_at] = doc.xpath('//p[@id="date_text"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']

@@ -19,3 +19,7 @@
 #container {
 /*  background-image:url(/assets/1024_16_8_8.png);*/
 }
+
+body {
+  font-family: '돋움';
+}
