@@ -1,6 +1,7 @@
 Wepoll::Application.routes.draw do
   resources :timeline_entries
   resources :bills
+  resources :link_replies
 
   namespace :admin do
     match '/' => 'admin#index'

@@ -44,4 +44,7 @@ class TimelineEntry
   #소속 정치인
   belongs_to :politician
 
+  #댓글들
+  has_many :link_replies, :inverse_of => :timeline_entry
+
 end

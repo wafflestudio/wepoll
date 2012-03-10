@@ -48,6 +48,8 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1.json
   def show
     @timeline_entry = TimelineEntry.find(params[:id])
+    @link_replies = @timeline_entry.link_replies
+    @new_link = LinkReply.new
 
     respond_to do |format|
       format.json { render json: @timeline_entry }

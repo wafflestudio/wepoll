@@ -7,9 +7,9 @@ class LinkReply
 
   #=== Mongoid fields ===
   field :body, type: String
-  field :like, type: Integer
-  field :blame, type: Integer #신고
+  field :like, type: Integer, default: 0
+  field :blame, type: Integer, default: 0 #신고
 
-  belongs_to :user
-  belongs_to :timeline_entry
+  belongs_to :user, :inverse_of => :link_replies
+  belongs_to :timeline_entry, :inverse_of => :link_replies
 end

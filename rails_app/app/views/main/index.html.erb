@@ -145,9 +145,11 @@ stroke: "none",
       $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
       $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
     });
+    console.log("over");
 
     },
     out = function () {
+      console.log("out");
       this.curve.remove();
       this.arrow.remove();
       $("#vs-container").css("visibility","hidden");

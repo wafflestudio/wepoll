@@ -90,7 +90,7 @@
           <%= yield :sidebar %>
           <%# TODO 조건 검사? %>
           <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) %>
-            <%= render :partial => '/main/recent_links' %>
+            <%#= render :partial => '/main/recent_links' %>
           <% end -%>
         </div>
 

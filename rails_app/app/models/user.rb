@@ -79,6 +79,8 @@ class User
   #timeline entry
   has_many :timeline_entries
 
+  has_many :link_replies, :inverse_of => :user
+
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token.extra.raw_info
 

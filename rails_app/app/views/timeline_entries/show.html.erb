@@ -1,29 +1,73 @@
+<script type="text/javascript">
+  $(function() {
+    $('span.checkbox').addClass("unchecked");
+    $(".checkbox").click(function(){
+      if($(this).children("input").attr("checked")){
+        // uncheck
+        $(this).children("input").removeAttr("checked");
+        $(this).removeClass("checked");
+        $(this).addClass("unchecked");
+      }else{
+        // check
+        $(this).children("input").attr({checked: "checked"});
+        $(this).removeClass("unchecked");
+        $(this).addClass("checked");
+      }
+    });
+  });
+</script>
+
 <div class="container_16" id="link-detail-wrapper">
   <div class="grid_11 alpha omega">
-    <div class="grid_7 alpha">
+    <div class="grid_6 alpha">
       <div class="grid_2 alpha" id="link-like-count">
         <span id="like-count"><%= @timeline_entry.like%></span><br />
         <span style="color:#48d822;font-size:9pt;">공감</span>
       </div>
 
-      <div class="grid_5 omega">
+      <div class="grid_4 omega">
         <img class="grid_1 alpha" id="link-thumbnail" src="<%= @timeline_entry.thumbnail.url(:square48)%>" />
-        <div class="grid_4 omega">
+        <div class="grid_3 omega">
           <div id="link-title"><%= @timeline_entry.title %></div>
-          <div id="link-url"><%= link_to @timeline_entry.url%></div>
+          <div id="link-url"><%= link_to truncate(@timeline_entry.url, :length => 35), @timeline_entry.url%></div>
         </div>
       </div>
 
     </div>
 
-    <div class="grid_4 omega">
+    <div class="grid_5 omega">
+
       <div id="link-user">
-        <div style="color:#9b957c;font-size:8pt;">올린이</div>
-        <img src="<%#=@timeline_entry.user.profile_picture.url(:square50)%>" id="link-user-photo" />
+        <div style="color:#706d5d;font-size:8pt;">올린이</div>
+        <img src="<%=@timeline_entry.user.profile_picture.url(:square50)%>" id="link-user-photo" />
         <div id="link-user-info">
-          <span id="link-user-name"><%#= @timeline_entry.user.nickname %></span><br />
+          <span id="link-user-name"><%= @timeline_entry.user.nickname %></span><br />
           <span id="link-time-ago"><%= time_ago_in_words @timeline_entry.created_at %></span>
         </div>
+      </div>
+
+      <%= form_for @new_link do |f| -%>
+        <div class="grid_5 alpha omega">
+          <% if user_signed_in? -%>
+            <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
+          <% else -%>
+            <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
+          <% end -%>
+          <div id="reply_check">
+            <span class="checkbox twitter"><input name="tweet" type="checkbox" /></span>
+            <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
+          </div>
+        </div>
+
+        <%= f.text_area :body %>
+      <% end -%>
+
+      <div class="grid_5 alpha omega">
+        댓글(<span id="link-reply-count"><%= @link_replies.count %></span>개)
+      </div>
+
+      <div id="link-reply-list" class="grid_5 alpha omega">
+        <%= render @link_replies %>
       </div>
     </div>
   </div>
