@@ -1281,3 +1281,8 @@ class TimelineController
 
 # And finally, make sure it is available outside the file.
 modules.TimelineController = TimelineController
+$ ->
+	$('#link-cancel').live 'click', ->
+		$.colorbox.close()
+		false
+	return

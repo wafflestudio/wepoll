@@ -1,0 +1,8 @@
+  <div class="reply_item">
+    <p><%= tweet_reply.user.nickname unless tweet_reply.user.nil? %> <%= tweet_reply.content %></p>
+    <span class="reply_date"><%= tweet_reply.created_at.strftime("%Y-%m-%d") %></span>
+    <p class="links">
+    <%= link_to '신고', tweet_reply_report_path(tweet_reply), :class => "report_link" %>
+    <%= link_to '공감'+tweet_reply.recommend_count.to_s, tweet_reply_recommend_path(tweet_reply), :class => "recommend_link" %>
+    </p>
+  </div>

@@ -95,8 +95,8 @@ div.field {
 
 #link-cancel {
   background:url(/assets/btn_link_cancel.gif);
-  padding-top:9px;
-  height:33px - 9px;
+  border: none;
+  height:33px;
 }
 
 #popular-tags {
@@ -154,4 +154,266 @@ div.field {
   color:#f87978;
   text-decoration:none;
   font-size:8pt;
+}
+
+#timeline-container {
+	padding-top:10px;
+	padding-left:5px;
+	background-color:#222;
+	height:480px;
+	z-index:2;
+	display:none;
+	position:fixed;
+}
+
+#timeline-container-border {
+	position:absolute;
+	left:0px;
+	top:0px;
+	background-color:white;
+	margin:8px;
+	width:992px;
+	height:474px;
+	opacity:0.5;
+}
+
+#timeline-bg{
+	position:absolute;
+	left:140px;
+	top:0px;
+	background-color:white;
+	margin:8px;
+	width:852px;
+	height:474px;
+}
+
+
+#timeline-container a{
+	color:black;
+}
+
+#timeline-all {
+position:relative;
+padding-top:25px;
+padding-bottom:20px;
+}
+
+#tm-politician1{
+	position:relative;
+	height:200px;
+	padding-left:20px;
+	padding-top:20px;
+
+	background:url('/assets/bg_politician_timeline_1.png') no-repeat;
+}
+
+#tm-politician2 {
+	height:200px;
+	padding-left:20px;
+	padding-top:35px;
+	background:url('/assets/bg_politician_timeline_2.png') no-repeat;
+
+}
+
+
+.photo-holder {
+	position:relative;
+	width:80px;
+	height:80px;
+	border:1px solid black;
+}
+
+.politician-photo1, .politician-photo2 {
+	width:80px;
+	height:80px;
+	position:relative;
+}
+
+.pol-name {
+text-align:center;
+}
+
+#timeline {
+font-size:11px;
+position:relative;
+overflow:hidden;
+height:600px;
+/*background-color:#ccc;*/
+z-index:10;
+}
+
+.timeline-navigator {
+	position:absolute;
+}
+
+.timeline-canvas {
+	position:absolute;
+	left:0px;
+	right:0px;
+	z-index:-1;
+}
+
+.timeline-view {
+	position:absolute;
+	overflow:hidden;
+	left:0px;
+	width:3000px;/*** quirky measure. **/
+}
+
+.tm-hgroup {
+	position:relative;
+	float:left;
+	margin-left:100px;
+	width: 210px;
+	height: 500px;
+	/*background-color:#222;*/
+}
+
+.tm-hg-holder {
+	position:absolute;
+	left:0px;
+}
+
+.tm-vgroup {
+	position:absolute
+}
+
+.tm-slider {
+	position:absolute;
+	width:210px;
+	height:200px;
+}
+
+.tm-bubble1 {
+	background:url('/assets/bubble_timeline_1.gif') no-repeat;
+}
+.tm-bubble2 {
+	background:url('/assets/bubble_timeline_2.gif') no-repeat;
+}
+.tm-bubble3 {
+	background:url('/assets/bubble_timeline_3.gif') no-repeat;
+}
+
+.tm-bubble4 {
+	background:url('/assets/bubble_timeline_4.gif') no-repeat;
+}
+.tm-bubble5 {
+	background:url('/assets/bubble_timeline_5.gif') no-repeat;
+}
+.tm-bubble6 {
+	background:url('/assets/bubble_timeline_6.gif') no-repeat;
+}
+
+.tm-nav-left {
+	width:26px;
+	height:68px;
+	background:url('/assets/icn_timeline_left.gif') no-repeat;
+}
+.tm-nav-right {
+	width:26px;
+	height:68px;
+	background:url('/assets/icn_timeline_right.gif') no-repeat;
+}
+
+#timeline-msg-noentry {
+	position:relative;
+	text-align:center;
+	top:200px;
+	padding:5px;
+	margin-left:auto;
+	margin-right:auto;
+	width:300px;
+	background-color:#ccc;
+}
+
+
+.tm-sl-holder {
+position:relative;
+}
+
+.tm-sl-nav {
+	z-index:5;
+	position:absolute;
+	top:27px;
+	left:155px;
+	width:210px;
+}
+
+.tm-sl-nav-p {
+	display:inline-block;
+	width:9px;
+	height:12px;
+	background:url('/assets/icn_timeline_sl_left.gif') no-repeat;
+}
+
+.tm-sl-nav-n {
+	display:inline-block;
+	width:9px;
+	height:12px;
+	background:url('/assets/icn_timeline_sl_right.gif') no-repeat;
+}
+
+.tm-entry {
+	position:absolute;
+	top:25px;
+	left:0px;
+}
+
+.tm-entry-view {
+	position:relative;
+	width:160px;
+	height:90px;
+	margin-left:20px;
+	margin-right:20px;
+	overflow:hidden
+}
+
+.tm-entry-numlike,.tm-entry-numreply {
+	text-align:center;
+	float:left;
+	width:54px;
+	height:15px;
+	margin-right:15px;
+}
+.tm-entry-numlike  { background:url('/assets/tm-like-bg.gif')}
+.tm-entry-numreply  { background:url('/assets/tm-reply-bg.gif')}
+
+.tm-entry-content {
+	margin-top:10px;
+}
+
+.tm-bubble4 .tm-entry-view,.tm-bubble5 .tm-entry-view,.tm-bubble6 .tm-entry-view {
+	margin-top:10px;
+}
+
+.tm-legend {
+	position:absolute;
+	width:200px;
+	top:220px;
+	margin-left:50px;
+	z-index:2;
+}
+
+#tm-entry-new {
+	background-color:white;
+}
+
+#rsidebar {
+margin-top:50px;
+z-index:3;
+}
+
+
+#link-form-badlink {
+	color:red;
+	display:none;
+}
+
+#link-form-preview-img {
+}
+
+.preview-img {
+	float:left;
+	width:50px;
+	height:50px;
 }

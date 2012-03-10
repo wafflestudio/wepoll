@@ -50,6 +50,7 @@ class MainController < ApplicationController
     @best = @politician.tweets.desc('recommend_count').first
     @today_best = @politician.tweets.desc('today_recommend_count').first
     @links = TimelineEntry.asc('like')
+    @total_replies = @politician.total_replies.sort{|a,b| b.created_at <=> a.created_at}
   end
 
   def before_search

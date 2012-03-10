@@ -95,9 +95,8 @@
 			$('#show-timeline').click( function() {
 				$('#timeline-container').jqmShow();
 				return false
-			})
-
-			$('#timeline-container').jqm();
+			});
+      $('#timeline-container').jqm();
 
       $(".joint-politician img").hover(function() {
         //show
@@ -148,6 +147,7 @@
   </script>
 
 <% end -%>
+<%= render 'timeline_entries/index' %>
 
 <a href="#" id="show-timeline">&nbsp;</a>
 <div id="name-cards" class="grid_12 alpha omega">
@@ -278,4 +278,3 @@
   <div class="grid_2 omega">
   </div>
 </div>
-<%= render :file => 'timeline_entries/index'  %>
