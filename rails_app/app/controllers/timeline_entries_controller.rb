@@ -53,6 +53,8 @@ class TimelineEntriesController < ApplicationController
     @link_replies = @timeline_entry.link_replies
     @new_link = LinkReply.new
 
+    @other_links = [] #TODO : 관련 링크 가져오기
+
     respond_to do |format|
       format.json { render json: @timeline_entry }
       format.html { render :layout => false }

@@ -14,59 +14,87 @@
         $(this).addClass("checked");
       }
     });
+
+    $("#link_reply_body").keyup(function() {
+      var $this = $(this);
+      var max = parseInt($this.attr('maxlength'));
+      var len = $this.val().length;
+      if (len > max) {
+        console.log("len>max");
+        $this.val($this.val().substr(0, max));
+        len = $this.val().length;
+      }
+
+      $("#current-comment-length").text(len);
+
+      $("#link-reply-button").click(function() {
+      //  $(this).attr("disabled", true);
+        return true;
+      });
+    });
   });
 </script>
 
 <div class="container_16" id="link-detail-wrapper">
   <div class="grid_11 alpha omega">
-    <div class="grid_6 alpha">
+    <div class="grid_6 alpha" id="replies-left">
       <div class="grid_2 alpha" id="link-like-count">
         <span id="like-count"><%= @timeline_entry.like%></span><br />
         <span style="color:#48d822;font-size:9pt;">공감</span>
       </div>
 
-      <div class="grid_4 omega">
-        <img class="grid_1 alpha" id="link-thumbnail" src="<%= @timeline_entry.thumbnail.url(:square48)%>" />
-        <div class="grid_3 omega">
-          <div id="link-title"><%= @timeline_entry.title %></div>
-          <div id="link-url"><%= link_to truncate(@timeline_entry.url, :length => 35), @timeline_entry.url%></div>
-        </div>
+      <img class="grid_1" id="link-thumbnail" src="<%= @timeline_entry.thumbnail.url(:square48)%>" />
+      <div class="grid_3 omega" id="link-title-wrapper">
+        <div id="link-title"><%= @timeline_entry.title %></div>
+        <div id="link-url"><%= link_to truncate(@timeline_entry.url, :length => 35), @timeline_entry.url%></div>
       </div>
 
     </div>
 
-    <div class="grid_5 omega">
+    <div class="grid_5 omega" id="replies-right">
 
-      <div id="link-user">
+      <div id="link-user" class="clearfix">
         <div style="color:#706d5d;font-size:8pt;">올린이</div>
-        <img src="<%=@timeline_entry.user.profile_picture.url(:square50)%>" id="link-user-photo" />
+        <img src="<%=@timeline_entry.user ? @timeline_entry.user.profile_picture.url(:square50) : "/assets/anonymous.gif"%>" id="link-user-photo" />
         <div id="link-user-info">
-          <span id="link-user-name"><%= @timeline_entry.user.nickname %></span><br />
+          <span id="link-user-name"><%= @timeline_entry.user ? @timeline_entry.user.nickname : "정보없음" %></span><br />
           <span id="link-time-ago"><%= time_ago_in_words @timeline_entry.created_at %></span>
         </div>
       </div>
 
-      <%= form_for @new_link do |f| -%>
-        <div class="grid_5 alpha omega">
-          <% if user_signed_in? -%>
-            <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
-          <% else -%>
-            <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
-          <% end -%>
-          <div id="reply_check">
-            <span class="checkbox twitter"><input name="tweet" type="checkbox" /></span>
-            <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
-          </div>
+      <%= form_for @new_link, :remote => true do |f| -%>
+        <%= hidden_field_tag 'link_reply[timeline_entry_id]', @timeline_entry.id.to_s %>
+        <% if user_signed_in? -%>
+          <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
+        <% else -%>
+          <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
+        <% end -%>
+        <div id="reply_check">
+          <span class="checkbox twitter"><input name="tweet" type="checkbox" /></span>
+          <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
         </div>
 
-        <%= f.text_area :body %>
+        <% if user_signed_in? -%>
+          <%= f.text_area :body, :maxlength => 140%>
+        <% else -%>
+          <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+        <% end -%>
+
+      <div style="float: right; margin-right:10px;">
+        <div id="comment-length">
+          <span id="current-comment-length">0</span>/140자
+        </div>
+        <%= f.submit '등록', :id => 'link-reply-button' %>
+      </div>
       <% end -%>
 
-      <div class="grid_5 alpha omega">
+      <div class="clear"></div>
+
+      <div>
         댓글(<span id="link-reply-count"><%= @link_replies.count %></span>개)
       </div>
 
-      <div id="link-reply-list" class="grid_5 alpha omega">
+      <div id="link-reply-list">
         <%= render @link_replies %>
       </div>
     </div>

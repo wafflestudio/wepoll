@@ -84,9 +84,8 @@ class User
   has_many :link_replies, :inverse_of => :user
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
-    data = access_token.extra.raw_info
 
-    if user_token = UserToken.where(:provider => 'facebook', :uid => data["id"]).first
+    if user_token = UserToken.where(:provider => 'facebook', :uid => access_token.id).first
       user_token.user
 #    elsif signed_in_resource.nil?
 #      user = User.create!(:userid => "fb_#{data["id"]}", :email => data.email, :password => Devise.friendly_token[0,20])

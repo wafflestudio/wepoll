@@ -120,6 +120,12 @@ div.field {
   background-color:#fff4c4;
   border-radius:7px;
   padding:7px;
+  margin-bottom:10px;
+}
+
+#link-user-info {
+  margin-left:5px;
+  float:left;
 }
 
 #link-user-photo {
@@ -140,6 +146,7 @@ div.field {
 
 #link-detail-wrapper {
   width:688px;
+  padding-top:20px;
 }
 
 #link-thumbnail {
@@ -170,9 +177,13 @@ div.field {
 }
 
 #link_reply_body {
-  height:70px;
+  height:70px - 10px;
   border:0;
   background-color:#eceded;
+  margin-top:10px;
+  margin-bottom:5px;
+  width:280px - 10px;
+  padding:5px;
 }
 
 #link-comment-action {
@@ -211,6 +222,9 @@ div.field {
 .actions {
   text-align:right;
   margin-top:5px;
+  float:right;
+  width:120px;
+
   .like {
     color:#caac23;
     a {
@@ -229,6 +243,8 @@ div.field {
 .link-reply-date {
   margin-top:5px;
   color:#7a7a7a;
+  float:left;
+  width:150px;
 }
 
 #current-user-photo {
@@ -243,4 +259,35 @@ div.field {
 #reply_check {
   float:right;
   padding-top:35px;
+  padding-right:10px;
+}
+
+#comment-length {
+  float:left;
+  padding-top:5px;
+  margin-right:5px;
+}
+
+#link-reply-button {
+  border-radius:5px;
+  border:0;
+  background-color:#fede4d;
+  padding:3px 5px;
+}
+
+#link-reply-list {
+  margin-top:10px;
+}
+
+#replies-right {
+  width:280px;
+}
+
+#replies-left {
+  width:392px - 1px;
+  border-right:1px dashed #bdbbbc;
+}
+
+#link-title-wrapper {
+  width:218px;
 }
