@@ -63,6 +63,8 @@ stroke: "none",
 
     x = parseInt(coordinates[0]) - 50;
     y = parseInt(coordinates[1]) + 95;
+
+    if (parseInt(coordinates[2]) == 0) {
     end_x = 635;
     end_y = 120;
 
@@ -78,10 +80,36 @@ stroke: "none",
 
     this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
     this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+
     this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
 
     endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
     beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+    }
+    else {
+    end_x = 670;
+    end_y = 360;
+
+    len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
+    len /= 2.5;
+    alpha = Math.atan((end_y - y) / (end_x - x));
+
+    x1 = x + len * Math.cos(Math.PI / 4 + alpha);
+    y1 = y - len * Math.sin(Math.PI / 4 + alpha);
+
+    x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
+    y2 = end_y + len * Math.sin(Math.PI / 4 + alpha);
+
+    this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
+    this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+
+    endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
+    beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+    beta += 45;
+    beta *= -1;
+    }
     this.arrow.rotate(beta);
     console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
     $("#vs-container").css("visibility","");
@@ -153,7 +181,6 @@ stroke: "none",
       this.arrow.remove();
       $("#vs-container").css("visibility","hidden");
       this.stop().animate({fill: this.c}, 500);
-
     },
     click = function(e) {
       //if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
