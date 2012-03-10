@@ -23,7 +23,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
-        $("#vs-container").css("visibility","hidden");
+        $("#vs-container").hide();
 
         //TODO : according to cookie value, select map which not shown
         $("#busan-map").removeClass("selected");
@@ -112,7 +112,7 @@ stroke: "none",
     }
     this.arrow.rotate(beta);
     console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
-    $("#vs-container").css("visibility","");
+    $("#vs-container").show();
     //load politicians
     console.log("id = " + $(this).attr('id'));
 
@@ -148,6 +148,8 @@ stroke: "none",
       var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
       var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
 
+      console.log(photourl1);
+      console.log(photourl2);
 
       if (photourl1 === "")  {
         $img1.fadeOut();
@@ -174,12 +176,13 @@ stroke: "none",
       $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
       $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
     });
+    console.log("over");
 
     },
     out = function () {
       this.curve.remove();
       this.arrow.remove();
-      $("#vs-container").css("visibility","hidden");
+      $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
@@ -245,7 +248,7 @@ r.setViewBox(-94,95,500,640,false)
       </a>
 
       <a class="small-map" id="busan-small-map" href="#">
-        <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6" %>
+        <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6; position:absolute;" %>
         <%= image_tag '/assets/comming_soon.png', :style => "position: absolute; width: 150px; top: 60px; margin-left: 50px;opacity: 0.8" %>
       </a>
     </div>
