@@ -129,21 +129,17 @@ $(function() {
 	
 	<% if user_signed_in? %>
   $(".link-new").click(function() {
-
-    $(this).colorbox({title:false,onComplete:function(){
+    $(this).colorbox({title:false,width:'800px',height:'640px',onComplete:function(){
     	activateTimelineEntryForm()
 			$('.tm-entry-form').submit( function() {
 				submitTimelineEntryForm(this)			
 				$.colorbox.close()
-				// prevent actually changing the page
 				return false;
 			});
 
     	}
     });
   });
-
-	
 	<% end %>
 
 	$('#timeline-container').corner('20px')

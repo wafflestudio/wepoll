@@ -137,20 +137,21 @@ createView = (model)->
 			<!--<p>링크: #{model.escape('url')}</p>-->
 			<!--<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
+			<p>#{model.escape('tag_text')}</p>
 			#{if TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
 			</div>
 		</div>"
 	element = $(template)
 	element.find('a').click (evt)->
 		url = "/timeline_entries/" + model.id + "/edit"
-		$.colorbox {href:url,onComplete: ()->
+		$.colorbox {href:url,width:'800px', height:'640px',onComplete: ()->
 			activateTimelineEntryForm()
 			$('.tm-entry-form').submit ()->
 				submitTimelineEntryForm(this, model.id)
 				element.html(createView(model))
 				$.colorbox.close()
 				return false
-			}
+		}
 
 		return false
 

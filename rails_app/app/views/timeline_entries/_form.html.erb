@@ -12,7 +12,7 @@
     <div class="grid_1 omega"><span><img class="preview-status"/></span></div>
     <div class="clear"></div>
   	<div id="link-form-badlink" class="prefix_1 note">유효하지 않은 링크입니다.</div>
-  	<dic class="clear"></div>
+  	<div class="clear"></div>
 
   	<div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
   		<div id="link-form-preview-img" class="prefix_1 grid_1 alpha"></div>
@@ -61,7 +61,7 @@
   </div>
 
   <div id="actions">
-    <a href="#" id="link-cancel" class="action">돌아가기</a>
+    <a href="#" id="link-cancel" class="action" onclick="$.colorbox.close()">돌아가기</a>
     <%= f.submit '등록하기', :id => 'link-post', :class => 'action' %>
   </div>
 
