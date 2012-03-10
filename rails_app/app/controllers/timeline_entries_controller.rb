@@ -1,4 +1,6 @@
+#coding : utf-8
 class TimelineEntriesController < ApplicationController
+
   
 	before_filter :authenticate_user!, :except => [:index,:show]
   
@@ -71,6 +73,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1/edit
   def edit
     @timeline_entry = TimelineEntry.find(params[:id])
+    @politician = @timeline_entry.politician
     render :layout => false
   end
 

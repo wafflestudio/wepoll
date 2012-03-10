@@ -6,10 +6,21 @@
     <div class="link-type"><%= f.radio_button 'is_good', 'false' %> 지적합니다.</div>
   </div>
 
-  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+  <div class="prefix_1 grid_8 suffix_2 alpha omega field">
     <label class="grid_1 alpha">링크주소</label>
-    <div class="grid_6 omega"><%=f.text_field :url %></div>
+    <div class="grid_6"><%=f.text_field :url, :class =>'input-link' %></div>
+    <div class="grid_1 omega"><span><img class="preview-status"/></span></div>
+    <div class="clear"></div>
+  	<div id="link-form-badlink" class="prefix_1 note">유효하지 않은 링크입니다.</div>
+  	<div class="clear"></div>
+
+  	<div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
+  		<div id="link-form-preview-img" class="prefix_1 grid_1 alpha"></div>
+  		<div id="link-form-preview-txt" class="prefix_1 grid_5 omega note"></div>
+  	</div>
   </div>
+	<div class="clear"></div>
+
 
   <div class="prefix_1 grid_8 suffix_1 alpha omega field">
     <label class="grid_1 alpha">제목</label>
@@ -30,9 +41,9 @@
       <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>
     </div>
 
-    <div class="prefix_1 grid_6 alpha omega">
+    <!--<div class="prefix_1 grid_6 alpha omega">
       날짜 bar
-    </div>
+    </div>-->
   </div>
 
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
@@ -40,8 +51,7 @@
     <div class="grid_6 omega"><%= f.text_field :tag_text, :placeholder => "한개이상 입력하세요" %></div>
     <div class="prefix_1 grid_6 alpha omega note">
       태그는 5개까지 입력할 수 있습니다.<br />
-      여러개를 입력할 경우 띄어쓰기로 구분해주세요.<br />
-      예) 등록금 FTA 저축은행특별법
+      여러개를 입력할 경우 엔터키로 구분해주세요.<br />
     </div>
   </div>
 
@@ -51,7 +61,7 @@
   </div>
 
   <div id="actions">
-    <a href="#" id="link-cancel" class="action">돌아가기</a>
+    <a href="#" id="link-cancel" class="action" onclick="$.colorbox.close()">돌아가기</a>
     <%= f.submit '등록하기', :id => 'link-post', :class => 'action' %>
   </div>
 
