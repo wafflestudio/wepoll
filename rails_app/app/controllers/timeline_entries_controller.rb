@@ -1,4 +1,6 @@
+#coding : utf-8
 class TimelineEntriesController < ApplicationController
+
   
 	before_filter :authenticate_user!, :except => [:index,:show]
   

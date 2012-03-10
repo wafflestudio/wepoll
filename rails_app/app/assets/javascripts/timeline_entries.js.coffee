@@ -1187,15 +1187,20 @@ class TimelineController
 		if options.entries
 			for entry in options.entries
 				@collection.add(entry)
-
+		
+		
 
 		# Growl
 		@collection.on "add", (model)->
+			$("#timeline-msg-noentry").hide()
 			console.log('Entry added to collection')
 			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
 		@collection.on "remove", (model)->
+			if @collection.length == 0
+				$("#timeline-msg-noentry").show()
 			console.log('Entry removed from collection')
 			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
+
 		@collection.on "change", (model)->
 			console.log('Entry changed in collection')
 			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
@@ -1243,6 +1248,10 @@ class TimelineController
 			@currentScale.goLeft()
 		$("<div class='timeline-navigator'></div>").css({right:0,top:165,zIndex:2}).addClass('tm-nav-right').appendTo(@$el).click ()=>
 			@currentScale.goRight()
+
+		$("<div id='timeline-msg-noentry'>항목이 없습니다.</div>").appendTo(@$el)
+		$("#timeline-msg-noentry").hide() if @collection.length > 0
+
 
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
