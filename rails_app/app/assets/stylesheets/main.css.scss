@@ -285,3 +285,7 @@
 #login_close {
   cursor: pointer;
 }
+
+/* all */
+::-webkit-input-placeholder  { font-family: '돋움'; }
+input:-moz-placeholder { font-family: '돋움'; }

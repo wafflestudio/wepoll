@@ -30,6 +30,7 @@
         $("#seoul-map").addClass("selected");
 
         $("#region-selector .region").click(function() {
+          return false;
           $("#region-selector .region").removeClass("selected");
           $(this).addClass("selected");
 
@@ -155,9 +156,9 @@ stroke: "none",
 
     },
     click = function(e) {
-      if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
+      //if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
         $(location).attr('href',"/district/"+worldmap.names[this.id]);
-      }
+      //}
     };
 r.setStart();
 for (var country in worldmap.shapes) {
@@ -183,7 +184,7 @@ r.setViewBox(-94,95,500,640,false)
     </div>
   </div>
 
-  <%= image_tag '/assets/dummy_map.gif' %>
+  <%= image_tag '/assets/dummy_map.png', :style => "margin: 30px 0 0 32px" %>
   <div id="seoul-map-image">
   </div>
   <!--  <div id="dest" style="position:absolute;left:690px;top:100px;width:10px;height:10px;background-color:red;"></div>-->
@@ -217,7 +218,8 @@ r.setViewBox(-94,95,500,640,false)
       </a>
 
       <a class="small-map" id="busan-small-map" href="#">
-        <%= image_tag '/assets/busan_map_small.gif' %>
+        <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6" %>
+        <%= image_tag '/assets/comming_soon.png', :style => "position: absolute; width: 150px; top: 60px; margin-left: 50px;opacity: 0.8" %>
       </a>
     </div>
   </div>

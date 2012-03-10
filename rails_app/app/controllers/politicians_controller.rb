@@ -2,8 +2,11 @@ class PoliticiansController < ApplicationController
   before_filter :prepare_politicians, :except => [:initiate_bills]
   def initiate_bills
     @politician = Politician.find(params[:id])
-
-    @bills = @politician.initiate_bills.page(params[:page]).per(8)
+    if params[:result]
+      @bills = @politician.initiate_bills.where(:result => Bill::RESULT_APPROVED).page(params[:page]).per(8)
+    else
+      @bills = @politician.initiate_bills.page(params[:page]).per(8)
+    end
 
     respond_to do |format|
       format.html do 

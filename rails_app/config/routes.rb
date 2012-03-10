@@ -1,5 +1,7 @@
 Wepoll::Application.routes.draw do
-  resources :timeline_entries
+  resources :timeline_entries do
+    match '/recommend' => 'timeline_entries#recommend', :as => :recommend
+  end
   resources :bills
 
   namespace :admin do

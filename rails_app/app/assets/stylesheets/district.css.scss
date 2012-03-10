@@ -51,7 +51,7 @@
   border-top-right-radius:0;
   padding-top:12px;
   text-align:center;
-  font-size:9pt;
+  font-size:12pt;
   text-decoration:none;
   color:#999375;
 }
@@ -89,7 +89,7 @@
 
   .subsection-label {
     float:left;
-    font-size:8.5pt;
+    font-size:12pt;
     width:80px;
     text-align:center;
     font-weight:bold;
@@ -240,6 +240,8 @@
 
 .candidate-selector {
   select {
+    font-family: '돋움';
+    font-size: 13pt;
     border:2px solid #4f4f50;
     padding:0;
     width:112px - 4px;
@@ -564,4 +566,8 @@ div.profile.subsection {
   top:150px;
   left:0;
   display:block;
+}
+#vs-fb-like-btn {
+  margin-top: 10px;
+  margin-left: 46px;
 }

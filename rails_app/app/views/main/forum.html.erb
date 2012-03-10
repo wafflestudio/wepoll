@@ -28,7 +28,7 @@ $('span.checkbox').addClass("unchecked");
       <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %>
       <h2><%= @politician.name %></h2>
       <h3>@<%= @politician.tweet_name %></h3>
-      <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+      <%#= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
     </div>
   </div>
 </div>
@@ -37,7 +37,7 @@ $('span.checkbox').addClass("unchecked");
   <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} unless @best.nil? %>
   <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} unless @today_best.nil? %>
   <div id="tweet_divider"></div>
-  <% @politician.tweets.desc('created_at').each do |t| %>
+  <% @politician.tweets.desc('created_at').limit(50).each do |t| %>
     <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
   <% end -%>
 </div>

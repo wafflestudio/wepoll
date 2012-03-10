@@ -17,7 +17,8 @@ class TimelineEntry
   field :deleted, type: Boolean, default: false
   field :title, type: String
   field :is_good, type: Boolean, default: true #칭찬링크: true, 지적링크: false
-  field :like, type: Integer, default:0 #공감수
+  field :recommend_count, type: Integer, default:0 #공감수
+  field :report_count, type: Integer, default:0 #신고수
   field :tags, type: Array, default: []
 
   #=== Mongoid attach ===
@@ -44,5 +45,29 @@ class TimelineEntry
 
   #소속 정치인
   belongs_to :politician
+
+
+  has_and_belongs_to_many :recommend_users, :class_name => "User", :inverse_of => :recommend_timeline_entries
+  has_and_belongs_to_many :report_users, :class_name => "User", :inverse_of => :report_timeline_entries
+
+  def recommend(user)
+    if self.recommend_users.include? user
+      false
+    else
+      self.recommend_count += 1
+      self.recommend_users << user
+      self.save
+    end
+  end
+
+  def report(user)
+    if self.report_users.include? user
+      false
+    else
+      self.report_count += 1
+      self.report_users << user
+      self.save
+    end
+  end
 
 end

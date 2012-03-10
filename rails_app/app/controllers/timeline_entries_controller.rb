@@ -126,4 +126,14 @@ class TimelineEntriesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def recommend
+    @t = TimelineEntry.find(params[:timeline_entry_id])
+    if @t.recommend(current_user)
+      render :json => {:status => "ok", :count => @t.recommend_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+
 end

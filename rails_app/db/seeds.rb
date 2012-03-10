@@ -15,7 +15,7 @@ period[5]  = [Date.parse("1963.12.17"),Date.parse("1967.6.30")]
 period[6]  = [Date.parse("1967.7.1"),Date.parse("1971.6.30")]
 period[7]  = [Date.parse("1971.7.1"),Date.parse("1972.10.17")]
 period[8]  = [Date.parse("1973.3.12"),Date.parse("1979.3.11")]
-period[9] = [Date.parse("1979.3.12"),Date.parse("1980.10.27")]
+period[9]  = [Date.parse("1979.3.12"),Date.parse("1980.10.27")]
 period[10] = [Date.parse("1981.4.11"),Date.parse("1985.4.10")]
 period[11] = [Date.parse("1985.4.11"),Date.parse("1988.5.29")]
 period[12] = [Date.parse("1988.5.30"),Date.parse("1992.5.29")]
@@ -116,12 +116,15 @@ end
 
 (exit 0) if dump_file_exist
 
+=begin
 #==== 법안 ====
 c2 = 0
 puts "-------- csv 파일에서 생성 --------"
+f = File.open(Rails.root+"duplicated_politician.txt", "w") # *** 동명이인 처리, 법안 번호, 이름 저장하고 수작업으로 직접 입력
 CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do |csv|
   name = csv[4]
-  p = Politician.where(:name => name).first #XXX : 동명이인 어떻게 처리
+  party = csv[5]
+  p = Politician.where(:name => name, :party => party).first #XXX : 동명이인 어떻게 처리 **** 처리 완료
   puts "#{name} doesn't exist!! " if p.nil?
   name_romanize = name.romanize
   csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name_romanize}.csv")[0]
@@ -189,10 +192,18 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
       commitee = "경제"
     end
 
-    #XXX : 동명이인 어떻게 처리
+    #XXX : 동명이인 어떻게 처리 *** 동명이인 처리
     #XXX : 이름만 등록된 껍데기 국회의원을 만든다
     only_names = []
-    coactors = coactors.map {|name| p1 = Politician.where(:name => name).first; only_names << name if p1.nil?; p1}.reject {|p2| p2.nil? || p.id == p2.id }
+
+    coactors.each do |coactor|
+      puts "#{title},#{code},#{name}" if Politician.where(:name => name).count != 1
+      f.write "#{title},#{code},#{name}" if Politician.where(:name => name).count != 1
+    end
+
+    coactors = coactors.map {|name| p1 = Politician.where(:name => name).first; only_names << name if p1.nil?; p1}.reject {|p2| p2.nil? || p.id == p2.id || Politician.where(name: name).count != 1 }
+
+    # *** : 동명이인만 따로 정리. 나중에 직접 입력
 
     b = Bill.new(:title => title,
                  :initiated_at => Date.parse(init_date),
@@ -211,12 +222,15 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
   end
   puts "#{law_count}개"
 end
+f.close
+#=== 법안 입력 끝 ===
 
 #==== 법안에 대한 찬성 반대 ====
 #==== 반대는 raw data에 없어서 구현이 안됨
 puts "법안에 대한 찬성 반대 입력 중"
 puts "============================="
 
+f = File.open(Rails.root+"duplicated_supporters.txt", "w")
 File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
   code = line.sub("\n", "")
   file_name = "#{code}.html"
@@ -234,7 +248,13 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
       doc = Nokogiri::HTML(raw_data)
       names = doc.xpath("html/body/table[4]/tr[2]/td[1]/table/tr[2]/td[2]/table//td").map {|td| td.inner_text}.reject {|txt| txt.length == 0}
 
-      bill.supporters = names.map {|name| Politician.where(:name => name).first}
+      # *** 동명이인 처리
+      names.each do |name|
+        f.write "#{bill.title},#{code},#{name}" if Politician.where(:name => name).count != 1
+      end
+
+      bill.supporters = names.map {|name| Politician.where(:name => name).first}.reject {|temp| temp.nil? || Politician.where(name: name).count != 1 }
+
       puts "==== 법안찬성자 ===="
       puts names.join(",")
       puts(bill.save ? "==== 성공 ====" : "==== 실패 ====")
@@ -245,3 +265,4 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
 end
 
 Politician.calculate_joint_initiate
+=end
