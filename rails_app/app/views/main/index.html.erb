@@ -23,7 +23,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
-        $("#vs-container").css("visibility","hidden");
+        $("#vs-container").hide();
 
         //TODO : according to cookie value, select map which not shown
         $("#busan-map").removeClass("selected");
@@ -80,12 +80,12 @@ stroke: "none",
     beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
     this.arrow.rotate(beta);
     console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
-    $("#vs-container").css("visibility","");
+    $("#vs-container").show();
     },
     out = function () {
       this.curve.remove();
-      this.arrow.remove();
-      $("#vs-container").css("visibility","hidden");
+      this.arrow.animate({"opacity": 0}, 50);
+      $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
