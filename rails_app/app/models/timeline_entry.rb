@@ -40,7 +40,7 @@ class TimelineEntry
   end
 
   #생성한 user
-  belongs_to :user
+  belongs_to :user, :inverse_of => :timeline_entries
 
   #소속 정치인
   belongs_to :politician
