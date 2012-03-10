@@ -123,62 +123,48 @@ formatDate = (d)->
 
 #data: data.title, data.create_at, data.image, data.description
 loadPreview = (url, onload)->
-	$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
-		(data)->
-			onload(data)
+	#$.ajax  url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
+	#	(data)->
+	#		onload(data)
 
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			
+			<div class='tm-entry-numlike'>공감 #{model.get('like')}</div>
+			<div class='tm-entry-numreply'>댓글0</div>
+			<div class='clear'></div>
+			<div class='tm-entry-content'>
 			<span>#{model.escape('title')}</span>
 			<!--<p>링크: #{model.escape('url')}</p>-->
 			<!--<p>날짜: #{formatDate(new Date(model.escape('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
+			<p>#{model.escape('tag_text')}</p>
 			#{if TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
+			</div>
 		</div>"
 	element = $(template)
 	element.find('a').click (evt)->
 		url = "/timeline_entries/" + model.id + "/edit"
-		$.colorbox {href:url,onComplete: ()->
+		$.colorbox {href:url,width:'800px', height:'640px',onComplete: ()->
+			activateTimelineEntryForm()
 			$('.tm-entry-form').submit ()->
 				submitTimelineEntryForm(this, model.id)
+				element.html(createView(model))
 				$.colorbox.close()
 				return false
-			}
+		}
 
 		return false
 
-	loadPreview model.get('url'), (data)->
-		image = $("<img class='preview-img'/>").attr('src', data.image).load ()=>
-			element.prepend(image)
-			#if this.complete && this.naturalWidth
-			#	element.prepend(image)
+	#loadPreview model.get('url'), (data)->
+	if model.get('aux_url')
+		image = $("<img class='preview-img'/>").attr 'src', model.get('aux_url').load ()=>
+			image.prependTo($(element).find(".tm-entry-content"))
 			
 	return element
 
 			
 
-# The `createForm` class method definition is exposed for new/edit form creation.
-# `createForm` will return a jquery object carrying a DOM node filled with the form used to create/update a `TimelineEntry`.
-# the returned object exposes *save* event to listen to.
-createForm = (model,pol)->
-	template = "<form method='post' action='/timeline_entries/#{if model then model.id else 'new'}' accept-charset='UTF-8'>
-			<input type='hidden' name='_method' value='#{if model then 'put' else 'post'}'/>
-			<input type='hidden' name='politician_id' value='#{if model then model.escape('politician_id') else pol}'/>
-			<p>제목:<input type='text' name='title' value='#{if model then model.escape('title') else ''}'/></input><p>
-			<p>링크 주소:<input type='text' name='url' value='#{if model then model.escape('url') else ''}'/></input><p>
-			<p>코멘트:</p>
-			<p><textarea name='comment' rows='2' cols='16'>#{if model then model.escape('comment') else ''}</textarea></p>
-	
-			<p>날짜:<input type='text' name='posted_at' value='#{if model then model.escape('posted_at') else ''}'/></p>
-			<p><input type='submit' value='Done'/></p>
-		</form>"
-	# Create a new model with default values if not supplied in the argument.
-	model = new TimelineEntry({comment:"",url:"",posted_at:new Date().toISOString()}) if !model
-	element = $(template)
-	# A datepicker is supplied.
-	$(element).find('input[name="posted_at"]').datepicker()
-	
+###
 	timeout = 0
 
 	url_input = $(element).find("input[name='url']")
@@ -202,7 +188,6 @@ createForm = (model,pol)->
 
 	.focusout ()->
 			load($(url_input).val())
-	
 
 		
 	# The model is saved on clicking the submit button.
@@ -225,7 +210,7 @@ createForm = (model,pol)->
 
 	return element
 
-
+###
 
 # TimelineEntryView
 # =====================================================
@@ -256,15 +241,6 @@ class TimelineEntryView extends Backbone.View
 			view = createView(@model)
 			element = $("<div class='tm-entry' data-id='" + @model.id+ "'/>").append(view)
 			
-			view.on "changeMode", ()=>
-				load('/timeline_entries/show', {politician_id:@model.get('politician_id')})
-
-			#edit.on "save", ()=>
-				#view.remove()
-				#view = createView(@model)
-				#element.append(view)
-				#view.on "changeMode", () =>
-
 
 			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
@@ -301,8 +277,8 @@ class TimelineEntryView extends Backbone.View
 # EntryView,EntryNav -> Slider -> VGroup -> HGroup -> TimelineView
 class TimelineEntryNav extends Backbone.View
 	initialize:(options)->
-		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'>P</a><span class='tm-sl-cntnt'></span>
-		<a href='#' class='tm-sl-nav-n'>N</a></div>")
+		@$el = $("<div class='tm-sl-nav'><a href='#' class='tm-sl-nav-p'></a><span class='tm-sl-cntnt'></span>&nbsp;
+		<a href='#' class='tm-sl-nav-n'></a></div>")
 			
 		@$pbutton = @$el.find('.tm-sl-nav-p').click @prev
 		@$nbutton = @$el.find('.tm-sl-nav-n').click @next
@@ -315,17 +291,17 @@ class TimelineEntryNav extends Backbone.View
 		
 		@currentPage = @numPages if @currentPage > @numPages
 
-		if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
+		#if @numPages > 1 then @$content.html("#{@currentPage+1}/#{@numPages}") else @$content.html(" ")
 
 		if @currentPage+1 >= @numPages
-			@$nbutton.hide()
+			@$nbutton.css('visibility','hidden')
 		else
-			@$nbutton.show()
+			@$nbutton.css('visibility','')
 		
 		if @currentPage == 0
-			@$pbutton.hide()
+			@$pbutton.css('visibility','hidden')
 		else
-			@$pbutton.show()
+			@$pbutton.css('visibility','')
 	
 	appendTo:(target)->
 		@$el.appendTo(target)
@@ -390,7 +366,7 @@ class TimelineEntrySlider extends Backbone.View
 
 	showPage: (page)=>
 		@$holder.find('.tm-entry').each (index,el)=>
-			if index == page then $(el).show() else $(el).hide()
+			if index == page then $(el).fadeIn(400).show() else $(el).fadeOut(400).hide()
 
 	appendTo:($target)->
 		@$el.appendTo($target)
@@ -602,8 +578,7 @@ class TimelineView
 		@$el = $("<div class='timeline-view'></div>")
 		# if @collection is already loaded somehow
 		@collection.each (entry)=>
-			@drawEntry(entry)
-		
+			@drawEntry(entry)	
 		
 	
 	getWidth:()->
@@ -818,7 +793,10 @@ class TimelineView
 			lcap = width/2-(rbound-lbound)/2
 			@setX(lcap-left)
 		else
-			@setLeft(left)
+			if rbound - left <= width
+				@setRight(rbound)
+			else
+				@setLeft(left)
 
 
 	
@@ -945,7 +923,6 @@ class TimelineView
 			else
 				@setX(x+TimelineView.EntryWidth,true)
 		else
-
 			if right+TimelineView.EntryWidth >= rbound
 				console.log("right to: bound #{rbound}")
 				@setRight(rbound,true)
@@ -1211,15 +1188,20 @@ class TimelineController
 		if options.entries
 			for entry in options.entries
 				@collection.add(entry)
-
+		
+		
 
 		# Growl
 		@collection.on "add", (model)->
+			$("#timeline-msg-noentry").hide()
 			console.log('Entry added to collection')
 			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
 		@collection.on "remove", (model)->
+			if @collection.length == 0
+				$("#timeline-msg-noentry").show()
 			console.log('Entry removed from collection')
 			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
+
 		@collection.on "change", (model)->
 			console.log('Entry changed in collection')
 			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
@@ -1268,6 +1250,10 @@ class TimelineController
 		$("<div class='timeline-navigator'></div>").css({right:0,top:165,zIndex:2}).addClass('tm-nav-right').appendTo(@$el).click ()=>
 			@currentScale.goRight()
 
+		$("<div id='timeline-msg-noentry'>항목이 없습니다.</div>").appendTo(@$el)
+		$("#timeline-msg-noentry").hide() if @collection.length > 0
+
+
 	# You can let the timeline updated automatically.
 	startAutoUpdate: ()->
 		@autoUpdate = true
@@ -1291,8 +1277,6 @@ class TimelineController
 		entry.save(attrs, options)
 
 	
-	@getForm: (pol)->
-		return createForm(null,pol)
 	
 
 # And finally, make sure it is available outside the file.

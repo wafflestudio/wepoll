@@ -1,4 +1,5 @@
 #coding:utf-8
+require 'iconv'
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
@@ -46,6 +47,15 @@ class DistrictController < ApplicationController
   protected
   def simplify_district_name
     if !params[:name].nil?
+      if request.env["HTTP_USER_AGENT"] =~ /MSIE/
+        iconv = Iconv.new("UTF-8", "EUC-KR")
+        begin
+          params[:name] = iconv.iconv(params[:name])
+        rescue
+          #do nothing
+        end
+      end
+      Rails.logger.info params[:name]
       str = params[:name]
       if str && (%w(구 시).include? str[-2]) && (%w(갑 을 병 정 무 기 경 신 임 계).include? str[-1])
         if str.length-2 >= 2

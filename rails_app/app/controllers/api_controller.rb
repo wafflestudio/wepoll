@@ -17,8 +17,12 @@ class ApiController < ApplicationController
 	#											output : title, image, description // json형식
 	def article_parsing
 		target_link = params[:url]
+		if !target_link.match("^http://")
+			target_link = "http://" + target_link
+		end
+
 	 # short url 처리 
-		response = Net::HTTP.get_response(URI(target_link))	
+		response = Net::HTTP.get_response(URI(target_link))
 		if response == Net::HTTPRedirection then
 			target_link = response['location']
 		end
@@ -32,7 +36,7 @@ class ApiController < ApplicationController
 		else
 			doc = Nokogiri::HTML(open(target_link))
 			#무슨 기사인지 판별.  
-			if target_link.match('news\.chosu.\.com') != nil #조선일보 
+			if target_link.match('news\.chosun.\.com') != nil #조선일보 
 				result[:created_at] = doc.xpath('//p[@id="date_text"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
@@ -145,10 +149,11 @@ class ApiController < ApplicationController
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:image] = doc.xpath('//div[@id="articleImage0"]/span/img').first['src'] if doc.xpath('//div[@id="articleImage0"]/span/img').count > 0
 			else
-				result[:title] = doc.title()
-				result[:image] = doc.xpath('//meta[@property="og:image"]').first['content'] if doc.xpath('//meta[@property="og:image"]').count > 0
-				result[:description] = doc.xpath('//meta[@property="og:description"]').first['content'] if doc.xpath('//meta[@property="og:description"]').count > 0
-				result[:created_at] = ''
+				result[:error] = '해당 기사는 지원되지 않습니다.'
+				#result[:title] = doc.title()
+				#result[:image] = doc.xpath('//meta[@property="og:image"]').first['content'] if doc.xpath('//meta[@property="og:image"]').count > 0
+				#result[:description] = doc.xpath('//meta[@property="og:description"]').first['content'] if doc.xpath('//meta[@property="og:description"]').count > 0
+				#result[:created_at] = ''
 			end
 			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 		end
