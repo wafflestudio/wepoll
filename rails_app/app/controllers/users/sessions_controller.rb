@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
+  layout :false, :only => [:new]
   def new
-    render :layout => false
   end
   def after_sign_in_path_for(resource)
     Rails.logger.info "==== after_sign_in_path ===="

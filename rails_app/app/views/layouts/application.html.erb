@@ -10,6 +10,36 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     <![endif]-->
 
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <%= stylesheet_link_tag "colorbox", :media => "all" %>
+    <%= stylesheet_link_tag "users/sessions", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= yield :scripts %>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        //notification bars
+        <% [:notice, :error, :alert].each do |level| %>
+          <% unless flash[level].blank? %>
+            $.gritter.add({title:" ",text:"<%= flash[level]%>"});
+          <% end %>
+        <% end %>
+      });
+      $("input#query").autocomplete({
+        source: search_source,
+        delay: 50, 
+        max: 10,
+        autoFocus: true,
+        select: function(event, ui) {
+        $("#query_hidden").val(ui.item.query);
+        $("#query_type").val(ui.item.type);
+        $("#query").val(ui.item.form);
+        return false;
+        },
+        focus: function() {return false;}}); 
+    </script>
+
     <!-- Le styles -->
     <%= stylesheet_link_tag    "application", :media => "all" %>
 
@@ -103,32 +133,5 @@
       </div>
     </footer>
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <%= javascript_include_tag "application" %>
-    <%= yield :scripts %>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        //notification bars
-        <% [:notice, :error, :alert].each do |level| %>
-          <% unless flash[level].blank? %>
-            $.gritter.add({title:" ",text:"<%= flash[level]%>"});
-          <% end %>
-        <% end %>
-      });
-      $("input#query").autocomplete({
-        source: search_source,
-        delay: 50, 
-        max: 10,
-        autoFocus: true,
-        select: function(event, ui) {
-        $("#query_hidden").val(ui.item.query);
-        $("#query_type").val(ui.item.type);
-        $("#query").val(ui.item.form);
-        return false;
-        },
-        focus: function() {return false;}}); 
-    </script>
   </body>
 </html>
