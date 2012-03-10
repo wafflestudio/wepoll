@@ -100,9 +100,13 @@ footer {
   background-color:#4f4f50;
   border-bottom-right-radius:12px;
   border-bottom-left-radius:12px;
-  height:56px;
+  height:66px;
   margin-left:0;
   padding-left:18px;
+
+  .fb-like {
+    margin-bottom: 3px;
+  }
 }
 
 .content .column{
@@ -141,4 +145,5 @@ footer {
 }
 
 #recent-link-header {
+  margin-top: 10px;
 }

@@ -1,6 +1,6 @@
 <h3 id="recent-link-header" class="link-section-header">최신링크</h3>
 <div class="links-container grid_4 alpha omega" id="recent-links">
-  <% @recent_timeline_entries.each do |link| -%>
+  <% @recent_timeline_entries.limit(2).each do |link| -%>
     <%= render :partial => '/main/link', :locals => {:link => link } %>
   <% end -%>
 
@@ -11,7 +11,7 @@
 
 <h3 class="link-section-header">인기링크</h3>
 <div class="links-container grid_4 alpha omega" id="popular-links">
-  <% @popular_timeline_entries.each do |link| -%>
+  <% @popular_timeline_entries.limit(2).each do |link| -%>
     <%= render :partial => '/main/link', :locals => {:link => link} %>
   <% end -%>
 
