@@ -4,14 +4,14 @@
 #facebook localhost
 #FACEBOOK_CLIENT = {:key => "185387964894905", :secret => "331fcf8686c33ecf0805ab25765e0263"}
 #facebook wepoll.dev
-FACEBOOK_CLIENT = {:key => "303599686360199", :secret => "2e74135fd133ecf0452fb50def7440ba"}
+FACEBOOK_CLIENT = {:key => "369053339792936", :secret => "ba912e789ee9d9d525d3199394b3e076"}
 
 #twitter localhost
 #TWITTER_CLIENT = {:key => "H6fDcyU6pRgs2mmHSj76PA", :secret => "405iY9l5YIR5yxcQFT9641mhmfu98SYM7Jf8F8Fg1Y"}
 #twitter ruby.snu.ac.kr
 #TWITTER_CLIENT = {:key => "40T6Ck0T9dRcWaPtBvMw", :secret => "PNXjZ1WKgLqpx16OjL504UtwoqhdB3M31jt7WnXIwm4"}
 #twitter wepoll.dev
-TWITTER_CLIENT = {:key => "88OE73uSGAFf6rg1YwZlaw", :secret => "18rkQwAnGJN55shBUJ1xmBQcmc4DZdTCA1Q2Vah6TdY"}
+TWITTER_CLIENT = {:key => "N8RsJW7dOjV94G05KM3dQ", :secret => "0UCAoWxk0pcibJagr2IksmfAQaMD7AJxLsCDlAXAMg"}
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
