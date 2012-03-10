@@ -6,6 +6,10 @@ CSV.foreach(Rails.root+"init_data/center_tmp.csv") do |line|
   name = line[3]
 
   p = Politician.where(name: name, party: party).first 
-  
-  printf "#{name}(#{party}) " if !p.nil?
+
+  if !p.nil?
+  #printf "#{name}(#{party}) "
+  else
+  printf "#{name}(#{party}) "
+  end
 end
