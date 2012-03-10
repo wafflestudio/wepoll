@@ -58,7 +58,7 @@
       -moz-border-radius: 20px;
       -webkit-border-radius: 20px;
       background: #fff;
-      margin-bottom: 45px;
+      margin-bottom: 20px;
       padding: 30px 30px 10px 30px;
       th {
         padding-left: 3px;
@@ -69,6 +69,14 @@
       .list_title { width: 516px; }
       .list_button { width: 40px; }
       .list_count { width: 71px; font-weight: bold; text-align: center;}
+    }
+    .paginator {
+      text-align: center;
+      margin-bottom: 20px;
+      a {
+        color: #5B5A5A;
+        text-decoration: none;
+      }
     }
 
     table {
