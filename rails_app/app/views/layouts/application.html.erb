@@ -120,6 +120,7 @@
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 
+        max: 10,
         autoFocus: true,
         select: function(event, ui) {
         $("#query_hidden").val(ui.item.query);
