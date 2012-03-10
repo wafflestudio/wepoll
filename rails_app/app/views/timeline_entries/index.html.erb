@@ -9,33 +9,34 @@ Backbone.Model.prototype.toJSON = function() {
   });
  }
 
-//TODO: FEED IN DATA HERE
-
-//var pol1 = "<%= @politicians[0].id %>";
-//var pol2 = "<%= @politicians[1].id %>";
-var pol1 = <%= @politicians[0].to_json.html_safe %>
-var pol2 = <%= @politicians[1].to_json.html_safe %>
+// FEED IN DATA
+var pol1 = <%= @p1.to_json.html_safe %>
+var pol2 = <%= @p2.to_json.html_safe %>
 var entries = <%= @timeline_entries.to_json.html_safe %>
-
 $(function() {
 	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
 	timelineController.appendTo($("#timeline"))
 	
 	<% if user_signed_in? %>
-	$(".link-new").each(function(index, el) {
-		$(el).click(function() {
-			$("#tm-entry-new").empty()
-
-			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
-				timelineController.addEntry(model)
-				$.colorbox.close()
-			}
-			)
-			$(this).colorbox({inline:true,open:true})
-
-		})
-	})
+  $(".link-new").click(function() {
+    $(this).colorbox({title:false});
+  });
+//	$(".link-new").each(function(index, el) {
+//		$(el).click(function() {
+//			$("#tm-entry-new").empty()
+//
+//			$(modules.TimelineController.getForm([pol1._id,pol2._id][index])).appendTo($('#tm-entry-new')).bind("save", function(evt, model) {
+//				timelineController.addEntry(model)
+//				$.colorbox.close()
+//			}
+//			)
+//			$(this).colorbox({inline:true,open:true})
+//
+//		})
+//		$('#timeline-container').corner('20px')
+//		$('#timeline-container-border').corner('10px').css('z-index','auto')
+//	})
 
 	
 	<% end %>
@@ -111,26 +112,85 @@ $(function() {
 </script>
 <style type="text/css">
 
-#politician1{
+#timeline-container {
+	padding-top:10px;
+	padding-left:5px;
+	background-color:#555;
+	height:440px;
+	z-index:2;
+	display:none;
+	position:fixed;
+}
+
+#timeline-container-border {
+	position:absolute;
+	left:0px;
+	top:0px;
+	background-color:white;
+	margin:8px;
+	width:992px;
+	height:434px;
+}
+
+#timeline-container a{
+	color:black;
+}
+
+#timeline-all {
+}
+
+#tm-politician1{
 	position:relative;
 	height:200px;
+	padding-left:20px;
+	padding-top:20px;
+
+	background:url('/assets/bg_politician_timeline_1.gif') no-repeat;
 }
+
+#tm-politician2{
+	height:200px;
+	padding-left:20px;
+	padding-top:35px;
+
+	background:url('/assets/bg_politician_timeline_2.gif') no-repeat;
+
+}
+
 
 .photo-holder {
 	position:relative;
 	width:100px;
 	height:100px;
+	border:1px solid black;
 }
 
+.politician-photo1 .politician-photo2 {
+	position:relative;
+}
 
-
+.pol-name {
+text-align:center;
+}
 
 #timeline {
+font-size:11px;
 position:relative;
 overflow:hidden;
 height:600px;
 /*background-color:#ccc;*/
 z-index:10;
+}
+
+.timeline-navigator {
+	position:absolute;
+}
+
+.timeline-canvas {
+	position:absolute;
+	left:0px;
+	right:0px;
+	z-index:-1;
 }
 
 .timeline-view {
@@ -144,9 +204,9 @@ z-index:10;
 	position:relative;
 	float:left;
 	margin-left:100px;
-	width: 200px;
+	width: 210px;
 	height: 500px;
-	background-color:#222;
+	/*background-color:#222;*/
 }
 
 .tm-hg-holder {
@@ -160,89 +220,149 @@ z-index:10;
 
 .tm-slider {
 	position:absolute;
-	width:200px;
+	width:210px;
 	height:200px;
+}
+
+.tm-bubble1 {
+	background:url('/assets/bubble_timeline_1.gif') no-repeat;
+}
+.tm-bubble2 {
+	background:url('/assets/bubble_timeline_2.gif') no-repeat;
+}
+.tm-bubble3 {
+	background:url('/assets/bubble_timeline_3.gif') no-repeat;
+}
+
+.tm-bubble4 {
+	background:url('/assets/bubble_timeline_4.gif') no-repeat;
+}
+.tm-bubble5 {
+	background:url('/assets/bubble_timeline_5.gif') no-repeat;
+}
+.tm-bubble6 {
+	background:url('/assets/bubble_timeline_6.gif') no-repeat;
+}
+
+.tm-nav-left {
+	width:26px;
+	height:68px;
+	background:url('/assets/icn_timeline_left.gif') no-repeat;
+}
+.tm-nav-right {
+	width:26px;
+	height:68px;
+	background:url('/assets/icn_timeline_right.gif') no-repeat;
 }
 
 .tm-sl-nav {
 	position:absolute;
-	width:200px;
+	width:210px;
 }
+
+.tm-sl-nav-left {
+	width:9px;
+	height:12px;
+	background:url('/assets/icn_timeline_sl_left.gif') no-repeat;
+}
+
+.tm-sl-nav-right {
+	width:9px;
+	height:12px;
+	background:url('/assets/icn_timeline_sl_right.gif') no-repeat;
+}
+
 .tm-entry {
 	position:absolute;
-	top:40px;
+	top:30px;
 	left:0px;
-	background-color:white;
 }
 
 .tm-entry-view {
 	position:relative;
-	width:200px;
+	width:160px;
+	height:90px;
+	margin-left:20px;
+	margin-right:20px;
 	overflow:hidden
+}
+
+
+.tm-bubble4 .tm-entry-view,.tm-bubble5 .tm-entry-view,.tm-bubble6 .tm-entry-view {
+	margin-top:10px;
 }
 
 .tm-legend {
 	position:absolute;
 	width:200px;
-	top:200px;
+	top:220px;
+	margin-left:50px;
+	z-index:2;
 }
 
 #tm-entry-new {
 	background-color:white;
 }
 
+#rsidebar {
+margin-top:50px;
+z-index:3;
+}
+
+
+
+
+.preview-img {
+	float:left;
+	width:50px;
+	height:50px;
+}
+
+
 </style>
 <% end %>
+<div id="timeline-container" class="grid_16">
+<div id="timeline-container-border"></div>
+
 
 <% if user_signed_in? %> 
-
 
 <div style='display:none'>	
 	<div id='tm-entry-new'></div>
 </div>
 <% end %>
 
-<div id="timeline-nav">
-	<a href="#all">전체</a>
-	<a href="#year">연</a>
-	<a href="#quarter">분기</a>
-	<a href="#month">월</a>
-	<a href="#week">주</a>
-	<a href="#day">일</a>
-</div>
 <div id="timeline-all" class="container_16">
 	<div class="grid_14">
 		<div id="lsidebar" class="grid_3 alpha">
-			<div id='politician1'>
-				<div class="grid_3">
+			<div id='tm-politician1'>
+				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @politicians[0].profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다' %>
+					<%= image_tag @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
 					</div>
-				</div>
 
-				<div class="grid_3">
-					<%= @politicians[0].name %>
+					<p class='pol-name'><%= @p1.name %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
 					<% end %>
+					</p>
 				</div>
 
 			</div>
 			
 			<div class='clear'></div>
 			
-			<div id='politician2'>
-				<div class="grid_3">
+			<div id='tm-politician2'>
+				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @politicians[1].profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다' %>
+					<%= image_tag @p2.profile_photo.url(:square100),:alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
 					</div>
-				</div>
-				<div class='clear'></div>
-				<div class="grid_3">
-					<%= @politicians[1].name %>
+				<p class='pol-name'>
+					<%= @p2.name %>
 					<% if user_signed_in? %>
-						<a class="link-new" href="#tm-entry-new" title="New Timeline Entry">[항목추가]</a>
-					<% end %>
+            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p2.id)%>">[+]</a>
+				<% end %>
+				</p>
 
 			</div>
 
@@ -250,5 +370,13 @@ z-index:10;
 		</div>
 		<div id="timeline" class="grid_11 omega"></div>
 	</div>
-	<div id="rsidebar" class="grid_2">슬라이더</div>
+	<div id="rsidebar" class="grid_2">
+		<p><a href="#all">전체</a></p>
+		<p><a href="#year">연</a></p>
+		<p><a href="#quarter">분기</a></p>
+		<p><a href="#month">월</a></p>
+		<p><a href="#week">주</a></p>
+		<p><a href="#day">일</a></p>
+	</div>
 </div>
+</div><!-- class='timeline-container'-->

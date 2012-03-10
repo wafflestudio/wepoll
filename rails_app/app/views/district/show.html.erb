@@ -86,7 +86,24 @@
 
         var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
         $(location).attr('href',url);
+        
+
       });
+			$('#show-timeline').click( function() {
+				$('#timeline-container').jqmShow();
+				return false
+			})
+
+			$('#timeline-container').jqm();
+
+      $(".joint-politician img").hover(function() {
+        //show
+
+      },
+      function() {
+        //hide
+      });
+
     });
   </script>
 
@@ -129,12 +146,15 @@
 
 <% end -%>
 
+<a href="#" id="show-timeline">&nbsp;</a>
 <div id="name-cards" class="grid_12 alpha omega">
   <div class="clearfix" id="name-cards-inner-wrapper">
     <div class="name-card">
-      <div class="tweet left">
-        last tweet of <%= @p1.tweet_name%>
-      </div>
+      <%= link_to forum_path(@p1), :class => "vs-forum-link" do %>
+        <div class="tweet left">
+          <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,48]}.." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
+        </div>
+      <% end -%>
       <div class="photo-frame" style="margin-left:5px;">
         <%= image_tag @p1.profile_photo.url(:square100) %>
         <div class="back">
@@ -161,9 +181,11 @@
     </div>
 
     <div class="name-card">
-      <div class="tweet right">
-        last tweet of <%=@p2.tweet_name%>
-      </div>
+      <%= link_to forum_path(@p2), :class => "vs-forum-link" do %>
+        <div class="tweet right">
+          <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,48]}.." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
+        </div>
+      <% end -%>
 
       <div class="candidate-selector right">
         <% if @politicians.any? -%>
@@ -233,3 +255,4 @@
   <div class="grid_2 omega">
   </div>
 </div>
+<%= render :file => 'timeline_entries/index'  %>

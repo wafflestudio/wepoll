@@ -48,7 +48,7 @@ Wepoll::Application.routes.draw do
   resources :tweets do
     match '/recommend' => 'tweets#recommend', :as => :recommend
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
-    get 'twwet_replies' => 'tweets#replies', :as => :tweet_replies
+    get 'tweet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
     match '/recommend' => 'tweet_replies#recommend', :as => :recommend
@@ -79,6 +79,7 @@ Wepoll::Application.routes.draw do
 
   match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
   match 'api/article_parse' => 'api#article_parsing'
+  match 'api/youtube_parse' => 'api#youtube_parsing'
 
 end
 

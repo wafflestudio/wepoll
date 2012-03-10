@@ -1,4 +1,5 @@
-<% politician.joint_initiate_bill_politicians[0...4].each_with_index do |tmp, i| -%>
+<% politician.joint_initiate_bill_politicians[0...5].each_with_index do |tmp, i| -%>
+  <% next if tmp[0] == politician._id %>
   <div class="joint-politician<%= i==0?" alpha":i==3?" omega":""%>">
     <% p = Politician.where(:_id => tmp[0]).first -%>
     <% if p && p.profile_photo? -%>
@@ -7,7 +8,7 @@
       <%= link_to image_tag("http://placehold.it/48x48"), '#'%>
     <% end -%>
 
-    <div><%= p.nil? ? tmp[0] : p.name  %></div>
-    <div><%= "#{(tmp[1].to_f/politician.initiate_bills.count*100.0).round}%" %></div>
+    <div class="joint-info"><%= p.nil? ? tmp[0] : p.name  %><br />
+    <%= "#{(tmp[1].to_f/politician.initiate_bills.count*100.0).round}%" %></div>
   </div>
 <% end -%>

@@ -7,8 +7,6 @@ class TimelineEntry
 	validates_associated :user
 	validates_presence_of :url,:posted_at
 
-	belongs_to :politician
-
   #=== Mongoid fields ===
   field :comment, type: String
   field :url, type: String

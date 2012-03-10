@@ -3,6 +3,11 @@ class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
     @politicians = Politician.where(:district => @district).desc(:good_link_count)
+
+    if @politicians.count < 2
+      render :json => []
+      return
+    end
     raise "politicians.count < 2" if @politicians.count < 2
 
     if (params[:p1_id] && params[:p2_id])
@@ -23,6 +28,26 @@ class DistrictController < ApplicationController
     @p2_bill_categories = p2_bill_categories.map {|c,n| c}
 
     @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
+
+    @t1 = @p1.tweets.asc('created_at').first
+    @t2 = @p2.tweets.asc('created_at').first
+
+		# Timeline => See timeline_controller.rb.
+		if params[:from]
+			q_time = {:updated_at => {'$gte' => params[:from]}}
+		elsif params[:after]
+			q_time = {:updated_at => {'$gt' => params[:after]}}
+		else
+			q_time = {:deleted => false} # (all except deleted)
+		end
+
+	  @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1.id,@p2.id])
+
+
+    respond_to do |format|
+      format.html
+      format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
+    end
   end
 
   protected

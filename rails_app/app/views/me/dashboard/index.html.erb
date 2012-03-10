@@ -1,16 +1,129 @@
-<h1><%= current_user.email %> <small>위폴 정보수정 페이지</small></h1>
+<h1><%= current_user.email %></h1>
 
 <div class="row">
-  <div>
-    <h3>닉네임</h3>
-    <%= form_for current_user, :url => '/users' do |f| -%>
-    <%= f.text_field :nickname %>
-    <% end -%>
+  <div class="span5 status">
+
+  </div>
+  <div class="span5 well">
+    <h3 class="small_title">내가 올린 링크</h3>
+    <h3 class="small_title pull-right">24개</h3>
+    <div class="link_list">
+      <table>
+        <thead>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="span5 well">
-    <h3>내가 올린 링크들</h3>
-    <p>없어요 아직</p>
+    <h3 class="small_title">내가 공감한 링크</h3>
+    <h3 class="small_title pull-right">24개</h3>
+    <div class="link_list">
+      <table>
+        <thead>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+          <tr>
+            <td class="list_date">2012-02-17</td>
+            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
+            <td class="list_button">
+              <img src="assets/sympathy.png" />
+            </td>
+            <td class="list_count">
+              500
+            </td>
+            <td class="list_button">
+              <img src="assets/report.png" />
+            </td>
+            <td class="list_count">
+              300
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="span6 well">
@@ -48,6 +161,13 @@
       <div class="alert">
         Twitter를 연결하여 위폴을 이용해보세요 <%= link_to '연동하기', me_sns_link_path(:twitter), :class => 'btn btn-small' %>
       </div>
+    <% end -%>
+  </div>
+
+  <div>
+    <h3>닉네임</h3>
+    <%= form_for current_user, :url => '/users' do |f| -%>
+    <%= f.text_field :nickname %>
     <% end -%>
   </div>
 </div>
