@@ -11,6 +11,7 @@ class TimelineEntry
   #=== Mongoid fields ===
   field :comment, type: String
   field :url, type: String
+  field :aux_url, type: String # image나 동영상
   field :link_type, type: String #NOTE:url이 가리키는 대상이 뭔지 구분하기 위해서 필요하다.
   field :posted_at, type:Time
   field :deleted, type: Boolean, default: false
@@ -29,13 +30,13 @@ class TimelineEntry
   def tag_text
   	text = ""
   	self.tags.each do |tag|
-  		text += tag + "\n" 
+  		text += tag + "," 
   	end
   	text
   end
 
   def tag_text=(text)
-		self.tags = text.split("\n")	
+		self.tags = text.split(",")	
   end
 
   #생성한 user

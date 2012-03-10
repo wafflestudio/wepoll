@@ -1,5 +1,4 @@
 <% content_for(:scripts) do %>
-<script type="text/coffeescript"></script>
 <script type="text/javascript">
 var timelineView;
 
@@ -44,11 +43,67 @@ function submitTimelineEntryForm(element,id)  {
 	}
 }
 
+function loadPreview(url,onload,onerror)  {
+	$.ajax({url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
+		function(data) {
+			onload(data)
+		}
+		, error:
+		function(xhr,textstatus,error) {
+			if(onerror)
+				onerror()
+		}
+	});
+	
+}
+
+function activateTimelineFormPreview(onload,onerror)  {
+	var timeout = null;
+	var url = null
+	input = $('.input-link')
+	input.keydown(function() {
+		if(timeout)
+			clearTimeout(timeout);
+		timeout = setTimeout(function() {
+			timeout = null
+			if(input.val() != url)
+				loadPreview(input.val(),onload,onerror)
+			url = input.val()
+		},1000)
+	});
+
+	input.focusout(function() {
+		if(input.val() != url)
+			loadPreview(input.val(),onload,onerror)
+		url = input.val()
+	})
+	
+	loadPreview(input.val(),onload,onerror)
+
+}
+
+
+function activateTimelineEntryForm() {
+	activateTimelineFormPreview(function successful(data){
+		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.')
+		$('#link-post').removeAttr('disabled').off('mousedown')
+	},function failed(){
+		$('.preview-status').attr("src", "/assets/bad.gif").attr('title', '유효하지 않은 링크입니다.')
+		$('#link-post').attr('disabled','disabled')
+	})
+	
+	tags = $("#timeline_entry_tag_text").val()
+	$("#timeline_entry_tag_text").tagsInput({maxChars:'5',defaultText:'태그추가'}).importTags(tags)
+
+
+}
+
 
 // FEED IN DATA
 var pol1 = <%= @p1.to_json.html_safe %>
 var pol2 = <%= @p2.to_json.html_safe %>
 var entries = <%= @timeline_entries.to_json.html_safe %>
+// On Load
 $(function() {
 	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
 	timelineController.startAutoUpdate()
@@ -58,21 +113,24 @@ $(function() {
   $(".link-new").click(function() {
 
     $(this).colorbox({title:false,onComplete:function(){
+    	activateTimelineEntryForm()
+			$('.tm-entry-form').submit( function() {
+				submitTimelineEntryForm(this)			
+				$.colorbox.close()
+				// prevent actually changing the page
+				return false;
+			});
 
-    		$('.tm-entry-form').submit( function() {
-					submitTimelineEntryForm(this)			
-					$.colorbox.close()
-    			// prevent actually changing the page
-					return false;
-				});
     	}
     });
   });
 
+	
+	<% end %>
+
 	$('#timeline-container').corner('20px')
 	$('#timeline-container-border').corner('10px').css('z-index','auto')
-
-	<% end %>
+	$('#timeline-bg').corner('10px').css('z-index','auto')
 
 
   $(".tm-entry").click(function() {
@@ -153,8 +211,8 @@ $(function() {
 #timeline-container {
 	padding-top:10px;
 	padding-left:5px;
-	background-color:#555;
-	height:440px;
+	background-color:#222;
+	height:480px;
 	z-index:2;
 	display:none;
 	position:fixed;
@@ -167,14 +225,28 @@ $(function() {
 	background-color:white;
 	margin:8px;
 	width:992px;
-	height:434px;
+	height:474px;
+	opacity:0.5;
 }
+
+#timeline-bg{
+	position:absolute;
+	left:140px;
+	top:0px;
+	background-color:white;
+	margin:8px;
+	width:852px;
+	height:474px;
+}
+
 
 #timeline-container a{
 	color:black;
 }
 
 #timeline-all {
+padding-top:25px;
+padding-bottom:20px;
 }
 
 #tm-politician1{
@@ -183,27 +255,28 @@ $(function() {
 	padding-left:20px;
 	padding-top:20px;
 
-	background:url('/assets/bg_politician_timeline_1.gif') no-repeat;
+	background:url('/assets/bg_politician_timeline_1.png') no-repeat;
 }
 
-#tm-politician2{
+#tm-politician2 {
 	height:200px;
 	padding-left:20px;
 	padding-top:35px;
-
-	background:url('/assets/bg_politician_timeline_2.gif') no-repeat;
+	background:url('/assets/bg_politician_timeline_2.png') no-repeat;
 
 }
 
 
 .photo-holder {
 	position:relative;
-	width:100px;
-	height:100px;
+	width:80px;
+	height:80px;
 	border:1px solid black;
 }
 
-.politician-photo1 .politician-photo2 {
+.politician-photo1, .politician-photo2 {
+	width:80px;
+	height:80px;
 	position:relative;
 }
 
@@ -293,18 +366,27 @@ z-index:10;
 	background:url('/assets/icn_timeline_right.gif') no-repeat;
 }
 
+.tm-sl-holder {
+position:relative;
+}
+
 .tm-sl-nav {
+	z-index:5;
 	position:absolute;
+	top:27px;
+	left:155px;
 	width:210px;
 }
 
-.tm-sl-nav-left {
+.tm-sl-nav-p {
+	display:inline-block;
 	width:9px;
 	height:12px;
 	background:url('/assets/icn_timeline_sl_left.gif') no-repeat;
 }
 
-.tm-sl-nav-right {
+.tm-sl-nav-n {
+	display:inline-block;
 	width:9px;
 	height:12px;
 	background:url('/assets/icn_timeline_sl_right.gif') no-repeat;
@@ -312,7 +394,7 @@ z-index:10;
 
 .tm-entry {
 	position:absolute;
-	top:30px;
+	top:25px;
 	left:0px;
 }
 
@@ -325,6 +407,19 @@ z-index:10;
 	overflow:hidden
 }
 
+.tm-entry-numlike,.tm-entry-numreply {
+	text-align:center;
+	float:left;
+	width:54px;
+	height:15px;
+	margin-right:15px;
+}
+.tm-entry-numlike  { background:url('/assets/tm-like-bg.gif')}
+.tm-entry-numreply  { background:url('/assets/tm-reply-bg.gif')}
+
+.tm-entry-content {
+	margin-top:10px;
+}
 
 .tm-bubble4 .tm-entry-view,.tm-bubble5 .tm-entry-view,.tm-bubble6 .tm-entry-view {
 	margin-top:10px;
@@ -361,6 +456,7 @@ z-index:3;
 <% end %>
 <div id="timeline-container" class="grid_16">
 <div id="timeline-container-border"></div>
+<div id="timeline-bg"></div>
 
 
 <% if user_signed_in? %> 

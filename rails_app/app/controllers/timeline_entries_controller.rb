@@ -71,6 +71,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1/edit
   def edit
     @timeline_entry = TimelineEntry.find(params[:id])
+    @politician = @timeline_entry.politician
     render :layout => false
   end
 
