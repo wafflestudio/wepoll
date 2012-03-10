@@ -2,50 +2,84 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.status {
-  border: 1px solid black;
-  width: 620px;
-  height: 130px;
-  margin: 30px auto 80px auto;
-}
-
-.well {
-  width: 940px;
-}
-
-.small_title {
-  font-size: 12px;
-  float: left;
-  margin-bottom: 10px;
-  margin-left: 15px;
-}
-
-.pull-right {
-  float: right;
-}
-
-.link_list {
-  clear: both;
-  border: 4px solid #4f4f50;
-  border-radius: 20px;
-  -moz-border-radius: 20px;
-  -webkit-border-radius: 20px;
-  background: #fff;
-  margin-bottom: 45px;
-  padding: 30px 30px 10px 30px;
-  .list_date { width: 131px; }
-  .list_title { width: 516px; }
-  .list_button { width: 40px; }
-  .list_count { width: 71px; font-weight: bold; text-align: center;}
-}
-
-table {
-  width: 100%;
-  clear: both;
-  tr {
-    height: 40px;
+#dash-main-content {
+  #sidebar {
+    min-height: 70px;
   }
-  td {
-    font-size: 13px;
+  #mypage_dashboard {
+
+    .alert {
+      position: relative;
+      margin-top: 5px;
+      height: 45px;
+      background-repeat: no-repeat;
+      background-position: 10px center;
+      text-align: right;
+      border-radius: 8px;
+      a {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+      }
+    }
+    .alert.facebook {
+      background-color: #3C539B;
+      background-image: url(facebook.png);
+    }
+    .alert.twitter {
+      background-color: #78DEF8;
+      background-image: url(twitter.png);
+    }
+    .status {
+      width: 620px;
+      height: 130px;
+      margin: 20px auto;
+    }
+
+    .well {
+      width: 960px;
+    }
+
+    .small_title {
+      font-size: 12px;
+      float: left;
+      margin-bottom: 10px;
+      margin-left: 15px;
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    .link_list {
+      clear: both;
+      border: 4px solid #4f4f50;
+      border-radius: 20px;
+      -moz-border-radius: 20px;
+      -webkit-border-radius: 20px;
+      background: #fff;
+      margin-bottom: 45px;
+      padding: 30px 30px 10px 30px;
+      th {
+        padding-left: 3px;
+        text-align: left;
+        font-size: 11pt;
+      }
+      .list_date { width: 131px; }
+      .list_title { width: 516px; }
+      .list_button { width: 40px; }
+      .list_count { width: 71px; font-weight: bold; text-align: center;}
+    }
+
+    table {
+      width: 100%;
+      clear: both;
+      tr {
+        height: 40px;
+      }
+      td {
+        font-size: 13px;
+      }
+    }
   }
 }

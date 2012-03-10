@@ -1,173 +1,74 @@
-<h1><%= current_user.email %></h1>
+<div id="mypage_dashboard">
+  <div class="row">
+    <div class="span5 status">
+        <% if current_user.facebook_token -%>
+          <div class="alert alert-success facebook">
+            <%= link_to image_tag('me/unlink.png'), "https://facebook.com/#{current_user.facebook_token.uid}" %>
+          </div>
+        <% else -%>
+          <div class="alert facebook">
+            <%= link_to image_tag('me/link.png'), me_sns_link_path(:facebook), :class => 'btn btn-small' %>
+          </div>
+        <% end -%>
 
-<div class="row">
-  <div class="span5 status">
-
-  </div>
-  <div class="span5 well">
-    <h3 class="small_title">내가 올린 링크</h3>
-    <h3 class="small_title pull-right">24개</h3>
-    <div class="link_list">
-      <table>
-        <thead>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <% if current_user.twitter_token -%>
+          <div class="alert alert-success twitter">
+            <%= link_to image_tag('me/unlink.png'), "https://twitter.com/users/#{current_user.twitter_token.uid}" %>
+          </div>
+        <% else -%>
+          <div class="alert twitter">
+            <%= link_to image_tag('me/link.png'), me_sns_link_path(:twitter), :class => 'btn btn-small' %>
+          </div>
+        <% end -%>
     </div>
-  </div>
 
-  <div class="span5 well">
-    <h3 class="small_title">내가 공감한 링크</h3>
-    <h3 class="small_title pull-right">24개</h3>
-    <div class="link_list">
-      <table>
-        <thead>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-          <tr>
-            <td class="list_date">2012-02-17</td>
-            <td class="list_title">서태지와 아이들 (Taiji Boys) - 난  알알요 서태지와...</td>
-            <td class="list_button">
-              <img src="assets/sympathy.png" />
-            </td>
-            <td class="list_count">
-              500
-            </td>
-            <td class="list_button">
-              <img src="assets/report.png" />
-            </td>
-            <td class="list_count">
-              300
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="grid_14 push_1">
+      <h3 class="small_title">내가 올린 링크</h3>
+      <h3 class="small_title pull-right"><%= @uploaded_links.count %>개</h3>
+      <div class="link_list">
+        <table>
+          <thead>
+            <tr>
+              <th class="list_date">날짜</th>
+              <th class="list_title">제목</th>
+              <th class="list_count">공감</th>
+              <th class="list_count">신고</th>
+            </tr>
+          </thead>
+          <tbody id="uploaded_links">
+            <%= render @uploaded_links %>
+          </tbody>
+        </table>
+      </div>
+      <div id="uploaded_paginator">
+        <%= paginate @uploaded_links, :remote => true %>
+      </div>
     </div>
-  </div>
+    <div class="clear"></div>
 
-  <div class="span6 well">
-    <h3>지지하는 정치인</h3>
-    <p>없어 아직 그런거</p>
-  </div>
+    <div class="grid_14 push_1">
+      <h3 class="small_title">내가 공감한 링크</h3>
+      <h3 class="small_title pull-right"><%= @recommend_links.count %>개</h3>
+      <div class="link_list">
+        <table>
+          <thead>
+            <tr>
+              <th class="list_date">날짜</th>
+              <th class="list_title">제목</th>
+              <th class="list_count">공감</th>
+              <th class="list_count">신고</th>
+            </tr>
+          </thead>
+          <tbody id="recommend_links">
+            <%= render @recommend_links %>
+          </tbody>
+        </table>
+      </div>
+      <div id="recommend_paginator">
+        <%= paginate @recommend_links, :remote => true %>
+      </div>
+    </div>
+    <div class="clear"></div>
 
-  <div class="span5 well">
-    <h3>SNS 연동</h3>
-    <h4>Facebook</h4>
-    <% if current_user.facebook_token && current_user.facebook_token.approved -%>
-      <div class="alert alert-success">
-        Facebook 연동이 돼있습니다. <%= link_to "바로가기", "https://facebook.com/#{current_user.facebook_token.uid}" %>
-      </div>
-    <% elsif current_user.facebook_token && !current_user.facebook_token.approved -%>
-      <div class="alert alert-info">
-        Facebook 연동 인증메일을 통해 인증 대기중입니다. <%= link_to '메일을 못받았어요.', '#' %>
-      </div>
-    <% else -%>
-      <div class="alert">
-        Facebook을 연결하여 위폴을 이용해보세요 <%= link_to '연동하기', me_sns_link_path(:facebook), :class => 'btn btn-small' %>
-      </div>
-    <% end -%>
-
-    <h4>Twitter</h4>
-    <% if current_user.twitter_token && current_user.twitter_token.approved-%>
-      <div class="alert alert-success">
-        Twitter 연동이 돼있습니다. <%= link_to '바로가기', "https://twitter.com/users/#{current_user.twitter_token.uid}" %>
-      </div>
-    <% elsif current_user.twitter_token && !current_user.twitter_token.approved -%>
-      <div class="alert alert-info">
-        Twitter 연동 인증메일을 통해 인증 대기중입니다. <%= link_to '메일을 못받았어요', '#' %>
-      </div>
-    <% else -%>
-      <div class="alert">
-        Twitter를 연결하여 위폴을 이용해보세요 <%= link_to '연동하기', me_sns_link_path(:twitter), :class => 'btn btn-small' %>
-      </div>
-    <% end -%>
-  </div>
-
-  <div>
-    <h3>닉네임</h3>
-    <%= form_for current_user, :url => '/users' do |f| -%>
-    <%= f.text_field :nickname %>
-    <% end -%>
   </div>
 </div>

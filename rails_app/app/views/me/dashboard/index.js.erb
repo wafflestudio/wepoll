@@ -1,0 +1,2 @@
+$('#uploaded_links').html('<%= escape_javascript render(@uploaded_links) %>');
+$('#uploaded_paginator').html('<%= escape_javascript(paginate(@uploaded_links, :remote => true).to_s) %>');
