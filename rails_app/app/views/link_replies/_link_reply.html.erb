@@ -1,0 +1,17 @@
+<div class="link-reply-wrapper">
+  <img class="link-reply-user-photo" src="<%= link_reply.user ? link_reply.user.profile_picture.url(:square50) : "/assets/anonymous.gif" %>"/>
+
+  <div class="link-content-wrapper">
+    <div class="link-reply-user-name"><%= link_reply.user ? link_reply.user.nickname : "정보없음" %></div>
+    <div class="link-reply-content"><%= link_reply.body %></div>
+  </div>
+
+  <div class="clear"></div>
+
+  <div class="link-reply-date"><%= link_reply.created_at.strftime("%Y-%m-%d %p %H:%M") %></div>
+  <div class="actions">
+    <span class="like"><%= link_to '공감', '#', :class => "" %> <%= link_reply.like %></span>
+    <span class="blame"><%= link_to '신고', '#', :class => "" %></span>
+  </div>
+  <div class="clear"></div>
+</div>

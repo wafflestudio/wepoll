@@ -119,6 +119,13 @@ div.field {
 #link-user {
   background-color:#fff4c4;
   border-radius:7px;
+  padding:7px;
+  margin-bottom:10px;
+}
+
+#link-user-info {
+  margin-left:5px;
+  float:left;
 }
 
 #link-user-photo {
@@ -139,6 +146,7 @@ div.field {
 
 #link-detail-wrapper {
   width:688px;
+  padding-top:20px;
 }
 
 #link-thumbnail {
@@ -416,4 +424,131 @@ z-index:3;
 	float:left;
 	width:50px;
 	height:50px;
+}
+#current-user-photo {
+  width:36px;
+  height:36px;
+  border:3px solid #fedc43;
+  display:block;
+  float:left;
+}
+
+#send-sns {
+  float:right;
+}
+
+#link_reply_body {
+  height:70px - 10px;
+  border:0;
+  background-color:#eceded;
+  margin-top:10px;
+  margin-bottom:5px;
+  width:280px - 10px;
+  padding:5px;
+}
+
+#link-comment-action {
+  float:right;
+  input {
+    background-color:#fede4d;
+    width:40px - 6px;
+    height:28px - 8px;
+    border:0;
+    padding-top:4px;
+    padding-bottom:4px;
+    padding-left:3px;
+    padding-right:3px;
+    border-radius:5px;
+  }
+}
+
+.link-reply-user-photo {
+  width:32px;
+  height:32px;
+  float:left;
+  display:block;
+  border:3px solid #feda3a;
+  border-radius:3px;
+}
+
+.link-content-wrapper {
+  margin-left:5px;
+  float:left;
+}
+
+.link-reply-user-name {
+  color:#6eb8b9;
+}
+
+.actions {
+  text-align:right;
+  margin-top:5px;
+  float:right;
+  width:120px;
+
+  .like {
+    color:#caac23;
+    a {
+      text-decoration:none;
+      color:#caac23;
+    }
+    margin-right:5px;
+  }
+
+  .blame a{
+    color:#f85151;
+    text-decoration:none;
+  }
+}
+
+.link-reply-date {
+  margin-top:5px;
+  color:#7a7a7a;
+  float:left;
+  width:150px;
+}
+
+#current-user-photo {
+  float:left;
+  display:block;
+  width:36px;
+  height:36px;
+  border:4px solid #fedc45;
+  border-radius:6px;
+}
+
+#reply_check {
+  float:right;
+  padding-top:35px;
+  padding-right:10px;
+}
+
+#comment-length {
+  float:left;
+  padding-top:5px;
+  margin-right:5px;
+}
+
+#link-reply-button {
+  border-radius:5px;
+  border:0;
+  background-color:#fede4d;
+  padding:3px 5px;
+}
+
+#link-reply-list {
+  margin-top:10px;
+}
+
+#replies-right {
+  width:280px;
+}
+
+#replies-left {
+  width:392px - 1px;
+  border-right:1px dashed #bdbbbc;
+}
+
+#link-title-wrapper {
+  width:218px;
 }

@@ -81,10 +81,11 @@ class User
   #timeline entry
   has_many :timeline_entries, :inverse_of => :user
 
-  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
-    data = access_token.extra.raw_info
+  has_many :link_replies, :inverse_of => :user
 
-    if user_token = UserToken.where(:provider => 'facebook', :uid => data["id"]).first
+  def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
+
+    if user_token = UserToken.where(:provider => 'facebook', :uid => access_token.id).first
       user_token.user
 #    elsif signed_in_resource.nil?
 #      user = User.create!(:userid => "fb_#{data["id"]}", :email => data.email, :password => Devise.friendly_token[0,20])
