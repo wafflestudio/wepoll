@@ -40,7 +40,7 @@
           </tbody>
         </table>
       </div>
-      <div id="uploaded_paginator">
+      <div id="uploaded_paginator" class="paginator">
         <%= paginate @uploaded_links, :remote => true %>
       </div>
     </div>
@@ -64,8 +64,8 @@
           </tbody>
         </table>
       </div>
-      <div id="recommend_paginator">
-        <%= paginate @recommend_links, :remote => true %>
+      <div id="recommend_paginator" class="paginator">
+        <%= paginate @recommend_links, :remote => true, :param_name => 'page_2' %>
       </div>
     </div>
     <div class="clear"></div>

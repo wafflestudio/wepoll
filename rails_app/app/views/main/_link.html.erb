@@ -2,8 +2,8 @@
     <!-- TODO : 링크걸어주세요 -->
     <div class="title"><%= link.nil? ? (raw "<span style=\"color:#888\">링크가 없습니다.</span>") : (link_to (link.title||"제목이 없습니다.").truncate(40), '#') %></div>
   <div class="meta-info clearfix">
-    <div class="support-count">공감 <%= link.nil? ? 0 : link.like%></div>
+    <div class="support-count">공감 <%= link.nil? ? 0 : link.recommend_count %></div>
     <!-- TODO : 링크걸어주세요 -->
-    <div class="nickname"><%= link.nil? || link.user.nil? ? "위폴" : (link_to link.user.nickname, '#')%></div>
+    <div class="nickname"><%= (link.nil? || link.user.nil?) ? "위폴" : (link_to link.user.nickname, '#')%></div>
   </div>
 </div>

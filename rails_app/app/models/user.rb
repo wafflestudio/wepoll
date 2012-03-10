@@ -79,7 +79,7 @@ class User
   has_and_belongs_to_many :report_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :report_users
 
   #timeline entry
-  has_many :timeline_entries
+  has_many :timeline_entries, :inverse_of => :user
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
     data = access_token.extra.raw_info
