@@ -50,7 +50,7 @@ class TimelineEntriesController < ApplicationController
   # GET /timeline_entries/1.json
   def show
     @timeline_entry = TimelineEntry.find(params[:id])
-    @link_replies = @timeline_entry.link_replies
+    @link_replies = @timeline_entry.link_replies.desc('created_at')
     @new_link = LinkReply.new
 
     @other_links = [] #TODO : 관련 링크 가져오기

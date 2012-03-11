@@ -21,28 +21,6 @@
     //XXX: #fb-link-like는 없는 dom인데??
     FB.XFBML.parse($("#fb-link-like")[0]);
 
-    //fucking ie
-    $.support.placeholder = false;
-    var test = document.createElement('input');
-    if('placeholder' in test) $.support.placeholder = true;
-
-    if(!$.support.placeholder) { 
-      var active = document.activeElement;
-      $('textarea').focus(function () {
-        if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
-          $(this).val('').removeClass('hasPlaceholder');
-        }
-      }).blur(function () {
-        if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
-          $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
-        }
-      });
-      $('textarea').blur();
-      $(active).focus();
-      $('form').submit(function () {
-        $(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
-      });
-    }
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
   });
 </script>

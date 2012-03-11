@@ -4,14 +4,22 @@
 #facebook localhost
 #FACEBOOK_CLIENT = {:key => "185387964894905", :secret => "331fcf8686c33ecf0805ab25765e0263"}
 #facebook wepoll.dev
-FACEBOOK_CLIENT = {:key => "369053339792936", :secret => "ba912e789ee9d9d525d3199394b3e076"}
+#FACEBOOK_CLIENT = {:key => "369053339792936", :secret => "ba912e789ee9d9d525d3199394b3e076"}
+
+#facebook for service
+FACEBOOK_CLIENT = {:key => "107303369400040", :secret => "a98ae96f729d42af7e46e6b0c431e57a"}
+
 
 #twitter localhost
 #TWITTER_CLIENT = {:key => "H6fDcyU6pRgs2mmHSj76PA", :secret => "405iY9l5YIR5yxcQFT9641mhmfu98SYM7Jf8F8Fg1Y"}
 #twitter ruby.snu.ac.kr
 #TWITTER_CLIENT = {:key => "40T6Ck0T9dRcWaPtBvMw", :secret => "PNXjZ1WKgLqpx16OjL504UtwoqhdB3M31jt7WnXIwm4"}
 #twitter wepoll.dev
-TWITTER_CLIENT = {:key => "N8RsJW7dOjV94G05KM3dQ", :secret => "0UCAoWxk0pcibJagr2IksmfAQaMD7AJxLsCDlAXAMg"}
+#TWITTER_CLIENT = {:key => "N8RsJW7dOjV94G05KM3dQ", :secret => "0UCAoWxk0pcibJagr2IksmfAQaMD7AJxLsCDlAXAMg"}
+
+#twitter for service
+TWITTER_CLIENT = {:key => "NN9GgXKlb4d5nP70iwNQ", :secret => "tIur37NTzQRx7z6yfxrAno7uKEFzjMkotGnm1IZVgZs"}
+TWITTER_ACCOUNT = {:key => "508262434-6OIa5OWjgvc9n8idt4HXpIft1grD4RztzsN71Fsy", :secret => "DPFraTfhHKUPSTI08HiRxN8QUS2LnMpW6Exc9URK6M"}
 
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.

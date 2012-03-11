@@ -175,7 +175,10 @@ $(function() {
   $(".tm-entry").click(function() {
     var entry_id = $(this).attr('data-id');
     var url = "/timeline_entries/"+entry_id;
-    $(this).colorbox({href:url});
+    $(this).colorbox({width: 800, href:url, onComplete:function() {
+      $('#link_reply_body').placeholder();
+      FB.XFBML.parse($("#fb-link-like")[0]);
+    }});
   });
 
 //  Raphael(function() {
