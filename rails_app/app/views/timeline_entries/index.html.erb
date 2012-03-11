@@ -277,7 +277,7 @@ $(function() {
 			<div id='tm-politician1'>
 				<div class="grid_2">
 					<div class="photo-holder">
-						<%= image_tag @p1.nil? ? "http://placehold.it/100" : @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+						<%= image_tag @p1 ? @p1.profile_photo.url(:square100) : "http://placehold.it/100", :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
 						<div class='pol-name'><%= @p1 ? raw(@p1.name.split("").join('<br/>')) : "" %>
 						<% if user_signed_in? && @p1 %>
 							<a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
@@ -295,7 +295,7 @@ $(function() {
 			<div id='tm-politician2'>
 				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @p2 ? @p2.profile_photo.url(:square100) : nil,:alt=>'프로필 사진이 없습니다',:class=>'politician-photo2' %>
+					<%= image_tag @p2 ? @p2.profile_photo.url(:square100) : "http://placehold.it/100",:alt=>'프로필 사진이 없습니다',:class=>'politician-photo2' %>
 					</div>
 				<p class='pol-name'>
 					<%= @p2 ? raw(@p2.name.split("").join('<br/>')) : "" %>

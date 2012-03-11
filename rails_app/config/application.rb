@@ -59,10 +59,16 @@ module Wepoll
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    config.assets.paths << Rails.root.join("app", "assets", "stylesheets", "preload")
+    config.assets.paths << Rails.root.join("app", "assets", "stylesheets", "admin")
+    config.assets.paths << Rails.root.join("app", "assets", "javascripts", "admin")
+    config.assets.precompile += ["preload/preload.css"]
+    config.assets.precompile += ["admin/admin.js", "admin/*.css"]
+
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.action_mailer.default_url_options = {:host => 'ruby.snu.ac.kr:7789'}
+    config.action_mailer.default_url_options = {:host => 'wepoll.or.kr'}
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.perform_deliveries = true
     config.action_mailer.raise_delivery_errors = true
