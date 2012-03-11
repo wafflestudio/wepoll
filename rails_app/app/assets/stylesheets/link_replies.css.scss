@@ -7,3 +7,29 @@
   padding-bottom:5px;
   padding-top:5px;
 }
+
+.link-content-wrapper {
+  width:280px;
+  float:left;
+}
+.link-reply-user-name {
+  margin-bottom:5px;
+}
+
+.link-reply-user-photo {
+  margin-right:5px;
+  width:32px;
+  height:32px;
+  float:left;
+  display:block;
+  border:3px solid #feda3a;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+}
+
+.link-reply-user-name {
+  color:#6eb8b9;
+}
+
+

@@ -1,9 +1,9 @@
 #coding : utf-8
 class TimelineEntriesController < ApplicationController
 
-  
+
 	before_filter :authenticate_user!, :except => [:index,:show]
-  
+
   # GET /timeline_entries
   # GET /timeline_entries.json
   def index
@@ -148,11 +148,9 @@ class TimelineEntriesController < ApplicationController
 
   def recommend
     @t = TimelineEntry.find(params[:timeline_entry_id])
-    if @t.recommend(current_user)
-      render :json => {:status => "ok", :count => @t.recommend_count }
-    else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
-    end
+    @result = @t.recommend(current_user)
+#      render :json => {:status => "ok", :count => @t.recommend_count }
+#      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
   end
 
 protected
