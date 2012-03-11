@@ -173,7 +173,7 @@ class ApiController < ApplicationController
 			elsif target_link.match('hani\.co\.kr') # 한겨례 
 				result[:title] = doc.title()
 				result[:created_at] = doc.xpath('//p[@class="date"]/span').first.text.split(' ')[2] + ' ' + doc.xpath('//p[@class="date"]/span').first.text.split(' ')[3]
-				result[:description] doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
+				result[:description] =  doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
 				if doc.xpath('//table[@class="photo-view-area"]//img').length > 0 
 					result[:image] = doc.xpath('//table[@class="photo-view-area"]//img').first['src']
 				else 
@@ -181,10 +181,6 @@ class ApiController < ApplicationController
 				end
 			else
 				result[:error] = '해당 기사는 지원되지 않습니다.'
-				#result[:title] = doc.title()
-				#result[:image] = doc.xpath('//meta[@property="og:image"]').first['content'] if doc.xpath('//meta[@property="og:image"]').count > 0
-				#result[:description] = doc.xpath('//meta[@property="og:description"]').first['content'] if doc.xpath('//meta[@property="og:description"]').count > 0
-				#result[:created_at] = ''
 			end
 			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 		end
