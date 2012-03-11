@@ -37,6 +37,10 @@ class User
 
   validates :agree_provision,:inclusion => {:in => [true]}
 
+  ## 계정정지
+  field :suspended, type: Integer, default: 0
+  field :total_suspend_count, type: Integer, default: 0
+
   def email_required?
     false
   end
@@ -85,7 +89,9 @@ class User
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
 
-    if user_token = UserToken.where(:provider => 'facebook', :uid => access_token.id).first
+    uid = access_token.uid
+    Rails.logger.info "find_for_facebook_oauth, uid = " + uid
+    if user_token = UserToken.where(:provider => 'facebook', :uid => uid).first
       user_token.user
 #    elsif signed_in_resource.nil?
 #      user = User.create!(:userid => "fb_#{data["id"]}", :email => data.email, :password => Devise.friendly_token[0,20])

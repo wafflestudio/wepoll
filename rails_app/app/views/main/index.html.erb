@@ -23,7 +23,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
-        $("#vs-container").hide();
+//        $("#vs-container").hide();
 
         //TODO : according to cookie value, select map which not shown
         $("#busan-map").removeClass("selected");
@@ -175,15 +175,37 @@ stroke: "none",
 
       $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
       $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
+
+      //draw bar grpah
+      $("#vs-politician1 .good_links").attr("data-value",p1 ? p1.good_link_count : 0);
+      $("#vs-politician2 .good_links").attr("data-value",p2 ? p2.good_link_count : 0);
+
+      $("#vs-politician1 .bad_links").attr("data-value",p1 ? p1.bad_link_count : 0);
+      $("#vs-politician2 .bad_links").attr("data-value",p2 ? p2.bad_link_count : 0);
+
+      $(".good_links, .bad_links").html("");
+
+      $(".good_links, .bad_links").simpleBarGraph({
+        width:100,
+        height:8,
+        labelWidth:20,
+        labelPosition:"outside",
+        animate:true,
+        labelClass:"links-bar-label",
+        total:-1, //ref model
+        minWidth:10,
+        label:function(x, fx) {
+          return Math.round(x)+"";
+        }
+      });
+
     });
-    console.log("over");
 
     },
     out = function () {
-      console.log("out");
       this.curve.remove();
       this.arrow.remove();
-      $("#vs-container").hide();
+//      $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
@@ -263,16 +285,16 @@ r.setViewBox(-94,95,500,640,false)
         <div class="photo-frame"></div>
       </div>
       <div class="politician-name"></div>
-      <div class="good_links"></div>
-      <div class="bad_links"></div>
+      <div class="good_links" data-float="right" data-color="#f1366f" data-ref="#vs-politician2 .good_links"></div>
+      <div class="bad_links" data-float="right" data-color="#606366" data-ref="#vs-politician2 .bad_links"></div>
     </div>
     <div class="vs-part omega" id="vs-politician2">
       <div class="loser-photo-wrapper">
         <div class="photo-frame"></div>
       </div>
       <div class="politician-name"></div>
-      <div class="good_links"></div>
-      <div class="bad_links"></div>
+      <div class="good_links" data-float="left" data-color="#f1366f" data-ref="#vs-politician1 .good_links"></div>
+      <div class="bad_links" data-float="left" data-color="#606366" data-ref="#vs-politician1 .bad_links"></div>
     </div>
   </div>
 <% end -%>

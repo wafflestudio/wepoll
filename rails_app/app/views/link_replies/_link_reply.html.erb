@@ -10,8 +10,8 @@
 
   <div class="link-reply-date"><%= link_reply.created_at.strftime("%Y-%m-%d %p %H:%M") %></div>
   <div class="actions">
-    <span class="like"><%= link_to '공감', '#', :class => "" %> <%= link_reply.like %></span>
-    <span class="blame"><%= link_to '신고', '#', :class => "" %></span>
+    <span class="like"><%= link_to '공감', like_link_reply_path(link_reply), :remote => true%> <span id="like-count-<%=link_reply.id%>"><%= link_reply.like %></span></span>
+    <span class="blame"><%= link_to '신고', blame_link_reply_path(link_reply), :remote => true%></span>
   </div>
   <div class="clear"></div>
 </div>

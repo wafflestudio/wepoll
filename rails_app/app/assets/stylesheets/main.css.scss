@@ -279,11 +279,36 @@
   height:20px;
   font-size:9pt;
   text-align:center;
-  margin:0 auto;
+  margin:7px auto 7px auto;
 }
 
 #login_close {
   cursor: pointer;
+}
+
+.links-bar-label {
+  font-size:6pt;
+}
+
+.good_links {
+  margin-bottom:5px;
+  .links-bar-label {
+    color:#f1366f;
+  }
+}
+
+.bad_links {
+  .links-bar-label {
+    color:#606366;
+  }
+}
+
+#vs-politician1 .good_links, #vs-politician1 .bad_links {
+  float:right;
+}
+
+#vs-politician2 .good_links, #vs-politician2 .bad_links {
+  float:left;
 }
 
 /* all */
