@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
       true
     end
   end
+
   def prepare_links
     @recent_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
     #TODO : 인기 링크 정렬 방식 고민

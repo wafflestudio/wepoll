@@ -1,0 +1,7 @@
+<div class="notice-wrapper grid_10 alpha omega">
+  <h3 class="notice-title "><%= notice.title %></h3>
+  <div class="notice-date "><%= notice.created_at.strftime("%Y-%m-%d %H:%M") %></div>
+  <div class="notice-content ">
+    <%= simple_format notice.content%>
+  </div>
+</div>

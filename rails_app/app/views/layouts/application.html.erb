@@ -17,6 +17,11 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
+
+      function show_notices() {
+        $.colorbox({href:"<%= notices_path %>"});
+      }
+
       $(document).ready(function() {
         //notification bars
         <% [:notice, :error, :alert].each do |level| %>
@@ -25,9 +30,10 @@
           <% end %>
         <% end %>
       });
+
       $("input#query").autocomplete({
         source: search_source,
-        delay: 50, 
+        delay: 50,
         max: 10,
         autoFocus: true,
         select: function(event, ui) {
