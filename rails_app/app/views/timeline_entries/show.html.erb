@@ -1,20 +1,5 @@
 <script type="text/javascript">
   $(function() {
-    $('span.checkbox').addClass("unchecked");
-    $(".checkbox").click(function(){
-      if($(this).children("input").attr("checked")){
-        // uncheck
-        $(this).children("input").removeAttr("checked");
-        $(this).removeClass("checked");
-        $(this).addClass("unchecked");
-      }else{
-        // check
-        $(this).children("input").attr({checked: "checked"});
-        $(this).removeClass("unchecked");
-        $(this).addClass("checked");
-      }
-    });
-
     $("#link_reply_body").keyup(function() {
       var $this = $(this);
       var max = parseInt($this.attr('maxlength'));
@@ -32,6 +17,9 @@
         return true;
       });
     });
+
+    //XXX: #fb-link-like는 없는 dom인데??
+    FB.XFBML.parse($("#fb-link-like")[0]);
 
     //fucking ie
     $.support.placeholder = false;
@@ -55,6 +43,7 @@
         $(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
       });
     }
+    !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
   });
 </script>
 
@@ -66,10 +55,20 @@
         <span style="color:#48d822;font-size:9pt;">공감</span>
       </div>
 
-      <img class="grid_1" id="link-thumbnail" src="<%= @timeline_entry.thumbnail.url(:square48)%>" />
+      <%= image_tag @timeline_entry.aux_url, :class => "grid_1", :id => "link-thumbnail" %>
       <div class="grid_3 omega" id="link-title-wrapper">
         <div id="link-title"><%= @timeline_entry.title %></div>
         <div id="link-url"><%= link_to truncate(@timeline_entry.url, :length => 35), @timeline_entry.url%></div>
+      </div>
+
+      <div class="clear"></div>
+
+      <div class="grid_2 alpha" id="sns-links">
+        <%= link_to '공감하기', timeline_entry_like_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
+        <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
+      </div>
+
+      <div class="grid_4 omega" id="link-preview">
       </div>
 
     </div>
@@ -87,21 +86,20 @@
 
       <%= form_for @new_link, :remote => true do |f| -%>
         <%= hidden_field_tag 'link_reply[timeline_entry_id]', @timeline_entry.id.to_s %>
-        <% if user_signed_in? -%>
-          <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
-        <% else -%>
-          <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
-        <% end -%>
-        <div id="reply_check">
-          <span class="checkbox twitter"><input name="tweet" type="checkbox" /></span>
-          <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
-        </div>
 
-        <% if user_signed_in? -%>
-          <%= f.text_area :body, :maxlength => 140%>
-        <% else -%>
-          <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
-        <% end -%>
+        <div class="clearfix grid_5 alpha omega" id="link-reply-field-wrapper">
+          <% if user_signed_in? -%>
+            <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
+          <% else -%>
+            <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
+          <% end -%>
+
+          <% if user_signed_in? -%>
+            <%= f.text_area :body, :maxlength => 140%>
+          <% else -%>
+            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+          <% end -%>
+        </div>
 
       <div style="float: right; margin-right:10px;">
         <div id="comment-length">

@@ -154,6 +154,8 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 
 #link-thumbnail {
   display:block;
+  height:48px;
+  margin-top:10px;
 }
 
 #link-title {
@@ -445,6 +447,8 @@ z-index:3;
   border:3px solid #fedc43;
   display:block;
   float:left;
+  margin-left:5px;
+  margin-top:5px;
 }
 
 #send-sns {
@@ -455,10 +459,20 @@ z-index:3;
   height:70px - 10px;
   border:0;
   background-color:#eceded;
-  margin-top:10px;
   margin-bottom:5px;
-  width:280px - 10px;
+  width:220px - 10px;
   padding:5px;
+  float:left;
+}
+
+#link-reply-field-wrapper {
+  background-color:#eceded;
+  -moz-border-radius:5px;
+  -o-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  //TODO : change the URL
+  behavior:url(http://wepoll.dev/PIE.htc);
 }
 
 #link-comment-action {
@@ -477,27 +491,6 @@ z-index:3;
     -moz-border-radius:5px;
 behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   }
-}
-
-.link-reply-user-photo {
-  width:32px;
-  height:32px;
-  float:left;
-  display:block;
-  border:3px solid #feda3a;
-  border-radius:3px;
-  -webkit-border-radius:3px;
-  -moz-border-radius:3px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-}
-
-.link-content-wrapper {
-  margin-left:5px;
-  float:left;
-}
-
-.link-reply-user-name {
-  color:#6eb8b9;
 }
 
 .actions {
@@ -577,4 +570,28 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 
 #link-title-wrapper {
   width:218px;
+  margin-top:10px;
+}
+
+#sns-links {
+  margin-top:10px;
+  margin-left:15px;
+  width:88px - 15px;
+}
+
+#link-preview {
+  width:218px + 48px + 10px;
+}
+
+#link-recommend {
+  display:block;
+  margin-bottom:10px;
+  background-color:#FEDE4D;
+  border-radius:5px;
+  color:#68665D;
+  padding:5px;
+  width:50px - 5px;
+  text-decoration:none;
+  text-align:center;
+  font-size:8pt;
 }

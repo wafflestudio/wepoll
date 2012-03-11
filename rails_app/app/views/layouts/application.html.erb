@@ -24,6 +24,15 @@
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>"});
       }
+      function show_about() {
+        $.colorbox({href:"/about",width:800,height:600});
+      }
+      function show_provision() {
+        $.colorbox({href:"/provision",width:800,height:600});
+      }
+      function show_privacy() {
+        $.colorbox({href:"/privacy",width:800,height:600});
+      }
 
       $(document).ready(function() {
         $.support.placeholder = false;
@@ -84,6 +93,7 @@ focus: function() {return false;}});
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
     <!--    <link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">-->
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
+    <%= javascript_include_tag "cssrefresh" %>
   </head>
   <body>
     <div id="fb-root"></div>
