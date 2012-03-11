@@ -27,6 +27,14 @@
           <% end %>
         <% end %>
       });
+
+      <% if session[:need_login] -%>
+        $.colorbox({href:"/users/sign_in", width: 520, height: 250});
+        alert('hihi');
+        <% session.delete :need_login -%>
+      <% else -%>
+        alert('hihi2');
+      <% end -%>
       $("input#query").autocomplete({
         source: search_source,
         delay: 50, 

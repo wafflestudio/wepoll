@@ -32,7 +32,7 @@
       <textarea class="text_box" readonly>
 <%= File.read(Rails.root + "privacy.txt")%>
       </textarea>
-      <%= check_box_tag :agree_private %><%= label_tag :agree_private, '개인정보 수집 및 이용에 동의합니다.' %>
+      <%= check_box_tag :agree_privacy %><%= label_tag :agree_private, '개인정보 수집 및 이용에 동의합니다.' %>
     </div>
   </div>
   <div id="buttons"><%= button_to '돌아가기', '#', :id => "cancel_btn", :class => "btn" %><%= f.submit "가입하기", :id => "sign_up_btn", :class => "btn" %></div>
