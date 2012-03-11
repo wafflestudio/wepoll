@@ -24,6 +24,15 @@
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>"});
       }
+      function show_about() {
+        $.colorbox({href:"/about",width:800,height:600});
+      }
+      function show_provision() {
+        $.colorbox({href:"/provision",width:800,height:600});
+      }
+      function show_privacy() {
+        $.colorbox({href:"/privacy",width:800,height:600});
+      }
 
       $(document).ready(function() {
         $.support.placeholder = false;
