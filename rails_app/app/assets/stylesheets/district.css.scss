@@ -20,6 +20,8 @@
 #tab-wrapper {
   background-color:#feeda0;
   border-radius:15px;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
   width:607px;
   margin-left:51px;
   margin-top:15px;
@@ -38,6 +40,8 @@
   width:607px;
   margin:0;
   border-radius:15px;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
   background-color:#fff5c8;
 }
 #tabs .tab {
@@ -47,6 +51,8 @@
   background-color:#ffefa6;
   margin-bottom:6px;
   border-radius:8px;
+  -webkit-border-radius:8px;
+  -moz-border-radius:8px;
   border-bottom-right-radius:0;
   border-top-right-radius:0;
   padding-top:12px;
@@ -73,6 +79,8 @@
 .subsection {
   border:1px solid #5a5958;
   border-radius:7px;
+  -webkit-border-radius:7px;
+  -moz-border-radius:7px;
   margin-bottom:12px;
   padding: 7px 0;
 
@@ -116,12 +124,16 @@
   float:left;
   width:688px - 30px;
   border-radius:15px;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
 }
 
 #name-cards-inner-wrapper {
   width:658px;
   height:329px;
   border-radius:15px;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
   background-color:#fff5c8;
 }
 
@@ -313,6 +325,8 @@
 #popup-profile-photo {
   border:2px solid #4f4f50;
   border-radius:4px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
   width:130px;
   float:left;
   .photo {
@@ -343,6 +357,8 @@
   width:332px;
   border:2px solid #4f4f50;
   border-radius:4px;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
   background-color:white;
 
   h3.bill-count {

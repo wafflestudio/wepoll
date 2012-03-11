@@ -35,6 +35,15 @@
   <%= devise_error_messages! %>
 <% end %>
 
+<%= javascript_include_tag 'jquery' %>
+<%= javascript_include_tag 'jquery_ujs' %>
+
+<script type="text/javascript">
+  $('#cancel_btn').click(function() {
+    window.close();
+    return false;
+  });
+</script>
 <style type"text/css">
   #info {
     padding-left: 20px;
