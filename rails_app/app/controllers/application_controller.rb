@@ -1,3 +1,4 @@
+#coding : utf-8
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
@@ -5,7 +6,15 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if current_user.nil?
-      render :js => '$.colorbox({href:"/users/sign_in", width: 520, height: 250});'
+      respond_to do |format|
+        format.html do
+          flash[:error] = "로그인이 필요합니다."
+          redirect_to root_path
+        end
+        format.js do
+          render :js => '$.colorbox({href:"/users/sign_in", width: 520, height: 250});'
+        end
+      end
     else
       true
     end
