@@ -167,13 +167,13 @@ div.field {
 }
 
 #timeline-container {
-	padding-top:10px;
-	padding-left:5px;
 	background-color:#222;
-	height:480px;
+	width:1024px;
+	height:509px;
 	z-index:2;
 	display:none;
 	position:fixed;
+	background:url('/assets/timeline-bg.png') no-repeat;
 }
 
 #timeline-container-border {
@@ -204,7 +204,7 @@ div.field {
 
 #timeline-all {
 position:relative;
-padding-top:25px;
+padding-top:55px;
 padding-bottom:20px;
 }
 
@@ -220,6 +220,7 @@ padding-bottom:20px;
 #tm-politician2 {
 	height:200px;
 	padding-left:20px;
+	margin-top:30px;
 	padding-top:35px;
 	background:url('/assets/bg_politician_timeline_2.png') no-repeat;
 
@@ -228,15 +229,20 @@ padding-bottom:20px;
 
 .photo-holder {
 	position:relative;
-	width:80px;
-	height:80px;
-	border:1px solid black;
 }
 
 .politician-photo1, .politician-photo2 {
 	width:80px;
 	height:80px;
+	margin-right:5px;
 	position:relative;
+	float:left;
+}
+
+.pol-name {
+	padding-top:5px;
+	line-height:16px;
+	font-weight:bold;
 }
 
 .pol-name {
@@ -410,6 +416,7 @@ position:relative;
 
 .tm-entry-tags {
 	color:#5151ff;
+	margin:7px;
 }
 
 #rsidebar {

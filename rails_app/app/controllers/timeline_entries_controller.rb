@@ -92,6 +92,19 @@ class TimelineEntriesController < ApplicationController
       politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
     end
 
+#    if(params[:tweet])
+#      unless tweet_after_create
+#        @error = 1
+#        @message += "tweet을 게시하는데 오류가 발생했습니다."
+#      end
+#    end
+#    if(params[:facebook])
+#      unless post_after_create
+#        @error = 1
+#        @message += "facebook에 포스팅하는데 오류가 발생했습니다."
+#      end
+#    end
+
     respond_to do |format|
       if @timeline_entry.save
         format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
@@ -142,4 +155,34 @@ class TimelineEntriesController < ApplicationController
     end
   end
 
+protected
+  def tweet_after_create
+    if current_user.twitter_token
+      Twitter.configure do |config|
+        config.consumer_key = TWITTER_CLIENT[:key]
+        config.consumer_secret = TWITTER_CLIENT[:secret]
+        config.oauth_token = current_user.twitter_token.access_token
+        config.oauth_token_secret  = current_user.twitter_token.access_token_secret
+      end
+
+#      TODO: 나중에 풀어주세요
+#      Twitter.update(params[:tweet_reply][:content])
+      true
+    else
+      false
+    end
+  end
+
+  def post_after_create
+    @facebook_cookies ||= Koala::Facebook::OAuth.new(FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret]).get_user_info_from_cookie(cookies)
+    unless @facebook_cookies.nil?
+#      TODO: 나중에 풀어주세요
+#      @access_token = @facebook_cookies["access_token"]
+#      @graph = Koala::Facebook::GraphAPI.new(@access_token)
+#      @graph.put_object("me","feed",:message => params[:tweet_reply][:content])
+      true
+    else
+      false
+    end
+  end
 end

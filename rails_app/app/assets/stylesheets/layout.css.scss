@@ -6,6 +6,10 @@ body {
   background-color:#fede4d
 }
 
+input {
+  font-family: AppleGothic, Dotum, 돋움, sans-serif;
+}
+
 #header {
   margin-top:40px;
 }
@@ -155,4 +159,8 @@ footer {
 
 #recent-link-header {
   margin-top: 10px;
+}
+
+.hasPlaceholder {
+color:#777;
 }
