@@ -113,6 +113,7 @@
         //hide
       });
 
+
     });
   </script>
 
@@ -285,3 +286,14 @@
   <div class="grid_2 omega">
   </div>
 </div>
+
+<% if params[:timeline_entry_id] -%>
+  <script type="text/javascript">
+    $(function() {
+      $("#show-timeline").click();
+      var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
+      $.colorbox({href:url});
+    })
+  </script>
+<% end -%>
+
