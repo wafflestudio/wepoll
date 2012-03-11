@@ -57,8 +57,11 @@ gem 'fastercsv'
 
 gem 'koala'
 
-#group :development do
+gem 'unicorn'
+
+group :development do
 #  gem 'linecache19', '0.5.13'
 #  gem 'ruby-debug-base19', '0.11.26'
 #  gem 'ruby-debug19', :require => 'ruby-debug'
-#end
+  gem 'capistrano'
+end
