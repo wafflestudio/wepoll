@@ -70,6 +70,7 @@ class Politician #정치인 모델
       h = {}
 
       politician.initiate_bills.each do |bill|
+        bill.coactors.reject {|coactor| coactor.id == politician.id}
         bill.coactors.each {|coactor| h[coactor.id] = (h[coactor.id] || 0) + 1 }
         bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1} if !bill.unregistered_coactor_names.nil?
       end

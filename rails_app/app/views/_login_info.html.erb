@@ -20,23 +20,6 @@
   </div>
 </div>
 
-<% content_for :scripts do -%>
-  <script type="text/javascript">
-    function show_join_form() {
-      $.colorbox({href:"<%= new_user_registration_path%>"});
-    }
-
-    $(function() {
-
-      $(".popup-auth").click(function() {
-        var $this = $(this);
-        var href = $this.attr("href");
-        window.open(href, "authWindow", "width=600,height=400,menubar=0,location=0,toolbar=0,modal=yes,alwaysRaised=yes");
-        return false;
-      });
-    });
-  </script>
-<% end -%>
 <% else -%>
   <div class="grid_1 alpha" id="profile-pic-thumb-wrapper">
     <%= image_tag current_user.profile_picture.url(:square50), :style => "width:40px;height:40px;", :id => 'profile-pic-thumb'%>

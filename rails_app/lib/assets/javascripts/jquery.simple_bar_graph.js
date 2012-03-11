@@ -11,6 +11,7 @@
 			backgroundColor:"transparent",
 			animate:true,
 			labelWidth:0,
+			minWidth:0,
 			label:function(x, fx) {
 				return x+"";
 			}
@@ -32,15 +33,22 @@
 			if (total == -1) {
 				var $ref = $($this.attr("data-ref"));
 				var value2 = parseFloat($ref.attr("data-value"));
+				var larger = value2 > value ? value2:value;
 
-				r = value2>value ? (value/value2) : 1.0;
+				if (larger == 0)
+					r = 0;
+				else
+					r = value/larger;
 			}
 			else {
-				r = value/total;
-				console.log(r);
+				r = total == 0 ? 0 : value/total;
 			}
 
-			var w = Math.round(r*width);
+			var w;
+			if (r == 0) w = options.minWidth;
+			else w = Math.round(r*width);
+
+			console.log("bar width = " + w);
 
 			//make bar
 			var $bar = $("<div></div>");
@@ -87,6 +95,7 @@
 			else if (options.labelPosition === "center2") {
 			}
 
+			$bar.css("width", options.minWidth);
 			if (options.animate) {
 				$bar.delay(500).animate({width:w}, {
 					duration:3000,

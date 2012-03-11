@@ -3,7 +3,10 @@ Wepoll::Application.routes.draw do
     match '/recommend' => 'timeline_entries#recommend', :as => :recommend
   end
   resources :bills
-  resources :link_replies
+  resources :link_replies do
+    get 'blame', :on => :member
+    get 'like', :on => :member
+  end
 
   namespace :admin do
     match '/' => 'admin#index'
