@@ -1,6 +1,6 @@
 #coding:utf-8
 class TweetRepliesController < ApplicationController
-  before_filter :authenticate_user!, :only => [:create, :recommend]
+  before_filter :authenticate_user!, :only => [:create, :like]
 
   def create
     if current_user.nil?
@@ -41,6 +41,25 @@ class TweetRepliesController < ApplicationController
     end
   end
 
+
+  def like
+    @re = TweetReply.find(params[:id])
+    if @re.like(current_user)
+      render :json => {:status => "ok", :count => @re.like_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+  def blame
+    @re = TweetReply.find(params[:id])
+    if @re.blame(current_user)
+      render :json => {:status => "ok", :count => @re.blame_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+  
+  protected
   def tweet_after_create
     if current_user.twitter_token
       Twitter.configure do |config|
@@ -68,22 +87,4 @@ class TweetRepliesController < ApplicationController
       false
     end
   end
-
-  def recommend
-    @re = TweetReply.find(params[:tweet_reply_id])
-    if @re.recommend(current_user)
-      render :json => {:status => "ok", :count => @re.recommend_count }
-    else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
-    end
-  end
-  def report
-    @re = TweetReply.find(params[:tweet_reply_id])
-    if @re.report(current_user)
-      render :json => {:status => "ok", :count => @re.report_count }
-    else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
-    end
-  end
-  
 end

@@ -1,3 +1,4 @@
+#coding: utf-8
 class LinkRepliesController < ApplicationController
   before_filter :authenticate_user!, :except => [:show]
   layout false
@@ -13,13 +14,20 @@ class LinkRepliesController < ApplicationController
     @reply.save
   end
 
-  def blame
-    @reply = LinkReply.find(params[:id])
-    @reply.inc(:blame, 1)
-  end
-
   def like
-    @reply = LinkReply.find(params[:id])
-    @reply.inc(:like, 1)
+    @re = TweetReply.find(params[:id])
+    if @re.like(current_user)
+      render :json => {:status => "ok", :count => @re.like_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+  def blame
+    @re = TweetReply.find(params[:id])
+    if @re.blame(current_user)
+      render :json => {:status => "ok", :count => @re.blame_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
   end
 end

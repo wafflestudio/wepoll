@@ -17,8 +17,8 @@ class TimelineEntry
   field :deleted, type: Boolean, default: false
   field :title, type: String
   field :is_good, type: Boolean, default: true #칭찬링크: true, 지적링크: false
-  field :recommend_count, type: Integer, default:0 #공감수
-  field :report_count, type: Integer, default:0 #신고수
+  field :like_count, type: Integer, default:0 #공감수
+  field :blame_count, type: Integer, default:0 #신고수
   field :tags, type: Array, default: []
 
   #=== Mongoid attach ===
@@ -49,25 +49,25 @@ class TimelineEntry
   #댓글들
   has_many :link_replies, :inverse_of => :timeline_entry
 
-  has_and_belongs_to_many :recommend_users, :class_name => "User", :inverse_of => :recommend_timeline_entries
-  has_and_belongs_to_many :report_users, :class_name => "User", :inverse_of => :report_timeline_entries
+  has_and_belongs_to_many :like_users, :class_name => "User", :inverse_of => :like_timeline_entries
+  has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_timeline_entries
 
-  def recommend(user)
-    if self.recommend_users.include? user
+  def like(user)
+    if self.like_users.include? user
       false
     else
-      self.recommend_count += 1
-      self.recommend_users << user
+      self.like_count += 1
+      self.like_users << user
       self.save
     end
   end
 
-  def report(user)
-    if self.report_users.include? user
+  def blame(user)
+    if self.blame_users.include? user
       false
     else
-      self.report_count += 1
-      self.report_users << user
+      self.blame_count += 1
+      self.blame_users << user
       self.save
     end
   end

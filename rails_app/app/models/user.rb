@@ -83,11 +83,13 @@ class User
   # tweet forum association
 
   has_many :tweet_replies
-  has_and_belongs_to_many :recommend_replies, :class_name => "TweetReply", :inverse_of => :recommend_users
-  has_and_belongs_to_many :report_replies, :class_name => "TweetReply", :inverse_of => :report_users
-  has_and_belongs_to_many :recommend_tweets, :class_name => "Tweet", :inverse_of => :recommend_users
-  has_and_belongs_to_many :recommend_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :recommend_users
-  has_and_belongs_to_many :report_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :report_users
+  has_and_belongs_to_many :like_tweet_replies, :class_name => "TweetReply", :inverse_of => :like_users
+  has_and_belongs_to_many :blame_tweet_replies, :class_name => "TweetReply", :inverse_of => :blame_users
+  has_and_belongs_to_many :like_link_replies, :class_name => "LinkReply", :inverse_of => :like_users
+  has_and_belongs_to_many :blame_link_replies, :class_name => "LinkReply", :inverse_of => :blame_users
+  has_and_belongs_to_many :like_tweets, :class_name => "Tweet", :inverse_of => :like_users
+  has_and_belongs_to_many :like_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :like_users
+  has_and_belongs_to_many :blame_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :blame_users
 
   #timeline entry
   has_many :timeline_entries, :inverse_of => :user
