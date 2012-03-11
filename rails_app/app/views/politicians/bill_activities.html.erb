@@ -1,10 +1,17 @@
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <% if politician.is_18? %>
-      <div class="<%=i==0 ? "left":"right" %>">
-        <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
-      </div>
+    <% if i == 0 && !politician.is_18? %>
+      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:50px;z-index:1;" %>
+    <% elsif i == 1 && !politician.is_18? %>
+      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:360px;z-index:1;" %>
     <% end %>
+    <div class="<%=i==0 ? "left":"right" %>">
+      <% if politician.is_18? %>
+        <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
+      <% else %>
+        &nbsp;
+      <% end -%>
+      </div>
 
     <% if i==0 -%><div class="subsection-label">대표법안</div><% end -%>
   <% end -%>
@@ -12,11 +19,13 @@
 
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <% if politician.is_18? %>
-      <div class="<%= i==0?"left":"right"%>">
+    <div class="<%= i==0?"left":"right"%>">
+      <% if politician.is_18? %>
         <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
-      </div>
-    <% end %>
+      <% else %>
+        &nbsp;
+      <% end -%>
+    </div>
 
     <% if i==0 -%><div class="subsection-label">국회인맥</div><% end -%>
   <% end -%>
@@ -24,8 +33,8 @@
 
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <% if politician.is_18? %>
-      <div class="<%= i==0?"left":"right"%>">
+    <div class="<%= i==0?"left":"right"%>">
+      <% if politician.is_18? %>
         <div class="att-bar-graph" 
           data-value="<%= politician.attendance %>"
           data-total="100"
@@ -33,8 +42,10 @@
           data-color="<%= i==0?"#29cf4f":"#bb262c"%>"
           style="<%= i==0?"float:right":"float:left" %>">
         </div>
-      </div>
-    <% end %>
+      <% else %>
+        &nbsp;
+      <% end -%>
+    </div>
     <% if i==0 -%><div class="subsection-label">본회의<br />출석률</div><% end -%>
   <% end -%>
 </div>
