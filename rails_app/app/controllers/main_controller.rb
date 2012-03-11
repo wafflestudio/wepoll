@@ -2,7 +2,6 @@
 require 'oauth2'
 require 'csv'
 class MainController < ApplicationController
-  before_filter :before_search
   def index
     @politicians = Politician.all.asc('name').limit(10)
     @big_header = true
@@ -50,41 +49,6 @@ class MainController < ApplicationController
     @best = @politician.tweets.desc('recommend_count').first
     @today_best = @politician.tweets.desc('today_recommend_count').first
     @links = TimelineEntry.asc('like')
-  end
-
-  def before_search
-    @source = Array.new
-
-    CSV.foreach(Rails.root + "district.csv", :encoding => "UTF-8") do |csv|
-      ## type
-        # 0 : district
-        # 1 : name
-        # 2 : dong
-      ##
-
-      # district
-      data = csv[0]
-      party = ""
-      type = "0"
-      label = data
-      @source << "{'data':'#{data}','party':'#{party}','type':'#{type}','label':'#{label}'}".html_safe
-
-      # name
-      data = csv[1]
-      party = csv[2]
-      type = "1"
-      label = "#{data}(#{party})"
-      @source << "{'data':'#{data}','party':'#{party}','type':'#{type}','label':'#{label}'}".html_safe
-
-      # dong
-      type = "2"
-      party = csv[0]
-      csv[3].split(" ").each do |dong|
-        data = dong
-        label = data 
-        @source << "{'data':'#{data}','party':'#{party}','type':'#{type}','label':'#{label}'}".html_safe
-      end
-    end
   end
 
   def search

@@ -63,7 +63,8 @@ CSV.foreach(Rails.root+"init_data/politicians_18.csv", :encoding => "UTF-8") do 
                      :birthday => birth,
                      :military => military,
                      :district => district,
-                     :tweet_name => tweet_name)
+                     :tweet_name => tweet_name
+                    )
   cnt += 1
   p.profile_photo = File.open(Rails.root + profile_photo_path) unless profile_photo_path.nil?
   puts "#{name} photo doesn't exist" if profile_photo_path.nil?
@@ -116,7 +117,6 @@ end
 
 (exit 0) if dump_file_exist
 
-=begin
 #==== 법안 ====
 c2 = 0
 puts "-------- csv 파일에서 생성 --------"
@@ -263,6 +263,3 @@ File.open(Rails.root + "init_data/bill_codes.txt", "r").each do |line|
     end
   end
 end
-
-Politician.calculate_joint_initiate
-=end

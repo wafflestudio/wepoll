@@ -1,4 +1,7 @@
 #coding:utf-8
+require './romanize.rb'
+require 'csv'
+
 class Politician #정치인 모델
   include Mongoid::Document
   include Mongoid::Paperclip
@@ -19,6 +22,7 @@ class Politician #정치인 모델
   field :education, type: String
   field :experiences, type: String
   field :promises, type: Array, default: []
+  field :attendance, type: Integer, default: 0
 
   field :joint_initiate_bill_politicians, type: Array, default: []
 
@@ -78,5 +82,49 @@ class Politician #정치인 모델
       politician.save
     end
     puts "=== 공동발의 일치도 계산 완료 ==="
+  end
+
+  def self.calculate_attendance
+    puts "=== 출석률 계산 ==="
+    csvs_folder = ["csvs","csvs2","csvs3"]
+    Politician.all.each do |politician|
+      name = politician.name.romanize
+      csvs_folder.each do |csvs|
+        if File.exists?(Rails.root + "init_data/profile_csvs/#{csvs}/profile2_#{name}.csv")
+          total = 0
+          CSV.foreach(Rails.root + "init_data/profile_csvs/#{csvs}/profile2_#{name}.csv", :encoding => "UTF-8") do |csv|
+            name = csv[0]
+            party = csv[3].split("/").first
+            if party == "한나라당"
+              party = "새누리당"
+            elsif party == "민주당"
+              party = "민주통합당"
+            end
+            if politician != Politician.where(name: name, party: party).first
+              puts "###ERROR### #{politician.name.romanize} #{name} #{party}" 
+              next
+            end
+            sum = 0
+            list = csv[9].split(")")
+            puts politician.name
+            list.each do |elem|
+              e = elem[13..25]
+              q = e.match("[0-9]+").to_s.to_i
+              total += q
+
+              elem = elem[8..12]
+              puts elem
+              p = elem.match("[0-9]+").to_s.to_i
+              sum += p
+              printf "#{sum} / #{total}\n"
+            end
+            puts (total / Float(sum) * 100).to_i.to_s
+            politician.attendance = (total / Float(sum) * 100).to_i
+            politician.save
+          end
+        end
+      end
+    end
+    puts "=== 출석률 계산 완료 ==="
   end
 end
