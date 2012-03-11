@@ -7,6 +7,7 @@ Wepoll::Application.routes.draw do
     get 'blame', :on => :member
     get 'like', :on => :member
   end
+  resources :notices
 
   namespace :admin do
     match '/' => 'admin#index'
