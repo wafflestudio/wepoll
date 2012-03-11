@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//= require placeholder
 //= require timeline/underscore
 //= require timeline/json2
 //= require timeline/module

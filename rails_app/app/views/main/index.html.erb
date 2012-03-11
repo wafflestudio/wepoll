@@ -21,9 +21,6 @@
           $("#"+region+"-map").addClass("selected");
           });
         });
-    function loadVSPoliticians(district) {
-
-    }
 function getInternetExplorerVersion()
   // Returns the version of Internet Explorer or a -1
   // (indicating the use of another browser).
@@ -54,8 +51,8 @@ console.log(ver);
 var paper = Raphael("seoul-map-image", 800, 600, function () {
     var r = this;
     r.rect(-150, 100, 850, 850).attr({
-stroke: "none",
-});
+      "stroke":"none"
+      });
     var over = function () {
     this.c = this.c || this.attr("fill");
     this.stop().animate({fill: "#64C8CB"}, 200);
