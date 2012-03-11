@@ -1,4 +1,4 @@
-<%= content_for :scripts do %>
+<% content_for :scripts do %>
 <script type="text/javascript">
 $(function() {
 $('span.checkbox').addClass("unchecked");
@@ -28,7 +28,7 @@ $('span.checkbox').addClass("unchecked");
       <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %>
       <h2><%= @politician.name %></h2>
       <h3>@<%= @politician.tweet_name %></h3>
-      <%#= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+      <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
     </div>
   </div>
 </div>
@@ -57,6 +57,11 @@ $('span.checkbox').addClass("unchecked");
     <% end -%>
   </div>
   <div id="replies_wrapper" class="grid_4 alpha omega">
-    <%= render :partial => "tweet_replies", :locals => { :replies => @politician.total_replies } %> 
+    <% if @total_replies.count == 0 %>
+      <div class="reply_item">
+        등록된 댓글이 없습니다.
+      </div>
+    <% end -%>
+    <%= render @total_replies %> 
   </div>
 <% end -%>

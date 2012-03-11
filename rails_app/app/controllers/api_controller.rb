@@ -28,15 +28,15 @@ class ApiController < ApplicationController
 		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
-		if preview != nil
-			result[:creasted_at] = preview.created
+		if preview != nil and !params[:force_get]
+			result[:created_at] = preview.created
 			result[:title] = preview.title
 			result[:description ] = preview.description
 			result[:image] = preview.image_url
 		else
 			doc = Nokogiri::HTML(open(target_link))
 			#무슨 기사인지 판별.  
-			if target_link.match('news\.chosun.\.com') != nil #조선일보 
+			if target_link.match('news\.chosun\.com') != nil #조선일보 
 				result[:created_at] = doc.xpath('//p[@id="date_text"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
@@ -148,11 +148,42 @@ class ApiController < ApplicationController
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:image] = doc.xpath('//div[@id="articleImage0"]/span/img').first['src'] if doc.xpath('//div[@id="articleImage0"]/span/img').count > 0
-			else
+			elsif target_link.match('wikitree\.co\.kr') # wikitree
 				result[:title] = doc.title()
-				result[:image] = doc.xpath('//meta[@property="og:image"]').first['content'] if doc.xpath('//meta[@property="og:image"]').count > 0
-				result[:description] = doc.xpath('//meta[@property="og:description"]').first['content'] if doc.xpath('//meta[@property="og:description"]').count > 0
-				result[:created_at] = ''
+				if doc.xpath('//embed').length > 0 #has video 
+					result[:video] = doc.xpath('//embed').first['src']
+				else 
+					if doc.xpath('//p[@align="center"]/img').length > 0
+						result[:image] = doc.xpath('//p[@align="center"]/img').first['src'] 
+					else
+						result[:image] = ''
+					end
+				end
+				result[:description] = doc.xpath('//div[@id="content1"]').text
+				result[:created_at] = doc.xpath('//span[@class="date"]').text
+			elsif target_link.match('seoul\.co\.kr/news') # 서울신문
+				result[:title] = doc.title()
+				if doc.xpath('//div[@id="img"]//img').length > 0
+					result[:image] = doc.xpath('//div[@id="img"]//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@class="VCdate"]').text
+				result[:description] = doc.xpath('//div[@id="articleContent"]//p').first.text.gsub(/\r\n/, '').gsub(/\t/, '')
+			elsif target_link.match('hani\.co\.kr') # 한겨례 
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//p[@class="date"]/span').first.text.split(' ')[2] + ' ' + doc.xpath('//p[@class="date"]/span').first.text.split(' ')[3]
+				result[:description] =  doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
+				if doc.xpath('//table[@class="photo-view-area"]//img').length > 0 
+					result[:image] = doc.xpath('//table[@class="photo-view-area"]//img').first['src']
+				else 
+					result[:image] = ''
+				end
+			else
+				result[:url] = target_link
+				result[:error] = '해당 기사는 지원되지 않습니다.'
+				render :json =>result.to_json, :status => 500
+				return
 			end
 			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 		end

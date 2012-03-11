@@ -1,49 +1,113 @@
-<h2>Sign up <small>위폴가입하기</small></h2>
+<!doctype html>
+<html>
+  <head>
+    <title>위폴 가입하기</title>
+    <%= javascript_include_tag 'jquery' %>
+    <%= javascript_include_tag 'jquery_ujs' %>
 
-<% if signed_via_facebook? -%>
-  <div class="alert alert-info">
-    <%= image_tag session["user_facebook_data"]["info"]["image"]  %> 페이스북으로 로그인하셨습니다. 필요한 정보를 입력하시면 페이스북과 연동하여 위폴을 이용할 수 있습니다.
-  </div>
-<% elsif signed_via_twitter? -%>
-  <div class="alert alert-info">
-    <%= image_tag session["user_twitter_data"]["info"]["image"] %>
-    트위터로 로그인하셨습니다. 필요한 정보를 입력하시면 트위터와 연동하여 위폴을 이용할 수 있습니다.
-  </div>
-<% end -%>
+    <script type="text/javascript">
+      $('#cancel_btn').click(function() {
+        window.close();
+        return false;
+      });
+    </script>
+    <style type"text/css">
+      body {
+        font-size:10pt;
+      }
+      #info {
+        padding-left: 20px;
+        font-size: 10pt;
+      }
+      #profile_image {
+        float: left;
+        margin-right: 10px;
+      }
+      .alert p {
+        float: left;
+      }
+      #middle {
+        background-color: #f4f4f4;
+      }
+      .agree_container {
+        padding: 10px;
+      }
+      .text_box {
+        background-color: white;
+      }
+      textarea.text_box {
+        width:100%;
+        height:150px;
+        border:1px solid #666;
+        font-size:9pt;
+      }
+      #buttons {
+        width: 134px;
+        margin: 0 auto;
+        height: 30px;
+      }
+      .btn {
+        height: 30px;
+        border: none;
+        margin: 0;
+        padding: 5px;
+        float: left;
+      }
+      #cancel_btn {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        background-color: #bdbdbd;
+        padding-left: 10px;
+      }
+      #sign_up_btn {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        background-color: #fede4d;
+        padding-right: 10px;
+      }
+    </style>
+  </head>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
-  <%= devise_error_messages! %>
-
-  <% unless signed_via_facebook? || signed_via_twitter? -%>
-    <div>
-      <%= f.label :userid %><br />
-      <%= f.text_field :userid %>
+  <body>
+    <div id="info">
+      <h2>위폴 가입하기</h2>
+      <% if signed_via_facebook? -%>
+        <div class="alert alert-info">
+          <%= image_tag session["user_facebook_data"]["info"]["image"], :id => "profile_image" %>
+          <p>
+          페이스북으로 로그인하셨습니다.<br />
+          약관과 개인정보 처리방침에 동의하시면<br /> 페이스북과 연동하여 위폴을 이용할 수 있습니다.
+          </p>
+        </div>
+      <% elsif signed_via_twitter? -%>
+        <div class="alert alert-info">
+          <%= image_tag session["user_twitter_data"]["info"]["image"], :id => "profile_image" %>
+          <p>
+          트위터로 로그인하셨습니다.<br />
+          약관과 개인정보 처리방침에 동의하시면<br /> 트위터와 연동하여 위폴을 이용할 수 있습니다.
+          </p>
+        </div>
+      <% end -%>
+      <div style="clear: both;"></div>
     </div>
 
-    <div>
-      <%= f.label :password %><br />
-      <%= f.password_field :password %>
-    </div>
-
-    <div>
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation %>
-    </div>
-  <% end -%>
-
-  <div>
-    <p>약관이 주절주절주절주절</p>
-    <%= check_box_tag :agree_provision %>
-  </div>
-
-  <div>
-    <div id="friends"></div>
-    친구들에게 위폴을 소개합니다
-    <%= check_box_tag :agree_send_requests %>
-  </div>
-
-  <div><%= f.submit "Sign up" %></div>
-<% end %>
-
-<%= render "links" %>
-
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+      <div id="middle">
+        <div class="agree_container">
+          <textarea class="text_box" readonly>
+<%= File.read(Rails.root + "provision.txt")%>
+          </textarea>
+          <%= check_box_tag :agree_provision %><%= label_tag :agree_provision, '약관에 동의합니다.' %>
+        </div>
+        <div class="agree_container">
+          <textarea class="text_box" readonly>
+<%= File.read(Rails.root + "privacy.txt")%>
+          </textarea>
+          <%= check_box_tag :agree_privacy %><%= label_tag :agree_private, '개인정보 수집 및 이용에 동의합니다.' %>
+        </div>
+      </div>
+      <div id="buttons"><%= button_to '돌아가기', '#', :id => "cancel_btn", :class => "btn" %><%= f.submit "가입하기", :id => "sign_up_btn", :class => "btn" %></div>
+      <%= devise_error_messages! %>
+    <% end %>
+  </body>
+</html>

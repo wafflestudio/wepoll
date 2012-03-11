@@ -1,0 +1,30 @@
+<%= form_tag suspend_confirm_admin_user_path do -%>
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <th class="full" colspan="2"><%= @user.nickname %> 계정정지</th>
+      <tr>
+        <td rowspan="<%= User::SUSPEND_REASONS.count + 1%>"><strong>사유</strong></td>
+        <td>
+          <%= radio_button_tag 'reason', 'etc'%><%= text_field_tag 'etc_reason', nil, :placeholder => "기타사유입력" %>
+        </td>
+      </tr>
+      <% User::SUSPEND_REASONS.each_with_index do |r, i| -%>
+        <tr>
+          <td>
+            <%= radio_button_tag 'reason', r, i== 0%> <%= r%> <br />
+          </td>
+        </tr>
+      <% end -%>
+
+      <tr>
+        <td><strong>정지일수</strong></td>
+        <td>
+          <%= select_tag 'days', options_for_select((1..10).to_a) %>
+        </td>
+      </tr>
+    </table>
+    <div class="actions">
+      <%= submit_tag '확인'%>
+    </div>
+  </div>
+<% end -%>

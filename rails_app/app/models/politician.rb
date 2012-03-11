@@ -11,6 +11,7 @@ class Politician #정치인 모델
   field :name, type: String
   field :party, type: String
   field :district, type: String #NOTE : 지역구를 따로 모델로 빼는건?
+  field :candidate, type: Boolean, default: false #NOTE: 19대 후보인가 아닌가,19대에만 적용되는 플래그. 주의
 
   # 프로필정보
   field :military, type: String
@@ -74,6 +75,7 @@ class Politician #정치인 모델
       h = {}
 
       politician.initiate_bills.each do |bill|
+        bill.coactors.reject {|coactor| coactor.id == politician.id}
         bill.coactors.each {|coactor| h[coactor.id] = (h[coactor.id] || 0) + 1 }
         bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1} if !bill.unregistered_coactor_names.nil?
       end

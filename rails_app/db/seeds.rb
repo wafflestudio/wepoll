@@ -104,7 +104,8 @@ if dump_file_exist
     party, name = (h.delete :initiator_name).split(" ")
     h[:initiator_id] = Politician.where(:party => party, :name => name).first.id
 
-    h[:coactor_ids] = (h.delete :coactor_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
+    array_from_coactor_names = h.delete :coactor_names
+    h[:coactor_ids] = array_from_coactor_names.map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id} unless array_from_coactor_names.nil?
     h[:supporter_ids] = (h.delete :supporter_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
     h[:dissenter_ids] = (h.delete :dissenter_names).map {|t| party,name=t.split(" ");Politician.where(:party => party, :name => name).first.id}
 

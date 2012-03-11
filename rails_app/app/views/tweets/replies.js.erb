@@ -1,1 +1,1 @@
-$('#replies_wrapper').html('<%= escape_javascript(render :partial => "main/tweet_replies", :locals => {:replies => @replies}) %>')
+$('#replies_wrapper').html('<%= escape_javascript(render @replies) %>')

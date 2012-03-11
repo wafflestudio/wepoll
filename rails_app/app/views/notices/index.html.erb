@@ -1,0 +1,11 @@
+<div class="container_16" id="notices">
+  <div class="grid_10 alpha omega">
+    <div id="notice-list">
+      <%= render @notices %>
+    </div>
+
+    <div id="notices-paginator">
+      <%= paginate @notices, :remote => true %>
+    </div>
+  </div>
+</div>

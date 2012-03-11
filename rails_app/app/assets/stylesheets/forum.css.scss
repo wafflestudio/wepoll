@@ -2,6 +2,8 @@
   padding: 10px;
   background-color: white;
   border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
   margin-bottom: 20px;
   h2 {
     font-size: 20pt;
@@ -19,7 +21,7 @@
 }
 #tweets_wrapper {
   max-height: 800px;
-  overflow: scroll;
+  overflow-y: scroll;
 
   a {
     color: black;
@@ -78,6 +80,8 @@
       background-color: white;
       border: 5px solid black;
       border-radius: 25px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
       &:hover {
         background-color: #F3F3F3;
       }
@@ -114,6 +118,8 @@
   background-color: white;
   border: 5px solid black;
   border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
 
   #reply_close {
     position: absolute;
@@ -123,9 +129,11 @@
   }
   label {
     font-size: 9pt;
-    margin-left: 20px;
+    margin-left: 15px;
+    margin-bottom: 5px;
   }
   #reply_check {
+  	padding-top: 5px;
     margin-right: 15px;
     float: right;
 
@@ -150,21 +158,26 @@
     border: none;
   }
   #reply_submit_btn {
+  	margin-top: 5px;
     margin-right: 15px;
     float: right;
     background-color: #FDDF49;
     border: none;
     border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
   }
 }
 #replies_wrapper {
-  overflow: scroll;
+  overflow-y: scroll;
   max-height: 800px;
   margin-top: 160px;
   padding: 10px;
   margin-bottom: 20px;
   background-color: white;
   border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
 
   .reply_item {
     font-size: 11pt;

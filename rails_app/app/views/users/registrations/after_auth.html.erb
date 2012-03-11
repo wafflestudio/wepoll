@@ -2,7 +2,6 @@
   <head>
     <script type="text/javascript">
       if (window.opener) {
-        alert("hi");
         window.opener.location = "<%=new_user_registration_url(:token => params[:token])%>";
         window.close();
       }

@@ -4,7 +4,7 @@
     <h1>로그인 후 후보자를 칭찬/지적 할 수 있습니다.</h1>
   </div>
   <div id="login_links_box">
-    <%= link_to '페이스북으로 로그인하기', '/users/auth/facebook', :id => "fb_login_btn" %>
-    <%= link_to '트위터로 로그인하기', '/users/auth/twitter', :id => "twitter_login_btn" %>
+    <%= link_to_function '페이스북으로 로그인하기', "show_auth_dialog('/users/auth/facebook')", :id => "fb_login_btn"%>
+    <%= link_to_function '트위터로 로그인하기', "show_auth_dialog('/users/auth/twitter')", :id => "twitter_login_btn"%>
   </div>
 </div>
