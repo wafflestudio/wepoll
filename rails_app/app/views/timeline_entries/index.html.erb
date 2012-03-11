@@ -46,7 +46,8 @@ function submitTimelineEntryForm(element,id)  {
 function loadPreview(url,onload,onerror)  {
 	$('.preview-status').attr("src", "/assets/ajax-loader.gif").attr('title', '링크를 검사중입니다')
 
-	$.ajax({url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success:
+	$.ajax({url: '/api/article_parse', data: {force_get:true,url:url, authenticity_token : $('meta[name="csrf-token"]').attr('content')},type: 'POST', dataType: 'json', success:
+   
 		function(data) {
 			onload(data)
 		}
@@ -97,11 +98,32 @@ function activateTimelineEntryForm() {
 		}
 		else
 			$('#link-form-preview-txt').addClass('prefix_1')
+		
+		if(data.created_at)  {
+			console.warn('date', data.created_at)
+			var d = Date.parse(data.created_at)
+			if(!d)  {
+				var match = data.created_at.match(/[0-9\.\-]+/)
+				if(match)  {
+					console.log(match[0].replace(/\./g,"-"))
+					d = Date.parse(match[0].replace(/\./g,"-"))
+				}
+				
+			}
+			if(d)  {
+				$('#timeline_entry_posted_at_1i').val(d.getFullYear())
+				$('#timeline_entry_posted_at_2i').val(d.getMonth()+1)
+				$('#timeline_entry_posted_at_3i').val(d.getDate())
+				console.warn('date success',d)
+			}
+
+		}
+
+
 		$('#link-form-preview-txt').html(data.title)
 
 	},function failed(){
 		var msg = $("#timeline_entry_tag_text").val().length > 0 ? '유효하지 않은 링크입니다.' : '링크를 입력하세요.'
-
 
 		$('.preview-status').attr("src", "/assets/bad.gif").attr('title',msg)
 		$('#link-post').attr('disabled','disabled')
