@@ -1,5 +1,10 @@
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
+    <% if i == 0 && !politician.is_18? %>
+      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:50px;z-index:1;" %>
+    <% else %>
+      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:360px;z-index:1;" %>
+    <% end %>
     <% if politician.is_18? %>
       <div class="<%=i==0 ? "left":"right" %>">
         <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
