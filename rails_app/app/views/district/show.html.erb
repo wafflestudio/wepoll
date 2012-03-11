@@ -20,7 +20,7 @@
     }
 
     $(function() {
-      var common_options = { width:624/2-33/2, height:14, labelWidth:48};
+      var common_options = { width:624/2-33/2, height:14, labelWidth:48, minWidth:10};
       $("#p1-good-link").simpleBarGraph(
         $.extend({
           labelClass:"good bar-label right",
@@ -160,7 +160,7 @@
           </div>
         <% end -%>
       <% else -%>
-        <div class="tweet left">최근 트윗이 없습니다."</div>
+        <div class="tweet left">최근 트윗이 없습니다.</div>
       <% end -%>
 
       <div class="photo-frame" style="margin-left:5px;">
@@ -229,7 +229,7 @@
         data-total="-1"
         data-ref="#p1-bad-link"
         data-float="right"
-        data-value="50">
+        data-value="<%= @p1 ? @p1.good_link_count : 0 %>">
       </div>
       <div class="bar-splitter">
       <%= image_tag "/assets/icn_smile.png" %>
@@ -238,7 +238,7 @@
         data-color="#f1376f"
         data-total="-1"
         data-ref="#p2-bad-link"
-        data-value="80">
+        data-value="<%= @p2 ? @p2.good_link_count : 0%>">
       </div>
     </div>
 
@@ -248,7 +248,7 @@
         data-total="-1"
         data-ref="#p1-good-link"
         data-float="right"
-        data-value="100">
+        data-value="<%= @p1 ? @p1.bad_link_count : 0 %>">
       </div>
       <div class="bar-splitter">
       <%= image_tag "/assets/icn_frown.png" %>
@@ -257,7 +257,7 @@
         data-color="#4f4f50"
         data-total="-1"
         data-ref="#p2-good-link"
-        data-value="200">
+        data-value="<%= @p2 ? @p2.bad_link_count : 0 %>">
       </div>
     </div>
   </div>

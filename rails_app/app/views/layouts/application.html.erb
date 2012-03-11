@@ -19,6 +19,10 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
+      function show_auth_dialog(href) {
+        window.open(href, "authWindow", "width=600,height=600,menubar=0,location=0,toolbar=0,modal=yes,alwaysRaised=yes");
+        return false;
+      }
 
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>"});
