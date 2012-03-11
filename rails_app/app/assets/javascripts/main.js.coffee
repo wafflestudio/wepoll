@@ -52,18 +52,14 @@ $ ->
   # reply submit btn 
   $('#reply_submit_btn').live 'click', ->
     $form = $('#reply_box form')
-    $.post $form[0].action, $form.serialize(), (data) ->
-      console.log data
-      if data.status == "error"
-        alert data.message
-      reset_box()
-      return
+    $.post $form[0].action, $form.serialize(), reset_box(), "script"
     false
 
   $('#reply_close').click ->
     $reply_box.hide()
     return
   $('#login_close').live 'click', ->
+    reset_box()
     $.colorbox.close()
     return
 

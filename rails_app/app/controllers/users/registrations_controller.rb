@@ -14,6 +14,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
       tmp_pwd = Devise.friendly_token[0,20]
       params[:user] = {
         password: tmp_pwd,
+        userid: (if sns_data['provider']=='facebook'
+                 "fb_#{uid}"
+                else
+                  "tw_#{uid}"
+                end),
         password_confirmation: tmp_pwd,
         nickname:
         (if sns_data['provider']=='facebook'
@@ -27,6 +32,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:profile_picture] = open(pic_url) unless pic_url.nil?
     end
     params[:user][:agree_provision] = true if params[:agree_provision]
+    params[:user][:agree_privacy] = true if params[:agree_privacy]
 
     if params[:agree_send_requests]
       params[:user][:fb_req_friend_ids] = params[:friend_ids]
@@ -85,13 +91,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     session.keys.grep(/^user\_facebook/).each {|k| puts "delete #{k}";session.delete k}
     session.keys.grep(/^user\_twitter/).each {|k| puts "delete #{k}";session.delete k}
-
-    Rails.logger.info "after_sign_up_path_for"
-    render :layout => false
   end
 
   def after_sign_up_path_for(resource)
-    Rails.logger.info "after_sign_up_path_for"
+    Rails.logger.info "====after_sign_up_path_for===="
+    link_sns
     after_auth_path
 #    super
   end
@@ -102,6 +106,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_auth
+    Rails.logger.info "====after_auth_path===="
     redirect_to root_path
   end
 end

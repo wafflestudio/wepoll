@@ -153,12 +153,17 @@
 .links-container {
   background-color:white;
   border-radius:10px;
-  padding-bottom:30px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  -o-border-radius:10px;
+  padding-bottom:20px;
   margin-bottom:40px;
+  max-height:200px;
+  overflow-y:auto;
 }
 
 .link-excerpt {
-  height:75px - 1px;
+  height:50px - 1px;
   border-bottom:1px dashed #bdbbbc;
 //  margin-top:15px;
   margin: 15px 15px 0 15px;
@@ -183,7 +188,7 @@
   }
 
   .meta-info {
-    margin-bottom:15px;
+    margin-bottom:5px;
   }
 
   .title {
@@ -192,8 +197,8 @@
       text-decoration:none;
     }
     color:black;
-    margin-bottom:20px;
-    min-height:30px;
+    margin-bottom:5px;
+    min-height:20px;
   }
 }
 
@@ -275,15 +280,41 @@
 .politician-name {
   border:2px solid #514e51;
   color:#514e51;
+  padding-top:5px;
   width:90px;
-  height:20px;
-  font-size:9pt;
+  height:20px - 5px;
+  font-size:8pt;
   text-align:center;
-  margin:0 auto;
+  margin:7px auto 7px auto;
 }
 
 #login_close {
   cursor: pointer;
+}
+
+.links-bar-label {
+  font-size:6pt;
+}
+
+.good_links {
+  margin-bottom:5px;
+  .links-bar-label {
+    color:#f1366f;
+  }
+}
+
+.bad_links {
+  .links-bar-label {
+    color:#606366;
+  }
+}
+
+#vs-politician1 .good_links, #vs-politician1 .bad_links {
+  float:right;
+}
+
+#vs-politician2 .good_links, #vs-politician2 .bad_links {
+  float:left;
 }
 
 /* all */

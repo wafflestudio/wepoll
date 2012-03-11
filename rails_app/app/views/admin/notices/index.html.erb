@@ -1,0 +1,31 @@
+<div class="top-bar">
+  <h1>공지사항 <small>(<%= Notice.count %>개)</small></h1>
+</div>
+
+<div class="table">
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <tr>
+      <th>제목</th>
+      <th>작성일</th>
+    </tr>
+
+    <% @notices.each do |notice| -%>
+    <tr>
+      <td><%= link_to notice.title, admin_notice_path(notice)%></td>
+      <td><%= notice.created_at.strftime("%Y-%m-%d")%></td>
+    </tr>
+    <% end -%>
+    <% if @notices.empty? -%>
+      <tr>
+        <td colspan="2">공지사항이 없습니다.</td>
+      </tr>
+    <% end -%>
+  </table>
+</div>
+
+<%= paginate @notices%>
+
+<div class="actions">
+  <%= link_to '공지 추가', new_admin_notice_path, :class => 'action add' -%>
+</div>
+

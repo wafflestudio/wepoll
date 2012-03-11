@@ -31,6 +31,15 @@ class Tweet
     # TODO get former tweets
 #    screen_name = params[:screen_name]
 #    politician = Politician.where(:tweet_name => screen_name).first
+    #
+
+    Twitter.configure do |config|
+      config.consumer_key = TWITTER_CLIENT[:key]
+      config.consumer_secret = TWITTER_CLIENT[:secret]
+      config.oauth_token = TWITTER_ACCOUNT[:key]
+      config.oauth_token_secret  = TWITTER_ACCOUNT[:secret]
+    end
+
     Politician.all.each do |p|
       politician = p
       screen_name = politician.tweet_name

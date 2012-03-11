@@ -3,6 +3,11 @@ Wepoll::Application.routes.draw do
     match '/recommend' => 'timeline_entries#recommend', :as => :recommend
   end
   resources :bills
+  resources :link_replies do
+    get 'blame', :on => :member
+    get 'like', :on => :member
+  end
+  resources :notices
 
   namespace :admin do
     match '/' => 'admin#index'
@@ -20,7 +25,13 @@ Wepoll::Application.routes.draw do
     end
 
     resources 'timeline_entries'
-    resources 'users'
+    resources 'users' do
+      get 'suspend', :as => 'suspend', :on => :member
+      post 'suspend_confirm', :as => 'suspend_confirm', :on => :member
+      post 'suspend_cancel', :as => 'suspend_cancel', :on => :member
+    end
+
+    resources 'notices'
   end
 
   devise_for :users, :controllers => {

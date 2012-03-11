@@ -10,34 +10,32 @@ class TweetRepliesController < ApplicationController
     @re = TweetReply.new(params[:tweet_reply])
     @re.user = current_user
     @tweet = Tweet.find(params[:tweet_id])
-    res = {}
+    @error = 0
+    @message = ""
     if @tweet.nil?
-      render :json => {:status => "error", :message => "오류가 발생했습니다."}
+      @error = 1
+      @message = "해당 트윗이 없습니다."
       return
     else
       @tweet.tweet_replies << @re
       if @re.save
-        res = {:status => "ok", :reply => @re, :message => "댓글달기가 완료되었습니다."}
+        @replies = @tweet.tweet_replies.desc('created_at')
         if(params[:tweet])
-          if tweet_after_create
-            res[:tweet] = "ok"
-          else
-            res[:status] = "error"
-            res[:message] = "tweet을 게시하는데 오류가 발생했습니다."
+          unless tweet_after_create
+            @error = 1
+            @message += "tweet을 게시하는데 오류가 발생했습니다."
           end
         end
         if(params[:facebook])
-          if post_after_create
-            res[:facebook] = "ok"
-          else
-            res[:status] = "error"
-            res[:message] += "facebook에 포스팅하는데 오류가 발생했습니다."
+          unless post_after_create
+            @error = 1
+            @message += "facebook에 포스팅하는데 오류가 발생했습니다."
           end
         end
-        render :json => res
         return
       else
-        render :json => {:status => "error", :message => "오류가 발생했습니다."}
+        @error = 1
+        @message = "저장하는데 오류가 발생했습니다."
         return
       end
     end
