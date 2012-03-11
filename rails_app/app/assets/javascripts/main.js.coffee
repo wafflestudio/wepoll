@@ -62,6 +62,7 @@ $ ->
     reset_box()
     $.colorbox.close()
     return
+  $('#reply_text_box').placeholder()
 
   # function
   reset_box = ->

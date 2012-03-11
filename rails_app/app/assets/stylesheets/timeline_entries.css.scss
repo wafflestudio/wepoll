@@ -124,6 +124,7 @@ div.field {
 behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   padding:7px;
   margin-bottom:10px;
+  width: 290px;
 }
 
 #link-user-info {
@@ -460,9 +461,10 @@ z-index:3;
   border:0;
   background-color:#eceded;
   margin-bottom:5px;
-  width:220px - 10px;
+  width:250px - 10px;
   padding:5px;
   float:left;
+  overflow: auto;
 }
 
 #link-reply-field-wrapper {
@@ -556,7 +558,10 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-reply-list {
+  width: 304px;
   margin-top:10px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 #replies-right {
