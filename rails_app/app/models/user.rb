@@ -34,6 +34,7 @@ class User
   field :last_sign_in_ip,    :type => String
 
   field :agree_provision, :type => Boolean, :default => false
+  field :agree_privacy, :type => Boolean, :default => false
 
   field :nickname, :type => String
 
@@ -41,6 +42,7 @@ class User
   field :fb_req_friend_ids, type: Array, default: []
 
   validates :agree_provision,:inclusion => {:in => [true]}
+  validates :agree_privacy,:inclusion => {:in => [true]}
 
   ## 계정정지
   field :status, type: Hash, default: {"status" => STATUS_OK}

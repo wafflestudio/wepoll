@@ -23,7 +23,7 @@
   <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
-//        $("#vs-container").hide();
+        $("#vs-container").hide();
 
         //TODO : according to cookie value, select map which not shown
         $("#busan-map").removeClass("selected");
@@ -205,7 +205,7 @@ stroke: "none",
     out = function () {
       this.curve.remove();
       this.arrow.remove();
-//      $("#vs-container").hide();
+      $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },
     click = function(e) {
