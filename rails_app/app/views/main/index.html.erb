@@ -1,26 +1,5 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
-    FB.getLoginStatus(function(response) {
-      if (response.status === 'connected') {
-        // the user is logged in and connected to your
-        // app, and response.authResponse supplies
-        // the user's ID, a valid access token, a signed
-        // request, and the time the access token 
-        // and signed request each expire
-        var uid = response.authResponse.userID;
-        var accessToken = response.authResponse.accessToken;
-//        alert("connected");
-      } else if (response.status === 'not_authorized') {
-        // the user is logged in to Facebook, 
-        //but not connected to the app
-//        alert("not authorized");
-      } else {
-        // the user isn't even logged in to Facebook.
-//        alert("not logged in");
-      }
-    });
-  </script>
-  <script type="text/javascript">
     $(document).ready(function() {
         // vs-container start
         $("#vs-container").hide();
@@ -46,7 +25,7 @@
 
     }
 // vs-container end
-</script>
+  </script>
 <script type="text/javascript">
 
 // draw arrow start

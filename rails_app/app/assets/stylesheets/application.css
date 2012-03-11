@@ -9,10 +9,9 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require reset
- *= require 1024_16_8_8
- *= require_tree . exclude: "admin"
- *= require colorbox
+ *= require_directory .
+ *= require_directory ./timeline
+ *= require_directory ./me
 */
 
 /* below css is for debugging, DO NOT ADD OTHER LINES  */
