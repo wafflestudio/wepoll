@@ -1,1 +1,5 @@
-$("#like-count-<%= @reply.id%>").text(<%= @reply.like_count %>);
+<% if @result -%>
+  $("#like-count-<%= @reply.id%>").text(<%= @reply.like_count %>);
+<% else -%>
+  alert("이미 공감하셨습니다.");
+<% end -%>

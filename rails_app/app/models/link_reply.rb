@@ -21,7 +21,7 @@ class LinkReply
     else
       self.like_count += 1
       self.like_users << user
-      self.save
+      return self.save
     end
   end
 

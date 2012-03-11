@@ -15,19 +15,11 @@ class LinkRepliesController < ApplicationController
   end
 
   def like
-    @re = TweetReply.find(params[:id])
-    if @re.like(current_user)
-      render :json => {:status => "ok", :count => @re.like_count }
-    else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
-    end
+    @reply = LinkReply.find(params[:id])
+    @result = @reply.like(current_user)
   end
   def blame
-    @re = TweetReply.find(params[:id])
-    if @re.blame(current_user)
-      render :json => {:status => "ok", :count => @re.blame_count }
-    else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
-    end
+    @reply = LinkReply.find(params[:id])
+    @result = @reply.blame(current_user)
   end
 end
