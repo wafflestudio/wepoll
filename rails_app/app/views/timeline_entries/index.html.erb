@@ -1,6 +1,6 @@
 <% content_for(:scripts) do %>
 <script type="text/javascript">
-var timelineView;
+var timelineController = {}
 
 Backbone.Model.prototype.toJSON = function() {
   return _(_.clone(this.attributes)).extend({
@@ -100,9 +100,12 @@ function activateTimelineEntryForm() {
 		$('#link-form-preview-txt').html(data.title)
 
 	},function failed(){
-		$('.preview-status').attr("src", "/assets/bad.gif").attr('title', '유효하지 않은 링크입니다.')
+		var msg = $("#timeline_entry_tag_text").val().length > 0 ? '유효하지 않은 링크입니다.' : '링크를 입력하세요.'
+
+
+		$('.preview-status').attr("src", "/assets/bad.gif").attr('title',msg)
 		$('#link-post').attr('disabled','disabled')
-		$('#link-form-badlink').show()
+		$('#link-form-badlink').show().html(msg)
 		$('#link-form-preview-img').empty()
 		$('#link-form-preview-txt').empty()
 

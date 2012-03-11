@@ -17,9 +17,9 @@
 //= require timeline/json2
 //= require timeline/module
 //= require timeline/raphael-min
-//= require timeline/date
+//= require timeline/date-ko-KR
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
-//= require_tree . exclude: "admin"
+//= require_tree . exclude: "admin" exclude: "cssrefresh"
 ////// JUST USE FOR DEVELOPMENT ///////
-//= require cssrefresh
+

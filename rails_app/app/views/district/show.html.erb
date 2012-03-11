@@ -92,8 +92,15 @@
         $(location).attr('href',url);
 
       });
+      var timelineInitialized = false
 			$('#show-timeline').click( function() {
 				$('#timeline-container').jqmShow();
+				
+				if(!timelineInitialized)
+				{
+					timelineController.reset()
+				}
+				timelineInitialized = true;
 				return false
 			});
       $('#timeline-container').jqm();
