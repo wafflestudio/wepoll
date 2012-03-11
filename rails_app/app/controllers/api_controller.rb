@@ -28,15 +28,15 @@ class ApiController < ApplicationController
 		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
-		if preview != nil
-			result[:creasted_at] = preview.created
+		if preview != nil and !params[:force_get]
+			result[:created_at] = preview.created
 			result[:title] = preview.title
 			result[:description ] = preview.description
 			result[:image] = preview.image_url
 		else
 			doc = Nokogiri::HTML(open(target_link))
 			#무슨 기사인지 판별.  
-			if target_link.match('news\.chosun.\.com') != nil #조선일보 
+			if target_link.match('news\.chosun\.com') != nil #조선일보 
 				result[:created_at] = doc.xpath('//p[@id="date_text"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
@@ -180,7 +180,10 @@ class ApiController < ApplicationController
 					result[:image] = ''
 				end
 			else
+				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'
+				render :json =>result.to_json, :status => 500
+				return
 			end
 			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 		end

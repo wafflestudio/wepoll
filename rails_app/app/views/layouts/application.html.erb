@@ -17,6 +17,10 @@
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
+      function show_auth_dialog(href) {
+        window.open(href, "authWindow", "width=600,height=600,menubar=0,location=0,toolbar=0,modal=yes,alwaysRaised=yes");
+        return false;
+      }
 
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>"});
@@ -30,7 +34,12 @@
           <% end %>
         <% end %>
       });
-
+			<% if session[:need_login] -%>
+				$.colorbox({href:"/users/sign_in", width: 520, height: 250});
+				<% session.delete :need_login -%>
+			<% else -%>
+			<% end -%>
+      if(search_source)
       $("input#query").autocomplete({
         source: search_source,
         delay: 50,

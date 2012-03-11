@@ -6,20 +6,19 @@
     <div class="link-type"><%= f.radio_button 'is_good', 'false' %> 지적합니다.</div>
   </div>
 
-  <div class="prefix_1 grid_8 suffix_2 alpha omega field">
+  <div class="prefix_1 grid_8 suffix_1 alpha omega field">
     <label class="grid_1 alpha">링크주소</label>
     <div class="grid_6"><%=f.text_field :url, :class =>'input-link' %></div>
     <div class="grid_1 omega"><span><img class="preview-status"/></span></div>
     <div class="clear"></div>
   	<div id="link-form-badlink" class="prefix_1 note">유효하지 않은 링크입니다.</div>
   	<div class="clear"></div>
-
+		
   	<div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
-  		<div id="link-form-preview-img" class="prefix_1 grid_1 alpha"></div>
-  		<div id="link-form-preview-txt" class="prefix_1 grid_5 omega note"></div>
+  		<div id="link-form-preview-img" class="grid_1 alpha"></div>
+  		<div id="link-form-preview-txt" class="grid_5 omega note"></div>
   	</div>
   </div>
-	<div class="clear"></div>
 
 
   <div class="prefix_1 grid_8 suffix_1 alpha omega field">
