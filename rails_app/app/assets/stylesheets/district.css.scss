@@ -151,11 +151,12 @@
 }
 .tweet {
   background:url(/assets/bubble_right.gif) no-repeat;
-  height:134px - 70px;
-  width:176px - 40px;
-  padding:30px 20px 40px 20px;
+  height:134px - 85px;
+  width:176px - 45px;
+  padding:35px 20px 50px 25px;
   position:relative;
   margin:13px 16px 0 16px;
+  font-size: 9pt;
 }
 
 .tweet.left {
