@@ -1,6 +1,6 @@
 #coding:utf-8
 class TweetsController < ApplicationController
-  before_filter :authenticate_user!, :only => [:recommend]
+  before_filter :authenticate_user!, :only => [:like]
 
   def get_tweet
     # TODO get former tweets
@@ -41,17 +41,17 @@ class TweetsController < ApplicationController
     if got_tweets.nil?
       return []
     else
-      if got_tweets.count == 20
+      if got_tweets.count == 60
         got_tweets << get_tweet_more(start_id, got_tweets_tweets.last.id)
       end
       return got_tweets
     end
   end
 
-  def recommend
-    @tweet = Tweet.find(params[:tweet_id])
-    if @tweet.recommend(current_user)
-      render :json => {:status => "ok", :count => @tweet.recommend_count }
+  def like
+    @tweet = Tweet.find(params[:id])
+    if @tweet.like(current_user)
+      render :json => {:status => "ok", :count => @tweet.like_count }
     else
       render :json => {:status => "error", :message => "이미 공감하셨습니다."}
     end

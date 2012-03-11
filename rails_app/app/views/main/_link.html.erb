@@ -1,7 +1,7 @@
 <div class="link-excerpt">
     <div class="title"><%= link.nil? ? (raw "<span style=\"color:#888\">링크가 없습니다.</span>") : (link_to (link.title||"제목이 없습니다.").truncate(40), display_timeline_entry_path(link.id)) %></div>
   <div class="meta-info clearfix">
-    <div class="support-count">공감 <%= link.nil? ? 0 : link.recommend_count %></div>
+    <div class="support-count">공감 <%= link.nil? ? 0 : link.like_count %></div>
     <div class="nickname"><%= (link.nil? || link.user.nil?) ? "위폴" : (link_to link.user.nickname, display_timeline_entry_path(link.id))%></div>
   </div>
 </div>

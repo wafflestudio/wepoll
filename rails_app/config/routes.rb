@@ -1,6 +1,7 @@
 Wepoll::Application.routes.draw do
   resources :timeline_entries do
-    match '/recommend' => 'timeline_entries#recommend', :as => :recommend
+    get 'blame', :on => :member
+    get 'like', :on => :member
   end
 
   match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
@@ -62,13 +63,13 @@ Wepoll::Application.routes.draw do
   match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
 
   resources :tweets do
-    match '/recommend' => 'tweets#recommend', :as => :recommend
+    get 'like', :on => :member
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
     get 'tweet_replies' => 'tweets#replies', :as => :tweet_replies
   end
   resources :tweet_replies do
-    match '/recommend' => 'tweet_replies#recommend', :as => :recommend
-    match '/report' => 'tweet_replies#report', :as => :report
+    get 'blame', :on => :member
+    get 'like', :on => :member
   end
 
   match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback

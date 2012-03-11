@@ -146,11 +146,9 @@ class TimelineEntriesController < ApplicationController
     end
   end
 
-  def recommend
-    @t = TimelineEntry.find(params[:timeline_entry_id])
-    @result = @t.recommend(current_user)
-#      render :json => {:status => "ok", :count => @t.recommend_count }
-#      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+  def like
+    @t = TimelineEntry.find(params[:id])
+    @result = @t.like(current_user)
   end
 
 protected

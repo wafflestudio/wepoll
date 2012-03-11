@@ -51,7 +51,7 @@
   <div class="grid_11 alpha omega">
     <div class="grid_6 alpha" id="replies-left">
       <div class="grid_2 alpha" id="link-like-count">
-        <span id="like-count"><%= @timeline_entry.recommend_count %></span><br />
+        <span id="like-count"><%= @timeline_entry.like_count %></span><br />
         <span style="color:#48d822;font-size:9pt;">공감</span>
       </div>
 
@@ -64,7 +64,7 @@
       <div class="clear"></div>
 
       <div class="grid_2 alpha" id="sns-links">
-        <%= link_to '공감하기', timeline_entry_recommend_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
+        <%= link_to '공감하기', timeline_entry_like_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
         <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
       </div>
 

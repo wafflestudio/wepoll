@@ -1,14 +1,15 @@
 <div data-href="<%= tweet_tweet_replies_path(t) %>" class="tweet_item clearfix <%= c %>">
   <div class="count">
-    <%= t.recommend_count %>
+    <%= t.like_count %>
   </div>
   <div class="content">
     <div>
       <span class="tweet_author"><%= t.name if t.name? %> <%= "@#{t.screen_name}" if t.screen_name? %></span>
-      <%= link_to '공감하기', tweet_recommend_path(t), :class => "tweet_recommend_btn" %>
       <% if user_signed_in? -%>
+        <%= link_to '공감하기', tweet_like_path(t), :class => "tweet_recommend_btn" %>
         <%= link_to '댓글달기', tweet_tweet_replies_path(t), :class => "reply_btn", "data-status_id" => t.status_id %>
       <% else -%>
+        <%= link_to_function '공감하기', "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
         <%= link_to_function '댓글달기', "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
       <% end -%>
     </div>
