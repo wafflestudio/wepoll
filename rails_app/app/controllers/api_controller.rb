@@ -148,6 +148,37 @@ class ApiController < ApplicationController
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:image] = doc.xpath('//div[@id="articleImage0"]/span/img').first['src'] if doc.xpath('//div[@id="articleImage0"]/span/img').count > 0
+			elsif target_link.match('wikitree\.co\.kr') # wikitree
+				result[:title] = doc.title()
+				if doc.xpath('//embed').length > 0 #has video 
+					result[:video] = doc.xpath('//embed').first['src']
+				else 
+					if doc.xpath('//p[@align="center"]/img').length > 0
+						result[:image] = doc.xpath('//p[@align="center"]/img').first['src'] 
+					else
+						result[:image] = ''
+					end
+				end
+				result[:description] = doc.xpath('//div[@id="content1"]').text
+				result[:created_at] = doc.xpath('//span[@class="date"]').text
+			elsif target_link.match('seoul\.co\.kr/news') # 서울신문
+				result[:title] = doc.title()
+				if doc.xpath('//div[@id="img"]//img').length > 0
+					result[:image] = doc.xpath('//div[@id="img"]//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@class="VCdate"]').text
+				result[:description] = doc.xpath('//div[@id="articleContent"]//p').first.text.gsub(/\r\n/, '').gsub(/\t/, '')
+			elsif target_link.match('hani\.co\.kr') # 한겨례 
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//p[@class="date"]/span').first.text.split(' ')[2] + ' ' + doc.xpath('//p[@class="date"]/span').first.text.split(' ')[3]
+				result[:description] doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
+				if doc.xpath('//table[@class="photo-view-area"]//img').length > 0 
+					result[:image] = doc.xpath('//table[@class="photo-view-area"]//img').first['src']
+				else 
+					result[:image] = ''
+				end
 			else
 				result[:error] = '해당 기사는 지원되지 않습니다.'
 				#result[:title] = doc.title()
