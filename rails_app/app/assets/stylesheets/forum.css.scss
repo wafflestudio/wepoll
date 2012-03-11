@@ -2,6 +2,8 @@
   padding: 10px;
   background-color: white;
   border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
   margin-bottom: 20px;
   h2 {
     font-size: 20pt;
@@ -78,6 +80,8 @@
       background-color: white;
       border: 5px solid black;
       border-radius: 25px;
+      -webkit-border-radius: 25px;
+      -moz-border-radius: 25px;
       &:hover {
         background-color: #F3F3F3;
       }
@@ -114,6 +118,8 @@
   background-color: white;
   border: 5px solid black;
   border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
 
   #reply_close {
     position: absolute;
@@ -158,6 +164,8 @@
     background-color: #FDDF49;
     border: none;
     border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
   }
 }
 #replies_wrapper {
@@ -168,6 +176,8 @@
   margin-bottom: 20px;
   background-color: white;
   border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
 
   .reply_item {
     font-size: 11pt;
