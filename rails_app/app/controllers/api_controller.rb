@@ -173,7 +173,7 @@ class ApiController < ApplicationController
 			elsif target_link.match('hani\.co\.kr') # 한겨례 
 				result[:title] = doc.title()
 				result[:created_at] = doc.xpath('//p[@class="date"]/span').first.text.split(' ')[2] + ' ' + doc.xpath('//p[@class="date"]/span').first.text.split(' ')[3]
-				result[:description] doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
+				result[:description] =  doc.xpath('//div[@class="article-contents"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\n/, '')
 				if doc.xpath('//table[@class="photo-view-area"]//img').length > 0 
 					result[:image] = doc.xpath('//table[@class="photo-view-area"]//img').first['src']
 				else 
