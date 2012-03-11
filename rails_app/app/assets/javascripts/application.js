@@ -22,4 +22,3 @@
 //= require jquery.gritter.min
 //= require_tree . exclude: "admin" exclude: "cssrefresh"
 ////// JUST USE FOR DEVELOPMENT ///////
-

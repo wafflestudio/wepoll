@@ -1,7 +1,7 @@
 <div class="link-reply-wrapper">
-  <img class="link-reply-user-photo" src="<%= link_reply.user ? link_reply.user.profile_picture.url(:square50) : "/assets/anonymous.gif" %>"/>
 
   <div class="link-content-wrapper">
+    <img class="link-reply-user-photo" src="<%= link_reply.user ? link_reply.user.profile_picture.url(:square50) : "/assets/anonymous.gif" %>"/>
     <div class="link-reply-user-name"><%= link_reply.user ? link_reply.user.nickname : "정보없음" %></div>
     <div class="link-reply-content"><%= link_reply.body %></div>
   </div>

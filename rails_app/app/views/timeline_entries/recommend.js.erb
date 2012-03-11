@@ -1,0 +1,5 @@
+<% if @result -%>
+  $("#like-count").text("<%= @t.recommend_count%>");
+<% else -%>
+  alert("이미 공감하셨습니다.");
+<% end -%>
