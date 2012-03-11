@@ -2,4 +2,94 @@
   <h1><%= @user.nickname %></h1>
 </div>
 
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">기본회원정보</th>
+    </tr>
 
+    <tr>
+      <td><strong>ID</strong></td>
+      <td><%= @user.userid %></td>
+    </tr>
+
+    <tr>
+      <td><strong>페이스북</strong></td>
+      <td>
+        <% if @user.facebook_connected? -%>
+          <%= @user.facebook_token.uid %></td>
+        <% else -%>
+          연동안됨
+        <% end -%>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>트위터</strong></td>
+      <td>
+        <% if @user.twitter_connected? -%>
+          <%= @user.twitter_token.uid %></td>
+        <% else -%>
+          연동안됨
+        <% end -%>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>닉네임</strong></td>
+      <td><%= @user.nickname %></td>
+    </tr>
+    <tr>
+      <td><strong>프로필사진</strong></td>
+      <td><%= image_tag @user.profile_picture.url %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">활동정보</th>
+    </tr>
+    <tr>
+      <td><strong>현재상황</strong></td>
+      <td>
+        <%if @user.status["status"] == User::STATUS_OK -%>
+          정상이용
+        <% elsif @user.status["status"] == User::STATUS_SUSPEND -%>
+          <%= "#{@user.status["start"].strftime("%Y-%m-%d %H:%M")}~#{@user.status["end"].strftime("%Y-%m-%d %H:%M")} 계정정지(#{@user.status["reason"]})" %>
+        <% else -%>
+          <%= @user.status["status"] %>
+        <% end -%>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>누적 계정정지</strong></td>
+      <td>
+        <% @user.total_suspends.each do |d| -%>
+          <%= "#{d["reason"]} (#{d["start"].strftime("%Y-%m-%d")} ~ #{d["start"].strftime("%Y-%m-%d")})" %> <br />
+        <% end -%>
+        <% if @user.total_suspends.empty? -%>
+          누적 계정정지 없음
+        <% end -%>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>작성 링크갯수</strong></td>
+      <td><%= @user.timeline_entries.count%></td>
+    </tr>
+    <tr>
+      <td><strong>작성 리플갯수</strong></td>
+      <td><%= @user.link_replies.count%></td>
+    </tr>
+</table>
+</div>
+
+<div class="actions">
+  <%= link_to '목록', admin_users_path, :class => 'action list' %> | 
+  <%= link_to '편집', edit_admin_user_path(@user), :class => 'action edit' %> | 
+  <%= link_to '삭제', admin_user_path(@user), :method => :delete, :confirm => '정말 삭제하시겠습니까?', :class => 'action destroy' %> | 
+  <% if @user.status["status"] == User::STATUS_SUSPEND -%>
+    <%= link_to '계정정지취소', suspend_cancel_admin_user_path(@user), :method => :post, :confirm => '정말 취소하시겠습니까?', :class => 'action cancel' %>
+  <% else -%>
+    <%= link_to '계정정지', suspend_admin_user_path(@user), :class => 'action suspend' %>
+  <% end -%>
+</div>

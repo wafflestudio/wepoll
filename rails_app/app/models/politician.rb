@@ -8,6 +8,7 @@ class Politician #정치인 모델
   field :name, type: String
   field :party, type: String
   field :district, type: String #NOTE : 지역구를 따로 모델로 빼는건?
+  field :candidate, type: Boolean, default: false #NOTE: 19대 후보인가 아닌가,19대에만 적용되는 플래그. 주의
 
   # 프로필정보
   field :military, type: String
