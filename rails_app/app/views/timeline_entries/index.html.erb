@@ -167,7 +167,7 @@ $(function() {
   });
 	<% end %>
 
-	$('#timeline-container').corner('20px')
+	//$('#timeline-container').corner('20px')
 	$('#timeline-container-border').corner('10px').css('z-index','auto')
 	$('#timeline-bg').corner('10px').css('z-index','auto')
 
@@ -177,6 +177,19 @@ $(function() {
     var url = "/timeline_entries/"+entry_id;
     $(this).colorbox({href:url});
   });
+
+  Raphael(function() {
+
+  	var src1 = $('.politician-photo1').attr('src')
+  	var src2 = $('.politician-photo2').attr('src')
+		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
+		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
+  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
+  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
+
+
+
+	});
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {
@@ -246,9 +259,9 @@ $(function() {
 })
 </script>
 <% end %>
-<div id="timeline-container" class="grid_16">
-<div id="timeline-container-border"></div>
-<div id="timeline-bg"></div>
+<div id="timeline-container" class="alpha omega">
+<!--<div id="timeline-container-border"></div>
+<div id="timeline-bg"></div>-->
 
 
 <% if user_signed_in? %> 
@@ -264,14 +277,15 @@ $(function() {
 			<div id='tm-politician1'>
 				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @p1.nil? ? "http://placehold.it/100" : @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+						<%= image_tag @p1.nil? ? "http://placehold.it/100" : @p1.profile_photo.url(:square100), :alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+						<div class='pol-name'><%= @p1 ? raw(@p1.name.split("").join('<br/>')) : "" %>
+						<% if user_signed_in? && @p1 %>
+							<a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
+						<% end %>
+						</div>
+
 					</div>
 
-					<p class='pol-name'><%= @p1 ? @p1.name : "" %>
-					<% if user_signed_in? && @p1 %>
-            <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
-					<% end %>
-					</p>
 				</div>
 
 			</div>
@@ -281,10 +295,10 @@ $(function() {
 			<div id='tm-politician2'>
 				<div class="grid_2">
 					<div class="photo-holder">
-					<%= image_tag @p2 ? @p2.profile_photo.url(:square100) : nil,:alt=>'프로필 사진이 없습니다',:class=>'politician-photo1' %>
+					<%= image_tag @p2 ? @p2.profile_photo.url(:square100) : nil,:alt=>'프로필 사진이 없습니다',:class=>'politician-photo2' %>
 					</div>
 				<p class='pol-name'>
-					<%= @p2 ? @p2.name : "" %>
+					<%= @p2 ? raw(@p2.name.split("").join('<br/>')) : "" %>
 					<% if user_signed_in? && @p2%>
             <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p2.id)%>">[+]</a>
 				<% end %>

@@ -24,6 +24,28 @@
     function loadVSPoliticians(district) {
 
     }
+function getInternetExplorerVersion()
+  // Returns the version of Internet Explorer or a -1
+  // (indicating the use of another browser).
+{
+  var rv = -1; // Return value assumes failure.
+  if (navigator.appName == 'Microsoft Internet Explorer')
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      rv = parseFloat( RegExp.$1 );
+  }
+  return rv;
+}
+function checkVersion()
+{
+  var msg = "You're not using Internet Explorer.";
+  var ver = getInternetExplorerVersion();
+   
+console.log(ver);
+    return ver;
+}
 // vs-container end
   </script>
 <script type="text/javascript">
@@ -59,15 +81,23 @@ stroke: "none",
 
     this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
     this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
-
+    
+    if ((checkVersion() < 9) && (checkVersion() > 5)) {
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40);
+    } 
+    else if (checkVersion() < 0) {
     this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+    }
+    else {
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+    }
 
     endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
     beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
     }
     else {
     end_x = 670;
-    end_y = 360;
+    end_y = 350;
 
     len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
     len /= 2.5;
@@ -82,7 +112,15 @@ stroke: "none",
     this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
     this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
 
+    if ((checkVersion() < 9) && (checkVersion() > 5)) {
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40);
+    } 
+    else if (checkVersion() < 0) {
     this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+    }
+    else {
+    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+    }
 
     endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
     beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
@@ -182,8 +220,8 @@ stroke: "none",
 
     },
     out = function () {
-      this.curve.remove();
-      this.arrow.remove();
+      if (typeof this.curve !== "undefined" || this.curve !== null) this.curve.remove();
+      if (typeof this.arrow !== "undefined" || this.arrow !== null) this.arrow.remove();
       $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
     },

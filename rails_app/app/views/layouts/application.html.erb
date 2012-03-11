@@ -49,30 +49,31 @@
         }
 
         //notification bars
+            if(search_source) {
+              $("input#query").autocomplete({
+source: search_source,
+delay: 50,
+max: 10,
+autoFocus: true,
+select: function(event, ui) {
+$("#query_hidden").val(ui.item.query);
+$("#query_type").val(ui.item.type);
+$("#query").val(ui.item.form);
+return false;
+},
+focus: function() {return false;}}); 
+}
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
             $.gritter.add({title:" ",text:"<%= flash[level]%>"});
           <% end %>
         <% end %>
       });
-			<% if session[:need_login] -%>
-				$.colorbox({href:"/users/sign_in", width: 520, height: 250});
-				<% session.delete :need_login -%>
-			<% else -%>
-			<% end -%>
-      if(search_source)
-      $("input#query").autocomplete({
-        source: search_source,
-        delay: 50,
-        max: 10,
-        autoFocus: true,
-        select: function(event, ui) {
-        $("#query_hidden").val(ui.item.query);
-        $("#query_type").val(ui.item.type);
-        $("#query").val(ui.item.form);
-        return false;
-        },
-        focus: function() {return false;}}); 
+<% if session[:need_login] -%>
+  $.colorbox({href:"/users/sign_in", width: 520, height: 250});
+  <% session.delete :need_login -%>
+<% else -%>
+<% end -%>
     </script>
 
     <!-- Le styles -->
@@ -167,6 +168,5 @@
         <%= render :partial => '/layouts/footer' %>
       </div>
     </footer>
-
   </body>
 </html>

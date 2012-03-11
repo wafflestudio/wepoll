@@ -11,8 +11,8 @@ doc = Nokogiri::HTML(html)
 
 doc_path = doc.xpath("html/body/div/div[2]/div/div[2]/div[4]/div[4]/table/tbody")
 
-# 선거구 / 소속 정당명 / 사진 / 성명(한자) / 성별 / 생년월일(연령) / 주소 / 직업 / 학력 / 경력 / 등록일자
-# district / party / picture / name(chinese) / gender / birth / address / job / academic / career / register
+# 선거구 / 소속 정당명 / 사진 / 성명 / 한자 / 성별 / 생년월일(연령) / 주소 / 직업 / 학력 / 경력 / 등록일자
+# district / party / picture / name / chinese / gender / birth / address / job / academic / career / register
 
 i = 0
 

@@ -1,8 +1,10 @@
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%=i==0 ? "left":"right" %>">
-      <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
-    </div>
+    <% if politician.is_18? %>
+      <div class="<%=i==0 ? "left":"right" %>">
+        <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
+      </div>
+    <% end %>
 
     <% if i==0 -%><div class="subsection-label">대표법안</div><% end -%>
   <% end -%>
@@ -10,9 +12,11 @@
 
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
-    </div>
+    <% if politician.is_18? %>
+      <div class="<%= i==0?"left":"right"%>">
+        <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
+      </div>
+    <% end %>
 
     <% if i==0 -%><div class="subsection-label">국회인맥</div><% end -%>
   <% end -%>
@@ -20,15 +24,17 @@
 
 <div class="grid_9 alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <div class="att-bar-graph" 
-        data-value="<%= i==0?30:50%>"
-        data-total="100"
-        data-float="<%= i==0?"right":"left"%>"
-        data-color="<%= i==0?"#29cf4f":"#bb262c"%>"
-        style="<%= i==0?"float:right":"float:left" %>">
+    <% if politician.is_18? %>
+      <div class="<%= i==0?"left":"right"%>">
+        <div class="att-bar-graph" 
+          data-value="<%= politician.attendance %>"
+          data-total="100"
+          data-float="<%= i==0?"right":"left"%>"
+          data-color="<%= i==0?"#29cf4f":"#bb262c"%>"
+          style="<%= i==0?"float:right":"float:left" %>">
+        </div>
       </div>
-    </div>
+    <% end %>
     <% if i==0 -%><div class="subsection-label">본회의<br />출석률</div><% end -%>
   <% end -%>
 </div>
