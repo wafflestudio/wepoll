@@ -268,7 +268,7 @@ $(function() {
 					</div>
 
 					<p class='pol-name'><%= @p1 ? @p1.name : "" %>
-					<% if user_signed_in? %>
+					<% if user_signed_in? && @p1 %>
             <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p1.id) %>">[+]</a>
 					<% end %>
 					</p>
@@ -285,7 +285,7 @@ $(function() {
 					</div>
 				<p class='pol-name'>
 					<%= @p2 ? @p2.name : "" %>
-					<% if user_signed_in? %>
+					<% if user_signed_in? && @p2%>
             <a class="link-new" href="<%= new_timeline_entry_path(:politician_id => @p2.id)%>">[+]</a>
 				<% end %>
 				</p>

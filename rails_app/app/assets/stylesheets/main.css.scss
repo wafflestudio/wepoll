@@ -155,12 +155,15 @@
   border-radius:10px;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
-  padding-bottom:30px;
+  -o-border-radius:10px;
+  padding-bottom:20px;
   margin-bottom:40px;
+  max-height:200px;
+  overflow-y:auto;
 }
 
 .link-excerpt {
-  height:75px - 1px;
+  height:50px - 1px;
   border-bottom:1px dashed #bdbbbc;
 //  margin-top:15px;
   margin: 15px 15px 0 15px;
@@ -185,7 +188,7 @@
   }
 
   .meta-info {
-    margin-bottom:15px;
+    margin-bottom:5px;
   }
 
   .title {
@@ -194,8 +197,8 @@
       text-decoration:none;
     }
     color:black;
-    margin-bottom:20px;
-    min-height:30px;
+    margin-bottom:5px;
+    min-height:20px;
   }
 }
 
@@ -277,9 +280,10 @@
 .politician-name {
   border:2px solid #514e51;
   color:#514e51;
+  padding-top:5px;
   width:90px;
-  height:20px;
-  font-size:9pt;
+  height:20px - 5px;
+  font-size:8pt;
   text-align:center;
   margin:7px auto 7px auto;
 }
