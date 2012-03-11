@@ -7,6 +7,11 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+  STATUS_OK = "ok"
+  STATUS_SUSPEND = "suspended"
+
+  SUSPEND_REASONS = ["욕설", "비방", "인신공격", "허위사실"]
+
   ## Database authenticatable
 
   field :email,              :type => String, :default => ""
@@ -38,8 +43,8 @@ class User
   validates :agree_provision,:inclusion => {:in => [true]}
 
   ## 계정정지
-  field :suspended, type: Integer, default: 0
-  field :total_suspend_count, type: Integer, default: 0
+  field :status, type: Hash, default: {"status" => STATUS_OK}
+  field :total_suspends, type: Array, default: []
 
   def email_required?
     false

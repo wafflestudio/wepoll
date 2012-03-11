@@ -24,7 +24,11 @@ Wepoll::Application.routes.draw do
     end
 
     resources 'timeline_entries'
-    resources 'users'
+    resources 'users' do
+      get 'suspend', :as => 'suspend', :on => :member
+      post 'suspend_confirm', :as => 'suspend_confirm', :on => :member
+      post 'suspend_cancel', :as => 'suspend_cancel', :on => :member
+    end
   end
 
   devise_for :users, :controllers => {

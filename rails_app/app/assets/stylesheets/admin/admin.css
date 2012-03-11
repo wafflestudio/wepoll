@@ -434,3 +434,6 @@ a.action.add {
   background:url(/assets/admin/icn_plus.png) no-repeat 0 2px;
 }
 
+a.action.suspend {
+  background:url(/assets/admin/icn_suspend.png) no-repeat 0 2px;
+}
