@@ -271,6 +271,12 @@
 </div>
 
 <div class="grid_12 alpha omega" id="tab-wrapper">
+  <% if !@p1.is_18? %>
+    <%= image_tag "icn_not_18.png", :style => "position:absolute;top:30px;left:80px;z-index:200;" %>
+  <% end %>
+  <% if !@p2.is_18? %>
+    <%= image_tag "icn_not_18.png", :style => "position:absolute;top:30px;left:400px;z-index:200;" %>
+  <% end %>
   <div id="tabs" class="clearfix">
     <%= link_to '국회활동',
       bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
