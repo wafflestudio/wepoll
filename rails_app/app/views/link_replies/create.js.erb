@@ -2,6 +2,7 @@
   $("#link-reply-list").html("<%= escape_javascript render(@reply.timeline_entry.link_replies) %>");
   $("#link-reply-count").text("<%= @reply.timeline_entry.link_replies.count%>")
   $("#link_reply_body").val("");
+  $.colorbox.resize();
 <% else -%>
   //error 상황
   alert("에러!");

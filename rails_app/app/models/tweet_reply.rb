@@ -21,21 +21,21 @@ class TweetReply
 
   def like(user)
     if self.like_users.include? user
-      false
+      return false
     else
       self.like_count += 1
       self.like_users << user
-      self.save
+      return self.save
     end
   end
 
   def blame(user)
     if self.blame_users.include? user
-      false
+      return false
     else
       self.blame_count += 1
       self.blame_users << user
-      self.save
+      return self.save
     end
   end
 
