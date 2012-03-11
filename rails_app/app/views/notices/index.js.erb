@@ -1,0 +1,2 @@
+$("#notice-list").html("<%= escape_javascript render(@notices)%>");
+$("#notices-paginator").html("<%= escape_javascript(paginate(@notices, :remote => true))%>");
