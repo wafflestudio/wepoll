@@ -44,6 +44,15 @@ class DistrictController < ApplicationController
     end
   end
 
+  def show_timeline_entry
+
+    @timeline_entry = TimelineEntry.find(params[:id])
+    @p1 = @timeline_entry.politician
+    @p2 = Politician.where(:district => @p1.district).reject {|p| p.id == @p1.id}.first
+
+    redirect_to district_vs_politicians_path(:p1_id => @p1.id, :p2_id => @p2.id, :timeline_entry_id => params[:id], :name => @p1.district)
+  end
+
   protected
   def simplify_district_name
     if !params[:name].nil?

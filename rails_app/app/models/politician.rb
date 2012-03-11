@@ -68,6 +68,14 @@ class Politician #정치인 모델
     end
   end
 
+  def is_18?
+    if elections.include?(18)
+      true
+    else
+      false
+    end
+  end
+
   def self.calculate_joint_initiate
     puts "=== 공동발의 일치도 계산 ==="
     Politician.all.each do |politician|

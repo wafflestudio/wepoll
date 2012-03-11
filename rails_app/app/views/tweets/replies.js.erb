@@ -1,1 +1,5 @@
-$('#replies_wrapper').html('<%= escape_javascript(render @replies) %>')
+<% if @replies.count == 0 -%>
+  $('#replies_wrapper').html('<div class="reply_item"> 등록된 댓글이 없습니다.  </div>');
+<% else -%>
+  $('#replies_wrapper').html('<%= escape_javascript(render @replies) %>');
+<% end -%>

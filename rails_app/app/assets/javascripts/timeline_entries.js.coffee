@@ -66,7 +66,7 @@ loadPreview = (url, onload)->
 
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<div class='tm-entry-numlike'>공감 #{model.get('like')}</div>
+			<div class='tm-entry-numlike'>공감 #{model.get('recommend_count')}</div>
 			<div class='tm-entry-numreply'>댓글0</div>
 			<div class='clear'></div>
 			<div class='tm-entry-content'>
@@ -74,7 +74,7 @@ createView = (model)->
 			<!--<p>링크: #{model.escape('url')}</p>-->
 			<!--<p>날짜: #{formatDate(Date.parse(model.escape('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
-			<p class='tm-entry-tags'>#{model.escape('tags')}</p>
+			<div class='tm-entry-tags'>#{model.escape('tags')}</div>
 			#{if TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
 			</div>
 		</div>"

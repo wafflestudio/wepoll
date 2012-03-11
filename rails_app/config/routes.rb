@@ -2,6 +2,9 @@ Wepoll::Application.routes.draw do
   resources :timeline_entries do
     match '/recommend' => 'timeline_entries#recommend', :as => :recommend
   end
+
+  match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
+
   resources :bills
   resources :link_replies do
     get 'blame', :on => :member
@@ -93,6 +96,5 @@ Wepoll::Application.routes.draw do
   match 'main/tw_test' => 'main#twitter_test', :as => :tw_test
   match 'api/article_parse' => 'api#article_parsing'
   match 'api/youtube_parse' => 'api#youtube_parsing'
-
 end
 

@@ -33,6 +33,28 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
       background-color: #78DEF8;
       background-image: url(twitter.png);
     }
+    .alert.user-status {
+      background-color: #FFFFFF;
+      span.label {
+      	margin-left: 10px;
+      	margin-top: 15px;
+        float: left;
+        font-weight: bold;
+      	font-size: 13pt;
+        color: #4f4f50;
+      }
+      span.text {
+        float: right;
+        margin-right: 10px;
+        margin-top: 15px;
+        font-weight: bold;
+        font-size: 13pt;
+        color: #ff0000;
+        &.good {
+          color: #4f4f50;
+        }
+      }
+    }
     .status {
       width: 620px;
       height: 130px;
