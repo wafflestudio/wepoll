@@ -66,7 +66,7 @@ loadPreview = (url, onload)->
 
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<div class='tm-entry-numlike'>공감 #{model.get('recommend_count')}</div>
+			<div class='tm-entry-numlike'>공감 #{model.get('like_count')}</div>
 			<div class='tm-entry-numreply'>댓글0</div>
 			<div class='clear'></div>
 			<div class='tm-entry-content'>

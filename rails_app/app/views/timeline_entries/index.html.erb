@@ -181,18 +181,18 @@ $(function() {
     }});
   });
 
-  Raphael(function() {
-
-  	var src1 = $('.politician-photo1').attr('src')
-  	var src2 = $('.politician-photo2').attr('src')
-		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
-		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
-  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
-  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
-
-
-
-	});
+//  Raphael(function() {
+//
+//  	var src1 = $('.politician-photo1').attr('src')
+//  	var src2 = $('.politician-photo2').attr('src')
+//		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
+//		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
+//  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
+//  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
+//
+//
+//
+//	});
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {

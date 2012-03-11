@@ -1,6 +1,6 @@
 <% if @reply.persisted? -%>
   $("#link-reply-list").html("<%= escape_javascript render(@reply.timeline_entry.link_replies.desc('created_at')) %>");
-  $('#link-reply-count').html("<%= @reply.timeline_entry.link_replies.count %>");
+  $('#link-reply-count').text("<%= @reply.timeline_entry.link_replies.count %>");
   $("#link_reply_body").val("");
   $.colorbox.resize();
 <% else -%>
