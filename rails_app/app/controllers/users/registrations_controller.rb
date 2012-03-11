@@ -32,6 +32,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:profile_picture] = open(pic_url) unless pic_url.nil?
     end
     params[:user][:agree_provision] = true if params[:agree_provision]
+    params[:user][:agree_privacy] = true if params[:agree_privacy]
 
     if params[:agree_send_requests]
       params[:user][:fb_req_friend_ids] = params[:friend_ids]
