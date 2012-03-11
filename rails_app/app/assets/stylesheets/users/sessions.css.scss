@@ -7,6 +7,7 @@
   border-radius: 25px;
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
+behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   
   h1 {
     margin-top: 10px;
@@ -22,6 +23,7 @@
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
+behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     width: 15px;
     height: 15px;
     text-align: center;
@@ -34,7 +36,7 @@
     #fb_login_btn, #twitter_login_btn {
       font-size: 10pt;
       display: block;
-      margin: 0 auto;
+      margin: 5px auto;
       padding-left: 20px;
       width: 150px;
       height: 22px;

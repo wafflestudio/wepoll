@@ -10,15 +10,14 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     <![endif]-->
 
+    <%= stylesheet_link_tag "preload/preload", :media => "all" %>
     <!-- Le javascript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <%= stylesheet_link_tag "preload/preload", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= yield :scripts %>
     <script type="text/javascript">
       function show_auth_dialog(href) {
-        window.open(href, "authWindow", "width=600,height=600,menubar=0,location=0,toolbar=0,modal=yes,alwaysRaised=yes");
+        window.open(href, "authWindow", "width=600,height=600,menubar=0,location=0,toolbar=0,modal=yes,scrollbars=yes,alwaysRaised=yes");
         return false;
       }
 
@@ -27,6 +26,28 @@
       }
 
       $(document).ready(function() {
+        $.support.placeholder = false;
+        var test = document.createElement('input');
+        if('placeholder' in test) $.support.placeholder = true;
+
+        if(!$.support.placeholder) { 
+          var active = document.activeElement;
+          $(':text').focus(function () {
+            if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
+              $(this).val('').removeClass('hasPlaceholder');
+            }
+          }).blur(function () {
+            if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
+              $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
+            }
+          });
+          $(':text').blur();
+          $(active).focus();
+          $('form').submit(function () {
+            $(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
+          });
+        }
+
         //notification bars
             if(search_source) {
               $("input#query").autocomplete({
