@@ -1,6 +1,6 @@
 development:
   host: localhost
-  database: kindone_wepoll_development
+  database: drh_wepoll_development
 
 test:
   host: localhost
@@ -8,13 +8,13 @@ test:
 
 # set these environment variables on your prod server
 production:
-  host: <%= ENV['MONGOID_HOST'] %>
-  port: <%= ENV['MONGOID_PORT'] %>
-  username: <%= ENV['MONGOID_USERNAME'] %>
-  password: <%= ENV['MONGOID_PASSWORD'] %>
-  database: <%= ENV['MONGOID_DATABASE'] %>
+  host: 211.43.193.132
+# port: 27018
+# username: wepoll
+# password: dnlvhf1234
+  database: wepoll
   # slaves:
-  #   - host: slave1.local
-  #     port: 27018
-  #   - host: slave2.local
-  #     port: 27019
+  # - host: slave1.local
+  # port: 27018
+  # - host: slave2.local
+  # port: 27019
