@@ -1,5 +1,7 @@
 class TimelineEntry extends Backbone.Model
 	defaults: {
+		like_count:0
+		blame_count:0
 		# The **deleted** field is used to indicate delete synchronization between clients. Server will _hopefully_ destroy the mongodb document after some time.
 		deleted:false
 	}
