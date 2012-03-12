@@ -91,9 +91,10 @@ class TimelineController
 			view.appendTo(@$el)
 		$(@$el).mousewheel (e, delta, deltax,deltay)=>
 			e.preventDefault()
-			if delta > -0.5 && delta < 0
+			console.warn('wheel', delta)
+			if delta < 0
 				@currentScale.goRight()
-			else if delta < 0.5  && delta >0
+			else if delta >0
 				@currentScale.goLeft()
 			return false
 			
