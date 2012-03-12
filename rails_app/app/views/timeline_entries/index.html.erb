@@ -148,7 +148,9 @@ var pol2 = <%= @p2.to_json.html_safe %>
 var entries = <%= @timeline_entries.to_json.html_safe %>
 // On Load
 $(function() {
+	console.warn('start')
 	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
+	console.warn('end')
 	timelineController.startAutoUpdate()
 	timelineController.appendTo($("#timeline"))
 	
@@ -181,18 +183,18 @@ $(function() {
     }});
   });
 
-//  Raphael(function() {
-//
-//  	var src1 = $('.politician-photo1').attr('src')
-//  	var src2 = $('.politician-photo2').attr('src')
-//		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
-//		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
-//  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
-//  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
-//
-//
-//
-//	});
+  Raphael(function() {
+
+  	var src1 = $('.politician-photo1').attr('src')
+  	var src2 = $('.politician-photo2').attr('src')
+		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
+		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
+  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
+  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
+
+
+
+	});
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {
