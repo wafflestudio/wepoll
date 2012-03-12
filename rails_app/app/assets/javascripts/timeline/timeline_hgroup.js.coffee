@@ -62,7 +62,7 @@ class HorizontalGroup
 	
 	prepareVGroup:(pos)->
 		if !@vgroups[pos]
-			console.log('prepareVGroup:', "@vgroups[#{pos}] doesn't exist, creating")
+			console.log('prepareVGroup:', "@vgroups[#{pos}] date:#{@legendText(@pos)} doesn't exist, creating")
 			@vgroups[pos] = new VerticalGroup(pos,{legendText:@legendText, legendHref:@legendHref})
 			@vgroups[pos].on "destroy", @onVGroupDestroy
 			@vgroups[pos].appendTo(@$holder)
@@ -79,7 +79,7 @@ class HorizontalGroup
 		@setSpan(@$holder.children('.tm-vgroup').length)
 	
 	appendBulk:(vgroups, shift)->
-		console.log('appendBulk', "appending #{vgroups.length} vgroups to hgroup[#{@pos}] (shift:#{shift})")
+		console.log('appendBulk', "appending #{vgroups.length} vgroups to hgroup[#{@pos}] (date:#{@legendText(@pos)} shift:#{shift})")
 		for element in vgroups
 			vgroup = $(element).data("vgroup")
 			if @vgroups[vgroup.pos]
@@ -96,11 +96,12 @@ class HorizontalGroup
 
 	collapse:(startpos)->
 		
-		console.log('collapse', "collapsing hgroup[#{@pos}] #{if startpos? then "from #{startpos}" else ""}")
+		console.log('collapse', "collapsing hgroup[#{@pos}] date:#{@legendText(@pos)} #{if startpos? then "from #{startpos}" else ""}")
 		vgroups = []
 		@$holder.children('.tm-vgroup').each (index,element)=>
 			return if startpos? and $(element).data("vgroup").pos < startpos
 			$(element).data("vgroup").off "destroy", @onVGroupDestroy
+			$(element).css("left", "#{parseInt($(element).css("left"))+(@epoch-@pos)*modules.TimelineView.EntryWidth}px")
 			$(element).detach()
 			vgroups.push($(element))
 

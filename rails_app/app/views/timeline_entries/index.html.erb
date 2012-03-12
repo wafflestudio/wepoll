@@ -156,7 +156,7 @@ $(function() {
 	
 	<% if user_signed_in? %>
   $(".link-new").click(function() {
-    $(this).colorbox({title:false,width:'800px',height:'640px',onComplete:function(){
+    $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
     	activateTimelineEntryForm()
 			$('.tm-entry-form').submit( function() {
 				submitTimelineEntryForm(this)			

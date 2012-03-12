@@ -19,7 +19,7 @@ createView = (model)->
 	element = $(template)
 	element.find('a').click (evt)->
 		url = "/timeline_entries/" + model.id + "/edit"
-		$.colorbox {href:url,width:'800px', height:'640px',onComplete: ()->
+		$.colorbox {href:url,width:'800px', height:'660px',onComplete: ()->
 			activateTimelineEntryForm()
 			$('.tm-entry-form').submit ()->
 				submitTimelineEntryForm(this, model.id)

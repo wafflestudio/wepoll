@@ -121,7 +121,6 @@ class TimelineController
 		
 		x = @currentScale.x
 		width = @currentScale.getWidth()
-		console.warn 'changeScale', x,width
 		if rbound-lbound <= width
 			@navp.hide()
 			@navn.hide()
