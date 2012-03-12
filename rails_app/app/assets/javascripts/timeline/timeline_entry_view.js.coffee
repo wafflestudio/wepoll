@@ -22,9 +22,9 @@ createView = (model)->
 		$.colorbox {href:url,width:'800px', height:'660px',onComplete: ()->
 			activateTimelineEntryForm()
 			$('.tm-entry-form').submit ()->
+				$.colorbox.close()
 				submitTimelineEntryForm(this, model.id)
 				element.html(createView(model))
-				$.colorbox.close()
 				return false
 		}
 

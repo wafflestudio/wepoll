@@ -159,8 +159,8 @@ $(function() {
     $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
     	activateTimelineEntryForm()
 			$('.tm-entry-form').submit( function() {
-				submitTimelineEntryForm(this)			
 				$.colorbox.close()
+				submitTimelineEntryForm(this)			
 				return false;
 			});
 
