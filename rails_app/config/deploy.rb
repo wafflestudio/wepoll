@@ -51,6 +51,14 @@ set :default_environment, {
 
 default_run_options[:shell] = 'bash'
 
+namespace :assets do
+  task :compile, :roles => :web, :except => { :no_release => true } do
+    run "cd #{current_path}/rails_app; rm -rf public/assets/*"
+    run "cd #{current_path}/rails_app; bundle exec rake assets:precompile RAILS_ENV=production"
+  end
+end
+before "deploy:restart", "assets:compile"
+
 namespace :deploy do
   desc "Deploy your application"
   task :default do
