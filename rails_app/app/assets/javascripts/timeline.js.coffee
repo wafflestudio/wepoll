@@ -1,3 +1,5 @@
+
+TimelineEntry = modules.TimelineEntry
 TimelineEntryCollection = modules.TimelineEntryCollection
 TimelineView = modules.TimelineView
 TermView = modules.TimelineTermView
