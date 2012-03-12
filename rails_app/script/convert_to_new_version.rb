@@ -7,6 +7,7 @@ require 'csv'
 # 3. 발의자가 사람일 경우에 공동 발의자 추가하기(Rails.root + crawl_bill.rb 참고)
 ###
 
+=begin
 # 당명 변경
 puts "=== 당명 변경 ==="
 Politician.all.each do |p|
@@ -17,35 +18,65 @@ Politician.all.each do |p|
 end
 puts "=== 당명 변경 완료 ==="
 # 당명 변경 완료
+=end
 
 # 상임위 이름 정리
 puts "=== 상임위 이름 정리 ==="
-=begin
 Bill.all.each do |bill|
   case bill.commitee
   when "보건복지위원회"
     bill.commitee = "보건복지"
+  when "보건복지가족위원회"
+    bill.commitee = "보건복지가족"
   when "외교통상통일위원회"
     bill.commitee = "외교통상"
   when "환경노동위원회" 
     bill.commitee = "환경노동"
   when "교육과학기술위원회"
     bill.commitee = "교육과학"
-  when "정치개혁특별위원회"
-    bill.commitee = "정치개혁"
+  when "교육위원회"
+    bill.commitee = "교육"
+  when "정치개혁특별위원회" || "정치개혁"
+    bill.commitee = "정치개혁특별"
+  when "농림수산식품위원회"
+    bill.commitee = "농림수산"
+  when "농림해양수산위원회"
+    bill.commitee = "농림해양수산"
   when "행정안전위원회"
     bill.commitee = "행정"
   when "국토해양위원회"
     bill.commitee = "국토해양"
   when "기획재정위원회"
     bill.commitee = "재정"
+  when "지식경제위원회"
+    bill.commitee = "경제"
+  when "재정경제위원회"
+    bill.commitee = "재정경제"
+  when "국회운영위원회"
+    bill.commitee = "국회운영"
+  when "법제사법위원회"
+    bill.commitee = "사법" 
+  when "문화체육관광방송통신위원회"
+    bill.commitee = "문화∙미디어"
+  when "정무위원회" || "정보" #
+    bill.commitee = "정무"
+  when "국방위원회"
+    bill.commitee = "국방"
+  when "정보위원회"
+    bill.commitee = "국가정보"
+  when "여성가족위원회"
+    bill.commitee = "여성가족"
+  when "여성위원회"
+    bill.commitee = "여성" 
   end
-  b.save
+  bill.commitee = "해당 없음" if bill.commitee.nil? || bill.commitee.empty?
+  bill.commitee = bill.commitee.sub("위원회","")
+  bill.save
 end
-=end
 puts "=== 상임위 이름 정리 완료 ==="
 # 상임위 이름 정리 완료
 
+=begin
 # 19대 출마자 업데이트
 puts "=== 19대 출마자 업데이트 ==="
 CSV.foreach(Rails.root + "init_data/center.csv") do |csv|
@@ -69,7 +100,6 @@ CSV.foreach(Rails.root + "init_data/center.csv") do |csv|
                       )
                       # 사진 등록
                       # image_url => csv[2] ex) 선관위.com/qwertyasdf.jpg
-=begin
     begin
       img_src = "#{img}#{i}.jpg";
       img_to = "#{dir}/#{titleId}_#{no}_#{i}.jpg"
@@ -85,7 +115,6 @@ CSV.foreach(Rails.root + "init_data/center.csv") do |csv|
       #printf "#{msg} 실패: #{img_src}\n"
       break 
     end 
-=end
                       p.save
   else # 18대 출신인 19대 출마
     # 지역구, 당, 생일, 직업, 학력, 직위(?) 업데이트
@@ -108,3 +137,4 @@ Politician.calculate_attendance
 # 공동발의 일치도 계산
 Politician.calculate_joint_initiate
 # 공동발의 일치도 완료
+=end
