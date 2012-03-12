@@ -21,11 +21,11 @@ pid "/tmp/unicorn.wepoll.pid"
 if env == "production"
   # Help ensure your application will always spawn in the symlinked
   # "current" directory that Capistrano sets up.
-  working_directory "/home/wepoll/wepoll/rails_app"
+  working_directory "/home/ubuntu/wepoll/current/rails_app"
 
   # feel free to point this anywhere accessible on the filesystem
   user 'wepoll', 'wheel'
-  shared_path = "/home/wepoll/wepoll/shared"
+  shared_path = "/home/ubuntu/wepoll/shared/rails_app"
 
   stderr_path "#{shared_path}/log/unicorn.stderr.log"
   stdout_path "#{shared_path}/log/unicorn.stdout.log"

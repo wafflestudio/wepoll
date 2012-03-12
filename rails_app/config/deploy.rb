@@ -1,38 +1,53 @@
 # config/deploy.rb 
 require "bundler/capistrano"
+set :application, "Wepoll"
+
+default_run_options[:pty] = true 
+#$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+#require "rvm/capistrano"                  # Load RVM's capistrano plugin.
+#set :rvm_ruby_string, '1.9.3@rails_3_2'        # Or whatever env you want it to run in.
+#set :rvm_type, :user  # Copy the exact line. I really mean :user here
 
 set :scm,             :git
-set :repository,      "http://github.com/wafflestudio/wepoll"
-set :branch,          "origin/master"
+set :repository,      "git@github.com:wafflestudio/wepoll.git"
+set :branch,          "master"
 set :migrate_target,  :current
-set :ssh_options,     { :forward_agent => true }
+set :ssh_options,     { :forward_agent => true, :username => "ubuntu", :keys => "#{ENV['HOME']}/.ssh/wepoll.pem" }
 set :rails_env,       "production"
-set :deploy_to,       "/home/wepoll/wepoll"
+set :deploy_to,       "/home/ubuntu/wepoll"
 set :normalize_asset_timestamps, false
+set :scm_passphrase, 'wepoll'
+set :deploy_via, :remote_cache
+set (:shared_path) { fetch(:deploy_to) + "/shared/rails_app/"}
 
-set :user,            "wepoll"
-set :group,           "staff"
+
+#  * executing "mkdir -p /home/ubuntu/wepoll /home/ubuntu/wepoll/shared /home/ubuntu/wepoll/shared/public/system /home/ubuntu/wepoll/shared/log /home/ubuntu/wepoll/shared/tmp/pids &&  chmod g+w /home/ubuntu/wepoll /home/ubuntu/wepoll/shared /home/ubuntu/wepoll/shared/public/system /home/ubuntu/wepoll/shared/log /home/ubuntu/wepoll/shared/tmp/pids"
+
+set :user,            "ubuntu"
+set :group,           "admin"
 set :use_sudo,        false
 
-role :web,    "211.43.193.131"
-role :app,    "211.43.193.131"
-role :db,     "211.43.193.132", :primary => true
+role :web,    "ec2-122-248-219-209.ap-southeast-1.compute.amazonaws.com"
+#role :app,    "ec2-122-248-219-209.ap-southeast-1.compute.amazonaws.com"
+#role :db,     "ec2-122-248-219-209.ap-southeast-1.compute.amazonaws.com", :primary => true
 
-set(:latest_release)  { fetch(:current_path) }
-set(:release_path)    { fetch(:current_path) }
-set(:current_release) { fetch(:current_path) }
+set(:latest_release)  { fetch(:current_path) + "/rails_app" }
+set(:release_path)    { fetch(:current_path) + "/rails_app" }
+set(:current_release) { fetch(:current_path) + "/rails_app" }
 
 set(:current_revision)  { capture("cd #{current_path}; git rev-parse --short HEAD").strip }
 set(:latest_revision)   { capture("cd #{current_path}; git rev-parse --short HEAD").strip }
 set(:previous_revision) { capture("cd #{current_path}; git rev-parse --short HEAD@{1}").strip }
 
-default_environment["RAILS_ENV"] = 'production'
-
-# Use our ruby-1.9.3-p0@wepoll gemset
-default_environment["PATH"]         = "--"
-default_environment["GEM_HOME"]     = "--"
-default_environment["GEM_PATH"]     = "--"
-default_environment["RUBY_VERSION"] = "ruby-1.9.3-p0"
+## Use our ruby-1.9.3-p125@rails_3_2 gemset
+set :default_environment, {
+  'PATH' => "/home/ubuntu/.rvm/gems/ruby-1.9.3-p125@rails_3_2/bin:/home/ubuntu/.rvm/bin:$PATH",
+  'RUBY_VERSION' => 'ruby-1.9.3-p125',
+  'GEM_HOME'     => '/home/ubuntu/.rvm/gems/ruby-1.9.3-p125@rails_3_2',
+  'GEM_PATH'     => '/home/ubuntu/.rvm/gems/ruby-1.9.3-p125@rails_3_2:/home/ubuntu/.rvm/gems/ruby-1.9.3-p125@global',
+  'BUNDLE_PATH'  => '/home/ubuntu/.rvm/gems/ruby-1.9.3-p125@rails_3_2',  # If you are using bundler.
+  'RAILS_ENV' => 'production'
+}
 
 default_run_options[:shell] = 'bash'
 
@@ -106,7 +121,7 @@ namespace :deploy do
 
   desc "Start unicorn"
   task :start, :except => { :no_release => true } do
-    run "cd #{current_path} ; bundle exec unicorn_rails -c config/unicorn.rb -D"
+    run "cd #{current_path}/rails_app ; bundle exec unicorn_rails -c config/unicorn.rb -D"
   end
 
   desc "Stop unicorn"
@@ -135,6 +150,6 @@ namespace :deploy do
 end
 
 def run_rake(cmd)
-  run "cd #{current_path}; #{rake} #{cmd}"
+  run "cd #{current_path}/rails_app; #{rake} #{cmd}"
 end
 
