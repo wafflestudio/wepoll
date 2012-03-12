@@ -36,8 +36,6 @@ class Tweet
     Twitter.configure do |config|
       config.consumer_key = TWITTER_CLIENT[:key]
       config.consumer_secret = TWITTER_CLIENT[:secret]
-      config.oauth_token = TWITTER_ACCOUNT[:key]
-      config.oauth_token_secret  = TWITTER_ACCOUNT[:secret]
     end
 
     Politician.all.each do |p|
@@ -51,7 +49,7 @@ class Tweet
         prev_last = politician.tweets.desc('created_at').first
         will_be_saved = []
         begin
-          Twitter.user_timeline(screen_name,{:count => 200}).sort{|a,b| a.created_at <=> b.created_at}.each_with_index do |t,i|
+          Twitter.user_timeline(screen_name,{:count => 100}).sort{|a,b| a.created_at <=> b.created_at}.each_with_index do |t,i|
             if (politician.tweets == [] || t.created_at > prev_last.created_at)
               tweet = Tweet.create(:created_at => t.created_at, :content => t.text, :status_id => t.id, :name => t.user.name, :screen_name => t.user.screen_name)
               will_be_saved << tweet
@@ -84,11 +82,11 @@ class Tweet
   end
 
   def self.get_tweet_more(start_id, last_id) #트윗들 : Array
-    got_tweets = Twitter.user_timeline(screen_name, {:since_id => start_id, :max_id => last_date, :count => 200})
+    got_tweets = Twitter.user_timeline(screen_name, {:since_id => start_id, :max_id => last_date, :count => 100})
     if got_tweets.nil?
       return []
     else
-      if got_tweets.count == 200
+      if got_tweets.count == 100
         got_tweets << get_tweet_more(start_id, got_tweets_tweets.last.id)
       end
       return got_tweets

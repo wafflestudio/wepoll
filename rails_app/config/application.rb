@@ -63,7 +63,7 @@ module Wepoll
     config.assets.paths << Rails.root.join("app", "assets", "stylesheets", "admin")
     config.assets.paths << Rails.root.join("app", "assets", "javascripts", "admin")
     config.assets.precompile += ["preload/preload.css"]
-    config.assets.precompile += ["admin/admin.js", "admin/*.css"]
+    config.assets.precompile += ["admin/admin.js", "admin/*.css", "search.js"]
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

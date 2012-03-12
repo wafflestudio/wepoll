@@ -63,7 +63,7 @@ class Politician #정치인 모델
   end
 
   def initiate_bills_categories
-    initiate_bills.map {|b| b.commitee}.sort.inject([]) do |s,x|
+    initiate_bills.map {|b| b.commitee}.reject { |bt| bt.nil? }.sort.inject([]) do |s,x|
       s.last.nil? ? s<<[x,1] : s.last.first == x ? s[0...-1] << [s.last.first, s.last.last+1] : s << [x,1]
     end
   end
