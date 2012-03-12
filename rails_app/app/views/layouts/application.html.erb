@@ -143,7 +143,7 @@ focus: function() {return false;}});
 
           <%= yield :sidebar %>
           <%# TODO 조건 검사? %>
-          <% if @recent_timeline_entries && @popular_timeline_entries && !current_page?(:controller => :timeline_entries) && !current_page?(:action => :forum) && !current_page?(:controller => :dashboard) %>
+          <% if @recent_timeline_entries && @popular_timeline_entries && controller_name != "timeline_entries" && controller_name != "dashboard" && action_name != 'forum' %>
             <%= render :partial => '/main/recent_links' %>
           <% end -%>
         </div>

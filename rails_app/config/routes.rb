@@ -59,7 +59,7 @@ Wepoll::Application.routes.draw do
   match '/sns_verify/:user_id/:token_id/:key' => 'me/sns#verify_sns_link',
     :via => :get, :as => :sns_link_verify
 
-  match '/forum/:politician_id' => 'main#forum' , :as => :forum
+  match 'forum/:politician_id' => 'main#forum' , :as => :forum
   match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
 
   resources :tweets do
