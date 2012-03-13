@@ -86,18 +86,18 @@ class TimelineEntriesController < ApplicationController
   def create
     @timeline_entry = TimelineEntry.new(params[:timeline_entry])
     @timeline_entry.user_id = current_user.id
-    politician = @timeline_entry.politician
-    if politician
-      politician.inc(:good_link_count, 1) if @timeline_entry.is_good
-      politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
+    @politician = @timeline_entry.politician
+    if @politician
+      @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
+      @politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
     end
 
-#    if(params[:tweet])
-#      unless tweet_after_create
-#        @error = 1
-#        @message += "tweet을 게시하는데 오류가 발생했습니다."
-#      end
-#    end
+    if(params[:tweet])
+      unless tweet_after_create
+        @error = 1
+        @message += "tweet을 게시하는데 오류가 발생했습니다."
+      end
+    end
     if(params[:facebook])
       unless post_after_create
         @error = 1
@@ -107,8 +107,13 @@ class TimelineEntriesController < ApplicationController
 
     respond_to do |format|
       if @timeline_entry.save
-        format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
-        format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
+        if @error == 1
+          format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created. SNS post error.' }
+          format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
+        else
+          format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
+          format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
+        end
       else
         format.html { render action: "new" }
         format.json { render json: @timeline_entry.errors, status: :unprocessable_entity }
@@ -161,8 +166,7 @@ protected
         config.oauth_token_secret  = current_user.twitter_token.access_token_secret
       end
 
-#      TODO: 나중에 풀어주세요
-#      Twitter.update(params[:tweet_reply][:content])
+      Twitter.update(params[:timeline_entry][:title]+" http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id)+" \nhttp://wepoll.or.kr 에서 등록")
       true
     else
       false
@@ -174,7 +178,8 @@ protected
     unless @facebook_cookies.nil?
       @access_token = @facebook_cookies["access_token"]
       @graph = Koala::Facebook::GraphAPI.new(@access_token)
-      @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+politician.profile_photo(:square50), :description => "위폴 "+politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
+      Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
+      @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://choco.wafflestudio.net:3082"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+@politician.profile_photo(:square50), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
       true
     else
       false
