@@ -1,3 +1,4 @@
+#coding:utf-8
 class PoliticiansController < ApplicationController
   before_filter :prepare_politicians, :except => [:initiate_bills]
   def initiate_bills
@@ -22,6 +23,7 @@ class PoliticiansController < ApplicationController
 
     @bill_counts = bill_categories.map {|bc| bc.map {|c,n| n}}
     @bill_categories = bill_categories.map {|bc| bc.map {|c,n| "#{c} #{n}"}}
+    @party_color = {"자유선진당" => "#007DC5", "통합진보당" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f" }
 
     render :layout => false
   end

@@ -1,0 +1,36 @@
+<div class="namecard">
+  <div class="tweet-bubble">
+    <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+  </div>
+
+  <div class="politician-photo-wrapper">
+    <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square100) : "http://placehoold.it/160", :class => "photo" %>
+    <div class="photo-frame"></div>
+  </div>
+
+  <%= select_tag 'politician' + (index==0 ?  1 : 2).to_s, (raw @politicians.map {|p| "<option#{@politicians[index].name == p.name ? " selected" : ""}><span>#{p.party}</span><span>#{p.name}</span></option>"}.join("")), :class => "politician-select", :width => 200 %>
+
+  <div class="link-graph-wrapper clearfix">
+    <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
+    <div id="p<%= index+1 %>-good-link" class="bar-graph good-links"
+      data-color="#81d9fb,#60cbfa"
+      data-total="-1"
+      data-height="10,8"
+      data-ref="#p<%= 2-index%>-good-link"
+      data-float="<%= index==0 ? "right" : "left"%>"
+      data-value="<%= (politician ? politician.good_link_count : 0 ); 30 %>">
+    </div>
+    <div class="clear"></div>
+
+    <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
+    <div id="p<%=index+1 %>-bad-link" class="bar-graph bad-links"
+      data-color="#686868,#4a4a4a"
+      data-total="-1"
+      data-height="10,8"
+      data-float="<%= index==0 ? "right" : "left"%>"
+      data-ref="#p<%= 2-index%>-bad-link"
+      data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
+    </div>
+  </div>
+  <%= link_to '링크등록', '#' , :class => 'link-button'%>
+</div>

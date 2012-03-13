@@ -1,4 +1,5 @@
-<div class="grid_9 alpha omega subsection clearfix">
+<div class="grid_11 alpha omega subsection clearfix">
+  * 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)
   <% @politicians.each_with_index do |politician, i| -%>
     <% if i == 0 && !politician.is_18? %>
       <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:50px;z-index:1;" %>
@@ -11,9 +12,9 @@
       <% else %>
         &nbsp;
       <% end -%>
-      </div>
+    </div>
 
-    <% if i==0 -%><div class="subsection-label">대표법안</div><% end -%>
+    <% if i==0 -%><div class="subsection-label">발의한법안</div><% end -%>
   <% end -%>
 </div>
 
