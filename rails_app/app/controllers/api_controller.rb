@@ -41,6 +41,15 @@ class ApiController < ApplicationController
 				result[:title] = doc.title()
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:image] = doc.xpath('//div[@id="img_pop0"]/dl/div/img').first['src'] if doc.xpath('//div[@id="img_pop0"]/dl/div/img').count > 0
+			elsif target_link.match('biz\.chosun\.com') != nil #조선비즈
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//div[@id="article"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+				result[:created_at] =  doc.xpath('//div[@class="date_ctrl"]/p').text.split(' ')[2] + ' ' +  doc.xpath('//div[@class="date_ctrl"]/p').text.split(' ') [3] 
+				if  doc.xpath('//div[@class="center_img"]//img').length > 0 
+					result[:image] =  doc.xpath('//div[@class="center_img"]//img').first['src']
+				else
+					result[:image] = ''
+				end
 			elsif target_link.match('news\.kbs\.co\.kr') != nil #케이비에스 
 				result[:created_at] = doc.xpath('//p[@class="newsUpload"]/em').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:title] = doc.xpath('//meta[@name="title"]').first['content']
