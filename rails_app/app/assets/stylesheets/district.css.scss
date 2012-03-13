@@ -45,6 +45,11 @@
 }
 
 .tweet-bubble {
+	a {
+		text-decoration: none;
+    color: black;
+  	line-height: 140%;
+  }
   &.left {
     background:url(/assets/bubble_tweet_left.jpg) no-repeat;
     margin-left:12px;
