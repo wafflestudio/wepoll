@@ -34,7 +34,7 @@ loadTab = ($obj) ->
     $tab_section.show()
     return false
 
-  $tab_section = $ '<div class="grid_9 alpha omega tab-section"></div>'
+  $tab_section = $ '<div class="alpha omega tab-section"></div>'
   $tab_section.attr 'id', id
 
   $tab_section.load $obj.attr('href')

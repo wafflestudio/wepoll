@@ -1,9 +1,9 @@
-<div class="namecard">
-  <div class="tweet-bubble">
+<div class="namecard<%=index==0 ? " alpha" : ""%>">
+  <div class="tweet-bubble <%= index==0?"left":"right"%>">
     <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
   </div>
 
-  <div class="politician-photo-wrapper">
+  <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
     <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square100) : "http://placehoold.it/160", :class => "photo" %>
     <div class="photo-frame"></div>
   </div>
@@ -32,5 +32,5 @@
       data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
     </div>
   </div>
-  <%= link_to '링크등록', '#' , :class => 'link-button'%>
+  <%= link_to '링크등록', '#' , :class => "link-button #{index==0?'left':'right'}"%>
 </div>

@@ -1,12 +1,12 @@
-<div class="grid_11 alpha omega subsection clearfix">
-  * 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)
+<div class="alpha omega subsection clearfix">
+  <span style="text-align:right;font-size:8pt;">* 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
   <% @politicians.each_with_index do |politician, i| -%>
     <% if i == 0 && !politician.is_18? %>
       <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:50px;z-index:1;" %>
     <% elsif i == 1 && !politician.is_18? %>
       <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:360px;z-index:1;" %>
     <% end %>
-    <div class="<%=i==0 ? "left":"right" %>">
+    <div class="<%=i==0 ? "left":"right" %> init_bills">
       <% if politician.is_18? %>
         <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
       <% else %>
@@ -14,11 +14,11 @@
       <% end -%>
     </div>
 
-    <% if i==0 -%><div class="subsection-label">발의한법안</div><% end -%>
+    <% if i==0 -%><div class="subsection-label" style="margin-top:100px;">발의한법안</div><% end -%>
   <% end -%>
 </div>
 
-<div class="grid_9 alpha omega subsection clearfix">
+<div class="alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
       <% if politician.is_18? %>
@@ -28,38 +28,21 @@
       <% end -%>
     </div>
 
-    <% if i==0 -%><div class="subsection-label">국회인맥</div><% end -%>
+    <% if i==0 -%><div class="subsection-label" style="margin-top:110px;"><small>함께발의한의원</small></div><% end -%>
   <% end -%>
 </div>
 
-<div class="grid_9 alpha omega subsection clearfix">
+<div class="alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
+      <div class="attendance" style="color:<%= @party_color[politician.party] || 'red' %>">
       <% if politician.is_18? %>
-        <div class="att-bar-graph" 
-          data-value="<%= politician.attendance %>"
-          data-total="100"
-          data-float="<%= i==0?"right":"left"%>"
-          data-color="<%= i==0?"#29cf4f":"#bb262c"%>"
-          style="<%= i==0?"float:right":"float:left" %>">
-        </div>
+        <%= politician.attendance%>%
       <% else %>
-        &nbsp;
+        0%
       <% end -%>
+      </div>
     </div>
-    <% if i==0 -%><div class="subsection-label">본회의<br />출석률</div><% end -%>
+    <% if i==0 -%><div class="subsection-label" style="margin-top:20px;">본회의출석률</div><% end -%>
   <% end -%>
 </div>
-
-<script type="text/javascript">
-  $(".att-bar-graph").simpleBarGraph({
-    width:224-2,
-    height:21-2,
-    labelWidth:30,
-    animate:false,
-    backgroundColor:"#fff",
-    labelPosition:"inside", labelClass:"att-label", label:function(x,fx) {
-      return x+"%";
-    }
-  });
-</script>

@@ -17,6 +17,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 	}
 	var angle = 0,
 	total = 0,
+	rects = [],
+	texts = [],
 	start = 0,
 	hue = index == 0 ? 134/360.0 : 358/360.0,
 	process = function (j) {
@@ -35,6 +37,9 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		var rect = paper.rect(txt_x - 30 - 3, txt_y-5 - 3,60 +6, 10+6).attr({"stroke":"#888", fill:"white", opacity:0.5, r:8});
 		var txt = paper.text(txt_x, txt_y, labels[j])
 		.attr({fill: "#000", stroke: "none", opacity:1, "font-size": 10});
+
+		rects.push(rect);
+		texts.push(txt);
 
 		var f1 = function() {
 			p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, ">");
@@ -65,8 +70,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		rect.mouseover(f1).mouseout(f2);
 
 		angle += angleplus;
-		chart.push(txt);
-		chart.push(rect);
+//		chart.push(txt);
+//		chart.push(rect);
 		chart.push(p);
 		start += .1;
 	};
@@ -76,6 +81,17 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 	for (i = 0; i < ii; i++) {
 		process(i);
 	}
+
+	//z-index
+	// for (i = 0; i < ii; i++) {
+	//   if (rects[i].parentNode)
+	//     rects[i].parentNode.appendChild(rects[i]);
+	// }
+	// for (i = 0; i < ii; i++) {
+	//   if (texts[i].parentNode)
+	//     texts[i].parentNode.appendChild(texts[i]);
+	// }
+
 	var totalcounttext = paper.text(cx,cy,total).attr({fill: color, stroke: "none", opacity: 1, "font-weight":"bold", "font-size": 35});
 	return chart;
 };

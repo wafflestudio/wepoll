@@ -31,12 +31,31 @@
 
 .namecard {
   float:left;
+  width:280px;
+  margin-bottom:35px;
+  &.alpha {
+  }
+  &.omega {
+  }
+}
+
+#name-cards {
+  margin:0 auto;
+  width:700px;
 }
 
 .tweet-bubble {
-  background:url(/assets/bubble_tweet.png) no-repeat;
+  &.left {
+    background:url(/assets/bubble_tweet_left.jpg) no-repeat;
+    margin-left:12px;
+  }
+  &.right {
+    background:url(/assets/bubble_tweet_right.jpg) no-repeat;
+    margin-left:12px;
+  }
+
   width:260px - 40px - 25px;
-  height:169px - 34px - 25px;
+  height:160px - 34px - 25px;
   padding-top: 34px;
   padding-left: 40px;
   padding-right:25px;
@@ -45,16 +64,26 @@
 
 #split-bar {
   width:120px;
-  background:url(/assets/vs_mark.gif) no-repeat 0px 0px;
+  background:url(/assets/vs_mark.gif) no-repeat 0px 95px;
   float:left;
   text-indent:-999px;
   height:470px;
+  padding:0 10px;
 }
 
 .politician-photo-wrapper {
   position:relative;
   height:170px;
   width:170px;
+  margin:0 15px;
+
+  &.left {
+    float:right;
+  }
+
+  &.right {
+    float:left;
+  }
 
   .photo-frame {
     background:url(/assets/photo_frame.png) no-repeat;
@@ -90,10 +119,17 @@
   height:48px;
   background:url(/assets/btn_link.jpg) no-repeat;
   padding:0;margin:0;
+  margin-top:20px;
   border:0;
   text-indent:-999px;
   cursor:hand;
   cursor:pointer;
+  &.left {
+    float:right;
+  }
+  &.right{
+    float:left;
+  }
 }
 
 #p1-good-link, #p2-good-link {
@@ -193,22 +229,17 @@
 
 #tab-sections-container {
   background-color:#e6e6dc;
+  width:700px - 20px;
   padding:10px;
 }
 
 //국회활동 탭 
 a.init-bills-link {
   text-decoration:none;
+  margin:0 auto;
+  display:block;
 }
 
-
-.left {
-  float:left;
-}
-
-.right {
-  float:right;
-}
 
 @mixin border-radius($x) {
   -o-border-radius: $x;
@@ -222,10 +253,80 @@ a.init-bills-link {
   display:block;
   float:left;
   background:url(/assets/bg_subsection_label.gif) no-repeat;
+  text-align:center;
+  padding-top:10px;
+  color:#fff;
+  font-size:11pt;
 }
 
 .subsection {
+  width:700 - 20px;
   background-color:#fff;
   @include border-radius(7px);
   margin-bottom:8px;
+  .left {
+    float:left;
+    width: 275px;
+  }
+
+  .right {
+    float:right;
+    width: 275px;
+  }
+}
+
+.attendance {
+  font-size:25pt;
+  font-weight:bold;
+  display:block;
+  text-align:center;
+  height:85px - 25px;
+  margin-top: 25px;
+}
+
+.tab-section {
+  width:700px - 20px;
+}
+
+.joint-politicians {
+ margin:15px auto; 
+}
+
+.joint-politician {
+  margin:0 18px;
+  margin-bottom:5px;
+  width:100px;
+  float:left;
+  &.alpha {
+ //   margin-left:0;
+  }
+  &.omega {
+//    margin-right:0;
+  }
+
+  .joint-info {
+    text-align:center;
+    margin-top:5px;
+  }
+  img {
+    border:1px solid #454545;
+    display:block;
+    margin:0 auto;
+    width:100px; height:100px;
+  }
+}
+
+.profile {
+  font-size:11pt;
+  color:#4f4f50;
+  text-align:center;
+  padding-top:30px;
+}
+
+.profile-item {
+  margin-bottom:20px;
+  .subsection-label {
+    margin-top:-10px;
+    background:url(/assets/bg_subsection_label_gray.gif) no-repeat;
+  }
 }
