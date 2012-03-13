@@ -28,7 +28,8 @@ function submitTimelineEntryForm(element,id)  {
 				attrs[name] = $(el).val() 
 		}
 		else if($(el).is("input[type=checkbox]")) { 
-			attrs[name] = $(el).val() ? $(el).val() : 0;
+		  if($(el).attr('checked'))
+				attrs[name] = $(el).val() 
 		}
 		else
 			attrs[name] = $(el).val()

@@ -87,6 +87,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new(params[:timeline_entry])
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
+    @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
       @politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
@@ -166,9 +167,19 @@ protected
         config.oauth_token_secret  = current_user.twitter_token.access_token_secret
       end
 
-      Twitter.update(params[:timeline_entry][:title]+" http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id)+" \nhttp://wepoll.or.kr 에서 등록")
-      true
+      begin
+        Twitter.update(params[:timeline_entry][:title]+" http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id)+" \nhttp://wepoll.or.kr 에서 등록")
+        true
+      rescue Twitter::Error => e
+        Rails.logger.info "Tiwtter tweet error"
+        puts "Tiwtter tweet error"
+        Rails.logger.info e.message
+        puts e.message
+        false
+      end
     else
+      Rails.logger.info "twitter token doesn't exist"
+      puts "twitter token doesn't exist"
       false
     end
   end
@@ -176,12 +187,19 @@ protected
   def post_after_create
     @facebook_cookies ||= Koala::Facebook::OAuth.new(FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret]).get_user_info_from_cookie(cookies)
     unless @facebook_cookies.nil?
-      @access_token = @facebook_cookies["access_token"]
-      @graph = Koala::Facebook::GraphAPI.new(@access_token)
-      Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
-      @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://choco.wafflestudio.net:3082"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+@politician.profile_photo(:square50), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
-      true
+      begin
+        @access_token = @facebook_cookies["access_token"]
+        @graph = Koala::Facebook::GraphAPI.new(@access_token)
+        Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
+        @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://choco.wafflestudio.net:3082"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+@politician.profile_photo(:square50), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
+        true
+      rescue StandardError => e
+        Rails.logger.info e.message
+        puts e.message
+      end
     else
+      Rails.logger.info "facebook cookie doesn't exist"
+      puts "facebook cookie doesn't exist"
       false
     end
   end
