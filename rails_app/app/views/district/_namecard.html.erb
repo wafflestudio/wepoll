@@ -8,7 +8,17 @@
     <div class="photo-frame"></div>
   </div>
 
-  <%= select_tag 'politician' + (index==0 ?  1 : 2).to_s, (raw @politicians.map {|p| "<option#{(index == 0?@p1:@p2).id == p.id ? " selected" : ""} value=\"#{p.id}\"><span>#{p.party}</span><span>#{p.name}</span></option>"}.join("")), :class => "politician-select", :width => 200 %>
+  <dl data-district="<%= @district%>" id="<%= "politician#{(index==0 ?  1 : 2)}"%>" class="dropdown <%= index==0?"left":"right"%>">
+    <dt><a href="#"><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
+    <dd>
+    <ul>
+      <% @politicians.each do |p| -%>
+        <li><a href="#" class="<%= p.id == politician.id ? "current":"" %>" data-id="<%= p.id%>"><span class="value"><%=p.id%></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= p.party%></span>&nbsp;<span class="name"><%= p.name%></span></a></li>
+      <% end -%>
+    </ul>
+    </dd>
+  </dl>
+  <div class="clear"></div>
 
   <div class="link-graph-wrapper clearfix">
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>

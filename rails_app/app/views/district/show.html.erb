@@ -1,32 +1,6 @@
 <%content_for :scripts do -%>
   <script type="text/javascript">
     $(function() {
-
-      $(".politician-select").change(function() {
-        var $this = $(this);
-        if ($this.attr("value") == "<%= @p1.nil? ? "" : @p1.id%>" || 
-        $this.attr("value") == "<%= @p2.nil? ? "" : @p2.id%>") {
-
-          if ($this.attr("id") == "politician1") 
-            $this.val("<%= @p1.nil? ? "" : @p1.id %>");
-          if ($this.attr("id") == "politician2") 
-            $this.val("<%= @p2.nil? ? "" : @p2.id %>");
-
-          return false;
-        }
-
-        var ids = $(".politician-select").map(function(i, select) {
-          var $select = $(select);
-          return $select.attr("value");
-        });
-        <% if @p1 && @p1.district -%>
-        var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
-        <% else -%>
-        var url = "";
-        <% end -%>
-        $(location).attr('href',url);
-
-      });
       var timelineInitialized = false
       $('#show-timeline').click( function() {
         $('#timeline-container').jqmShow();
@@ -58,6 +32,7 @@
           return false;
         <% end -%>
       });
+
     });
 
   </script>

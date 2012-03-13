@@ -116,7 +116,7 @@
 
 
 .politician-select {
-  width:150px;
+  width:165px;
 }
 
 
@@ -563,3 +563,40 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 #bills-wrapper {
   position:relative;
 }
+
+/*** dropdown menu***/
+
+.dropdown {width:160px;
+  margin:10px 20px 30px 20px;
+  &.left {float:right;}
+  &.right {float:left;}
+}
+.dropdown dd, .dropdown dt, .dropdown ul { margin:0px; padding:0px; }
+.dropdown dt {border:2px solid #4f4f50;}
+.dropdown dd { position:relative; }
+.dropdown a, .dropdown a:visited { text-decoration:none; outline:none;}
+.dropdown dt a:hover { color:#5d4617;}
+.dropdown dt a { padding-top:7px;height:28px - 7px;background:url(/assets/bg_dropdown_btn.gif) no-repeat scroll right center; display:block; padding-right:20px;}
+.dropdown dt a span {cursor:pointer; display:block; padding:5px;}
+.dropdown dd ul { z-index:3; overflow-y:scroll;height:200px;border:1px solid #aaa;display:none;
+                  background-color:white;left:0px; padding:5px 0px; position:absolute; top:2px; width:auto; width:160px; list-style:none;}
+.dropdown span.value { display:none;}
+.dropdown dd ul li a { padding:5px; display:block;
+  &.current {
+    background-color:#ddd;
+  }
+}
+.dropdown dd ul li a:hover { background-color:#ddd;}
+
+.dropdown img.flag { border:none; vertical-align:middle; margin-left:10px; }
+.flagvisibility { display:none;}
+
+.dropdown span.party {
+  display:inline;
+}
+.dropdown span.name {
+  display:inline;
+  color:black;
+  font-weight:bold;
+}
+
