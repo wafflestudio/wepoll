@@ -158,6 +158,20 @@ $(function() {
   $(".link-new").click(function() {
     $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
     	activateTimelineEntryForm();
+      $('span.checkbox').addClass("unchecked");
+      $(".checkbox").click(function(){
+        if($(this).children("input").attr("checked")){
+          // uncheck
+          $(this).children("input").removeAttr("checked");
+          $(this).removeClass("checked");
+          $(this).addClass("unchecked");
+        }else{
+          // check
+          $(this).children("input").attr({checked: "checked"});
+          $(this).removeClass("unchecked");
+          $(this).addClass("checked");
+        }
+      });
 			$('.tm-entry-form').submit( function() {
 				$.colorbox.close();
 				submitTimelineEntryForm(this);

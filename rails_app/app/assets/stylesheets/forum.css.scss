@@ -76,7 +76,7 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     .content {
       cursor: pointer;
       float: left;
-      width: 500px;
+      width: 514px;
       padding: 10px;
       background-color: white;
       border: 5px solid black;
@@ -135,24 +135,6 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     margin-left: 15px;
     margin-bottom: 5px;
   }
-  #reply_check {
-  	padding-top: 5px;
-    margin-right: 15px;
-    float: right;
-
-    #tweet {
-      background-image: url(forum/t-color.png);
-      &:checked {
-        background-image: url(forum/t-grayscale.png);
-      }
-    }
-    #facebook {
-      background-image: url(forum/f-color.png);
-      &:checked {
-        background-image: url(forum/f-grayscale.png);
-      }
-    }
-  }
   #reply_text_box {
     margin-left: 20px;
     width: 200px;
@@ -207,6 +189,15 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #reply_check {
+  &.forum {
+    padding-top: 5px;
+    margin-right: 15px;
+    float: right;
+  }
+  &.timeline_new {
+    float: left;
+    padding-top: 5px;
+  }
   .checkbox {
     input {
       display: none;
