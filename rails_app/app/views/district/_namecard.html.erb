@@ -8,7 +8,7 @@
     <div class="photo-frame"></div>
   </div>
 
-  <%= select_tag 'politician' + (index==0 ?  1 : 2).to_s, (raw @politicians.map {|p| "<option#{@politicians[index].name == p.name ? " selected" : ""}><span>#{p.party}</span><span>#{p.name}</span></option>"}.join("")), :class => "politician-select", :width => 200 %>
+  <%= select_tag 'politician' + (index==0 ?  1 : 2).to_s, (raw @politicians.map {|p| "<option#{(index == 0?@p1:@p2).id == p.id ? " selected" : ""} value=\"#{p.id}\"><span>#{p.party}</span><span>#{p.name}</span></option>"}.join("")), :class => "politician-select", :width => 200 %>
 
   <div class="link-graph-wrapper clearfix">
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
