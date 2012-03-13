@@ -11,6 +11,7 @@
   -moz-border-radius:14px;
   -webkit-border-radius:14px;
   border-radius:14px;
+  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
 }
 
 #district-title {
@@ -212,9 +213,13 @@
     text-align:center;
     color:#0073de;
     font-size:11pt;
-
-    @include border-top-left-radius(7px);
-    @include border-top-right-radius(7px);
+    position:relative;
+    
+    border-radius:7px 7px 0 0;
+    -o-border-radius:7px 7px 0 0;
+    -moz-border-radius:7px 7px 0 0;
+    -webkit-border-radius:7px 7px 0 0;
+    behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
 
     margin:0 4px;
 
@@ -268,6 +273,8 @@ a.init-bills-link {
   width:700 - 20px;
   background-color:#fff;
   @include border-radius(7px);
+  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+  position:relative;
   margin-bottom:8px;
   .left {
     float:left;

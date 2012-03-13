@@ -132,7 +132,9 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   border-radius:3px;
   -webkit-border-radius:3px;
   -moz-border-radius:3px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+  -o-border-radius:3px;
+  position:relative;
+  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
 }
 
 #nickname {
@@ -145,10 +147,6 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     font-size:7.5pt;
     color:#333;
     border:2px solid #f7d747;
-    border-radius:2px;
-    -webkit-border-radius:2px;
-    -moz-border-radius:2px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     background-color:white;
     text-decoration:none;
   }
