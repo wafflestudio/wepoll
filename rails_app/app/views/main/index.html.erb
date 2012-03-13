@@ -39,9 +39,7 @@ function checkVersion()
 {
   var msg = "You're not using Internet Explorer.";
   var ver = getInternetExplorerVersion();
-   
-console.log(ver);
-    return ver;
+  return ver;
 }
 // vs-container end
   </script>
@@ -68,6 +66,8 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
 
     x = parseInt(coordinates[0]) - 50;
     y = parseInt(coordinates[1]) + 95;
+
+    this.text = r.text(x, y, worldmap.names[this.id]);
 
     if (parseInt(coordinates[2]) == 0) {
     end_x = 635;
@@ -132,10 +132,7 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
     beta *= -1;
     }
     this.arrow.rotate(beta);
-    console.log(beta+" | "+endInfo.x+","+endInfo.y+"|"+endInfo.alpha);
     $("#vs-container").show();
-    //load politicians
-    console.log("id = " + $(this).attr('id'));
 
     var $img1 = $(".winner-photo-wrapper img");
     var $img2 = $(".loser-photo-wrapper img");
@@ -168,9 +165,6 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
       //photo
       var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
       var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
-
-      console.log(photourl1);
-      console.log(photourl2);
 
       if (photourl1 === "")  {
         $img1.fadeOut();
@@ -219,7 +213,6 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
           return Math.round(x)+"";
         }
       });
-
     });
     bubbleOut();
     },
@@ -228,12 +221,11 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
       if (typeof this.arrow !== "undefined" || this.arrow !== null) this.arrow.remove();
       $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
+      this.text.animate({"opacity":0}, 1500);
       bubbleIn();
     },
     click = function(e) {
-      //if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
-        $(location).attr('href',"/district/"+worldmap.names[this.id]);
-      //}
+      $(location).attr('href',"/district/"+worldmap.names[this.id]);
     };
     r.setStart();
     for (var country in worldmap.shapes) {
@@ -241,6 +233,7 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
     }
     var world = r.setFinish();
     world.hover(over, out);
+    world.click(click);
     r.setViewBox(-94,95,500,640,false)})
 // draw arrow end
 </script>

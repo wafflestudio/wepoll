@@ -101,6 +101,13 @@ focus: function() {return false;}});
               <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
 
+<% if !flash[:search_error].to_s.empty? %>
+  <style>
+    #query::-webkit-input-placeholder { color:#f00; }
+    #query:-moz-placeholder { color:#f00; }
+  </style>
+<% end %>
+
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
