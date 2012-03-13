@@ -1,26 +1,30 @@
 TimelineEntryView = modules.TimelineEntryView
 TimelineEntrySlider = modules.TimelineEntrySlider
 HorizontalGroup = modules.TimelineHorizontalGroup
-
+BillView = modules.BillView
+Bill = modules.Bill
 
 class TimelineView
 	@EntryWidth: 210
 
-	constructor:(@collection)->
+	constructor:(@collection,@billcollection)->
 
 		_.extend(this, Backbone.Events)
 		@sliders = [{},{}]
 		@groups = {}
 		@x = 0
+		@bills = {}
 		
 		@collection.on("add", @onEntryAdd)
+		@billcollection.on("reset", @onBillInit)
 
 		@$el = $("<div class='timeline-view'></div>")
 		# if @collection is already loaded somehow
 		@collection.each (entry)=>
 			@drawEntry(entry)
-		
 	
+		@billcollection.fetch({politicians:[@collection.pol1._id,@collection.pol2._id]})
+
 	getWidth:()->
 		if !@$el.parent()
 			#console.log('no parent',@$el.width())
@@ -45,6 +49,20 @@ class TimelineView
 
 	hide:()->
 		@$el.hide()
+
+	drawBill: (bill)->
+		pos = @calcPosition(bill.get("voted_at"))
+		return if @bills[pos]
+		billView = new BillView({model:bill})
+		@addBillView(billView,pos)
+		
+
+	addBillView:(billView,pos)->
+		group = @prepareGroup(pos,'bill')
+		billView.pos = pos
+		group.addBillView(billView, pos)
+		console.warn('bill added')
+		@bills[pos] = billView
 
 	drawEntry: (entry)->
 		pos = @calcPosition(entry.get("posted_at"))
@@ -102,7 +120,14 @@ class TimelineView
 
 	onChildDimensionChange:()=>
 		console.log('onChildDimensionChange',@getCurrentCenterPos())
-		@setStart(@getCurrentCenterPos())
+		pos = @getCurrentCenterPos()
+		# scroll to nearby?
+		if @timeout
+			clearTimeout(@timeout)
+		@timeout = setTimeout ()=>
+			@timeout = null
+			@setStart(pos)
+		, 4000
 	
 	prepareGroup:(pos, vpos)->
 
@@ -179,6 +204,11 @@ class TimelineView
 		else if pid == @collection.pol2._id
 			return 1
 		return 2
+
+	onBillInit:()=>
+		@billcollection.each (bill)=>
+			@drawBill(bill)
+	
 		
 	onEntryAdd:(entry)=>
 		console.log('TimelineView','event',"entry added, drawing")
@@ -214,6 +244,7 @@ class TimelineView
 		, 30000
 
 	setStart:(pos, animate = true)->
+		console.info('setStart', pos)
 		newPos = null
 		if !@groups[pos]
 			for p,group of @groups

@@ -51,7 +51,7 @@ class TimelineEntryView extends Backbone.View
 			element = $("<div class='tm-entry' data-id='" + @model.id+ "'/>").append(view)
 			
 
-			delete_link = $("<a class='tm-entry-delete' href='#'>삭제</a>").click ()=>
+			delete_link = $("<a class='tm-entry-delete' href='javascript:void(0)'>삭제</a>").click ()=>
 				@model.destroy() if confirm("정말로 삭제하시겠습니까?")
 
 			#edit.append(delete_link)

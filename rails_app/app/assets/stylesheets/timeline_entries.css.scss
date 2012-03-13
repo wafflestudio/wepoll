@@ -278,7 +278,7 @@ z-index:10;
 	position:absolute;
 	overflow:hidden;
 	left:0px;
-	width:3000px;/*** quirky measure. **/
+	width:9999px;/*** quirky measure. **/
 }
 
 .tm-hgroup {
@@ -298,6 +298,13 @@ z-index:10;
 .tm-vgroup {
 	position:absolute
 }
+
+.tm-bill-view {
+	position:absolute;
+	width:200px;
+	top:175px;
+}
+
 
 .tm-slider {
 	position:absolute;
