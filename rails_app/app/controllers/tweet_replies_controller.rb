@@ -69,9 +69,19 @@ class TweetRepliesController < ApplicationController
         config.oauth_token_secret  = current_user.twitter_token.access_token_secret
       end
 
-      Twitter.update(params[:tweet_reply][:content])
-      true
+      begin
+        Twitter.update(params[:tweet_reply][:content])
+        true
+      rescue Twitter::Error => e
+        Rails.logger.info "Tiwtter tweet error"
+        puts "Tiwtter tweet error"
+        Rails.logger.info e.message
+        puts e.message
+        false
+      end
     else
+      Rails.logger.info "twitter token doesn't exist"
+      puts "twitter token doesn't exist"
       false
     end
   end
@@ -79,11 +89,18 @@ class TweetRepliesController < ApplicationController
   def post_after_create
     @facebook_cookies ||= Koala::Facebook::OAuth.new(FACEBOOK_CLIENT[:key], FACEBOOK_CLIENT[:secret]).get_user_info_from_cookie(cookies)
     unless @facebook_cookies.nil?
-      @access_token = @facebook_cookies["access_token"]
-      @graph = Koala::Facebook::GraphAPI.new(@access_token)
-      Rails.logger.info @graph.put_object("me","feed",:message => params[:tweet_reply][:content], :link => params[:link], :picture => "http://choco.wafflestudio.net:3082/btn_wepoll.png" )
-      true
+      begin
+        @access_token = @facebook_cookies["access_token"]
+        @graph = Koala::Facebook::GraphAPI.new(@access_token)
+        Rails.logger.info @graph.put_object("me","feed",:message => params[:tweet_reply][:content], :link => params[:link], :picture => "http://choco.wafflestudio.net:3082/btn_wepoll.png" )
+        true
+      rescue StandardError => e
+        Rails.logger.info e.message
+        puts e.message
+      end
     else
+      Rails.logger.info "facebook cookie doesn't exist"
+      puts "facebook cookie doesn't exist"
       false
     end
   end
