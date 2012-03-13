@@ -19,6 +19,8 @@ $ () ->
   }
 
   $(".tab").click () ->
+    if $(this).hasClass 'disabled'
+      return false
     loadTab $(this)
   $(".selected").click()
 
