@@ -77,6 +77,7 @@ class MainController < ApplicationController
       end
     else
       flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
+      flash[:search_error] = "true"
       redirect_to back
     end
   end

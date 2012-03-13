@@ -1,4 +1,5 @@
 <div id="footer-links" class="grid_16">
+<div style="float: left; color: #FEDE4D">[<%= @notice.title %>] <%= @notice.content[0..39] %><%= "..." if @notice.content.length > 40 %></div>
 <%= link_to_function 'Wepoll 소개', "show_about()" %> | 
 <%= link_to_function '공지사항', "show_notices()" %> | 
 <%= link_to_function '이용약관', "show_provision()" %> | 

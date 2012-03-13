@@ -1,6 +1,6 @@
 <% content_for(:scripts) do %>
 <script type="text/javascript">
-var timelineController = {}
+var timelineController = {};
 
 Backbone.Model.prototype.toJSON = function() {
   return _(_.clone(this.attributes)).extend({
@@ -12,34 +12,34 @@ function submitTimelineEntryForm(element,id)  {
 
 	var attrs = {};
 	$(element).find('[name^="timeline_entry"]').each(function(index, el) {
-		var name = $(el).attr('name')
+		var name = $(el).attr('name');
 		if(name.match("posted_at"))
 			return;
 		else  {
-			match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]")
+			match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]");
 			if(match && match.length >= 2)
-				attrs[match[1]] = $(el).val()
+				attrs[match[1]] = $(el).val();
 		}
 	});
 
 	var date = []
 	$(element).find('select[name^="timeline_entry[posted_at"]').each(function(index,el) {
-		date[index] = $(el).val()
+		date[index] = $(el).val();
 	})
 	if(date.length)
-		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
+		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0);
 
 	if(typeof id != 'undefined')  {
 		timelineController.updateEntry(id,attrs, {error: function() {
-				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."});
 			}
-		})
+		});
 	}
 	else  {	
 		timelineController.createEntry(attrs, {error: function() {
-				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."})
+				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."});
 			}
-		})
+		});
 	}
 }
 
@@ -49,12 +49,12 @@ function loadPreview(url,onload,onerror)  {
 	$.ajax({url: '/api/article_parse', data: {force_get:true,url:url, authenticity_token : $('meta[name="csrf-token"]').attr('content')},type: 'POST', dataType: 'json', success:
    
 		function(data) {
-			onload(data)
+			onload(data);
 		}
 		, error:
 		function(xhr,textstatus,error) {
 			if(onerror)
-				onerror()
+				onerror();
 		}
 	});
 
@@ -89,78 +89,78 @@ function activateTimelineFormPreview(onload,onerror)  {
 
 function activateTimelineEntryForm() {
 	activateTimelineFormPreview(function successful(data){
-		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.')
-		$('#link-post').removeAttr('disabled')
-		$('#link-form-badlink').hide()
+		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.');
+		$('#link-post').removeAttr('disabled');
+		$('#link-form-badlink').hide();
 		if(data.image)  {
-			$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>")
-			$('#link-form-preview-txt').removeClass('prefix_1')
+			$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");
+			$('#link-form-preview-txt').removeClass('prefix_1');
 		}
 		else
-			$('#link-form-preview-txt').addClass('prefix_1')
+			$('#link-form-preview-txt').addClass('prefix_1');
 		
 		if(data.created_at)  {
-			console.warn('date', data.created_at)
-			var d = Date.parse(data.created_at)
+			console.warn('date', data.created_at);
+			var d = Date.parse(data.created_at);
 			if(!d)  {
-				var match = data.created_at.match(/[0-9\.\-]+/)
+				var match = data.created_at.match(/[0-9\.\-]+/);
 				if(match)  {
-					console.log(match[0].replace(/\./g,"-"))
-					d = Date.parse(match[0].replace(/\./g,"-"))
+					console.log(match[0].replace(/\./g,"-"));
+					d = Date.parse(match[0].replace(/\./g,"-"));
 				}
 				
 			}
 			if(d)  {
-				$('#timeline_entry_posted_at_1i').val(d.getFullYear())
-				$('#timeline_entry_posted_at_2i').val(d.getMonth()+1)
-				$('#timeline_entry_posted_at_3i').val(d.getDate())
-				console.warn('date success',d)
+				$('#timeline_entry_posted_at_1i').val(d.getFullYear());
+				$('#timeline_entry_posted_at_2i').val(d.getMonth()+1);
+				$('#timeline_entry_posted_at_3i').val(d.getDate());
+				console.warn('date success',d);
 			}
 
 		}
 
 
-		$('#link-form-preview-txt').html(data.title)
+		$('#link-form-preview-txt').html(data.title);
 
 	},function failed(){
-		var msg = $("#timeline_entry_tag_text").val().length > 0 ? '유효하지 않은 링크입니다.' : '링크를 입력하세요.'
+		var msg = $("#timeline_entry_tag_text").val().length > 0 ? '유효하지 않은 링크입니다.' : '링크를 입력하세요.';
 
-		$('.preview-status').attr("src", "/assets/bad.gif").attr('title',msg)
-		$('#link-post').attr('disabled','disabled')
-		$('#link-form-badlink').show().html(msg)
-		$('#link-form-preview-img').empty()
-		$('#link-form-preview-txt').empty()
+		$('.preview-status').attr("src", "/assets/bad.gif").attr('title',msg);
+		$('#link-post').attr('disabled','disabled');
+		$('#link-form-badlink').show().html(msg);
+		$('#link-form-preview-img').empty();
+		$('#link-form-preview-txt').empty();
 
 	})
 	
-	tags = $("#timeline_entry_tag_text").val()
-	var tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'5',defaultText:'태그추가'})
+	tags = $("#timeline_entry_tag_text").val();
+	var tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'5',defaultText:'태그추가'});
 	if(tags)
-		tagInput.importTags(tags)
+		tagInput.importTags(tags);
 
 
 }
 
 
 // FEED IN DATA
-var pol1 = <%= @p1.to_json.html_safe %>
-var pol2 = <%= @p2.to_json.html_safe %>
-var entries = <%= @timeline_entries.to_json.html_safe %>
+var pol1 = <%= @p1.to_json.html_safe %>;
+var pol2 = <%= @p2.to_json.html_safe %>;
+var entries = <%= @timeline_entries.to_json.html_safe %>;
 // On Load
 $(function() {
-	console.warn('start')
-	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>})
-	console.warn('end')
-	timelineController.startAutoUpdate()
-	timelineController.appendTo($("#timeline"))
+	console.warn('start');
+	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>});
+	console.warn('end');
+	timelineController.startAutoUpdate();
+	timelineController.appendTo($("#timeline"));
 	
 	<% if user_signed_in? %>
   $(".link-new").click(function() {
     $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
-    	activateTimelineEntryForm()
+    	activateTimelineEntryForm();
 			$('.tm-entry-form').submit( function() {
-				$.colorbox.close()
-				submitTimelineEntryForm(this)			
+				$.colorbox.close();
+				submitTimelineEntryForm(this);
 				return false;
 			});
 
@@ -170,8 +170,8 @@ $(function() {
 	<% end %>
 
 	//$('#timeline-container').corner('20px')
-	$('#timeline-container-border').corner('10px').css('z-index','auto')
-	$('#timeline-bg').corner('10px').css('z-index','auto')
+	$('#timeline-container-border').corner('10px').css('z-index','auto');
+	$('#timeline-bg').corner('10px').css('z-index','auto');
 
 
   $(".tm-entry").click(function() {
@@ -185,12 +185,12 @@ $(function() {
 
   Raphael(function() {
 
-  	var src1 = $('.politician-photo1').attr('src')
-  	var src2 = $('.politician-photo2').attr('src')
-		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>")
-		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>")
-  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3)
-  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3)
+  	var src1 = $('.politician-photo1').attr('src');
+  	var src2 = $('.politician-photo2').attr('src');
+		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>");
+		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>");
+  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3);
+  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3);
 
 	},80,80);
 
@@ -215,40 +215,40 @@ $(function() {
 
 		},
 		index: function() {
-			timelineController.changeScale('year')
+			timelineController.changeScale('year');
 		},
 		showAll: function() {
-			timelineController.changeScale('all')
+			timelineController.changeScale('all');
 		},
 		showYear: function(year) {
 			if(year)
-				timelineController.changeScale('year',year)
+				timelineController.changeScale('year',year);
 			else
-				timelineController.changeScale('year')
+				timelineController.changeScale('year');
 		},
 		showQuarter: function(year,quarter)  {
 			if(typeof year =='undefined')
-				timelineController.changeScale('quarter')
+				timelineController.changeScale('quarter');
 			else
-				timelineController.changeScale('quarter',{year:year,quarter:quarter})
+				timelineController.changeScale('quarter',{year:year,quarter:quarter});
 		},
 		showMonth: function(year,month)  {
 			if(typeof year =='undefined')
-				timelineController.changeScale('month')
+				timelineController.changeScale('month');
 			else
-				timelineController.changeScale('month',{year:year,month:month})
+				timelineController.changeScale('month',{year:year,month:month});
 		},
 		showWeek: function(year,month,week)  {
 			if(typeof year =='undefined')
-				timelineController.changeScale('week')
+				timelineController.changeScale('week');
 			else
-				timelineController.changeScale('week',{year:year,month:month,week:week})
+				timelineController.changeScale('week',{year:year,month:month,week:week});
 		},
 		showDay: function(year,month,day)  {
 			if(typeof year =='undefined')
-				timelineController.changeScale('day')
+				timelineController.changeScale('day');
 			else
-				timelineController.changeScale('day',{year:year,month:month,day:day})
+				timelineController.changeScale('day',{year:year,month:month,day:day});
 
 		}
 
