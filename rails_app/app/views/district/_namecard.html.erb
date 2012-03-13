@@ -1,6 +1,6 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
   <div class="tweet-bubble <%= index==0?"left":"right"%>">
-    <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+    <%= tweet ? link_to(tweet.content, forum_path(politician)) : "최근 트윗이 없습니다." %>
   </div>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
