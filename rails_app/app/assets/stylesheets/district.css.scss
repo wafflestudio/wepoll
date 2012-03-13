@@ -334,4 +334,19 @@ a.init-bills-link {
     margin-top:-10px;
     background:url(/assets/bg_subsection_label_gray.gif) no-repeat;
   }
+
+  .left, .right {
+    width:275px - 20px;
+    margin:0 10px;
+  }
+}
+
+#show-timeline {
+  background:url(/assets/btn_show_timeline.gif) no-repeat;
+  width:40px;
+  height:153px;
+  position:fixed;
+  top:150px;
+  left:0;
+  display:block;
 }

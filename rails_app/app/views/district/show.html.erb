@@ -1,4 +1,17 @@
 <%content_for :scripts do -%>
+  <script type="text/javascript">
+    var timelineInitialized = false
+    $('#show-timeline').click( function() {
+      $('#timeline-container').jqmShow();
+
+      if(!timelineInitialized)
+      {
+        timelineController.reset()
+      }
+      timelineInitialized = true;
+      return false
+    });
+    $('#timeline-container').jqm({overlay:1});
 
   </script>
 <% end -%>
@@ -46,4 +59,8 @@
 
   </div>
 </div>
+
+<%= render 'timeline_entries/index' %>
+
+<a href="#" id="show-timeline">&nbsp;</a>
 
