@@ -37,6 +37,16 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
+  def recent_links
+    @link = LinkReply.new 
+    render :layout => false
+  end
+
+  def popular_links
+    @link = LinkReply.new 
+    render :layout => false
+  end
+
   protected
   def prepare_politicians
     @politicians = [Politician.find(params[:id1]), Politician.find(params[:id2])]

@@ -30,16 +30,16 @@ class DistrictController < ApplicationController
     @t2 = @p2.nil? ? nil : @p2.tweets.asc('created_at').first
     @tweets = [@t1, @t2]
 
-		# Timeline => See timeline_controller.rb.
-		if params[:from]
-			q_time = {:updated_at => {'$gte' => params[:from]}}
-		elsif params[:after]
-			q_time = {:updated_at => {'$gt' => params[:after]}}
-		else
-			q_time = {:deleted => false} # (all except deleted)
-		end
+    # Timeline => See timeline_controller.rb.
+    if params[:from]
+      q_time = {:updated_at => {'$gte' => params[:from]}}
+    elsif params[:after]
+      q_time = {:updated_at => {'$gt' => params[:after]}}
+    else
+      q_time = {:deleted => false} # (all except deleted)
+    end
 
-	  @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
+    @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
 
     respond_to do |format|
       format.html

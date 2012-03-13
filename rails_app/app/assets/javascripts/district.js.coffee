@@ -7,7 +7,7 @@
 # =require raphael-donutchart
 # =require jcombox-1.0b.packed
 $ () ->
-  #  $('.politician-select').jcombox { theme: 'gray' }
+  $('.politician-select').jcombox { theme: 'gray' }
   $(".bar-graph").simpleBarGraph {
     animate:true,
     labelPosition:'outside',
@@ -23,6 +23,44 @@ $ () ->
       return false
     loadTab $(this)
   $(".selected").click()
+
+  # 정치인 선택 콤보박스 만들기 
+  $(".dropdown").each () ->
+    $this = $ this
+    $("dt a", $this).click () ->
+      $(".dropdown dd ul").hide()
+      $("dd ul", $this).toggle()
+      return false
+
+    $("dd ul li a", $this).click () ->
+      polid2=""
+      if ($this.attr("id") == "politician1")
+        polid2 = $("#politician2 dt a span.value").text()
+      else
+        polid2 = $("#politician1 dt a span.value").text()
+
+      polid = $(this).attr("data-id")
+      if polid == polid2 || $("dt a span.value", $this).text() == polid
+        return false
+
+      if $this.attr("id") == "politician2"
+        t = polid2
+        polid2 = polid
+        polid = t
+
+      text = $(this).html()
+      $("dt a", $this).html text
+      $("dd ul", $this).hide()
+
+      url = "/district/#{$this.attr("data-district")}/#{polid}/#{polid2}"
+      $(location).attr 'href', url
+
+      return false
+
+    $(document).bind 'click', (e) ->
+      $clicked = $ e.target
+      if (! $clicked.parents().hasClass("dropdown"))
+        $("dd ul", $this).hide()
 
 loadTab = ($obj) ->
   $(".tab").removeClass "selected"

@@ -1,0 +1,7 @@
+<div class="link_replies clearfix">
+  <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
+  <div class="link_replies_body">
+    <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>
+    <p><%= r.body %></p>
+  </div>
+</div>
