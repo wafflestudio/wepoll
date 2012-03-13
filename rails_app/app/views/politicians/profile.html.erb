@@ -15,7 +15,7 @@
   <div class="profile-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="<%= i==0?"left":"right"%>">
-        <%= politician.military || "정보없음" %>
+        <%= politician.military.length == 0 ? "정보없음" : politician.military %>
       </div>
       <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
     <% end -%>
