@@ -1,0 +1,66 @@
+<div class="link_entries" id="link-entry-<%= e.id%>">
+  <div class="link_header clearfix">
+    <%= image_tag e.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
+    <div class="link_profile_info"> 
+      <p class="name"><%= e.user.nickname %></p>
+      <p class="time"><%= e.posted_ago? %></p>
+    </div>
+    <%= image_tag "good_point.png", :style => "float: right;" %>
+  </div>
+  <div class="link_contents">
+    <p>
+    <%= e.title %>
+    </p>
+  </div>
+  <div class="link_footer clearfix">
+    <div class="button">
+      <p>신고 <%= e.blame_count %></p>
+    </div>
+    <div class="button">
+      <p>공감 <%= e.like_count %></p>
+    </div>
+  </div>
+  <div class="link_reply">
+    <% if e.more_link? %>
+      <div class="link_more">
+        <%= link_to "> #{e.more_link}개의 댓글 더 보기", link_reply_list_path(e, :format => :js), :remote => true %>
+      </div>
+    <% end %>
+    <% e.link_replies.reverse[0..2].reverse.each do |r| %>
+      <div class="link_replies clearfix">
+        <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
+        <div class="link_replies_body">
+          <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>
+          <p><%= r.body %></p>
+        </div>
+      </div>
+    <% end %>
+    <div class="link_reply_input clearfix">
+      <%= form_for @link, :remote => true do |f| -%>
+        <%= hidden_field_tag 'link_reply[timeline_entry_id]', e.id.to_s %>
+        <%= hidden_field_tag 'tabsection', "true" %>
+
+        <div class="clearfix">
+          <% if user_signed_in? -%>
+            <%= image_tag current_user.profile_picture %>
+          <% else -%>
+            <%= image_tag '/assets/anonymous.gif'%>
+          <% end -%>
+
+          <% if user_signed_in? -%>
+            <%= f.text_area :body, :id => "", :maxlength => 140, :placeholder => "댓글을 입력하세요."%>
+          <% else -%>
+            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+          <% end -%>
+        </div>
+
+        <div style="float: right; margin-right:10px;">
+          <div id="comment-length">
+            <span class="current-comment-length">0</span>/140자
+          </div>
+          <%= f.submit '등록', :class => 'link-reply-button' %>
+        </div>
+      <% end -%>
+    </div>
+  </div>
+</div>

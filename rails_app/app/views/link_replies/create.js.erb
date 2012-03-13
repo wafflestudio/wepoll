@@ -1,10 +1,16 @@
-<% if @reply.persisted? -%>
-  $("#link-reply-list").html("<%= escape_javascript render(@reply.timeline_entry.link_replies.desc('created_at')) %>");
-  $('#link-reply-count').text("<%= @reply.timeline_entry.link_replies.count %>");
-  $("#link_reply_body").val("");
-  $.colorbox.resize();
-<% else -%>
-  //error 상황
+<% if !@tabsection -%>
+  alert('apple');
+  <% if @reply.persisted? -%>
+    $("#link-reply-list").html("<%= escape_javascript render(@reply.timeline_entry.link_replies.desc('created_at')) %>");
+    $('#link-reply-count').text("<%= @reply.timeline_entry.link_replies.count %>");
+    $("#link_reply_body").val("");
+    $.colorbox.resize();
+  <% else -%>
+    //error 상황
   alert("에러!");
+  <% end -%>
+  $(this).removeAttr("disabled");
+<% else -%>
+  $("textarea", "#link-entry-<%= @reply.timeline_entry.id %>").val("");
+  $(".link_reply_input", "#link-entry-<%= @reply.timeline_entry.id %>").before("<%= escape_javascript render(:partial => "district_link_reply", :locals => { :r => @reply}) %>");
 <% end -%>
-$(this).removeAttr("disabled");

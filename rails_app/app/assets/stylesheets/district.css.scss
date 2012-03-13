@@ -280,6 +280,112 @@ a.init-bills-link {
   }
 }
 
+.sep-subsection {
+  float: left;
+  width: 355 - 20px;
+  margin-bottom: 8px;
+  .link_entries {
+    width: 345 - 10px;
+    background-color: #fff;
+    @include border-radius(7px);
+    margin-bottom: 10px;
+    .link_header {
+      border-bottom: 1px solid #bebebe;
+      padding: 10px;
+      .name { font-size: 14px; font-weight: bold; margin-bottom: 8px; margin-top: 3px; }
+      .time { font-size: 12px; color: gray; }
+      .link_profile_img {
+        float: left;
+        margin-right: 8px;
+      }
+      .link_profile_info {
+        float: left;
+      }
+    }
+    .link_contents {
+      padding: 10px;
+      margin: 5px 0;
+  }
+  .link_footer {
+    padding: 5px;
+    .button {
+      float: right;
+      background-color: #fede4d;
+      border-radius: 10px;
+      -o-border-radius: 10px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+      behavior: url(http://wafflestudio.net:4010/PIE.htc);
+      padding: 5px;
+      margin-left: 5px;
+      font-size: 14px;
+    }
+  }
+  .link_reply { 
+    padding: 5px;
+    .link_replies, .link_reply_input, .link_more {
+      background-color: #e9e8e8;
+      padding: 7px 5px;
+    }
+    .link_more {
+      border-bottom: 1px solid #d0d0e0;
+      a {
+        color: #4895d8;
+        font-size: 11px;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+    .link_replies {
+      margin-bottom: 3px;
+      .link_replies_body {
+        float: left;
+        font-size: 11px;
+        .name { font-weight: bold; }
+        .date { font-size: 10px; font-weight: normal; color: gray;}
+        p {
+          width: 260px;
+          word-wrap: break-word;
+          line-height: 1.2em;
+        }
+      }
+    }
+    .link_reply_input {
+padding-right: 0;
+      img {
+        width:36px;
+        height:36px;
+        display:block;
+        float:left;
+        margin-right: 5px;
+}
+textarea {
+  margin: 0;
+  height:50px;
+  width:265px;
+  border:1px solid #aaa;
+  float:left;
+}
+.link-reply-button {
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+  border:0;
+  background-color:#fede4d;
+  padding:3px 5px;
+}
+  }
+}
+}
+}
+
+.left.sep-subsection {
+  margin-right: 8px;
+}
+
 .attendance {
   font-size:25pt;
   font-weight:bold;
@@ -321,7 +427,7 @@ a.init-bills-link {
   }
 }
 
-.profile {
+.profile, .popular-links{
   font-size:11pt;
   color:#4f4f50;
   text-align:center;
