@@ -4,19 +4,10 @@
 </div>
 </a>
 <div class="clear"></div>
-<div class="bill-bar-graph" id="<%= politician.id%>-bill-bar-graph"
-  data-value="<%= count%>"
-  data-height="19"
-  data-total="<%= count>count2 ? count : count2%>"
-  data-color="<%= index==0?"#29cf4f":"#bb262c" %>"
-  data-float="<%= index==0?"right":"left"%>"
-  >
-</div>
-
 <script type="text/javascript">
   var bill_counts_<%= politician.id%> = [<%= bill_counts.join(",") %>];
   var bill_categories_<%=politician.id %> = $.parseJSON('<%=raw bill_categories.to_json %>');
-  Raphael("<%= politician.id %>-bill-graph", 240, 240).donutChart(240/2,240/2,95,46, bill_counts_<%= politician.id%>, bill_categories_<%= politician.id%>, "#FFF5C8", 1, <%= index%>);
+  Raphael("<%= politician.id %>-bill-graph", 240, 240).donutChart(240/2,240/2,95,46, bill_counts_<%= politician.id%>, bill_categories_<%= politician.id%>, "#FFF5C8", 1, <%= index%>, "<%= @party_color[politician.party] || '#f00' %>");
   $(".init-bills-link").colorbox();
 
   $("#<%= politician.id%>-bill-bar-graph").simpleBarGraph({

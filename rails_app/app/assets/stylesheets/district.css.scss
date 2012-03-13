@@ -194,5 +194,38 @@
 #tab-sections-container {
   background-color:#e6e6dc;
   padding:10px;
+}
 
+//국회활동 탭 
+a.init-bills-link {
+  text-decoration:none;
+}
+
+
+.left {
+  float:left;
+}
+
+.right {
+  float:right;
+}
+
+@mixin border-radius($x) {
+  -o-border-radius: $x;
+  -moz-border-radius: $x;
+  -webkit-border-radius: $x;
+  border-radius: $x;
+}
+.subsection-label {
+  width:130px;
+  min-height:43px;
+  display:block;
+  float:left;
+  background:url(/assets/bg_subsection_label.gif) no-repeat;
+}
+
+.subsection {
+  background-color:#fff;
+  @include border-radius(7px);
+  margin-bottom:8px;
 }

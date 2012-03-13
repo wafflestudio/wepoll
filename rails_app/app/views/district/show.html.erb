@@ -15,7 +15,7 @@
 
   <div id="name-cards" class="clearfix">
     <% @politicians.each_with_index do |politician,i| -%>
-      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i} %>
+      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
       <% if i==0 -%>
         <div id="split-bar">
           <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph", :style => "margin-top:360px;" %>

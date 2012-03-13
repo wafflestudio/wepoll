@@ -1,6 +1,6 @@
 <div class="namecard">
   <div class="tweet-bubble">
-    <%= @t1 || "최근 트윗이 없습니다." %>
+    <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
   </div>
 
   <div class="politician-photo-wrapper">
