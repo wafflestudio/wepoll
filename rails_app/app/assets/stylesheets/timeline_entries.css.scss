@@ -2,6 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#reply_check.timeline_new {
+  padding-top: 5px;
+  margin-right: 15px;
+  float: left;
+
+  #tweet {
+    background-image: url(/forum/t-color.png);
+    &:checked {
+      background-image: url(/forum/t-grayscale.png);
+    }
+  }
+  #facebook {
+    background-image: url(/forum/f-color.png);
+    &:checked {
+      background-image: url(/forum/f-grayscale.png);
+    }
+  }
+}
 .link-form label {
   font-size:9pt;
   padding-top:4px;

@@ -81,7 +81,7 @@ class TweetRepliesController < ApplicationController
     unless @facebook_cookies.nil?
       @access_token = @facebook_cookies["access_token"]
       @graph = Koala::Facebook::GraphAPI.new(@access_token)
-      @graph.put_object("me","feed",:message => params[:tweet_reply][:content])
+      @graph.put_object("me","feed",:message => params[:tweet_reply][:content], :link => params[:link], :picture => "http://choco.wafflestudio.net:3082/btn_wepoll.png" )
       true
     else
       false
