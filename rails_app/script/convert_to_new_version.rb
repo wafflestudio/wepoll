@@ -7,6 +7,30 @@ require 'csv'
 # 3. 발의자가 사람일 경우에 공동 발의자 추가하기(Rails.root + crawl_bill.rb 참고)
 ###
 
+# 동명이인 처리
+puts "동명이인 처리"
+CSV.foreach(Rails.root + "init_data/duplicated.csv") do |csv|
+  number = csv[0]
+  title = csv[1]
+  initiator = csv[2].to_s[0..2]
+  coactor = csv[3]
+  party = csv[4]
+  p =  Politician.where(name: coactor, party: party).first
+  b = Bill.where(number: number).first
+  if !b.nil? && !p.nil?
+    c = b.coactors.where(name: p.name).first
+    if !c.nil? && (c._id != p._id)
+      puts "#{number}, present: #{c.name}-#{c.party}, new: #{p.name}-#{p.party}"
+      if b.coactors.delete(c).party != c.party
+        b.coactors << p
+        b.save
+      end
+    end
+  end
+end
+puts "동명이인 처리 완료"
+# 동명이인 처리 완료
+
 # 지역구 변경
 puts "지역구 변경"
 Politician.all.each do |p|
