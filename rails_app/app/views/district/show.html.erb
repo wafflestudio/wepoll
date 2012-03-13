@@ -1,6 +1,32 @@
 <%content_for :scripts do -%>
   <script type="text/javascript">
     $(function() {
+
+      $(".politician-select").change(function() {
+        var $this = $(this);
+        if ($this.attr("value") == "<%= @p1.nil? ? "" : @p1.id%>" || 
+        $this.attr("value") == "<%= @p2.nil? ? "" : @p2.id%>") {
+
+          if ($this.attr("id") == "politician1") 
+            $this.val("<%= @p1.nil? ? "" : @p1.id %>");
+          if ($this.attr("id") == "politician2") 
+            $this.val("<%= @p2.nil? ? "" : @p2.id %>");
+
+          return false;
+        }
+
+        var ids = $(".politician-select").map(function(i, select) {
+          var $select = $(select);
+          return $select.attr("value");
+        });
+        <% if @p1 && @p1.district -%>
+        var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
+        <% else -%>
+        var url = "";
+        <% end -%>
+        $(location).attr('href',url);
+
+      });
       var timelineInitialized = false
       $('#show-timeline').click( function() {
         $('#timeline-container').jqmShow();
@@ -16,16 +42,21 @@
       $('#timeline-container').jqm({overlay:1});
 
       $(".link-button").click(function() {
-        $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
-          activateTimelineEntryForm();
-          $('.tm-entry-form').submit( function() {
-            $.colorbox.close();
-            submitTimelineEntryForm(this);
-            return false;
-          });
+        <% if user_signed_in? -%>
+          $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
+            activateTimelineEntryForm();
+            $('.tm-entry-form').submit( function() {
+              $.colorbox.close();
+              submitTimelineEntryForm(this);
+              return false;
+            });
 
-        }
-        });
+          }
+          });
+        <% else -%>
+          $.gritter.add({title:" ",text:"로그인을 하셔야 링크를 올릴 수 있습니다."});
+          return false;
+        <% end -%>
       });
     });
 
@@ -71,7 +102,7 @@
             bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
             :class => 'tab', "data-id" => "bill-activity" %>
             <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab selected', "data-id" => "profile"%>
-            <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega', "data-id" => "promise" %>
+            <%= link_to_function '공약', 'alert("준비중입니다^^");', :class => 'tab omega disabled', "data-id" => "promise" %>
           </div>
 
           <div class="grid_11 alpha omega clearfix" id="tab-sections-container">

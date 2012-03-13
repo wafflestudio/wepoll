@@ -1,5 +1,5 @@
 #coding:utf-8
-require './romanize.rb'
+require Rails.root+'romanize.rb'
 require 'csv'
 
 class Politician #정치인 모델

@@ -9,17 +9,29 @@ Backbone.Model.prototype.toJSON = function() {
  }
 
 function submitTimelineEntryForm(element,id)  {
-
 	var attrs = {};
-	$(element).find('[name^="timeline_entry"]').each(function(index, el) {
-		var name = $(el).attr('name');
-		if(name.match("posted_at"))
+	$(element).find('select,input,checkbox,radio,textarea').each(function(index, el) {
+		var nameattr = $(el).attr('name')
+		if(!nameattr || nameattr =='utf8' || nameattr == '_method' || nameattr == 'authenticity_token' || nameattr == 'commit')
 			return;
-		else  {
-			match = name.match("timeline_entry\\[([_A-Za-z0-9]+)\\]");
-			if(match && match.length >= 2)
-				attrs[match[1]] = $(el).val();
+		var match = nameattr.match("timeline_entry\\[([_A-Za-z0-9]+)\\]")
+		var name;
+		if(match && match.length >= 2)
+			name = match[1];
+		else
+			name = nameattr;
+
+		if($(el).is("select"))
+			return;
+		if($(el).is("input[type=radio]")) {
+			if($(el).attr('checked'))
+				attrs[name] = $(el).val() 
 		}
+		else if($(el).is("input[type=checkbox]")) { 
+			attrs[name] = $(el).val() ? $(el).val() : 0;
+		}
+		else
+			attrs[name] = $(el).val()
 	});
 
 	var date = []
@@ -27,7 +39,7 @@ function submitTimelineEntryForm(element,id)  {
 		date[index] = $(el).val();
 	})
 	if(date.length)
-		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0);
+		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
 
 	if(typeof id != 'undefined')  {
 		timelineController.updateEntry(id,attrs, {error: function() {
@@ -158,6 +170,20 @@ $(function() {
   $(".link-new").click(function() {
     $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
     	activateTimelineEntryForm();
+      $('span.checkbox').addClass("unchecked");
+      $(".checkbox").click(function(){
+        if($(this).children("input").attr("checked")){
+          // uncheck
+          $(this).children("input").removeAttr("checked");
+          $(this).removeClass("checked");
+          $(this).addClass("unchecked");
+        }else{
+          // check
+          $(this).children("input").attr({checked: "checked"});
+          $(this).removeClass("unchecked");
+          $(this).addClass("checked");
+        }
+      });
 			$('.tm-entry-form').submit( function() {
 				$.colorbox.close();
 				submitTimelineEntryForm(this);
