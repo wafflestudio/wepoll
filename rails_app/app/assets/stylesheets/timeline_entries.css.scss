@@ -124,6 +124,7 @@ div.field {
 behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   padding:7px;
   margin-bottom:10px;
+  width: 290px;
 }
 
 #link-user-info {
@@ -239,6 +240,7 @@ padding-bottom:20px;
 	height:80px;
 	margin-right:5px;
 	position:relative;
+	overflow:hidden;
 	float:left;
 }
 
@@ -362,14 +364,14 @@ position:relative;
 	display:inline-block;
 	width:9px;
 	height:12px;
-	background:url('/assets/icn_timeline_sl_left.gif') no-repeat;
+	background:url('/assets/tm-sl-nav-p.gif') no-repeat;
 }
 
 .tm-sl-nav-n {
 	display:inline-block;
 	width:9px;
 	height:12px;
-	background:url('/assets/icn_timeline_sl_right.gif') no-repeat;
+	background:url('/assets/tm-sl-nav-n.gif') no-repeat;
 }
 
 .tm-entry {
@@ -392,10 +394,11 @@ position:relative;
 	float:left;
 	width:54px;
 	height:15px;
+	padding-top:2px;
 	margin-right:15px;
 }
-.tm-entry-numlike  { background:url('/assets/tm-like-bg.gif')}
-.tm-entry-numreply  { background:url('/assets/tm-reply-bg.gif')}
+.tm-entry-numlike  { background:url('/assets/tm-like-bg.gif') no-repeat}
+.tm-entry-numreply  { background:url('/assets/tm-reply-bg.gif') no-repeat}
 
 .tm-entry-content {
 	margin-top:10px;
@@ -460,12 +463,14 @@ z-index:3;
   border:0;
   background-color:#eceded;
   margin-bottom:5px;
-  width:220px - 10px;
+  width:250px - 10px;
   padding:5px;
   float:left;
+  overflow: auto;
 }
 
 #link-reply-field-wrapper {
+  width:280px;
   background-color:#eceded;
   -moz-border-radius:5px;
   -o-border-radius:5px;
@@ -556,7 +561,10 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-reply-list {
+  width: 304px;
   margin-top:10px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 #replies-right {

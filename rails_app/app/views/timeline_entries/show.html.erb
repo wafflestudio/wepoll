@@ -21,28 +21,6 @@
     //XXX: #fb-link-like는 없는 dom인데??
     FB.XFBML.parse($("#fb-link-like")[0]);
 
-    //fucking ie
-    $.support.placeholder = false;
-    var test = document.createElement('input');
-    if('placeholder' in test) $.support.placeholder = true;
-
-    if(!$.support.placeholder) { 
-      var active = document.activeElement;
-      $('textarea').focus(function () {
-        if ($(this).attr('placeholder') != '' && $(this).val() == $(this).attr('placeholder')) {
-          $(this).val('').removeClass('hasPlaceholder');
-        }
-      }).blur(function () {
-        if ($(this).attr('placeholder') != '' && ($(this).val() == '' || $(this).val() == $(this).attr('placeholder'))) {
-          $(this).val($(this).attr('placeholder')).addClass('hasPlaceholder');
-        }
-      });
-      $('textarea').blur();
-      $(active).focus();
-      $('form').submit(function () {
-        $(this).find('.hasPlaceholder').each(function() { $(this).val(''); });
-      });
-    }
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
   });
 </script>
@@ -64,7 +42,7 @@
       <div class="clear"></div>
 
       <div class="grid_2 alpha" id="sns-links">
-        <%= link_to '공감하기', timeline_entry_like_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
+        <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
         <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
       </div>
 
@@ -117,6 +95,11 @@
 
       <div id="link-reply-list">
         <%= render @link_replies %>
+        <% if @link_replies.empty? -%>
+          <div class="link-reply-wrapper">
+            댓글이 없습니다.
+          </div>
+        <% end -%>
       </div>
     </div>
   </div>

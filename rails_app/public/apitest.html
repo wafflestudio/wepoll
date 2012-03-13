@@ -10,6 +10,7 @@
 
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 			function(data)  { 
+				console.warn(data)
 				$("#preview-title").html(data.title);
 				$("#preview-date").html(data.created_at +" 입력");
 				$("#preview-img").empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" );

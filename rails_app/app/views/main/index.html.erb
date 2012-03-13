@@ -49,11 +49,18 @@ console.log(ver);
 
 // draw arrow start
 var paper = Raphael("seoul-map-image", 800, 600, function () {
+    var bubbleOut = function() {
+    $("#seoul-map-bubble").fadeOut();
+    };
+    var bubbleIn = function() {
+    setTimeout(function() {$("#seoul-map-bubble").fadeIn()}, 3000);
+    };
     var r = this;
     r.rect(-150, 100, 850, 850).attr({
       "stroke":"none"
       });
     var over = function () {
+    this.attr({"cursor":"pointer"});
     this.c = this.c || this.attr("fill");
     this.stop().animate({fill: "#64C8CB"}, 200);
 
@@ -214,34 +221,30 @@ var paper = Raphael("seoul-map-image", 800, 600, function () {
       });
 
     });
-
+    bubbleOut();
     },
     out = function () {
       if (typeof this.curve !== "undefined" || this.curve !== null) this.curve.remove();
       if (typeof this.arrow !== "undefined" || this.arrow !== null) this.arrow.remove();
       $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
+      bubbleIn();
     },
     click = function(e) {
       //if (confirm("대결 지역으로 이동하시겠습니까?\n" + worldmap.names[this.id] + this.id)) {
         $(location).attr('href',"/district/"+worldmap.names[this.id]);
       //}
     };
-r.setStart();
-for (var country in worldmap.shapes) {
-  //r.path(worldmap.shapes[country]).attr({stroke: "#ccc6ae", fill: "#f0efeb", "stroke-opacity": 0.25});
-  r.path(worldmap.shapes[country]).attr({stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1});
-}
-var world = r.setFinish();
-world.hover(over, out);
-world.click(click);
-r.setViewBox(-94,95,500,640,false)
-  })
+    r.setStart();
+    for (var country in worldmap.shapes) {
+      r.path(worldmap.shapes[country]).attr({stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1});
+    }
+    var world = r.setFinish();
+    world.hover(over, out);
+    r.setViewBox(-94,95,500,640,false)})
 // draw arrow end
 </script>
 <% end -%>
-
-<%#= link_to 'test link', forum_path(Politician.last) %>
 
 <div id="seoul-map" class="map">
   <div id="seoul-map-bubble" class="bubble">

@@ -21,5 +21,15 @@
 //= require timeline/date-ko-KR
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
+//= require timeline/backbone 
+//= require timeline/timeline_entry
+//= require timeline/timeline_entry_collection
+//= require timeline/timeline_entry_navigator
+//= require timeline/timeline_entry_view
+//= require timeline/timeline_slider
+//= require timeline/timeline_vgroup
+//= require timeline/timeline_hgroup
+//= require timeline/timeline_views
+//= require timeline
 //= require_tree . exclude: "admin" exclude: "cssrefresh"
 ////// JUST USE FOR DEVELOPMENT ///////
