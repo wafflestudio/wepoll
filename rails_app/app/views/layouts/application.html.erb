@@ -28,10 +28,10 @@
       }
 
       function show_notices() {
-        $.colorbox({href:"<%= notices_path %>"});
+        $.colorbox({href:"<%= notices_path %>",width:800,height:600});
       }
       function show_about() {
-        $.colorbox({href:"/about",width:800,height:600});
+        $.colorbox({href:"/about"});
       }
       function show_provision() {
         $.colorbox({href:"/provision",width:800,height:600});
@@ -39,24 +39,44 @@
       function show_privacy() {
         $.colorbox({href:"/privacy",width:800,height:600});
       }
+      function show_suggestion() {
+        $.colorbox({href:"<%= new_suggestion_path %>",width:430,height:600});
+      }
+      function loop_notice(i,count) {
+        $list.eq(i).fadeOut(1800,"swing",function() {
+          $list.eq(i+1).fadeIn(1800,"swing",function(){
+            loop_notice(i+1,count)
+          });
+        });
+        if(i==(count-1)) {
+          i=0;
+        }
+      }
 
       $(document).ready(function() {
-          $("input#query").placeholder();
+        $('#notices li').not($('#notices li').eq(0)).hide();
+
+        $list = $('#notices li');
+        var notice_count = $list.length;
+        loop_notice(0,notice_count);
+
+        
+        $("input#query").placeholder();
         //notification bars
             if(search_source) {
               $("input#query").autocomplete({
-source: search_source,
-delay: 50,
-max: 10,
-autoFocus: true,
-select: function(event, ui) {
-$("#query_hidden").val(ui.item.query);
-$("#query_type").val(ui.item.type);
-$("#query").val(ui.item.form);
-return false;
-},
-focus: function() {return false;}}); 
-}
+              source: search_source,
+              delay: 50,
+              max: 10,
+              autoFocus: true,
+              select: function(event, ui) {
+                $("#query_hidden").val(ui.item.query);
+                $("#query_type").val(ui.item.type);
+                $("#query").val(ui.item.form);
+                return false;
+              },
+            focus: function() {return false;}}); 
+          }
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
             $.gritter.add({title:" ",text:"<%= flash[level]%>"});

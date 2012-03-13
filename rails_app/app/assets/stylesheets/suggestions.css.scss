@@ -1,0 +1,45 @@
+// Place all the styles related to the suggestions controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#suggestion {
+  margin: 0 auto;
+  h1 {
+    font-size: 25pt;
+  }
+  input {
+  	font-size: 13pt;
+    height: 23px;
+    border:none;
+    display: block;
+  	border-radius: 10px;
+  	-webkit-border-radius: 10px;
+  	-moz-border-radius: 10px;
+  	behavior:url(http://wepoll.dev/PIE.htc);
+    width: 300px;
+    display: block;
+
+  }
+  #suggestion_content {
+    height: 200px;
+    border:none;
+  	border-radius: 10px;
+  	-webkit-border-radius: 10px;
+  	-moz-border-radius: 10px;
+  	behavior:url(http://wepoll.dev/PIE.htc);
+  }
+  .field {
+  	label {
+      display: block;
+      font-size: 14pt;
+    }
+    width: 330px;
+    padding: 10px;
+  	background-color: #F4F4F4;
+  	border-radius: 10px;
+  	-webkit-border-radius: 10px;
+  	-moz-border-radius: 10px;
+  	behavior:url(http://wepoll.dev/PIE.htc);
+  }
+
+}

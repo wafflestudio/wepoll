@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
     @recent_timeline_entries = TimelineEntry.all.desc("created_at").limit(20)
     #TODO : 인기 링크 정렬 방식 고민
     @popular_timeline_entries = TimelineEntry.all.desc("like").limit(20)
-    @notice = Notice.last
+    @notices = Notice.desc('created_at').limit(5)
   end
   def back
     request.env["HTTP_REFERER"] || "/"

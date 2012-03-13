@@ -22,3 +22,48 @@
 body {
   font-family: '돋움', Dotum, AppleGothic, sans-serif;
 }
+#aboutus {
+  width:500px;
+  font-size:9pt;
+}
+
+#aboutus h2 {
+  font-size:11pt;
+  margin-top:20px;
+  margin-bottom:5px;
+}
+
+#aboutus p {
+  line-height:120%;
+  margin-bottom:5px;
+}
+
+#aboutus a {
+  text-decoration:none;
+  color:#b39d3b;
+}
+#aboutus a:hover {
+  text-decoration:underline;
+}
+
+#who {
+  margin-top:20px;
+  text-align:right;
+}
+
+.by {
+  width:100px;
+  float:left;
+  display:block;
+          margin-left:290px;
+}
+
+.who {
+  width:100px;
+  float:left;
+  display:block;
+}
+
+.bywho {
+width:100%;
+}

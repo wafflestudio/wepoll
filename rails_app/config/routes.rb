@@ -1,4 +1,6 @@
 Wepoll::Application.routes.draw do
+  resources :suggestions
+
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
