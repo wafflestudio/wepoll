@@ -1,4 +1,4 @@
-Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeWidth, index) {
+Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeWidth, index, color) {
 	var paper = this,
 	rad = Math.PI / 180,
 	chart = this.set();
@@ -17,6 +17,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 	}
 	var angle = 0,
 	total = 0,
+	rects = [],
+	texts = [],
 	start = 0,
 	hue = index == 0 ? 134/360.0 : 358/360.0,
 	process = function (j) {
@@ -29,44 +31,48 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		bcolor =  Raphael.hsb(hue, 0.4 + j*0.6/values.length, 1 - 0.3*j/values.length),
 		p = sector(cx, cy, r, angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 1});
 
-		var txt_x = 0;
-		if (popangle <90 && popangle>0 || popangle > 270 && popangle<360) {
-			txt_x = 175;
-		}
-		else{
-			txt_x = 10;
-		}
+		var txt_x = cx + (r - 10) * Math.cos(-popangle * rad);
 		var txt_y = cy + (r) * Math.sin(-popangle * rad);
-		var txt = paper.text(txt_x, txt_y, labels[j])
-		.attr({"text-anchor":"start", fill: "#000", stroke: "none", opacity: 0, "font-size": 10});
-		var lx = cx+(r*2+r2)/3*Math.cos(-popangle*rad),
-		ly = cy+(r*2+r2)/3*Math.sin(-popangle*rad),
-		lx2 = cx+r*Math.cos(-popangle*rad),
-		ly2 = cy+r*Math.sin(-popangle*rad),
-		lx3 = 0;
 	
-		if (popangle <90 && popangle>0 || popangle > 270 && popangle<360) {
-			lx3 = txt_x - 5;
-		}
-		else{
-			lx3 = txt_x + txt.getBBox().width + 5;
-		}
+		var rect = paper.rect(txt_x - 30 - 3, txt_y-5 - 3,60 +6, 10+6).attr({"stroke":"#888", fill:"white", opacity:0.5, r:8});
+		var txt = paper.text(txt_x, txt_y, labels[j])
+		.attr({fill: "#000", stroke: "none", opacity:1, "font-size": 10});
 
-		console.log("w:"+txt.getBBox().width);
-		var line = paper.path(["M", lx, ly, "L", lx2, ly2, lx3, txt_y]).attr({stroke:"#000", "stroke-width":1, opacity:0});
-		p.mouseover(function () {
+		rects.push(rect);
+		texts.push(txt);
+
+		var f1 = function() {
 			p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, ">");
 			txt.stop().animate({opacity: 1}, ms);
-			line.stop().animate({opacity:1}, ms);
-		}).mouseout(function () {
+			rect.stop().animate({opacity:0.8}, ms)
+		};
+
+		var f2 = function () {
 			p.stop().animate({transform: ""}, ms, ">");
-			txt.stop().animate({opacity: 0}, ms);
-			line.stop().animate({opacity:0}, ms);
+			txt.stop().animate({opacity: 0.5}, ms);
+			rect.stop().animate({opacity:0.5}, ms);
+		};
+
+		p.mouseover(function () {
+			p.animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, ">");
+			txt.animate({opacity: 1}, ms);
+			rect.animate({opacity:0.8}, ms);
+			rect.unmouseover();
+			rect.mouseout(f2);
+		}).mouseout(function () {
+			p.animate({transform: ""}, ms, ">");
+			txt.animate({opacity: 0.5}, ms);
+			rect.animate({opacity:0.5}, ms);
+			rect.mouseover(f1);
+			rect.unmouseout();
 		});
+
+		rect.mouseover(f1).mouseout(f2);
+
 		angle += angleplus;
+//		chart.push(txt);
+//		chart.push(rect);
 		chart.push(p);
-		chart.push(txt);
-		chart.push(line);
 		start += .1;
 	};
 	for (var i = 0, ii = values.length; i < ii; i++) {
@@ -75,5 +81,17 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 	for (i = 0; i < ii; i++) {
 		process(i);
 	}
+
+	//z-index
+	// for (i = 0; i < ii; i++) {
+	//   if (rects[i].parentNode)
+	//     rects[i].parentNode.appendChild(rects[i]);
+	// }
+	// for (i = 0; i < ii; i++) {
+	//   if (texts[i].parentNode)
+	//     texts[i].parentNode.appendChild(texts[i]);
+	// }
+
+	var totalcounttext = paper.text(cx,cy,total).attr({fill: color, stroke: "none", opacity: 1, "font-weight":"bold", "font-size": 35});
 	return chart;
 };

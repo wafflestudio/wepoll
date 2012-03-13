@@ -24,7 +24,7 @@ if env == "production"
   working_directory "/home/ubuntu/wepoll/current/rails_app"
 
   # feel free to point this anywhere accessible on the filesystem
-  user 'wepoll', 'wheel'
+  user 'ubuntu', 'admin'
   shared_path = "/home/ubuntu/wepoll/shared/rails_app"
 
   stderr_path "#{shared_path}/log/unicorn.stderr.log"

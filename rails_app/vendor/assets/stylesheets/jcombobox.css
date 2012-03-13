@@ -1,0 +1,143 @@
+/*  
+ * 		jCombox 1.0b | 2008.08.25
+ *		jQuery: HTML Select Tag Replacement Plugin 1.0b
+ *		Licensed under a Creative Commons Attribution 3.0 License
+ *
+ *		Tested to work on Firefox2/3, IE6/7, Safari3.1(Win) and Opera9.5 versions
+ *		Limitations: no keyboard usage + no multiple selections > checkout next version
+ *		_______________________________________________
+ * 		http://jquerylab.com | Sponsored by http://12tb.com
+ *		ruvanepa@gmail.com
+ *
+ *		How-to use: $('.select').jcombox();
+ *			or replce all <select> tags: $('select').jcombox();
+ */
+
+/*******************jCombox CSS : DO NOT EDIT THIS******************************/
+
+.jcombox *, .jcombox-m * { line-height: 1.6; cursor: default;}
+.jcombox, .jcombox-m {  margin:0 5px; float: left; clear:left; white-space: nowrap; /*border: 1px solid #a8a8a8; background-color: #eaeaea;*/ }
+.jcombox { /*width: 100px; height: 70px;*/  background-repeat: no-repeat; background-position: right center; background-image	: url('/assets/jcombobox/arrow.gif'); }
+.jcombox-m { overflow: auto;  overflow-x: hidden; } 
+.jcombox a, .jcombox-m a { outline: 0px; display: block; /*color: #3c3c3c;*/ font-weight: normal; padding: 0 3px; text-decoration: none !important;}
+.jcombox a:hover, .jcombox-m a:hover{ background-color: #e5e5e5; text-decoration: none !important; }
+
+.jcombox a.disabled, .jcombox-m a.disabled { color:#c0c0c0 !important;}
+
+.actext { padding: 1px 0px 0px 3px; }
+
+.jcombox span, .jcombox-m div { background: #fff;  border: 1px solid #eaeaea; /*border-right-color: #fff;*/ background: #fff url('/assets/jcombobox/inner_shadow.gif') no-repeat top left; }
+.jcombox span{ /*color: #3c3c3c; font-weight: bold;*/ display: block; overflow: hidden; margin-right: 20px; padding:0 0px 0px 5px; }
+
+.jcombox-m div { overflow: hidden; /*border-top: 0px;*/ }
+.jcombox div { background: #fff; display: none; position: absolute !important;/* border: 1px solid #808080;*/ z-index: 99 !important; background-color: #fff; overflow: auto; overflow-x: hidden; /*border-top: 0px;*/ }
+.jcombox-m .current { font-weight: bold; }
+
+/**********************End******************************/
+
+
+
+
+/*******jCombox Themes: 'default' *******/
+.default { 
+  border				: 1px solid #a8a8a8;
+  color					: #333;
+  font-size			: 13px;
+  font-weight			: bold;
+  background-color	: #e9e9e9;
+  }
+  .default .menu { border: 1px solid #808080; }
+  .default-hover { border-color: #808080; }
+  .default .current { background-color: #919191 !important; color: #fff !important; }
+
+
+  /*******jCombox Themes: 'blue' *******/
+  .blue { 
+    border				: 1px solid #84d7ff;
+    font-size			: 18px;
+    font-weight			: bold;
+    color					: #0080c0;
+    background-color	: #d5f1ff;
+    /*background-image	: url('arblue.gif');*/
+  }
+  .blue .menu { border: 1px solid #06aeff; }
+  .blue-hover { border-color: #06aeff; }
+  .blue .current { background-color: #0080c0 !important; color: #fff !important; }
+
+  /*Extra a:hover class added to change item hover color*/
+  .blue a:hover { background-color: #d5f1ff; }
+
+
+  /*******jCombox Themes: 'orange' *******/
+  .orange { 
+    border				: 1px solid #ffc600;
+    font-size			: 18px;
+    font-weight			: bold;
+    color					: #f09c00;
+    background-color	: #ffe48a;
+  }
+  .orange .menu { border: 1px solid #f09c00; }
+  .orange-hover { border-color: #f09c00;  background-color: #fff2c6;}
+  .orange .current { background-color: #ffc600 !important; color: #fff !important; }
+  .orange a:hover { background-color: #fff2c6; }
+
+
+  /************ mytheme *********************/
+  .mytheme { 
+    border				: 1px solid #668d32;
+    color					: #333;
+    font-size			: 13px;
+    background-color	: #e9e9e9;
+    background-image	: url('/assets/jcombobox/round.gif');
+  }
+  .mytheme-hover {
+    border-color: #008040; color: #668d32;
+    background-image	: url('/assets/jcombobox/round_hover.gif');
+  }
+  .mytheme .current {
+    background-color: #668d32 !important;
+    color: #fff !important; 
+  }
+  .mytheme .menu { border: 1px solid #668d32; }
+
+
+  /************ safari *********************/
+  .safari { 
+    border				: 1px solid #69A6E4;
+    color					: #333;
+    font-size			: 13px;
+    font-weight			: bold;
+    background-color	: #e9e9e9;
+    background-image	: url('/assets/jcombobox/safari.gif');
+  }
+  .safari-hover {
+    border-color: #69A6E4; color: #2067ae;
+    /*background-image	: url('safari_hover.gif');*/
+  }
+  .safari .current {
+    background-color: #69A6E4 !important;
+    color: #fff !important; 
+  }
+  .safari .menu { border: 1px solid #808080; }
+
+
+
+  /************ opera *********************/
+  .opera { 
+    border				: 1px solid #69A6E4;
+    color					: #505050;
+    font-size			: 13px;
+    font-weight			: bold;
+    background-color	: #e9e9e9;
+    background-image	: url('/assets/jcombobox/opera.gif');
+  }
+  .opera-hover {
+    border-color: #69A6E4; color: #505050;
+    background-image	: url('/assets/jcombobox/opera_hover.gif');
+  }
+  .opera .current {
+    background-color: #808080 !important;
+    color: #fff !important; 
+  }
+  .opera .menu { border: 1px solid #494949; }		
+

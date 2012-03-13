@@ -1,4 +1,4 @@
-(function($){
+(function($) {
 	$.fn.simpleBarGraph = function(prop) {
 		var options=$.extend({
 			height:10,
@@ -20,6 +20,10 @@
 		this.each(function() {
 			var $this = $(this);
 			var color = $this.attr('data-color') || options.color;
+			var colors, heights;
+			if (color.indexOf(",") >= 0) {
+				var colors = color.split(",");
+			}
 			var value = parseFloat($this.attr("data-value"));
 			var total = parseFloat(($this.attr("data-total") || options.total));
 			var width = parseInt(($this.attr('data-width') || options.width));
@@ -52,11 +56,37 @@
 
 			//make bar
 			var $bar = $("<div></div>");
+
+			if (colors) {
+				var $subbar1 = $("<div></div>");
+				var $subbar2 = $("<div></div>");
+
+				$subbar1.css("width","100%");
+				$subbar2.css("width","100%");
+				$bar.append($subbar1).append($subbar2);
+
+				$subbar1.css("background-color", colors[0]);
+				$subbar2.css("background-color", colors[1]);
+
+				if ($this.attr('data-height')) {
+					heights = $this.attr('data-height').split(',');
+					if (heights) {
+						$subbar1.css("height",heights[0]);
+						$subbar2.css("height",heights[1]);
+					}
+				}
+			}
+
 			var $lbl = $("<div></div>");
 			$lbl.attr('class', options.labelClass);
 
 			$bar.css("height", options.height + "px");
-			$bar.css("background-color", color);
+			if (heights) {
+				$bar.css("height",(parseInt(heights[0]) + parseInt(heights[1])) +"px");
+			}
+			if (!colors) {
+				$bar.css("background-color", color);
+			}
 
 			if (floating == 'left' || floating == "right") {
 				$bar.css("float", floating);
@@ -74,7 +104,13 @@
 			$this.append($bar);
 			$this.append($lbl);
 			$this.addClass("clearfix");
-			$this.css("height", options.height+"px");
+			if (heights) {
+				console.log("multibar");
+				$this.css("height", (parseInt(heights[0]) + parseInt(heights[1]))+"px");
+			}
+			else {
+				$this.css("height", options.height+"px");
+			}
 
 			if (options.labelPosition === "outside") {
 			}

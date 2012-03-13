@@ -179,6 +179,25 @@ class ApiController < ApplicationController
 				else 
 					result[:image] = ''
 				end
+			elsif target_link.match('mt\.co\.kr') #머니투데이 
+				result[:title] = doc.xpath('//meta[@name="og:title"]').first['content']
+				if  doc.xpath('//td[@class="img"]//img').length >0
+					result[:image] =  doc.xpath('//td[@class="img"]//img').first['src']
+				else
+					result[:image] = get_og_image doc
+				end
+				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
+				result[:created_at] = doc.xpath('//span[@class="num"]').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
+			elsif target_link.match('hankooki\.com') #한국일보
+				result[:title] = doc.title().gsub(/\n/, '')
+				if doc.xpath('//div[@id="Url_GisaImgNum_1"]').length > 0
+					result[:image] = doc.xpath('//div[@id="Url_GisaImgNum_1"]').text
+				else
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@id="GS_Content"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+				url_time = target_link.split('/').last.match(/\d\d\d\d\d\d\d\d\d\d\d\d/).to_s
+				result[:created_at] = url_time[0,4] + '.' + url_time[4,2] + '.' + url_time[6,2] + ' ' + url_time[8,2] + ':' + url_time[10,2]
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'

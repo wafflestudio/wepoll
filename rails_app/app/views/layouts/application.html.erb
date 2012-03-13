@@ -2,6 +2,12 @@
 <html lang="ko">
   <head>
     <meta charset="utf-8">
+    <meta property="fb:app_id"      content="<%= FACEBOOK_CLIENT[:key] %>" />
+    <meta property="og:title"       content="Wepoll" />
+    <meta property="og:url"         content="http://choco.wafflestudio.net:3082" />
+    <meta property="og:image"       content="http://choco.wafflestudio.net:3082/btn_wepoll.png" />
+    <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
+
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
 
@@ -67,6 +73,7 @@ focus: function() {return false;}});
     <!-- Le styles -->
     <%= stylesheet_link_tag    "application", :media => "all" %>
 
+
     <!-- Le fav and touch icons -->
     <!--    <link href="images/favicon.ico" rel="shortcut icon">-->
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
@@ -100,6 +107,13 @@ focus: function() {return false;}});
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
               <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
+
+<% if !flash[:search_error].to_s.empty? %>
+  <style>
+    #query::-webkit-input-placeholder { color:#f00; }
+    #query:-moz-placeholder { color:#f00; }
+  </style>
+<% end %>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>

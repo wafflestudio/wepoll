@@ -1,4 +1,5 @@
-<div class="grid_9 alpha omega subsection profile clearfix">
+<div class="subsection profile">
+  <div class="profile-item clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
       <% if politician.birthday -%>
@@ -9,40 +10,44 @@
     </div>
     <% if i==0 -%><div class="subsection-label">출생</div><% end -%>
   <% end -%>
-</div>
+  </div>
 
-<div class="grid_9 alpha omega subsection profile clearfix">
-  <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <%= politician.military || "정보없음" %>
-    </div>
-    <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
-  <% end -%>
-</div>
+  <div class="profile-item clearfix">
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="<%= i==0?"left":"right"%>">
+        <%= politician.military.length == 0 ? "정보없음" : politician.military %>
+      </div>
+      <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
+    <% end -%>
+  </div>
 
-<div class="grid_9 alpha omega subsection profile clearfix">
-  <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <%= politician.job || "정보없음" %>
-    </div>
-    <% if i==0 -%><div class="subsection-label">현직</div><% end -%>
-  <% end -%>
-</div>
 
-<div class="grid_9 alpha omega subsection profile clearfix">
-  <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <%= politician.education || "정보없음"%>
-    </div>
-    <% if i==0 -%><div class="subsection-label">학력</div><% end -%>
-  <% end -%>
-</div>
+  <div class="profile-item clearfix">
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="<%= i==0?"left":"right"%>">
+        <%= politician.job || "정보없음" %>
+      </div>
+      <% if i==0 -%><div class="subsection-label">현직</div><% end -%>
+    <% end -%>
+  </div>
 
-<div class="grid_9 alpha omega subsection profile clearfix">
-  <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <%= politician.experiences || "정보없음"%>
-    </div>
-    <% if i==0 -%><div class="subsection-label">주요경력</div><% end -%>
-  <% end -%>
+
+  <div class="profile-item clearfix"> 
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="<%= i==0?"left":"right"%>">
+        <%= politician.education || "정보없음"%>
+      </div>
+      <% if i==0 -%><div class="subsection-label">학력</div><% end -%>
+    <% end -%>
+  </div>
+
+
+  <div class="profile-item clearfix"> 
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="<%= i==0?"left":"right"%>">
+        <%= politician.experiences || "정보없음"%>
+      </div>
+      <% if i==0 -%><div class="subsection-label">주요경력</div><% end -%>
+    <% end -%>
+  </div>
 </div>

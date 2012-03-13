@@ -45,8 +45,9 @@ $('span.checkbox').addClass("unchecked");
 <%= content_for :sidebar do %>
   <div id="reply_box" class="grid_4 alpha omega">
     <%= form_tag('/tweets/', :method => "post") do %>
+      <%= hidden_field_tag :link , "#{request.url}" %>
       <%= image_tag 'admin/hr.gif', :id => "reply_close" %>
-      <div id="reply_check">
+      <div id="reply_check" class="forum">
         <span class="checkbox twitter"><input name="tweet" type="checkbox" /></span>
         <span class="checkbox facebook"><input name="facebook" type="checkbox" /></span>
       </div>
