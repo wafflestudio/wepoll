@@ -1,16 +1,13 @@
 <div class="alpha omega subsection clearfix">
-  <span style="text-align:right;font-size:8pt;">* 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
+  <span style="text-align:right;font-size:8pt;display:block">* 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
   <% @politicians.each_with_index do |politician, i| -%>
-    <% if i == 0 && !politician.is_18? %>
-      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:50px;z-index:1;" %>
-    <% elsif i == 1 && !politician.is_18? %>
-      <%= image_tag "icn_not_18.png", :style => "position:absolute;top:10px;left:360px;z-index:1;" %>
-    <% end %>
     <div class="<%=i==0 ? "left":"right" %> init_bills">
       <% if politician.is_18? %>
         <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
       <% else %>
-        &nbsp;
+        <% unless politician.is_18? %>
+          &nbsp;<%#= image_tag "icn_not_18.png", :style => "top:10px;left:50px;z-index:1;" %>
+        <% end %>
       <% end -%>
     </div>
 

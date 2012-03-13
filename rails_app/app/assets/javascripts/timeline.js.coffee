@@ -8,6 +8,8 @@ QuarterView = modules.TimelineQuarterView
 MonthView = modules.TimelineMonthView
 WeekView = modules.TimelineWeekView
 DayView = modules.TimelineDayView
+BillCollection = modules.BillCollection
+
 
 Views =
 	all:     TermView
@@ -30,6 +32,7 @@ class TimelineController
 
 		# We need to keep @collection and @views
 		@collection = new TimelineEntryCollection()
+		@billcollection = new BillCollection()
 		@collection.pol1 = @pol1 if @pol1
 		@collection.pol2 = @pol2 if @pol2
 		
@@ -66,7 +69,7 @@ class TimelineController
 		oldScale = @currentScale
 	
 		if !@views[scaleName]
-			@views[scaleName] = new Views[scaleName](@collection)	
+			@views[scaleName] = new Views[scaleName](@collection,@billcollection)
 			@views[scaleName].appendTo(@$el)
 
 		@currentScale = @views[scaleName]
@@ -80,7 +83,7 @@ class TimelineController
 	
 		@currentScale.show()
 		@currentScale.on('viewportChange', @onViewportChange)
-		@currentScale.setStart((if start? then start else 100000), false)
+		@currentScale.setStart(start, false) if start
 		@currentScale.startAutoUpdate() if @autoUpdate
 	
 	# The timeline will be visible after appending it to an html element (argument is preferably a referencing jquery object).
@@ -146,10 +149,7 @@ class TimelineController
 	stopAutoUpdate: ()->
 		@autoUpdate = false
 		@currentScale.stopAutoUpdate()
-	
-	addEntry: (model)->
-		@collection.add(model)
-	
+		
 	createEntry: (attrs, options)->
 		entry = new TimelineEntry()
 		options.silent = true

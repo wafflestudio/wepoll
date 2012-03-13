@@ -22,6 +22,9 @@
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
 //= require timeline/backbone 
+//= require timeline/bill
+//= require timeline/bill_collection
+//= require timeline/bill_view
 //= require timeline/timeline_entry
 //= require timeline/timeline_entry_collection
 //= require timeline/timeline_entry_navigator

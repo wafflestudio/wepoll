@@ -24,7 +24,6 @@ class HorizontalGroup
 		@$el.appendTo($target)
 		@trigger("dimensionChange")
 
-
 	setPos:(pos)->
 		return if @pos == pos
 		# DEBUG
@@ -66,16 +65,21 @@ class HorizontalGroup
 			@vgroups[pos] = new VerticalGroup(pos,{legendText:@legendText, legendHref:@legendHref})
 			@vgroups[pos].on "destroy", @onVGroupDestroy
 			@vgroups[pos].appendTo(@$holder)
+			@vgroups[pos].css("left","#{(pos-@epoch)*modules.TimelineView.EntryWidth}px")
 		else
 			console.log('prepareVGroup:', "@vgroups[#{pos}] exists")
 
 		return @vgroups[pos]
 
+	addBillView:(billView,pos)->
+		vgroup = @prepareVGroup(pos)
+		vgroup.addBillView(billView)
+		# set proper positon for vgroup
+		@setSpan(@$holder.children('.tm-vgroup').length)
+
 	addSlider:(slider,pos, vpos)->
 		vgroup = @prepareVGroup(pos)
 		vgroup.addSlider(slider,vpos)
-		vgroup.css("left","#{(slider.pos-@epoch)*modules.TimelineView.EntryWidth}px")
-
 		@setSpan(@$holder.children('.tm-vgroup').length)
 	
 	appendBulk:(vgroups, shift)->

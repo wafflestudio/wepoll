@@ -19,6 +19,11 @@ class VerticalGroup
 
 	getLength: ()->
 		return @num
+	
+	addBillView:(billView)->
+		billView.appendTo(@$el)
+		@num = @num + 1
+
 
 	addSlider:(slider, vpos)->
 		slider.appendTo(@$el)

@@ -17,16 +17,16 @@
 
         $(".link-button").click(function() {
           $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
-            activateTimelineEntryForm();
-            $('.tm-entry-form').submit( function() {
-              $.colorbox.close();
-              submitTimelineEntryForm(this);
-              return false;
-              });
-
-            }
-            });
+          activateTimelineEntryForm();
+          $('.tm-entry-form').submit( function() {
+            $.colorbox.close();
+            submitTimelineEntryForm(this);
+            return false;
           });
+
+        }
+        });
+        });
     });
  </script>
 <script type="text/javascript" src="/assets/infinitescroll.min.js"></script>
