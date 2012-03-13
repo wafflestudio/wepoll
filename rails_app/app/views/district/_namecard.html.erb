@@ -1,6 +1,6 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
   <div class="tweet-bubble <%= index==0?"left":"right"%>">
-    <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+    <%= tweet ? link_to(tweet.content, forum_path(politician)) : "최근 트윗이 없습니다." %>
   </div>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
@@ -32,5 +32,5 @@
       data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
     </div>
   </div>
-  <%= link_to '링크등록', '#' , :class => "link-button #{index==0?'left':'right'}"%>
+  <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'}"%>
 </div>

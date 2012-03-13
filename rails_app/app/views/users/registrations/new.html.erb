@@ -117,13 +117,13 @@
       <div id="middle">
         <div class="agree_container">
           <textarea class="text_box" readonly>
-            <%= File.read(Rails.root + "provision.txt")%>
+            <%= File.read(Rails.root + "public/provision.html")%>
           </textarea>
           <%= check_box_tag :agree_provision %><%= label_tag :agree_provision, '약관에 동의합니다.' %>
         </div>
         <div class="agree_container">
           <textarea class="text_box" readonly>
-            <%= File.read(Rails.root + "privacy.txt")%>
+            <%= File.read(Rails.root + "public/privacy.txt")%>
           </textarea>
           <%= check_box_tag :agree_privacy %><%= label_tag :agree_private, '개인정보 수집 및 이용에 동의합니다.' %>
         </div>
