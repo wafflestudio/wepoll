@@ -32,5 +32,5 @@
       data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
     </div>
   </div>
-  <%= link_to '링크등록', '#' , :class => "link-button #{index==0?'left':'right'}"%>
+  <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'}"%>
 </div>

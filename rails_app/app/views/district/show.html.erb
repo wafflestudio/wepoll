@@ -1,20 +1,40 @@
 <%content_for :scripts do -%>
   <script type="text/javascript">
-    var timelineInitialized = false
-    $('#show-timeline').click( function() {
-      $('#timeline-container').jqmShow();
+    $(function() {
+      var timelineInitialized = false
+      $('#show-timeline').click( function() {
+        $('#timeline-container').jqmShow();
 
-      if(!timelineInitialized)
-      {
-        timelineController.reset()
-      }
-      timelineInitialized = true;
-      return false
+        if(!timelineInitialized)
+        {
+          timelineController.reset()
+        }
+        timelineInitialized = true;
+        return false
+      });
+
+      $('#timeline-container').jqm({overlay:1});
+
+      $(".link-button").click(function() {
+        $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
+          activateTimelineEntryForm();
+          $('.tm-entry-form').submit( function() {
+            $.colorbox.close();
+            submitTimelineEntryForm(this);
+            return false;
+          });
+
+        }
+        });
+      });
     });
-    $('#timeline-container').jqm({overlay:1});
 
   </script>
 <% end -%>
+
+<%= render 'timeline_entries/index' %>
+<a href="#" id="show-timeline">&nbsp;</a>
+
 <div class="grid_12" id="vs-content-wrapper">
   <div id="district-title">
     이 공간은 <span id="district-label"><%= @district %></span> 대결 페이지입니다.
@@ -44,23 +64,20 @@
       <%= link_to '최신링크',
         '#',
         :class => 'tab alpha', "data-id" => "recent-links" %>
-      <%= link_to '인기링크',
-        '#',
-        :class => 'tab', "data-id" => "popular-links" %>
-      <%= link_to '국회활동',
-        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "bill-activity" %>
-      <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab selected', "data-id" => "profile"%>
-      <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega', "data-id" => "promise" %>
-    </div>
+        <%= link_to '인기링크',
+          '#',
+          :class => 'tab', "data-id" => "popular-links" %>
+          <%= link_to '국회활동',
+            bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+            :class => 'tab', "data-id" => "bill-activity" %>
+            <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab selected', "data-id" => "profile"%>
+            <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega', "data-id" => "promise" %>
+          </div>
 
-    <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
-    </div> <!-- end of tab conainer -->
+          <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
+          </div> <!-- end of tab conainer -->
 
-  </div>
-</div>
+        </div>
+      </div>
 
-<%= render 'timeline_entries/index' %>
-
-<a href="#" id="show-timeline">&nbsp;</a>
 
