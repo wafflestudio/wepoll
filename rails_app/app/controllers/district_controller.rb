@@ -5,6 +5,8 @@ class DistrictController < ApplicationController
   def show
     @politicians = Politician.where(:district => @district).desc(:good_link_count)
 
+    @party_color = {"자유선진당" => "#007DC5", "통합진보당" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f" }
+
     if (params[:p1_id] && params[:p2_id])
       @p1 = @politicians.where(:_id => params[:p1_id]).first
       @p2 = @politicians.where(:_id => params[:p2_id]).first
@@ -26,6 +28,7 @@ class DistrictController < ApplicationController
 
     @t1 = @p1.nil? ? nil : @p1.tweets.asc('created_at').first
     @t2 = @p2.nil? ? nil : @p2.tweets.asc('created_at').first
+    @tweets = [@t1, @t2]
 
 		# Timeline => See timeline_controller.rb.
 		if params[:from]

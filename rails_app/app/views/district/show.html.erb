@@ -1,299 +1,49 @@
-<% content_for :scripts do -%>
-  <script type="text/javascript">
-
-    function loadTab($obj) {
-      var id = $obj.attr('data-id');
-      if (!id) return;
-      $(".tab-section").hide();
-      var $tab_section = $("#"+id);
-      if ($tab_section.length > 0) {
-        $tab_section.show();
-        return;
-      }
-
-      $tab_section = $('<div class="grid_9 alpha omega tab-section"></div>');
-      $tab_section.attr('id', id);
-
-      $tab_section.load($obj.attr('href'));
-
-      $("#tab-sections-container").append($tab_section);
-    }
-
-    $(function() {
-      var common_options = { width:624/2-33/2, height:14, labelWidth:48, minWidth:10};
-      $("#p1-good-link").simpleBarGraph(
-        $.extend({
-          labelClass:"good bar-label right",
-          label:function(x, fx) {
-            return "칭찬 " + Math.round(x);
-          }
-        },
-        common_options)
-      );
-      $("#p1-bad-link").simpleBarGraph(
-        $.extend({
-          labelClass:"bad bar-label right",
-          label:function(x, fx) {
-            return "지적 " + Math.round(x);
-          }
-        },
-        common_options)
-      );
-      $("#p2-good-link").simpleBarGraph(
-        $.extend({
-          labelClass:"good bar-label left",
-          label:function(x, fx) {
-            return "칭찬 " + Math.round(x);
-          }
-        },
-        common_options)
-      );
-      $("#p2-bad-link").simpleBarGraph(
-        $.extend({
-          labelClass:"bad bar-label left",
-          label:function(x, fx) {
-            return "지적 " + Math.round(x);
-          }
-        },
-        common_options)
-      );
-
-      $(".tab").click(function() {
-        loadTab($(this));
-        $(".tab").removeClass("selected");
-        $(this).addClass("selected");
-        return false;
-      });
-      $(".tab").eq(0).click();
-
-      $(".politician-select").change(function() {
-        var $this = $(this);
-        if ($this.attr("value") == "<%= @p1.nil? ? "" : @p1.id%>" || 
-        $this.attr("value") == "<%= @p2.nil? ? "" : @p2.id%>") {
-
-          if ($this.attr("id") == "politician1") 
-            $this.val("<%= @p1.nil? ? "" : @p1.id %>");
-          if ($this.attr("id") == "politician2") 
-            $this.val("<%= @p2.nil? ? "" : @p2.id %>");
-
-          return false;
-        }
-
-        var ids = $(".politician-select").map(function(i, select) {
-          var $select = $(select);
-          return $select.attr("value");
-        });
-
-        <% if @p1 && @p1.district -%>
-        var url = "/district/"+"<%= @p1.district%>"+"/"+ids[0].toString()+"/"+ids[1].toString();
-        <% else -%>
-        var url = "";
-        <% end -%>
-        $(location).attr('href',url);
-
-      });
-      var timelineInitialized = false
-			$('#show-timeline').click( function() {
-				$('#timeline-container').jqmShow();
-				
-				if(!timelineInitialized)
-				{
-					timelineController.reset()
-				}
-				timelineInitialized = true;
-				return false
-			});
-      $('#timeline-container').jqm({overlay:1});
-
-      $(".joint-politician img").hover(function() {
-        //show
-
-      },
-      function() {
-        //hide
-      });
-
-
-    });
-  </script>
-
-  <script type="text/javascript">
-    function law_title_click($elem, id) {
-      //show box
-      var $div = $("#bill-summary-popup");
-      var index = $elem.index();
-      if ($div.length == 0) {
-        $div = $("<div id=\"bill-summary-popup\"><div id=\"summary-popup-content\"></div>");
-        var $a = $("<a id=\"bill-popup-close\" href=\"#\">x</a>");
-        $a.click(function() {
-          $div.slideUp();
-          return false;
-        });
-        $div.append($a);
-        $div.appendTo("#bills-wrapper");
-        $div.hide();
-      }
-
-      //caculate offset
-//      var offset_y = 30;
-//      var y = index*17 + offset_y;
-//      console.log("y = " + y + ", index = " + index);
-//
-//      $div.css("top", y);
-//      $div.css("left", 0);
-//      $div.css("position", "absolute");
-
-      //slide
-      $div.stop().slideDown();
-
-      //load html
-      $("#summary-popup-content").load("/bills/"+ id);
-
-      return false;
-    }
+<%content_for :scripts do -%>
 
   </script>
-
 <% end -%>
-<%= render 'timeline_entries/index' %>
+<div class="grid_12" id="vs-content-wrapper">
+  <div id="district-title">
+    이 공간은 <span id="district-label"><%= @district %></span> 대결 페이지입니다.
+  </div>
 
-<a href="#" id="show-timeline">&nbsp;</a>
-<div id="name-cards" class="grid_12 alpha omega">
-  <div class="clearfix" id="name-cards-inner-wrapper">
-    <div class="name-card">
-      <% if @p1 -%>
-        <%= link_to forum_path(@p1), :class => "vs-forum-link" do %>
-          <div class="tweet left">
-            <%= "최근 트윗이 없습니다." if @t1.nil? %> <%= "#{@t1.content[0,48]}.." unless @t1.nil? %> <br /><%= "@#{@p1.tweet_name}" %>
-          </div>
-        <% end -%>
-      <% else -%>
-        <div class="tweet left">최근 트윗이 없습니다.</div>
-      <% end -%>
+  <div id="district-desc">
+    후보들에 대한 링크를 달아보세요! 상대에 대한 욕설 및 비방은 삼가주세요.<br />
+    트위터말풍선을 누르면 트윗토론방으로 이동합니다.<br />
+    좋아요 버튼을 눌러서 친구들에게도 <%= @district%> 페이지를 알려주세요.<br />
+  </div>
 
-      <div class="photo-frame" style="margin-left:5px;">
-        <% if @p1 && @p1.profile_photo? -%>
-          <%= image_tag @p1.profile_photo.url(:square100) %>
-        <% else -%>
-          <%= image_tag "http://placehold.it/100" %>
-        <% end -%>
-        <div class="back">
+  <div id="name-cards" class="clearfix">
+    <% @politicians.each_with_index do |politician,i| -%>
+      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
+      <% if i==0 -%>
+        <div id="split-bar">
+          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph", :style => "margin-top:360px;" %>
+          <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph", :style => "margin-top:20px;" %>
         </div>
-      </div>
-      <div class="candidate-selector left">
-        <% if @politicians.any? -%>
-          <%= select_tag 'politician1', options_from_collection_for_select(@politicians, 'id', 'name', @p1.id.to_s), :class => "politician-select" %>
-        <% else -%>
-          <%= @p1.nil? ? "" : @p1.name%>
-        <% end -%>
-      </div>
-      <div class="clear"></div>
-    </div>
-
-    <div class="vs-bar">
-      <div style="height:40px;margin-bottom:12px"><div id="vs-fb-like-btn" class="fb-like" data-href="<%= request.url %>" data-send="false" data-layout="button_count" data-width="90" data-show-faces="false"></div>&nbsp;</div>
-      
-      <div class="district-label">
-        <%= @district%>
-      </div>
-
-      <div class="vs-mark">
-      </div>
-    </div>
-
-    <div class="name-card">
-      <% if @p2 -%>
-        <%= link_to forum_path(@p2), :class => "vs-forum-link" do %>
-          <div class="tweet right">
-            <%= "최근 트윗이 없습니다." if @t2.nil? %> <%= "#{@t2.content[0,48]}.." unless @t2.nil? %> <br /><%= "@#{@p2.tweet_name}" %>
-          </div>
-        <% end -%>
-      <% else -%>
-        <div class="tweet right">최근 트윗이 없습니다.</div>
       <% end -%>
+    <% end -%>
+  </div>
 
-      <div class="candidate-selector right">
-        <% if @politicians.any? -%>
-          <%= select_tag 'politician2', options_from_collection_for_select(@politicians, 'id', 'name', @p2.id.to_s), :class => "politician-select" %>
-        <% else -%>
-          <%= @p2.nil? ? "" : @p2.name%>
-        <% end -%>
-      </div>
-
-      <div class="photo-frame">
-        <% if @p2 && @p2.profile_photo? -%>
-          <%= image_tag @p2.profile_photo.url(:square100) %>
-        <% else -%>
-          <%= image_tag "http://placehold.it/100"%>
-        <% end -%>
-        <div class="back"></div>
-      </div>
-      <div class="clear"></div>
+  <!-- tab 시작 -->
+  <div id="tab-wrapper">
+    <div id="tabs" class="clearfix">
+      <%= link_to '최신링크',
+        '#',
+        :class => 'tab alpha', "data-id" => "recent-links" %>
+      <%= link_to '인기링크',
+        '#',
+        :class => 'tab', "data-id" => "popular-links" %>
+      <%= link_to '국회활동',
+        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+        :class => 'tab selected', "data-id" => "bill-activity" %>
+      <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
+      <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega', "data-id" => "promise" %>
     </div>
 
-    <div class="link-graph-wrapper clearfix">
-      <div id="p1-good-link" class="bar-graph"
-        data-color="#f1376f"
-        data-total="-1"
-        data-ref="#p1-bad-link"
-        data-float="right"
-        data-value="<%= @p1 ? @p1.good_link_count : 0 %>">
-      </div>
-      <div class="bar-splitter">
-      <%= image_tag "/assets/icn_smile.png" %>
-      </div>
-      <div id="p2-good-link" class="bar-graph"
-        data-color="#f1376f"
-        data-total="-1"
-        data-ref="#p2-bad-link"
-        data-value="<%= @p2 ? @p2.good_link_count : 0%>">
-      </div>
-    </div>
+    <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
+    </div> <!-- end of tab conainer -->
 
-    <div class="link-graph-wrapper clearfix">
-      <div id="p1-bad-link" class="bar-graph"
-        data-color="#4f4f50"
-        data-total="-1"
-        data-ref="#p1-good-link"
-        data-float="right"
-        data-value="<%= @p1 ? @p1.bad_link_count : 0 %>">
-      </div>
-      <div class="bar-splitter">
-      <%= image_tag "/assets/icn_frown.png" %>
-      </div>
-      <div id="p2-bad-link" class="bar-graph"
-        data-color="#4f4f50"
-        data-total="-1"
-        data-ref="#p2-good-link"
-        data-value="<%= @p2 ? @p2.bad_link_count : 0 %>">
-      </div>
-    </div>
   </div>
 </div>
-
-<div class="grid_12 alpha omega" id="tab-wrapper">
-  <div id="tabs" class="clearfix">
-    <%= link_to '국회활동',
-      bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-      :class => 'tab', "data-id" => "bill-activity" %>
-    <%= link_to '신상', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
-    <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "promise" %>
-  </div>
-
-  <div class="grid_8 clearfix" id="tab-sections-container">
-  </div> <!-- end of tab conainer -->
-
-  <div class="grid_2 omega">
-  </div>
-</div>
-
-<% if params[:timeline_entry_id] -%>
-  <script type="text/javascript">
-    $(function() {
-      $("#show-timeline").click();
-      var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
-      $.colorbox({href:url});
-    })
-  </script>
-<% end -%>
 

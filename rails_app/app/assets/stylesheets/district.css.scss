@@ -1,598 +1,231 @@
 // Place all the styles related to the district controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+// =require jcombobox
 
-.timeline-entry-excerpt {
-  font-size:10pt;
-  .title {
+#vs-content-wrapper {
+  background-color:#fff;
+  padding: 35px 20px;
+  width:740px - 40px;
+  -o-border-radius:14px;
+  -moz-border-radius:14px;
+  -webkit-border-radius:14px;
+  border-radius:14px;
+}
+
+#district-title {
+  font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕sans-serif;
+  font-weight:bold;
+  font-size:15pt;
+  #district-label {
+    color:#ef4d28;
   }
 
-  .tags {
-    a {
-      text-decoration:none;
-      font-color:#555;
-      font-size:9pt;
-    }
-  }
-  border:1px solid #333;
 }
 
-#tab-wrapper {
-  background-color:#feeda0;
-  border-radius:15px;
-  -webkit-border-radius:15px;
-  -moz-border-radius:15px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  width:607px;
-  margin-left:51px;
-  margin-top:15px;
-  padding:15px;
-}
-
-#tabs {
-  float:left;
-  width:75px;
-  margin-left:-75px;
-  margin-top:10px;
-}
-
-#tab-sections-container {
-// position:absolute;
-  width:607px;
-  margin:0;
-  border-radius:15px;
-  -webkit-border-radius:15px;
-  -moz-border-radius:15px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  background-color:#fff5c8;
-}
-#tabs .tab {
-  display:block;
-  width:75px;
-  height:37px - 12px;
-  background-color:#ffefa6;
-  margin-bottom:6px;
-  border-radius:8px;
-  -webkit-border-radius:8px;
-  -moz-border-radius:8px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  border-bottom-right-radius:0;
-  border-top-right-radius:0;
-  padding-top:12px;
-  text-align:center;
+#district-desc {
+  color:#969696;
   font-size:12pt;
-  text-decoration:none;
-  color:#999375;
+  margin-top:13px;
 }
 
-#tabs .tab.selected {
-  background-color:#fff5c8;
-  color:#68665d;
-
-  -moz-box-shadow: 2px 2px 1px #666;
-  -webkit-box-shadow: 2px 2px 1px #666;
-  box-shadow: 2px 2px 1px #666;
-
-}
-
-.tab-section {
-  margin:15px auto 0 23px;
-}
-
-.subsection {
-  border:1px solid #5a5958;
-  border-radius:7px;
-  -webkit-border-radius:7px;
-  -moz-border-radius:7px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  margin-bottom:12px;
-  padding: 7px 0;
-
-  .left {
-    width:240px - 2px;
-    border-right:2px dashed #a7a28c;
-    float:left;
-  }
-  .right {
-    width:240px - 2px;
-    border-left:2px dashed #a7a28c;
-    float:left;
-  }
-
-  .subsection-label {
-    float:left;
-    font-size:12pt;
-    width:80px;
-    text-align:center;
-    font-weight:bold;
-  }
-}
-
-.bill-graph {
-  width:240px - 10px; height:109px;
-}
-.init-bills-link{
-  text-decoration:none;
-}
-
-.labels span {
-  display:block;
-
-}
-
-#name-cards {
-  background-color:#feeda0;
-  margin:0 auto;
-  padding:15px;
-  position:relative;
-  float:left;
-  width:688px - 30px;
-  border-radius:15px;
-  -webkit-border-radius:15px;
-  -moz-border-radius:15px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-}
-
-#name-cards-inner-wrapper {
-  width:658px;
-  height:329px;
-  border-radius:15px;
-  -webkit-border-radius:15px;
-  -moz-border-radius:15px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  background-color:#fff5c8;
-}
-
-.name-card {
-  width:257px;
-  margin:0;
-  position:relative;
+.namecard {
   float:left;
 }
 
-.vs-forum-link {
-	font-size: 10pt;
-  color: black;
-  text-decoration: none;
-}
-.tweet {
-  background:url(/assets/bubble_right.gif) no-repeat;
-  height:134px - 85px;
-  width:176px - 45px;
-  padding:35px 20px 50px 25px;
-  position:relative;
-  margin:13px 16px 0 16px;
-  font-size: 9pt;
+.tweet-bubble {
+  background:url(/assets/bubble_tweet.png) no-repeat;
+  width:260px - 40px - 25px;
+  height:169px - 34px - 25px;
+  padding-top: 34px;
+  padding-left: 40px;
+  padding-right:25px;
+  padding-bottom:25px;
 }
 
-.tweet.left {
+#split-bar {
+  width:120px;
+  background:url(/assets/vs_mark.gif) no-repeat 0px 0px;
   float:left;
-  background:url(/assets/bubble_left.gif) no-repeat;
-}
-.tweet.right {
-  float:right;
+  text-indent:-999px;
+  height:470px;
 }
 
-.vs-bar {
-  width:144px;
+.politician-photo-wrapper {
   position:relative;
-  float:left;
-}
+  height:170px;
+  width:170px;
 
-.photo-frame {
-  width:123px;
-  height:123px;
-  position:relative;
-  float:left;
-
-  .back {
-    width:123px;
-    height:123px;
+  .photo-frame {
+    background:url(/assets/photo_frame.png) no-repeat;
+    width:170px;
+    height:170px;
     position:absolute;
-    background:url(/assets/vs_photo_frame.png);
   }
 
   img {
+    display:block;
+    width:160px;
+    height:160px;
+    top:5px;
+    left:5px;
     position:absolute;
-    width:110px;
-    height:110px;
-    top:6px;
-    left:6px;
   }
 }
 
-.district-label {
-  width:129px - 20px;
-  height:59px - 40px;
-  margin:0 auto 65px auto;
-  text-align:center;
-  padding:20px 10px;
-  background:url(/assets/district_border.gif) no-repeat;
-  font-size:20pt;
+.gray { border:2px solid #4f4f50; font-size:12pt; font-weight:bold; color:#0080c0; background-color:#d5f1ff; }
+.gray .menu { border:1px solid #06aeff; }
+.gray-hover { border-color:#06aeff; }
+.gray .current { background-color:#0080c0 !important; color:#fff !important; }
+
+
+.politician-select {
+  width:150px;
 }
 
-.vs-mark {
-  background:url(/assets/vs_mark.gif) no-repeat;
-  height:71px;
-  width:136px;
-  margin:0 auto;
+
+.link-button {
+  display:block;
+  width:192px;
+  height:48px;
+  background:url(/assets/btn_link.jpg) no-repeat;
+  padding:0;margin:0;
+  border:0;
+  text-indent:-999px;
+  cursor:hand;
+  cursor:pointer;
 }
 
-.link-graph-wrapper {
-  width:624px;
-  margin:0 auto;
-  .bar-graph {
+#p1-good-link, #p2-good-link {
+  margin-bottom:20px;
+}
+
+#p1-good-link, #p1-bad-link {
+  float:right;
+}
+#p2-good-link, #p2-bad-link {
+  float:left;
+}
+
+.graph-stopper {
+  height:18px;
+  width:4px;
+  background-color:#000;
+  &.left {
     float:left;
   }
-  margin-bottom:5px;
-}
-
-.bar-label {
-  padding-top:3px;
-  width:45px;
-  font-size:7pt;
-}
-.bar-label.right {
-  text-align:right;
-  margin-right:3px;
-}
-.bar-label.left {
-  text-align:left;
-  margin-left:3px;
-}
-
-.bar-label.good {
-  color:#f1376f;
-}
-
-.bar-label.bad {
-  color:#4f4f50;
-}
-
-.bar-splitter {
-  margin-left:5px;
-  margin-right:5px;
-  width:23px;
-  float:left;
-  margin-top:-3px;
-}
-
-.candidate-selector {
-  select {
-    font-family: '돋움';
-    font-size: 13pt;
-    border:2px solid #4f4f50;
-    padding:0;
-    width:112px - 4px;
-    height:25px;
-    margin:0;
-    background:white;
+  &.right {
+    float:right;
   }
-  margin-top:50px;
-  width:112px;
 }
-.candidate-selector.right {
-  float:left;
+
+.link-label {
+  font-size: 15pt;
+  font-weight:bold;
+}
+
+.good-links .link-label {
+    color:#60cbfa;
+}
+.bad-links .link-label {
+    color:#4a4a4a;
+}
+
+#p1-good-link .link-label, #p1-bad-link .link-label {
   margin-right:16px;
 }
-
-.candidate-selector.left {
-  float:right;
+#p2-good-link .link-label, #p2-bad-link .link-label {
   margin-left:16px;
 }
 
-.joint-politician {
-  float:left;
-  margin:0 5px;
-
-  .joint-info {
-    font-size:9pt;
-    text-align:center;
-    color:black;
-  }
-}
-
-.joint-politician.alpha {
-  margin-left:13px;
-}
-
-.joint-politician.omega {
-  margin-right:0px;
-}
-
-.att-bar-graph {
-  border:1px solid #4f4f50;
-  margin:0 3px;
-}
-.att-label {
-  color:white;
-  font-size:9pt;
-  padding-top:3px;
-}
-
-.bill-bar-graph {
-  border:1px solid #4f4f50;
+.icn-bar-graph {
+  width:23px;
+  height:22px;
+  display:block;
   margin:0 auto;
-  margin-top:10px;
 }
 
-.bill-label {
-  color:white;
-  font-size:9pt;
-  padding-top:2px;
+@mixin border-top-left-radius($x) {
+  -o-border-top-left-radius: $x;
+  -moz-border-top-left-radius: $x;
+  -webkit-border-top-left-radius: $x;
+  border-top-left-radius: $x;
+}
+@mixin border-top-right-radius($x) {
+  -o-border-top-right-radius: $x;
+  -moz-border-top-right-radius: $x;
+  -webkit-border-top-right-radius: $x;
+  border-top-right-radius: $x;
 }
 
-#popup-bills {
-  background-color:#fcf7e0;
-  border:2px solid #4f4f50;
-  width:703px - 16px;
-  padding:16px;
+
+#tabs {
+  a {
+    width:130px;
+    height:38px - 14px;
+    padding-top:14px;
+    float:left;
+    display:block;
+    background-color:#f4f4ee;
+    text-decoration:none;
+    text-align:center;
+    color:#0073de;
+    font-size:11pt;
+
+    @include border-top-left-radius(7px);
+    @include border-top-right-radius(7px);
+
+    margin:0 4px;
+
+    &.selected {
+      color:#000;
+      background-color:#e6e6dc;
+    }
+    &.alpha {
+      margin-left:0;
+    }
+
+    &.omega {
+      margin-right:0;
+    }
+  }
 }
 
-#popup-profile-photo {
-  border:2px solid #4f4f50;
-  border-radius:4px;
-  -webkit-border-radius:4px;
-  -moz-border-radius:4px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+#tab-sections-container {
+  background-color:#e6e6dc;
+  padding:10px;
+}
+
+//국회활동 탭 
+a.init-bills-link {
+  text-decoration:none;
+}
+
+
+.left {
+  float:left;
+}
+
+.right {
+  float:right;
+}
+
+@mixin border-radius($x) {
+  -o-border-radius: $x;
+  -moz-border-radius: $x;
+  -webkit-border-radius: $x;
+  border-radius: $x;
+}
+.subsection-label {
   width:130px;
-  float:left;
-  .photo {
-    width:130px;
-    height:130px - 20px;
-    text-align:center;
-    background-color:#fff;
-  }
-  .name-label{
-    color:white;
-    background-color:#ababab;
-    display:block;
-    height:20px - 4px;
-    text-align:center;
-    width:130px;
-    padding-top:4px;
-    font-size:9pt;
-  }
-  position:relative;
-  margin-right:40px;
-}
-
-#popup-bills-categories {
-  float:left;
-  margin-right:37px;
-  padding:5px 0;
-  height:130px - 10px;
-  width:332px;
-  border:2px solid #4f4f50;
-  border-radius:4px;
-  -webkit-border-radius:4px;
-  -moz-border-radius:4px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
-  background-color:white;
-
-  h3.bill-count {
-    font-size:10pt;
-    font-weight:bold;
-    margin-right:30px;
-    float:left;
-    margin-left:20px;
-    margin-bottom:23px;
-  }
-
-  span.bill-count {
-    color:#088eff;
-    width:40px;
-  }
-}
-
-#popup-bills-selector {
-  padding-top:100px;
-  height:30px;
-  float:left;
-  width:135px;
-  font-size:9pt;
-}
-
-.bill-category {
-  float:left;
-  margin-bottom: 7px;
-  width:80px;
-  .bill-category-name {
-    width:56px;
-    height:14px;
-    display:block;
-    float:left;
-    overflow:hidden;
-    text-align:center;
-  }
-
-  .bill-count {
-    width:80px - 56px;
-  }
-  font-size:9pt;
-}
-
-#bill-update-info {
-  margin-top:20px;
-  font-size:9pt;
-  .small {
-    font-size:8.5pt;
-    a {
-      text-decoration:none;
-      color:black;
-    }
-  }
-}
-
-#bills {
-  width:653px;
-  thead {
-    background-color:#fede4d;
-    margin-bottom:10px;
-    th {
-      padding:5px 0 5px 10px;
-      font-size:10pt;
-      font-weight:normal;
-      text-align:left;
-      color:#4f4f50;
-      border-right: 2px solid #fff;
-    }
-  }
-
-  tr.space-under td {
-    padding-top:10px;
-  }
-
-  .header-date {//, .cell-date {
-    width:71px; //81px (with padding)
-    border-bottom-left-radius:5px;
-    border-top-left-radius:5px;
-  }
-
-  .header-commitee{//, .cell-commitee {
-    width:68px; //78px (with padding)
-  }
-
-  .header-title{//, .cell-title {
-    width:403px; //413px (with padding)
-  }
-
-  .header-result{//, .cell-result {
-    width:70px; //80px (with padding)
-    border-bottom-right-radius:5px;
-    border-top-right-radius:5px;
-  }
-
-  tbody {
-    td {
-      font-size:10pt;
-      padding:3px 0 3px 10px;
-
-      a {
-        text-decoration:none;
-        color:black;
-      }
-      a:hover {
-        text-decoration:underline;
-      }
-    }
-
-    td.cell-date {
-      padding:3px 0 3px 5px;
-      font-size:9pt;
-    }
-  }
-}
-
-#bill-summary-popup {
-  width:650px - 4px;
-  height:303px;
-  border:2px solid #4f4f50;
-  background-color:white;
-  top:30px;
-  position:absolute;
-}
-
-#summary-popup-content {
-  height:303px - 12px;
-  overflow-x:hidden;
-  overflow-y:scroll;
-  padding:6px;
-  line-height:110%;
-
-  .bill-title {
-    font-size:10pt;
-    font-weight:bold;
-    margin-bottom:5px;
-  }
-  .bill-summary {
-    font-size:9pt;
-  }
-}
-
-#bill-popup-close {
-  position:absolute;
-  right:-8px;
-  top:-8px;
+  min-height:43px;
   display:block;
-  width:16px;
-  height:16px;
-  text-indent:-999px;
-  background:url(/assets/bill-popup-close.gif);
+  float:left;
+  background:url(/assets/bg_subsection_label.gif) no-repeat;
 }
 
-#bills-wrapper {
-  position:relative;
-}
-
-ol.promises li {
-  padding-left:45px;
-  background-repeat:no-repeat;
-  margin-bottom:30px;
-  min-height:53px + 12px;
-  padding-top:12px;
-
-  .promise-title {
-    color:#f34f7b;
-    font-size:10pt;
-    margin-bottom:10px;
-    margin-top:5px;
-  }
-
-  .promise-content {
-    color:#4f4f50;
-    font-size:9pt;
-  }
-}
-
-li.promise_1 {
-  background-image:url(/assets/icn_finger_1.gif);
-}
-li.promise_2 {
-  background-image:url(/assets/icn_finger_2.gif);
-}
-li.promise_3 {
-  background-image:url(/assets/icn_finger_3.gif);
-}
-
-div.promise.right {
-  border:0;
-  margin-left:24px;
-}
-div.promise.left {
-  border-right:2px dashed #565655;
-  padding-right:24px;
-  margin-left:12px;
-}
-
-div.subsection.noborder {
-  border:0;
-}
-
-div.profile.subsection {
-  background-color:#fff3a0;
-  font-size:9pt;
-}
-
-.profile.subsection .left, .profile.subsection .right {
-  padding: 10px 0;
-  text-align:center;
-}
-
-.profile.subsection .subsection-label {
-  padding-top:10px;
-}
-
-#show-timeline {
-  background:url(/assets/btn_show_timeline.gif) no-repeat;
-  width:40px;
-  height:153px;
-  position:fixed;
-  top:150px;
-  left:0;
-  display:block;
-}
-#vs-fb-like-btn {
-  margin-top: 10px;
-  margin-left: 46px;
+.subsection {
+  background-color:#fff;
+  @include border-radius(7px);
+  margin-bottom:8px;
 }
