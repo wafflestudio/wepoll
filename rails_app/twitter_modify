@@ -1,0 +1,26 @@
+#coding: utf-8
+require 'csv'
+CSV.foreach(Rails.root+"init_data/twitter_modify.csv",:encoding => "UTF-8") do |csv|
+	name = csv[0]
+	screen_name = csv[3]
+	p = Politician.where(:name => name).first
+	if p.nil?
+		puts name+"is nil"
+	else
+		p.tweet_name = screen_name
+		p.save
+		puts name+"tweet_name saved to "+screen_name
+	end
+end
+CSV.foreach(Rails.root+"init_data/seoul_twitter_0314.csv",:encoding => "UTF-8") do |csv|
+	name = csv[2]
+	screen_name = csv[5]
+	p = Politician.where(:name => name).first
+	if p.nil?
+		puts name+"is nil"
+	else
+		p.tweet_name = screen_name
+		p.save
+		puts name+"tweet_name saved to "+screen_name
+	end
+end
