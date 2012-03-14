@@ -1,6 +1,6 @@
-<tr>
+<tr data-href="<%= display_timeline_entry_path(timeline_entry) %>" class="dashboard-link-entry">
   <td class="list_date"><%= timeline_entry.created_at.strftime("%Y-%m-%d") %></td>
-  <td class="list_title"><%= link_to timeline_entry.title, '#' %></td>
+  <td class="list_title"><%= timeline_entry.title %></td>
   <td class="list_count"><%= timeline_entry.like_count %></td>
   <td class="list_count"><%= timeline_entry.blame_count %></td>
 </tr>

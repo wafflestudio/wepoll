@@ -44,6 +44,9 @@
       <div class="grid_2 alpha" id="sns-links">
         <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
         <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
+        <iframe allowtransparency="true" frameborder="0" scrolling="no"
+          src="//platform.twitter.com/widgets/tweet_button.html"
+          style="width:90px; height:20px;"></iframe></iframe>
       </div>
 
       <div class="grid_4 omega" id="link-preview">
