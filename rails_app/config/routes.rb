@@ -68,7 +68,7 @@ Wepoll::Application.routes.draw do
   resources :tweets do
     get 'like', :on => :member
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
-    get 'tweet_replies' => 'tweets#replies', :as => :tweet_replies
+    get 'tweet_replies' => 'tweet_replies#index', :as => :tweet_replies
   end
   resources :tweet_replies do
     get 'blame', :on => :member

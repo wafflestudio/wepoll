@@ -1,7 +1,11 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
-  <div class="tweet-bubble <%= index==0?"left":"right"%>">
-    <%= tweet ? link_to(tweet.content, forum_path(politician)) : "최근 트윗이 없습니다." %>
-  </div>
+  <% unless politician.nil? -%>
+    <%= link_to forum_path(politician) do  %>
+      <div class="tweet-bubble <%= index==0?"left":"right"%>">
+        <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+      </div>
+    <% end -%>
+  <% end -%>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
     <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square100) : "http://placehoold.it/160", :class => "photo" %>
