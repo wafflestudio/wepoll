@@ -8,6 +8,12 @@
 # =require jcombox-1.0b.packed
 # =require politicians
 $ () ->
+  $('.politician-photo-wrapper.right .photo-frame').click ->
+    $('.link-button.right').click()
+    return
+  $('.politician-photo-wrapper.left .photo-frame').click ->
+    $('.link-button.left').click()
+    return
   $('.politician-select').jcombox { theme: 'gray' }
   $(".bar-graph").simpleBarGraph {
     animate:true,

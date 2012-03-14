@@ -186,8 +186,8 @@
 
       $('#timeline-container').jqm({overlay:1});
 
-      $(".link-button").click(function() {
-        $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
+        $(".link-button.new").click(function() {
+          $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
           activateTimelineEntryForm();
           $('.tm-entry-form').submit( function() {
             $.colorbox.close();

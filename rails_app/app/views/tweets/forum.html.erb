@@ -62,9 +62,18 @@ $(function() {
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
     <% end -%>
   </div>
+  <% if @replies.empty? %>
+    <div id="replies_wrapper" class="grid_4 alpha omega">
+      <div class="reply_item">
+        <p>댓글이 없습니다.</p>
+      </div>
+    </div>
+  <% else -%>
+
   <div id="replies_wrapper" class="grid_4 alpha omega total">
     <%= render @replies %> 
   </div>
+  <% end -%>
   <div id="replies_paginator">
     <%= paginate @replies, :param_name => "replies_page" %>
   </div>
