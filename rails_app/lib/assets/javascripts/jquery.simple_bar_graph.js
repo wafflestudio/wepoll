@@ -52,8 +52,6 @@
 			if (r == 0) w = options.minWidth;
 			else w = Math.round(r*width);
 
-			console.log("bar width = " + w);
-
 			//make bar
 			var $bar = $("<div></div>");
 

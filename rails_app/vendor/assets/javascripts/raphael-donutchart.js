@@ -15,20 +15,21 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 
 		return paper.path(["M", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "L", x3,y3,"A",r2,r2,0,+(endAngle-startAngle>180),1,x4,y4, "z"]).attr(params);
 	}
+
 	var angle = 0,
 	total = 0,
 	rects = [],
 	texts = [],
 	start = 0,
-	hue = index == 0 ? 134/360.0 : 358/360.0,
+	hsbcolor=Raphael.rgb2hsb(Raphael.getRGB(color)),
 	process = function (j) {
 		var value = values[j],
 		angleplus = 360 * value / total,
 		popangle = angle + (angleplus / 2),
-		color = Raphael.hsb(hue, 0.4 + j*0.6/values.length, 1 - 0.3*j/values.length),
+		color = Raphael.hsb(hsbcolor.h, hsbcolor.s, 0.5 + 0.5*j/values.length),
 		ms = 200,
 		delta = 30,
-		bcolor =  Raphael.hsb(hue, 0.4 + j*0.6/values.length, 1 - 0.3*j/values.length),
+		bcolor =  color,
 		p = sector(cx, cy, r, angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 1});
 
 		var txt_x = cx + (r - 10) * Math.cos(-popangle * rad);
