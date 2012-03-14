@@ -1,0 +1,70 @@
+<div id="seoul-map" class="map">
+  <div id="seoul-map-bubble" class="bubble">
+    <div class="bubble-text">
+      서울시 지도에<br />
+      마우스를 올려보세요!
+    </div>
+  </div>
+
+  <%= image_tag '/assets/dummy_map.png', :style => "margin: 30px 0 0 32px" %>
+  <div id="seoul-map-image">
+  </div>
+  <!--  <div id="dest" style="position:absolute;left:690px;top:100px;width:10px;height:10px;background-color:red;"></div>-->
+  <canvas id="line-canvas" width="752" height="639"></canvas>
+
+  <div id="arrow-header">
+    <%= image_tag "/assets/arrow_hd.gif" %>
+  </div>
+</div>
+
+<div id="busan-map" class="map">
+  <div id="busan-map-bubble" class="bubble">
+    <div class="bubble-text">
+      부산시 지도에<br />
+      마우스를 올려보세요!
+    </div>
+  </div>
+
+  <%= image_tag '/assets/dummy_busan_map.png' %>
+</div>
+
+<% content_for :sidebar do -%>
+  <div id="region-selector">
+    <div class="clearfix">
+      <%= link_to "서울", '#', :id => "seoul-region", :class => "region selected" %>
+      <%= link_to "부산", '#', :id => "busan-region", :class => "region" %>
+    </div>
+    <div class="small-map-container">
+      <a class="small-map selected" id="seoul-small-map" href="#">
+        <%= image_tag '/assets/seoul_map_small.gif' %>
+      </a>
+
+      <a class="small-map" id="busan-small-map" href="#">
+        <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6; position:absolute;" %>
+        <%= image_tag '/assets/comming_soon.png', :style => "position: absolute; width: 150px; top: 60px; margin-left: 50px;opacity: 0.8" %>
+      </a>
+    </div>
+  </div>
+
+  <!-- vs-container is absolute positioned -->
+  <div id="vs-container" class="clearfix">
+    <h3 id="vs-district">지역구</h3>
+    <div class="vs-part alpha" id="vs-politician1">
+      <div class="winner-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links" data-float="right" data-color="#f1366f" data-ref="#vs-politician2 .good_links"></div>
+      <div class="bad_links" data-float="right" data-color="#606366" data-ref="#vs-politician2 .bad_links"></div>
+    </div>
+    <div class="vs-part omega" id="vs-politician2">
+      <div class="loser-photo-wrapper">
+        <div class="photo-frame"></div>
+      </div>
+      <div class="politician-name"></div>
+      <div class="good_links" data-float="left" data-color="#f1366f" data-ref="#vs-politician1 .good_links"></div>
+      <div class="bad_links" data-float="left" data-color="#606366" data-ref="#vs-politician1 .bad_links"></div>
+    </div>
+  </div>
+<% end -%>
+
