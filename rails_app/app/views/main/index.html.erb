@@ -48,183 +48,185 @@ function checkVersion()
 // draw arrow start
 var paper = Raphael("seoul-map-image", 800, 600, function () {
     var bubbleOut = function() {
-    $("#seoul-map-bubble").fadeOut();
+    	$("#seoul-map-bubble").fadeOut();
     };
     var bubbleIn = function() {
-    setTimeout(function() {$("#seoul-map-bubble").fadeIn()}, 3000);
+
+    	setTimeout(function() {$("#seoul-map-bubble").fadeIn()}, 3000);
     };
     var r = this;
     r.rect(-150, 100, 850, 850).attr({
       "stroke":"none"
-      });
-    var over = function () {
-    this.attr({"cursor":"pointer"});
-    this.c = this.c || this.attr("fill");
-    this.stop().animate({fill: "#64C8CB"}, 200);
-
-    coordinates = worldmap.points[this.id].split(" ");
-
-    x = parseInt(coordinates[0]) - 50;
-    y = parseInt(coordinates[1]) + 95;
-
-    this.text = r.text(x, y, worldmap.names[this.id]);
-
-    if (parseInt(coordinates[2]) == 0) {
-    end_x = 635;
-    end_y = 120;
-
-    len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
-    len /= 2.5;
-    alpha = Math.atan((end_y - y) / (end_x - x));
-
-    x1 = x + len * Math.cos(Math.PI / 4 + alpha);
-    y1 = y + len * Math.sin(Math.PI / 4 + alpha);
-
-    x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
-    y2 = end_y - len * Math.sin(Math.PI / 4 + alpha);
-
-    this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
-    this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
-    
-    if ((checkVersion() < 9) && (checkVersion() > 5)) {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40);
-    } 
-    else if (checkVersion() < 0) {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
-    }
-    else {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
-    }
-
-    endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
-    beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
-    }
-    else {
-    end_x = 670;
-    end_y = 350;
-
-    len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
-    len /= 2.5;
-    alpha = Math.atan((end_y - y) / (end_x - x));
-
-    x1 = x + len * Math.cos(Math.PI / 4 + alpha);
-    y1 = y - len * Math.sin(Math.PI / 4 + alpha);
-
-    x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
-    y2 = end_y + len * Math.sin(Math.PI / 4 + alpha);
-
-    this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
-    this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
-
-    if ((checkVersion() < 9) && (checkVersion() > 5)) {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40);
-    } 
-    else if (checkVersion() < 0) {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
-    }
-    else {
-    this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
-    }
-
-    endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
-    beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
-    beta += 45;
-    beta *= -1;
-    }
-    this.arrow.rotate(beta);
-    $("#vs-container").show();
-
-    var $img1 = $(".winner-photo-wrapper img");
-    var $img2 = $(".loser-photo-wrapper img");
-
-    if ($img1.length == 0) {
-      $img1 = $("<img class=\"profile-image\" />");
-      $(".winner-photo-wrapper").prepend($img1);
-    }
-    if ($img2.length == 0) {
-      $img2 = $("<img class=\"profile-image\" />");
-      $(".loser-photo-wrapper").prepend($img2);
-    }
-
-    if ($("#vs-container").attr("data-district") == worldmap.names[this.id]) {
-      return;
-    }
-    else {
-      $img1.attr("src","");
-      $img2.attr("src","");
-    }
-
-    $("#vs-district").text(worldmap.names[this.id]);
-
-    $.getJSON("/district/" + worldmap.names[this.id], function(data) {
-      $("#vs-container").attr("data-district", worldmap.names[this.id]);
-
-      var p1 = data[0];
-      var p2 = data[1];
-
-      //photo
-      var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
-      var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
-
-      if (photourl1 === "")  {
-        $img1.fadeOut();
-      }
-      else {
-        $img1.attr("src", photourl1);
-        $img1.fadeIn();
-      }
-
-      if (photourl2 === "")  {
-        $img2.fadeOut();
-      }
-      else {
-        $img2.attr("src", photourl2);
-        $img2.fadeIn();
-      }
-
-      $("#vs-politician1 .politician-name").text(p1 ? p1.party +" "+ p1.name :"");
-      $("#vs-politician2 .politician-name").text(p2 ? p2.party +" "+ p2.name :"");
-
-      $("#vs-politician1 .good_links").text(p1 ? p1.good_link_count : 0);
-      $("#vs-politician2 .good_links").text(p2 ? p2.good_link_count : 0);
-
-      $("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
-      $("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
-
-      //draw bar grpah
-      $("#vs-politician1 .good_links").attr("data-value",p1 ? p1.good_link_count : 0);
-      $("#vs-politician2 .good_links").attr("data-value",p2 ? p2.good_link_count : 0);
-
-      $("#vs-politician1 .bad_links").attr("data-value",p1 ? p1.bad_link_count : 0);
-      $("#vs-politician2 .bad_links").attr("data-value",p2 ? p2.bad_link_count : 0);
-
-      $(".good_links, .bad_links").html("");
-
-      $(".good_links, .bad_links").simpleBarGraph({
-        width:100,
-        height:8,
-        labelWidth:20,
-        labelPosition:"outside",
-        animate:true,
-        labelClass:"links-bar-label",
-        total:-1, //ref model
-        minWidth:10,
-        label:function(x, fx) {
-          return Math.round(x)+"";
-        }
-      });
     });
-    bubbleOut();
-    },
-    out = function () {
+    var over = function () {
+			this.attr({"cursor":"pointer"});
+			this.c = this.c || this.attr("fill");
+			this.stop().animate({fill: "#64C8CB"}, 200);
+
+			coordinates = worldmap.points[this.id].split(" ");
+
+			x = parseInt(coordinates[0]) - 50;
+			y = parseInt(coordinates[1]) + 95;
+
+			this.text = r.text(x, y, worldmap.names[this.id]);
+
+			if (parseInt(coordinates[2]) == 0) {
+				end_x = 635;
+				end_y = 120;
+
+				len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
+				len /= 2.5;
+				alpha = Math.atan((end_y - y) / (end_x - x));
+
+				x1 = x + len * Math.cos(Math.PI / 4 + alpha);
+				y1 = y + len * Math.sin(Math.PI / 4 + alpha);
+
+				x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
+				y2 = end_y - len * Math.sin(Math.PI / 4 + alpha);
+
+				this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
+				this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+				
+				if ((checkVersion() < 9) && (checkVersion() > 5)) {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40);
+				} 
+				else if (checkVersion() < 0) {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+				}
+				else {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40);
+				}
+
+				endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
+				beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+			}
+			else {
+				end_x = 670;
+				end_y = 350;
+
+				len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y -y));
+				len /= 2.5;
+				alpha = Math.atan((end_y - y) / (end_x - x));
+
+				x1 = x + len * Math.cos(Math.PI / 4 + alpha);
+				y1 = y - len * Math.sin(Math.PI / 4 + alpha);
+
+				x2 = end_x - len * Math.cos(Math.PI / 4 + alpha);
+				y2 = end_y + len * Math.sin(Math.PI / 4 + alpha);
+
+				this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y);
+				this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"});
+
+				if ((checkVersion() < 9) && (checkVersion() > 5)) {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40);
+				} 
+				else if (checkVersion() < 0) {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+				}
+				else {
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40);
+				}
+
+				endInfo = this.curve.getPointAtLength(this.curve.getTotalLength()); 
+				beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha;
+				beta += 45;
+				beta *= -1;
+			}
+			this.arrow.rotate(beta);
+			$("#vs-container").show();
+
+			var $img1 = $(".winner-photo-wrapper img");
+			var $img2 = $(".loser-photo-wrapper img");
+
+			if ($img1.length == 0) {
+				$img1 = $("<img class=\"profile-image\" />");
+				$(".winner-photo-wrapper").prepend($img1);
+			}
+			if ($img2.length == 0) {
+				$img2 = $("<img class=\"profile-image\" />");
+				$(".loser-photo-wrapper").prepend($img2);
+			}
+
+			if ($("#vs-container").attr("data-district") == worldmap.names[this.id]) {
+				return;
+			}
+			else {
+				$img1.attr("src","");
+				$img2.attr("src","");
+			}
+
+			$("#vs-district").text(worldmap.names[this.id]);
+
+			$.getJSON("/district/" + worldmap.names[this.id], function(data) {
+				$("#vs-container").attr("data-district", worldmap.names[this.id]);
+
+				var p1 = data[0];
+				var p2 = data[1];
+
+				//photo
+				var photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : "";
+				var photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : "";
+
+				if (photourl1 === "")  {
+					$img1.fadeOut();
+				}
+				else {
+					$img1.attr("src", photourl1);
+					$img1.fadeIn();
+				}
+
+				if (photourl2 === "")  {
+					$img2.fadeOut();
+				}
+				else {
+					$img2.attr("src", photourl2);
+					$img2.fadeIn();
+				}
+
+				$("#vs-politician1 .politician-name").text(p1 ? p1.party +" "+ p1.name :"");
+				$("#vs-politician2 .politician-name").text(p2 ? p2.party +" "+ p2.name :"");
+
+				$("#vs-politician1 .good_links").text(p1 ? p1.good_link_count : 0);
+				$("#vs-politician2 .good_links").text(p2 ? p2.good_link_count : 0);
+
+				$("#vs-politician1 .bad_links").text(p1 ? p1.bad_link_count : 0);
+				$("#vs-politician2 .bad_links").text(p2 ? p2.bad_link_count : 0);
+
+				//draw bar grpah
+				$("#vs-politician1 .good_links").attr("data-value",p1 ? p1.good_link_count : 0);
+				$("#vs-politician2 .good_links").attr("data-value",p2 ? p2.good_link_count : 0);
+
+				$("#vs-politician1 .bad_links").attr("data-value",p1 ? p1.bad_link_count : 0);
+				$("#vs-politician2 .bad_links").attr("data-value",p2 ? p2.bad_link_count : 0);
+
+				$(".good_links, .bad_links").html("");
+
+				$(".good_links, .bad_links").simpleBarGraph({
+					width:100,
+					height:8,
+					labelWidth:20,
+					labelPosition:"outside",
+					animate:true,
+					labelClass:"links-bar-label",
+					total:-1, //ref model
+					minWidth:10,
+					label:function(x, fx) {
+						return Math.round(x)+"";
+					}
+				});
+			});
+			bubbleOut();
+    }
+    var out = function () {
+    	var textel = this.text;
       if (typeof this.curve !== "undefined" || this.curve !== null) this.curve.remove();
       if (typeof this.arrow !== "undefined" || this.arrow !== null) this.arrow.remove();
       $("#vs-container").hide();
       this.stop().animate({fill: this.c}, 500);
-      this.text.animate({"opacity":0}, 1500);
+      this.text.animate({"opacity":0,callback:function() { textel.remove();console.info('removed')}}, 1500);
       bubbleIn();
-    },
-    click = function(e) {
+    }
+    var click = function(e) {
       $(location).attr('href',"/district/"+worldmap.names[this.id]);
     };
     r.setStart();
