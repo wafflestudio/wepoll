@@ -1,7 +1,17 @@
 <div class="container_16" id="notices">
   <div class="grid_10 alpha omega">
     <div id="notice-list">
-      <%= render @notices %>
+      <% if @notices.empty? -%>
+        <div class="notice-wrapper grid_10 alpha omega">
+          <h3 class="notice-title ">No title</h3>
+          <div class="notice-date "></div>
+          <div class="notice-content ">
+            공지사항이 없습니다.
+          </div>
+        </div>
+      <% else -%>
+        <%= render @notices %>
+      <% end -%>
     </div>
 
     <div id="notices-paginator">

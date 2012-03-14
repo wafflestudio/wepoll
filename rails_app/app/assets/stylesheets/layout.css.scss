@@ -171,3 +171,10 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 #session-actions {
   margin-top:5px;
 }
+
+#notices {
+  li {
+    float: left;
+    display: block;
+  }
+}

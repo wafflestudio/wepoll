@@ -1,8 +1,8 @@
 #coding : utf-8
 class TimelineEntry
   include Mongoid::Document
-	include Mongoid::Timestamps
-	include Mongoid::MultiParameterAttributes
+  include Mongoid::Timestamps
+  include Mongoid::MultiParameterAttributes
   include Mongoid::Paperclip
 
 	validates_associated :user
@@ -70,6 +70,33 @@ class TimelineEntry
       self.blame_users << user
       self.save
     end
+  end
+
+  def posted_ago?
+    ago = Time.now - created_at
+    context = ""
+    if (ago / 3600).to_i > 24
+      context = ((ago / 3600) / 24).to_i.to_s + "일 전"
+    elsif (ago / 3600).to_i > 0
+      context = (ago / 3600).to_i.to_s + "시간 전"
+    elsif (ago / 60) > 1
+      context = (ago / 60).to_i.to_s + "분 전"
+    else 
+      context = "방금 전" 
+    end
+    context
+  end
+
+  def more_link?
+    if link_replies.count > 3
+      return true
+    else
+      return false
+    end
+  end
+
+  def more_link
+    link_replies.count - 3
   end
 
 end

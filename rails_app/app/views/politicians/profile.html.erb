@@ -1,15 +1,15 @@
 <div class="subsection profile">
   <div class="profile-item clearfix">
-  <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <% if politician.birthday -%>
-        <%= politician.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - politician.birthday.year+1%>세)
-      <% else -%>
-        정보없음
-      <% end -%>
-    </div>
-    <% if i==0 -%><div class="subsection-label">출생</div><% end -%>
-  <% end -%>
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="<%= i==0?"left":"right"%>">
+        <% if politician.birthday -%>
+          <%= politician.birthday.strftime("%Y/%m/%d") %> (<%= Time.now.year - politician.birthday.year+1%>세)
+        <% else -%>
+          정보없음
+        <% end -%>
+      </div>
+      <% if i==0 -%><div class="subsection-label">출생</div><% end -%>
+    <% end -%>
   </div>
 
   <div class="profile-item clearfix">
@@ -20,7 +20,6 @@
       <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
     <% end -%>
   </div>
-
 
   <div class="profile-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>

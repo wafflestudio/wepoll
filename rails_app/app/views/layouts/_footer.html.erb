@@ -1,8 +1,17 @@
 <div id="footer-links" class="grid_16">
-<div style="float: left; color: #FEDE4D">[<%= @notice.title unless @notice.nil? %>] <%= @notice.content[0..39] unless @notice.nil? %><%= "..." if @notice.content.length > 40 unless @notice.nil? %></div>
+  <div style="float: left; color: #FEDE4D">
+    <ul id="notices">
+      <% if @notices.empty? -%>
+        <li>[공지사항] 공지사항이 없습니다.</li>
+      <% end -%>
+    <% @notices.each do |n| -%>
+      <li><%= link_to_function "[#{n.title}] #{n.content}"[0..47]+"...", "show_notices()" %></li>
+    <% end -%>
+    </ul>
+  </div>
 <%= link_to_function 'Wepoll 소개', "show_about()" %> | 
 <%= link_to_function '공지사항', "show_notices()" %> | 
 <%= link_to_function '이용약관', "show_provision()" %> | 
 <%= link_to_function '개인정보보호정책', "show_privacy()" %> | 
-<%= link_to '건의사항', '#' %>
+<%= link_to_function '건의사항', "show_suggestion()" %>
 </div>

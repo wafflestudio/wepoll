@@ -1,4 +1,6 @@
 Wepoll::Application.routes.draw do
+  resources :suggestions
+
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
@@ -8,6 +10,7 @@ Wepoll::Application.routes.draw do
 
   resources :bills
   resources :link_replies do
+    match "/list" => "link_replies#list", :as => "list"
     get 'blame', :on => :member
     get 'like', :on => :member
   end
@@ -81,6 +84,8 @@ Wepoll::Application.routes.draw do
   resources :politicians do
     get 'initiate_bills', :on => :member, :as => :init_bills_by
     get 'bill_activities', :on => :collection, :as => :bill_activities_of
+    get 'popular_links', :on => :collection, :as => :popular_links_of
+    get 'recent_links', :on => :collection, :as => :recent_links_of
     get 'profile', :on => :collection, :as => :profiles_of
     get 'promises', :on => :collection, :as => :promises_of
   end
