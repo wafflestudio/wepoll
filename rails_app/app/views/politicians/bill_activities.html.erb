@@ -1,6 +1,8 @@
 <div class="alpha omega subsection clearfix">
-  <span style="text-align:right;font-size:8pt;display:block">* 법안 발의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
-  <span style="text-align:right;font-size:8pt;display:block">* 본회의 출석 데이터는 '열려라국회'를 기준으로 합니다.</span>
+  <div style="padding-top:10px; padding-right:10px;">
+    <span style="text-align:right;font-size:8pt;display:block">* 법안 발의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
+    <span style="text-align:right;font-size:8pt;display:block">* 본회의 출석 데이터는 '열려라국회'를 기준으로 합니다.</span>
+  </div>
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%=i==0 ? "left":"right" %> init_bills">
       <% if politician.is_18? %>
