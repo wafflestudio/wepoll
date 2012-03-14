@@ -1,12 +1,13 @@
 <div class="alpha omega subsection clearfix">
-  <span style="text-align:right;font-size:8pt;display:block">* 이 탭의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
+  <span style="text-align:right;font-size:8pt;display:block">* 법안 발의 자료는 18대 국회활동을 기준으로 합니다(출처:국회의안정보시스템)</span>
+  <span style="text-align:right;font-size:8pt;display:block">* 본회의 출석 데이터는 '열려라국회'를 기준으로 합니다.</span>
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%=i==0 ? "left":"right" %> init_bills">
       <% if politician.is_18? %>
         <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
       <% else %>
         <% unless politician.is_18? %>
-          &nbsp;<%#= image_tag "icn_not_18.png", :style => "top:10px;left:50px;z-index:1;" %>
+          <div class="not_18" style="margin-top:80px;">18대 국회의원이 아닙니다.</div>
         <% end %>
       <% end -%>
     </div>
@@ -21,7 +22,7 @@
       <% if politician.is_18? %>
         <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
       <% else %>
-        &nbsp;
+        <div class="not_18" style="margin-top:90px;">18대 국회의원이 아닙니다.</div>
       <% end -%>
     </div>
 
@@ -33,11 +34,11 @@
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
       <div class="attendance" style="color:<%= @party_color[politician.party] || 'red' %>">
-      <% if politician.is_18? %>
-        <%= politician.attendance%>%
-      <% else %>
-        0%
-      <% end -%>
+        <% if politician.is_18? %>
+          <%= politician.attendance%>%
+        <% else %>
+          <div class="not_18" style="margin-top:-15px;">18대 국회의원이 아닙니다.</div>
+        <% end -%>
       </div>
     </div>
     <% if i==0 -%><div class="subsection-label" style="margin-top:20px;">본회의출석률</div><% end -%>

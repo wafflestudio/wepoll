@@ -5,6 +5,7 @@
 # =require jquery.path
 # =require raphael-min
 # =require map
+# =require jquery.simple_bar_graph
 worldmap = {
 	shapes: {
 				A: "M258.529,325.358c8.278,15.984,10.617,25.116,11.857,31.982c1.404,7.771,1.404,12.64,1.029,16.01c-0.038,0.346-0.081,0.676-0.125,0.991c-0.391,2.761-0.959,4.426-0.623,5.937c0.374,1.686,1.873,3.183,1.498,5.618c-0.374,2.435-2.621,5.804-0.374,11.421c1.895,4.74,6.987,11.078,17.978,25.759c0.71-0.499,1.35-1.029,1.87-1.604c1.874-2.06,2.248-4.683,5.244-6.554s8.612-2.995,15.729-2.246c7.114,0.75,15.729,3.37,24.153,3.933c8.426,0.562,16.665-0.937,25.278-3.089c5.742-1.436,11.648-3.162,19.943-5.154c-0.031-0.151-0.064-0.309-0.098-0.463c-0.73-3.604-1.465-8.444-1.886-15.739c-7.699-2.896-11.028-2.967-13.746-2.236c-3.84,1.028-6.46,3.65-9.083,4.025c-2.621,0.375-5.244-1.498-5.43-4.493c-0.188-2.997,2.059-7.116,2.059-9.363c0-2.248-2.247-2.622-3.369-5.056c-1.124-2.435-1.124-6.927-2.06-9.176c-0.938-2.247-2.81-2.247-4.308-1.685c-1.497,0.562-2.621,1.685-5.617,2.247c-2.994,0.562-7.864,0.562-12.356-0.749c-4.495-1.311-8.615-3.932-11.048-6.928c-2.435-2.996-3.185-6.366-1.873-9.362c1.312-2.996,4.681-5.618,6.366-8.8c1.686-3.184,1.686-6.928,1.312-11.609c-0.374-4.682-1.124-10.298-4.868-19.849c-2.853-7.273-7.442-16.828-14.434-30.898c-1.755,0.444-3.281,0.321-4.665-0.371c-0.688-0.345-1.341-0.829-1.985-1.437c-9.705,6.78-14.243,9.115-17.676,12.203c-4.68,4.212-7.302,9.83-9.736,14.137c-2.435,4.307-4.682,7.302-5.991,11.235c-0.948,2.842-1.406,6.172-2.364,9.498",
@@ -61,320 +62,371 @@ worldmap = {
 				Y1: "M209.491,480.624c0.017,0.002,0.035,0.006,0.051,0.01"
 			},
 	names: {
-			   1: "종로",
-			   2: "도봉갑",
-			   3: "도봉을",
-			   4: "노원병",
-			   5: "노원을",
-			   6: "노원갑",
-			   7: "강북을",
-			   8: "성북을",
-			   9: "중랑을",
-			   10: "중랑갑",
-			   11: "동대문을",
-			   12: "은평을",
-			   13: "은평갑",
-			   14: "서대문을",
-			   15: "서대문갑",
-			   16: "성북갑",
-			   17: "동대문갑",
-			   18: "중구",
-			   19: "성동을",
-			   20: "성동갑",
-			   21: "광진을",
-			   22: "광진갑",
-			   23: "강동갑",
-			   24: "강동을",
-			   25: "송파갑",
-			   26: "송파병",
-			   27: "송파을",
-			   28: "강남갑",
-			   29: "서초을",
-			   30: "동작을",
-			   31: "서초갑",
-			   32: "용산",
-			   33: "마포갑",
-			   34: "마포을",
-			   35: "양천갑",
-			   36: "영등포을",
-			   37: "동작갑",
-			   38: "관악갑",
-			   39: "관악을",
-			   40: "금천",
-			   41: "구로을",
-			   42: "구로갑",
-			   43: "영등포갑",
-			   44: "양천을",
-			   45: "강서갑",
-			   46: "강서을",
-			   47: "강북갑",
-			   48: "강남을"
-		   },
-    points: {
-              1: "365 285 0 0",
-              2: "460 142 0 0",
-              3: "453 84 0 0",
-              4: "520 90 0 0",
-              5: "523 150 0 0",
-              6: "528 189 0 0",
-              7: "445 205 0 0",
-              8: "475 231 0 0",
-              9: "554 228 0 0",
-              10: "544 280 0 0",
-              11: "506 310 0 0",
-              12: "300 180 0 0",
-              13: "261 259 0 0",
-              14: "304 260 0 0",
-              15: "301 310 0 0",
-              16: "405 235 0 0",
-              17: "485 266 0 0",
-              18: "400 335 0 0",
-              19: "470 335 0 0",
-              20: "470 370 0 0",
-              21: "531 393 1 0",
-              22: "553 345 1 0",
-              23: "659 339 1 0",
-              24: "618 362 1 0",
-              25: "579 422 1 0",
-              26: "620 469 1 0",
-              27: "542 440 1 0",
-              28: "454 428 1 0",
-              29: "419 505 1 0",
-              30: "341 462 1 0",
-              31: "400 450 1 0",
-              32: "360 395 0 0",
-              33: "300 367 0 0",
-              34: "224 334 0 0",
-              35: "179 403 0 0",
-              36: "278 413 1 0",
-              37: "297 447 1 0",
-              38: "345 530 1 0",
-              39: "287 538 1 0",
-              40: "226 543 1 0",
-              41: "194 476 0 0",
-              42: "123 485 0 0",
-              43: "234 409 0 0",
-              44: "126 431 0 0",
-              45: "139 368 0 0",
-              46: "100 315 0 0",
-              47: "400 150 0 0",
-              48: "537 500 1 0",
-            }
+				 1: "종로",
+				 2: "도봉갑",
+				 3: "도봉을",
+				 4: "노원병",
+				 5: "노원을",
+				 6: "노원갑",
+				 7: "강북을",
+				 8: "성북을",
+				 9: "중랑을",
+				 10: "중랑갑",
+				 11: "동대문을",
+				 12: "은평을",
+				 13: "은평갑",
+				 14: "서대문을",
+				 15: "서대문갑",
+				 16: "성북갑",
+				 17: "동대문갑",
+				 18: "중구",
+				 19: "성동을",
+				 20: "성동갑",
+				 21: "광진을",
+				 22: "광진갑",
+				 23: "강동갑",
+				 24: "강동을",
+				 25: "송파갑",
+				 26: "송파병",
+				 27: "송파을",
+				 28: "강남갑",
+				 29: "서초을",
+				 30: "동작을",
+				 31: "서초갑",
+				 32: "용산",
+				 33: "마포갑",
+				 34: "마포을",
+				 35: "양천갑",
+				 36: "영등포을",
+				 37: "동작갑",
+				 38: "관악갑",
+				 39: "관악을",
+				 40: "금천",
+				 41: "구로을",
+				 42: "구로갑",
+				 43: "영등포갑",
+				 44: "양천을",
+				 45: "강서갑",
+				 46: "강서을",
+				 47: "강북갑",
+				 48: "강남을"
+			 },
+		points: {
+							1: "365 285 0 0",
+							2: "460 142 0 0",
+							3: "453 84 0 0",
+							4: "520 90 0 0",
+							5: "523 150 0 0",
+							6: "528 189 0 0",
+							7: "445 205 0 0",
+							8: "475 231 0 0",
+							9: "554 228 0 0",
+							10: "544 280 0 0",
+							11: "506 310 0 0",
+							12: "300 180 0 0",
+							13: "261 259 0 0",
+							14: "304 260 0 0",
+							15: "301 310 0 0",
+							16: "405 235 0 0",
+							17: "485 266 0 0",
+							18: "400 335 0 0",
+							19: "470 335 0 0",
+							20: "470 370 0 0",
+							21: "531 393 1 0",
+							22: "553 345 1 0",
+							23: "659 339 1 0",
+							24: "618 362 1 0",
+							25: "579 422 1 0",
+							26: "620 469 1 0",
+							27: "542 440 1 0",
+							28: "454 428 1 0",
+							29: "419 505 1 0",
+							30: "341 462 1 0",
+							31: "400 450 1 0",
+							32: "360 395 0 0",
+							33: "300 367 0 0",
+							34: "224 334 0 0",
+							35: "179 403 0 0",
+							36: "278 413 1 0",
+							37: "297 447 1 0",
+							38: "345 530 1 0",
+							39: "287 538 1 0",
+							40: "226 543 1 0",
+							41: "194 476 0 0",
+							42: "123 485 0 0",
+							43: "234 409 0 0",
+							44: "126 431 0 0",
+							45: "139 368 0 0",
+							46: "100 315 0 0",
+							47: "400 150 0 0",
+							48: "537 500 1 0",
+						}
 }
 getInternetExplorerVersion = () ->
-  #Returns the version of Internet Explorer or a -1
-  #(indicating the use of another browser).
-  rv = -1 # Return value assumes failure.
-  if navigator.appName == 'Microsoft Internet Explorer'
-    ua = navigator.userAgent
-    re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})")
-    if (re.exec(ua) != null)
-      rv = parseFloat( RegExp.$1 )
-  return rv
+	#Returns the version of Internet Explorer or a -1
+	#(indicating the use of another browser).
+	rv = -1 # Return value assumes failure.
+	if navigator.appName == 'Microsoft Internet Explorer'
+		ua = navigator.userAgent
+		re	= new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})")
+		if (re.exec(ua) != null)
+			rv = parseFloat( RegExp.$1 )
+	return rv
 
 checkVersion = () ->
-  msg = "You're not using Internet Explorer."
-  ver = getInternetExplorerVersion()
-  return ver
+	msg = "You're not using Internet Explorer."
+	ver = getInternetExplorerVersion()
+	return ver
 
 $ () ->
-  # vs-container start
-  $("#vs-container").hide()
+	# vs-container start
+	$("#vs-container").hide()
 
-  #TODO : according to cookie value, select map which not shown
-  $("#busan-map").removeClass "selected"
-  $("#seoul-map").addClass "selected"
+	#TODO : according to cookie value, select map which not shown
+	$("#busan-map").removeClass "selected"
+	$("#seoul-map").addClass "selected"
 
-  $("#region-selector .region").click () ->
-    return false
-    $("#region-selector .region").removeClass "selected"
-    $(this).addClass "selected"
+	$("#region-selector .region").click () ->
+		return false
+		$("#region-selector .region").removeClass "selected"
+		$(this).addClass "selected"
 
-    region = $(this).attr("id").split("-")[0]
-    $(".small-map").removeClass "selected"
-    $("##{region}-small-map").addClass "selected"
+		region = $(this).attr("id").split("-")[0]
+		$(".small-map").removeClass "selected"
+		$("##{region}-small-map").addClass "selected"
 
-    $(".map").removeClass "selected"
-    $("##{region}-map").addClass "selected"
+		$(".map").removeClass "selected"
+		$("##{region}-map").addClass "selected"
 
 # draw arrow start
 paper = Raphael("seoul-map-image", 800, 600, () ->
-  bubbleOut = () ->
-    $("#seoul-map-bubble").fadeOut()
-  bubbleIn = () ->
-    setTimeout () ->
-      $("#seoul-map-bubble").fadeIn()
-    , 3000
+	bubbleOut = () ->
+		$("#seoul-map-bubble").stop().fadeOut()
+	bubbleIn = () ->
+		setTimeout () ->
+			$("#seoul-map-bubble").fadeIn()
+		, 3000
 
-  r = this
-  r.rect(-150, 100, 850, 850).attr {"stroke":"none"}
+	r = this
+	r.rect(-150, 100, 850, 850).attr {"stroke":"none"}
 
-  over = () ->
-    this.attr {"cursor":"pointer"}
-    this.c = this.c || this.attr("fill")
-    this.stop().animate {fill: "#64C8CB"}, 200
+	over = () ->
+		this.attr {"cursor":"pointer"}
+		this.c = this.c || this.attr("fill")
+		this.stop().animate {fill: "#64C8CB"}, 200
 
-    coordinates = worldmap.points[this.id].split " "
+		coordinates = worldmap.points[this.id].split " "
 
-    x = parseInt(coordinates[0]) - 50
-    y = parseInt(coordinates[1]) + 95
+		x = parseInt(coordinates[0]) - 50
+		y = parseInt(coordinates[1]) + 95
+			
+		if this.textel?
+			this.textel.attr('opacity',1.0).show()
+		else
+			this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
+			this.textel.click ()=>
+				$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
 
-    this.text = r.text x, y, worldmap.names[this.id]
+		if parseInt(coordinates[2]) == 0
+			end_x = 635
+			end_y = 120
 
-    if parseInt(coordinates[2]) == 0
-      end_x = 635
-      end_y = 120
+			len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y - y))
+			len /= 2.5
+			alpha = Math.atan((end_y - y) / (end_x - x))
 
-      len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y - y))
-      len /= 2.5
-      alpha = Math.atan((end_y - y) / (end_x - x))
+			x1 = x + len * Math.cos(Math.PI / 4 + alpha)
+			y1 = y + len * Math.sin(Math.PI / 4 + alpha)
 
-      x1 = x + len * Math.cos(Math.PI / 4 + alpha)
-      y1 = y + len * Math.sin(Math.PI / 4 + alpha)
+			x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
+			y2 = end_y - len * Math.sin(Math.PI / 4 + alpha)
 
-      x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
-      y2 = end_y - len * Math.sin(Math.PI / 4 + alpha)
+			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
+			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
 
-      this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y)
-      this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
+			
+			if !this.arrow?
+				if ((checkVersion() < 9) && (checkVersion() > 5))
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40)
+				else if (checkVersion() < 0)
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
+				else
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
 
-      if ((checkVersion() < 9) && (checkVersion() > 5))
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40)
-      else if (checkVersion() < 0)
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
-      else
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
+			endInfo = this.curve.getPointAtLength(this.curve.getTotalLength())
+			beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
 
-      endInfo = this.curve.getPointAtLength(this.curve.getTotalLength())
-      beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
+		else
+			end_x = 670
+			end_y = 350
 
-    else
-      end_x = 670
-      end_y = 350
+			len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y - y))
+			len /= 2.5
+			alpha = Math.atan((end_y - y) / (end_x - x))
 
-      len = Math.sqrt((end_x - x) * (end_x - x) + (end_y - y) * (end_y - y))
-      len /= 2.5
-      alpha = Math.atan((end_y - y) / (end_x - x))
+			x1 = x + len * Math.cos(Math.PI / 4 + alpha)
+			y1 = y - len * Math.sin(Math.PI / 4 + alpha)
 
-      x1 = x + len * Math.cos(Math.PI / 4 + alpha)
-      y1 = y - len * Math.sin(Math.PI / 4 + alpha)
+			x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
+			y2 = end_y + len * Math.sin(Math.PI / 4 + alpha)
 
-      x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
-      y2 = end_y + len * Math.sin(Math.PI / 4 + alpha)
+			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
+			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
 
-      this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y)
-      this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
+			if !this.arrow?
+				if ((checkVersion() < 9) && (checkVersion() > 5))
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40)
+				else if (checkVersion() < 0)
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
+				else
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
 
-      if ((checkVersion() < 9) && (checkVersion() > 5))
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40)
-      else if (checkVersion() < 0)
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
-      else
-        this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
+			endInfo = this.curve.getPointAtLength this.curve.getTotalLength()
+			beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
+			beta += 45
+			beta *= -1
 
-      endInfo = this.curve.getPointAtLength this.curve.getTotalLength()
-      beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
-      beta += 45
-      beta *= -1
+		this.arrow.rotate(beta)
+		$("#vs-container").show()
 
-    this.arrow.rotate(beta)
-    $("#vs-container").show()
+		$img1 = $(".winner-photo-wrapper img")
+		$img2 = $(".loser-photo-wrapper img")
 
-    $img1 = $(".winner-photo-wrapper img")
-    $img2 = $(".loser-photo-wrapper img")
+		if ($img1.length == 0)
+			$img1 = $ "<img class=\"profile-image\" />"
+			$(".winner-photo-wrapper").prepend($img1)
+		if ($img2.length == 0)
+			$img2 = $ "<img class=\"profile-image\" />"
+			$(".loser-photo-wrapper").prepend($img2)
 
-    if ($img1.length == 0)
-      $img1 = $ "<img class=\"profile-image\" />"
-      $(".winner-photo-wrapper").prepend($img1)
-    if ($img2.length == 0)
-      $img2 = $ "<img class=\"profile-image\" />"
-      $(".loser-photo-wrapper").prepend($img2)
+		if ($("#vs-container").attr("data-district") == worldmap.names[this.id])
+			return
+		else
+			$img1.attr "src",""
+			$img2.attr "src",""
 
-    if ($("#vs-container").attr("data-district") == worldmap.names[this.id])
-      return
-    else
-      $img1.attr "src",""
-      $img2.attr "src",""
+		$("#vs-district").text worldmap.names[this.id]
 
-    $("#vs-district").text worldmap.names[this.id]
+		$.getJSON "/district/"+worldmap.names[this.id], (data) ->
+			$("#vs-container").attr "data-district", worldmap.names[this.id]
 
-    $.getJSON "/district/"+worldmap.names[this.id], (data) ->
-      $("#vs-container").attr "data-district", worldmap.names[this.id]
+			p1 = data[0]
+			p2 = data[1]
 
-      p1 = data[0]
-      p2 = data[1]
+			#photo
+			photourl1 = if p1? then	"/system/politician_profile_photos/"+p1._id+"/square100.jpg" else ""
+			photourl2 = if p2? then	"/system/politician_profile_photos/"+p2._id+"/square100.jpg" else ""
 
-      #photo
-      photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : ""
-      photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : ""
+			if photourl1 == ""
+				$img1.fadeOut()
+			else
+				$img1.attr "src", photourl1
+				$img1.fadeIn()
 
-      if photourl1 == ""
-        $img1.fadeOut()
-      else
-        $img1.attr "src", photourl1
-        $img1.fadeIn()
+			if photourl2 == ""
+				$img2.fadeOut()
+			else
+				$img2.attr("src", photourl2)
+				$img2.fadeIn()
 
-      if photourl2 == ""
-        $img2.fadeOut()
-      else
-        $img2.attr("src", photourl2)
-        $img2.fadeIn()
+			$("#vs-politician1 .politician-name").text("#{p1?.party} #{p1?.name}")
+			$("#vs-politician2 .politician-name").text "#{p2?.party} #{p2?.name}"
 
-      $("#vs-politician1 .politician-name").text("#{p1?.party} #{p1?.name}")
-      $("#vs-politician2 .politician-name").text "#{p2?.party} #{p2?.name}"
+			$("#vs-politician1 .good_links").text p1?.good_link_count
+			$("#vs-politician2 .good_links").text p2?.good_link_count
 
-      $("#vs-politician1 .good_links").text p1?.good_link_count
-      $("#vs-politician2 .good_links").text p2?.good_link_count
+			$("#vs-politician1 .bad_links").text p1?.bad_link_count
+			$("#vs-politician2 .bad_links").text p2?.bad_link_count
 
-      $("#vs-politician1 .bad_links").text p1?.bad_link_count
-      $("#vs-politician2 .bad_links").text p2?.bad_link_count
+			#draw bar grpah
+			$("#vs-politician1 .good_links").attr "data-value",p1?.good_link_count
+			$("#vs-politician2 .good_links").attr "data-value",p2?.good_link_count
 
-      #draw bar grpah
-      $("#vs-politician1 .good_links").attr "data-value",p1?.good_link_count
-      $("#vs-politician2 .good_links").attr "data-value",p2?.good_link_count
+			$("#vs-politician1 .bad_links").attr "data-value",p1?.bad_link_count
+			$("#vs-politician2 .bad_links").attr "data-value",p2?.bad_link_count
 
-      $("#vs-politician1 .bad_links").attr "data-value",p1?.bad_link_count
-      $("#vs-politician2 .bad_links").attr "data-value",p2?.bad_link_count
+			$(".good_links, .bad_links").html ""
 
-      $(".good_links, .bad_links").html ""
+			$(".good_links, .bad_links").simpleBarGraph {
+				width:100,
+				height:8,
+				labelWidth:20,
+				labelPosition:"outside",
+				animate:true,
+				labelClass:"links-bar-label",
+				total:-1, #ref model
+				minWidth:10,
+				label: (x, fx) ->
+					return "#{Math.round(x)}"
+			}
+		bubbleOut()
+		this.curve.show()
+		this.arrow.show()
 
-      $(".good_links, .bad_links").simpleBarGraph {
-        width:100,
-        height:8,
-        labelWidth:20,
-        labelPosition:"outside",
-        animate:true,
-        labelClass:"links-bar-label",
-        total:-1, #ref model
-        minWidth:10,
-        label: (x, fx) ->
-          return "#{Math.round(x)}"
-      }
-    bubbleOut()
+	# obj is "from", evt.relatedTarget is "to"	
+	out_ = (evt, obj)->
 
-  out = () ->
-    if (typeof this.curve isnt "undefined" || this.curve isnt null)
-      this.curve.remove()
-    if (typeof this.arrow isnt "undefined" || this.arrow isnt null)
-      this.arrow.remove()
-    $("#vs-container").hide()
-    this.stop().animate {fill: this.c}, 500
-    textel = this.text
-    this.text.animate {"opacity":0,callback:()->
-    	textel.remove()
-    }, 1500
-    bubbleIn()
+		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
+		if relTarget && relTarget == this.node
+			return
 
-  click = (e) ->
-    $(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+		if obj == this.textel and relTarget == this.curve.node
+			func1 = (evt) =>
+				out_.call(this, evt, this.curve)
+				this.curve.unmouseout func1
+			this.curve.mouseout func1
+			return
+		if obj == this.curve and relTarget == this.textel.node.children[0]
+			func2 = (evt) =>
+				out_.call(this, evt, this.textel)
+				this.textel.unmouseout func2
+			this.textel.mouseout func2
+			return
 
-  r.setStart()
+		if this.curve?
+			this.curve.hide()
+		if this.arrow?
+			this.arrow.hide()
 
-  for country, shape of worldmap.shapes
-    r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+		$("#vs-container").hide()
+		this.stop().animate {fill: this.c}, 500
+		if this.textel
+			textel = this.textel
+			this.textel.animate {"opacity":0,callback:()->
+				textel.hide()
+			}, 200
+		bubbleIn()
 
-  world = r.setFinish()
-  world.hover over, out
-  world.click click
-  r.setViewBox(-94,95,500,640,false)
+	out = (evt) ->
+		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
+		found = false
+		if this.textel && relTarget == this.textel.node.children[0]
+			func = (evt)=>
+				out_.call(this, evt, this.textel)
+				this.textel.unmouseout func
+			this.textel.mouseout func
+			found = true
+		else if this.curve && relTarget == this.curve.node
+			func = (evt)=>
+				out_.call(this, evt, this.curve)
+				this.curve.unmouseout func
+			this.curve.mouseout func
+			found = true
+
+		if !found
+			out_.call(this, evt, this)
+
+	
+	click = (e) ->
+		$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+
+	r.setStart()
+
+	for country, shape of worldmap.shapes
+		r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+
+	world = r.setFinish()
+	world.hover over, out
+	world.click click
+	r.setViewBox(-94,95,500,640,false)
 )

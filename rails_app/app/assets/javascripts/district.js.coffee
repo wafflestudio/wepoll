@@ -20,6 +20,7 @@ $ () ->
 
   $(".tab").click () ->
     if $(this).hasClass 'disabled'
+      alert "준비중입니다^^"
       return false
     loadTab $(this)
   $(".selected").click()
