@@ -305,8 +305,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
       p2 = data[1]
 
       #photo
-      photourl1 = p1 ? "/system/politician_profile_photos/"+p1._id+"/square100.jpg" : ""
-      photourl2 = p2 ? "/system/politician_profile_photos/"+p2._id+"/square100.jpg" : ""
+      photourl1 = if p1? then  "/system/politician_profile_photos/"+p1._id+"/square100.jpg" else ""
+      photourl2 = if p2? then  "/system/politician_profile_photos/"+p2._id+"/square100.jpg" else ""
 
       if photourl1 == ""
         $img1.fadeOut()
@@ -352,19 +352,36 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
       }
     bubbleOut()
 
-  out = () ->
-    if (typeof this.curve isnt "undefined" || this.curve isnt null)
+  out_ = ()->
+    if this.curve?
       this.curve.remove()
-    if (typeof this.arrow isnt "undefined" || this.arrow isnt null)
+    if this.curve?
       this.arrow.remove()
+
     $("#vs-container").hide()
     this.stop().animate {fill: this.c}, 500
-    textel = this.text
-    this.text.animate {"opacity":0,callback:()->
-    	textel.remove()
-    }, 1500
+    if this.text
+      textel = this.text
+      this.text.animate {"opacity":0,callback:()->
+        textel.remove()
+      }, 1500
     bubbleIn()
 
+  out = (evt) ->
+    relTarget = evt.relatedTarget || evt.toElement
+    found = false
+    for el in [this.curve, this.text]
+      if el && relTarget == el.node
+        func = (evt)=>
+          out_.call(this,evt)
+          el.unout func
+        el.out func
+        found = true
+
+    if !found
+      out_.call(this, evt)
+
+  
   click = (e) ->
     $(location).attr 'href',"/district/#{worldmap.names[this.id]}"
 
