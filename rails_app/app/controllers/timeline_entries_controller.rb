@@ -42,7 +42,7 @@ class TimelineEntriesController < ApplicationController
 
     respond_to do |format|
       #format.html # index.html.erb
-      format.json { render json: @timeline_entries }
+      format.json { render json: @timeline_entries.to_json(:include => {:link_replies => {:only =>[:count]}}) }
     end
   end
 

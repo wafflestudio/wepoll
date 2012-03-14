@@ -14,7 +14,7 @@ createView = (model)->
 			</div>
 			<div class='tm-entry-footer'>
 				<div class='tm-entry-numlike'>공감 #{if model.get('like_count')? then model.get('like_count') else 0}</div>
-				<div class='tm-entry-numreply'>댓글0</div>
+				<div class='tm-entry-numreply'>댓글 #{if model.get('link_replies')? then model.get('link_replies').length else 0}</div>
 
 				#{if modules.TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
 			</div>
