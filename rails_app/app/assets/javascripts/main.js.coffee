@@ -224,6 +224,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			this.textel.attr('opacity',1.0).show()
 		else
 			this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
+			this.textel.click ()=>
+				$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
 
 		if parseInt(coordinates[2]) == 0
 			end_x = 635
