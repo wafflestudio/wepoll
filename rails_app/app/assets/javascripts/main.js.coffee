@@ -201,7 +201,7 @@ $ () ->
 # draw arrow start
 paper = Raphael("seoul-map-image", 800, 600, () ->
 	bubbleOut = () ->
-		$("#seoul-map-bubble").fadeOut()
+		$("#seoul-map-bubble").stop().fadeOut()
 	bubbleIn = () ->
 		setTimeout () ->
 			$("#seoul-map-bubble").fadeIn()
@@ -223,7 +223,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		if this.textel?
 			this.textel.attr('opacity',1.0).show()
 		else
-			this.textel = r.text x, y, worldmap.names[this.id]
+			this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
 
 		if parseInt(coordinates[2]) == 0
 			end_x = 635
@@ -382,7 +382,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			return
 
 		if this.curve?
-			this.curve.hide()#remove()
+			this.curve.hide()
 		if this.arrow?
 			this.arrow.hide()
 
