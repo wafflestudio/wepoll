@@ -1,6 +1,6 @@
 <%= render @entries %>
 <div id="recent-paginator-politician-<%=@p.id %>">
   <% unless @entries.current_page == @entries.num_pages %>
-    <%= link_to '>', recent_links_of_politician_path(@p, :page => @entries.current_page + 1), :id => "recent-next-page-#{@p.id}" %>
+    <%= link_to '>', recent_links_of_politician_path(@p, :page => @entries.current_page + 1), :id => "recent-next-page-#{@p.id}", :class => "next-links-page" %>
   <% end -%>
 </div>

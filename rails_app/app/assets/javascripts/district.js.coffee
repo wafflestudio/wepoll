@@ -6,6 +6,7 @@
 # =require raphael-piechart
 # =require raphael-donutchart
 # =require jcombox-1.0b.packed
+# =require politicians
 $ () ->
   $('.politician-select').jcombox { theme: 'gray' }
   $(".bar-graph").simpleBarGraph {
@@ -56,3 +57,4 @@ $ () ->
       $clicked = $ e.target
       if (! $clicked.parents().hasClass("dropdown"))
         $("dd ul", $this).hide()
+
