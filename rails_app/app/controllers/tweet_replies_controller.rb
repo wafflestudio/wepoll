@@ -55,7 +55,7 @@ class TweetRepliesController < ApplicationController
     if @re.blame(current_user)
       render :json => {:status => "ok", :count => @re.blame_count }
     else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+      render :json => {:status => "error", :message => "이미 신고하셨습니다."}
     end
   end
   

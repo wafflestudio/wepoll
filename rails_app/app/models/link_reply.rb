@@ -29,11 +29,11 @@ class LinkReply
 
   def blame(user)
     if self.blame_users.include? user
-      false
+      return false
     else
       self.blame_count += 1
       self.blame_users << user
-      self.save
+      return self.save
     end
   end
 

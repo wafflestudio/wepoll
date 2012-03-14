@@ -15,8 +15,10 @@ $ ->
   $('.reply_item p.links a.report_link').live 'click', ->
     obj = this
     $.get this.href, (data) ->
-      if data.status == "error"
-        alert "이미 신고하셨습니다"
+      if data.status == "ok"
+        alert "신고하셨습니다"
+      else
+      	alert "이미 신고하셨습니다"
     false
 
   # tweet recommend btn 
