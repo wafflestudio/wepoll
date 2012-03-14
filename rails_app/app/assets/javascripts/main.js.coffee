@@ -359,7 +359,10 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
       this.arrow.remove()
     $("#vs-container").hide()
     this.stop().animate {fill: this.c}, 500
-    this.text.animate {"opacity":0}, 1500
+    textel = this.text
+    this.text.animate {"opacity":0,callback:()->
+    	textel.remove()
+    }, 1500
     bubbleIn()
 
   click = (e) ->
