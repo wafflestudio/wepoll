@@ -18,11 +18,6 @@ $ () ->
       return Math.round(x)+""
   }
 
-  $(".tab").click () ->
-    if $(this).hasClass 'disabled'
-      return false
-    loadTab $(this)
-  $(".selected").click()
 
   # 정치인 선택 콤보박스 만들기 
   $(".dropdown").each () ->
@@ -62,24 +57,4 @@ $ () ->
       if (! $clicked.parents().hasClass("dropdown"))
         $("dd ul", $this).hide()
 
-loadTab = ($obj) ->
-  $(".tab").removeClass "selected"
-  $obj.addClass "selected"
-  id = $obj.attr 'data-id'
-  if (!id)
-    return false
-  $(".tab-section").hide()
-  $tab_section = $("#"+id)
-  if ($tab_section.length > 0)
-    $tab_section.show()
-    return false
-
-  $tab_section = $ '<div class="alpha omega tab-section"></div>'
-  $tab_section.attr 'id', id
-
-  $tab_section.load $obj.attr('href')
-
-  $("#tab-sections-container").append $tab_section
-
-  return false
 

@@ -1,6 +1,6 @@
 <% if @result -%>
   $("#like-count").text("<%= @t.like_count%>");
-  $(".timeline-like-count-<%= @timeline_entry.id %>").text("<%= @t.like_count%>");
+  $(".timeline-blame-count-<%= @timeline_entry.id %>").text("<%= @t.blame_count%>");
 <% else -%>
   alert("이미 공감하셨습니다.");
 <% end -%>

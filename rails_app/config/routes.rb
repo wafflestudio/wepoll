@@ -5,6 +5,7 @@ Wepoll::Application.routes.draw do
   end
 
   match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
+#  match "timeline_entries/list/:id" => "timeline_entries#list", :as => "timeline_entries_list"
 
   resources :bills
   resources :link_replies do
@@ -82,8 +83,13 @@ Wepoll::Application.routes.draw do
   resources :politicians do
     get 'initiate_bills', :on => :member, :as => :init_bills_by
     get 'bill_activities', :on => :collection, :as => :bill_activities_of
-    get 'popular_links', :on => :collection, :as => :popular_links_of
-    get 'recent_links', :on => :collection, :as => :recent_links_of
+
+    get 'popular_links', :on => :member, :as => :popular_links_of
+    get 'recent_links', :on => :member, :as => :recent_links_of
+
+    get 'popular_links_tab', :on => :collection, :as => :popular_links_tab_of
+    get 'recent_links_tab', :on => :collection, :as => :recent_links_tab_of
+
     get 'profile', :on => :collection, :as => :profiles_of
     get 'promises', :on => :collection, :as => :promises_of
   end

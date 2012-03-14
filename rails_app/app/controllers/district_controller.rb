@@ -30,6 +30,7 @@ class DistrictController < ApplicationController
     @t2 = @p2.nil? ? nil : @p2.tweets.asc('created_at').first
     @tweets = [@t1, @t2]
 
+
     # Timeline => See timeline_controller.rb.
     if params[:from]
       q_time = {:updated_at => {'$gte' => params[:from]}}

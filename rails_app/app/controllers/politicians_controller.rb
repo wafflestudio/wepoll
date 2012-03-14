@@ -1,6 +1,6 @@
 #coding:utf-8
 class PoliticiansController < ApplicationController
-  before_filter :prepare_politicians, :except => [:initiate_bills]
+  before_filter :prepare_politicians, :except => [:initiate_bills, :popular_links, :recent_links]
   def initiate_bills
     @politician = Politician.find(params[:id])
     if params[:result]
@@ -37,13 +37,29 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
+  def recent_links_tab
+    @entries = @politicians.map {|p| p.timeline_entries.desc("created_at").page(params[:page]).per(3)}
+    @link = LinkReply.new 
+    render :layout => false
+  end
+
+  def popular_links_tab
+    @entries = @politicians.map {|p| p.timeline_entries.desc("like_count").page(params[:page]).per(3)}
+    @link = LinkReply.new 
+    render :layout => false
+  end
+
   def recent_links
     @link = LinkReply.new 
+    @p = Politician.find(params[:id])
+    @entries = @p.timeline_entries.desc("created_at").page(params[:page]).per(3)
     render :layout => false
   end
 
   def popular_links
     @link = LinkReply.new 
+    @p = Politician.find(params[:id])
+    @entries = @p.timeline_entries.desc("like_count").page(params[:page]).per(3)
     render :layout => false
   end
 

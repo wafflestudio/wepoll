@@ -1,0 +1,43 @@
+<div class="politician-popular-links">
+  <div class="politician-popular-links-item clearfix">
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div id="p<%=i+1%>-popular-links" class="sep-subsection <%= i==0?"left":"right"%>">
+        <% if !@entries[i].nil? %>
+          <% entries = @entries[i]%>
+          <%= render entries %>
+          <div id="popular-paginator-politician-<%=politician.id %>">
+            <% unless entries.current_page == entries.num_pages %>
+              <%= link_to '>',  popular_links_of_politician_path(politician, :page => entries.current_page + 1), :id => "popular-next-page-#{politician.id}"%>
+            <% end -%>
+          </div>
+        <% else -%>
+          <div class="link_entries">
+            <div class="link_header" style="border-bottom: 0">
+              링크 없음 
+            </div>
+          </div>
+        <% end -%>
+      </div>
+    <% end -%>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+      $(".link_reply_input").keyup(function() {
+        var $this = $(this);
+        var max = 140;
+        var len = 0;
+        var $textarea = $("textarea", $this);
+        var len = $textarea.val().length;
+        if (len > max) {
+        $textarea.val($textarea.val().substr(0, max));
+        len = $textarea.val().length;
+        }
+        $this.find(".current-comment-length").text(len);
+
+        $this.children(".link-reply-button").click(function() {
+          return true;
+          });
+        });
+</script>
