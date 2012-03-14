@@ -4,8 +4,6 @@ formatDate = (d)->
 
 createView = (model)->
 	template = "<div class='tm-entry-view'>
-			<div class='tm-entry-numlike'>공감 #{if model.get('like_count')? then model.get('like_count') else 0}</div>
-			<div class='tm-entry-numreply'>댓글0</div>
 			<div class='clear'></div>
 			<div class='tm-entry-content'>
 			<span>#{model.escape('title')}</span>
@@ -13,8 +11,14 @@ createView = (model)->
 			<!--<p>날짜: #{formatDate(Date.parse(model.get('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
 			<div class='tm-entry-tags'>#{model.escape('tags')}</div>
-			#{if modules.TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
 			</div>
+			<div class='tm-entry-footer'>
+				<div class='tm-entry-numlike'>공감 #{if model.get('like_count')? then model.get('like_count') else 0}</div>
+				<div class='tm-entry-numreply'>댓글0</div>
+
+				#{if modules.TimelineController.displayEdit then "<p><a href='/timeline_entries/show?politician_id=#{model.escape('politician_id')}'>Edit</a></p>" else ""}
+			</div>
+
 		</div>"
 	element = $(template)
 	element.find('a').click (evt)->

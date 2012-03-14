@@ -5,7 +5,7 @@ class TimelineEntrySlider extends Backbone.View
 	initialize:(options)->
 		@$el = $("<div class='tm-slider'></div>").data('slider', this)
 		@$holder = $("<div class='tm-sl-holder'></div>").appendTo(@$el)
-
+		@$el.corner()
 		@nav = new TimelineEntryNav({current:0,num:0})
 		@nav.appendTo(@$holder)
 		@nav.on "changePage", @showPage
