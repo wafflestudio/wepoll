@@ -21,7 +21,8 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   }
 }
 #tweets_wrapper {
-  max-height: 800px;
+  min-height: 300px;
+  max-height: 700px;
   overflow-y: scroll;
 
   a {

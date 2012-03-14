@@ -28,21 +28,27 @@ class Tweet
   end
 
   def self.get_tweet
-    # TODO get former tweets
-#    screen_name = params[:screen_name]
-#    politician = Politician.where(:tweet_name => screen_name).first
-    #
 
     Twitter.configure do |config|
       config.consumer_key = TWITTER_CLIENT[:key]
       config.consumer_secret = TWITTER_CLIENT[:secret]
     end
+    if Twitter.rate_limit_status.remaining_hits == 0
+      Twitter.configure do |config|
+        config.consumer_key = TWITTER_CLIENT[:key]
+        config.consumer_secret = TWITTER_CLIENT[:secret]
+        config.oauth_token = TWITTER_ACCOUNT[:key]
+        config.oauth_token_secret  = TWITTER_ACCOUNT[:secret]
+      end
+    end
+
+
 
     Politician.all.each do |p|
       politician = p
       screen_name = politician.tweet_name
       #get tweet if politician's tweet isn't protected and politician isn't nil
-      unless (screen_name.nil? || Twitter.user(screen_name).protected?)
+      unless (screen_name.nil?)
         puts "start getting #{politician.name}'s tweet"
         Rails.logger.info "start getting #{politician.name}'s tweet"
         need_more = false
@@ -61,9 +67,11 @@ class Tweet
               end
             end
           end
-        rescue Exception => e
-          puts e
-          Rails.logger.info e
+        rescue Twitter::Error => e
+          puts "In get tweet"
+          Rails.logger.info "In get tweet"
+          puts e.message
+          Rails.logger.info e.message
         end
         if need_more
           puts "get more tweet for #{politician.name} "
@@ -82,7 +90,14 @@ class Tweet
   end
 
   def self.get_tweet_more(start_id, last_id) #트윗들 : Array
-    got_tweets = Twitter.user_timeline(screen_name, {:since_id => start_id, :max_id => last_date, :count => 100})
+    begin
+      got_tweets = Twitter.user_timeline(screen_name, {:since_id => start_id, :max_id => last_date, :count => 100})
+    rescue Twitter::Error => e
+      puts "In get tweet more"
+      Rails.logger.info "In get tweet more"
+      puts e.message
+      Rails.logger.info e.message
+    end
     if got_tweets.nil?
       return []
     else

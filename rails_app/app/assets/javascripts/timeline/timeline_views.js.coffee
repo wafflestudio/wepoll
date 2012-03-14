@@ -5,7 +5,7 @@ BillView = modules.BillView
 Bill = modules.Bill
 
 class TimelineView
-	@EntryWidth: 210
+	@EntryWidth: 240
 
 	constructor:(@collection,@billcollection)->
 
@@ -112,22 +112,24 @@ class TimelineView
 		if !found
 			group.appendTo(@$el)
 
-		group.on("dimensionChange", @onChildDimensionChange)
+		group.on("dimensionChange", @onChildDimensionChange,"add")
 	
 	removeGroup:(group)->
-		group.off("dimensionChange", @onChildDimensionChange)
+		group.off("dimensionChange", @onChildDimensionChange,"remove")
 		group.destroy()
 
-	onChildDimensionChange:()=>
-		console.log('onChildDimensionChange',@getCurrentCenterPos())
+	onChildDimensionChange:(cause)=>
+		return if cause != "remove"
 		pos = @getCurrentCenterPos()
+		@setStart(pos)
+
 		# scroll to nearby?
-		if @timeout
-			clearTimeout(@timeout)
-		@timeout = setTimeout ()=>
-			@timeout = null
-			@setStart(pos)
-		, 4000
+		#if @timeout
+		#	clearTimeout(@timeout)
+		#@timeout = setTimeout ()=>
+		#	@timeout = null
+		#	@setStart(pos)
+		#, 4000
 	
 	prepareGroup:(pos, vpos)->
 

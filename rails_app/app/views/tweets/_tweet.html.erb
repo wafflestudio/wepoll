@@ -18,7 +18,7 @@
       <%= t.content %>
     </div>
     <div>
-      <%= t.created_at %> 댓글<%= t.tweet_replies.count %>개
+      <%= t.created_at.strftime("%Y-%m-%d %I:%M%P") %> 댓글<%= t.tweet_replies.count %>개
     </div>
   </div>
 </div>

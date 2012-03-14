@@ -6,3 +6,6 @@ $ () ->
     $this = $ this
     href = $this.attr "href"
     return show_auth_dialog(href)
+	$('#login_close').live 'click', ->
+		$.colorbox.close()
+		return

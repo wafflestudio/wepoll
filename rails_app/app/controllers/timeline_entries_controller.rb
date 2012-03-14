@@ -2,7 +2,7 @@
 class TimelineEntriesController < ApplicationController
 
 
-	before_filter :authenticate_user!, :except => [:index,:show]
+	before_filter :authenticate_user!, :except => [:index,:list,:show]
 
   # GET /timeline_entries
   # GET /timeline_entries.json
@@ -42,8 +42,13 @@ class TimelineEntriesController < ApplicationController
 
     respond_to do |format|
       #format.html # index.html.erb
-      format.json { render json: @timeline_entries }
+      format.json { render json: @timeline_entries.to_json(:include => {:link_replies => {:only =>[:count]}}) }
     end
+  end
+
+  def list
+    @entry = Politician.find(params[:id]).timeline_entries.page(params[:page]).per(3)
+    @link = LinkReply.new
   end
 
   # GET /timeline_entries/1
@@ -155,6 +160,13 @@ class TimelineEntriesController < ApplicationController
   def like
     @t = TimelineEntry.find(params[:id])
     @result = @t.like(current_user)
+    @timeline_entry = @t
+  end
+
+  def blame
+    @t = TimelineEntry.find(params[:id])
+    @result = @t.blame(current_user)
+    @timeline_entry = @t
   end
 
 protected

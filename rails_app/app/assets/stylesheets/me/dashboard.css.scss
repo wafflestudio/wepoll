@@ -108,6 +108,9 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     table {
       width: 100%;
       clear: both;
+      .dashboard-link-entry {
+        cursor: pointer;
+      }
       tr {
         height: 40px;
       }
