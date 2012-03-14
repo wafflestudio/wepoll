@@ -29,7 +29,7 @@
       data-height="10,8"
       data-ref="#p<%= 2-index%>-good-link"
       data-float="<%= index==0 ? "right" : "left"%>"
-      data-value="<%= (politician ? politician.good_link_count : 0 ); 30 %>">
+      data-value="<%= politician ? politician.good_link_count : 0%>">
     </div>
     <div class="clear"></div>
 
@@ -40,7 +40,7 @@
       data-height="10,8"
       data-float="<%= index==0 ? "right" : "left"%>"
       data-ref="#p<%= 2-index%>-bad-link"
-      data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
+      data-value="<%= politician ? politician.bad_link_count : 0%>">
     </div>
   </div>
   <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'}"%>
