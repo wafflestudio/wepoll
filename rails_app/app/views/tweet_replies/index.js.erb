@@ -1,2 +1,4 @@
 $('#replies_wrapper').html('<%= escape_javascript(render @replies) %>');
+$('#replies_wrapper').animate({scrollTop:0},200);
+$('#replies_paginator').remove();
 $(window).unbind('.infscr');
