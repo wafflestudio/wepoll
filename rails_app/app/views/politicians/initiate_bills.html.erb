@@ -13,16 +13,18 @@
     <h3 class="bill-count">전체 <span class="bill-count"><%= @bills.count%></span>건</h3>
     <h3 class="bill-count">본회의 통과 <span class="bill-count"><%= @bills.where(:result => Bill::RESULT_APPROVED).count%></span>건</h3>
     <div class="clear"></div>
-    <% @bill_categories.each do |c, n| -%>
-      <div class="bill-category">
-        <span class="bill-category-name"><%= c%></span>
-        <span class="bill-count"><%= n%>건</span>
-      </div>
-    <% end -%>
+    <div id="bills-categories" class="clearfix">
+      <% @bill_categories.each do |c, n| -%>
+        <div class="bill-category">
+          <a title="<%= c%>" class="bill-category-name"><%= c[0...4]%></a>
+          <span class="bill-count small"><%= n%>건</span>
+        </div>
+      <% end -%>
+    </div>
   </div>
   <div id="popup-bills-selector">
-  <div><%= radio_button_tag 'bills', 'all' %> 모든법안보기</div>
-  <div><%= radio_button_tag 'bills', 'accepted' %> 통과(가결)법안보기</div>
+    <div><%= radio_button_tag 'bills', 'all', :checked => 'checked' %> 모든법안보기</div>
+    <div><%= radio_button_tag 'bills', 'accepted' %> 통과(가결)법안보기</div>
   </div>
 
   <div class="clear"></div>

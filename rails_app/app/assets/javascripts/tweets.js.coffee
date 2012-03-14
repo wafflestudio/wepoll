@@ -1,11 +1,16 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+#= require jquery.infinitescroll
 
 $ ->
   # initialize 
+  $('#tweets_wrapper').css 'max-height',(document.documentElement.clientHeight-$('#tweets_wrapper').offset().top-27)+"px"
+  $('#replies_wrapper').css 'max-height',(document.documentElement.clientHeight-$('#tweets_wrapper').offset().top-27)+"px"
+  	
   $reply_box=$('#reply_box')
   $reply_box.hide()
+  $('#replies_paginator').hide()
 
   # tweet box click handler
   $('.tweet_item').click ->
@@ -57,10 +62,6 @@ $ ->
 
   $('#reply_close').click ->
     $reply_box.hide()
-    return
-  $('#login_close').live 'click', ->
-    reset_box()
-    $.colorbox.close()
     return
   $('#reply_text_box').placeholder()
 

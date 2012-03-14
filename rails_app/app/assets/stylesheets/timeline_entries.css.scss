@@ -149,8 +149,11 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-detail-wrapper {
-  width:688px;
+  width:697px + 16px;
   padding-top:20px;
+  .grid_11 {
+    width:697px + 16px;
+  }
 }
 
 #link-thumbnail {
@@ -171,13 +174,13 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #timeline-container {
-	background-color:#222;
+	background-color:#eee;
 	width:1024px;
 	height:509px;
 	z-index:2;
 	display:none;
 	position:fixed;
-	background:url('/assets/timeline-bg.png') no-repeat;
+	/*background:url('/assets/timeline-bg.png') no-repeat;*/
 }
 
 #timeline-container-border {
@@ -307,11 +310,13 @@ z-index:10;
 
 
 .tm-slider {
+	background-color:white;
 	position:absolute;
-	width:210px;
-	height:200px;
+	width:230px;
+	height:170px;
 }
 
+/*
 .tm-bubble1 {
 	background:url('/assets/bubble_timeline_1.gif') no-repeat;
 }
@@ -331,6 +336,7 @@ z-index:10;
 .tm-bubble6 {
 	background:url('/assets/bubble_timeline_6.gif') no-repeat;
 }
+*/
 
 .tm-nav-left {
 	width:26px;
@@ -362,8 +368,8 @@ position:relative;
 .tm-sl-nav {
 	z-index:5;
 	position:absolute;
-	top:27px;
-	left:155px;
+	top:10px;
+	left:175px;
 	width:210px;
 }
 
@@ -389,11 +395,16 @@ position:relative;
 
 .tm-entry-view {
 	position:relative;
-	width:160px;
-	height:90px;
+	width:220px;
+	height:140px;
 	margin-left:20px;
 	margin-right:20px;
 	overflow:hidden
+}
+
+.tm-entry-footer {
+	position:absolute;
+	bottom:0px;
 }
 
 .tm-entry-numlike,.tm-entry-numreply {
@@ -411,8 +422,8 @@ position:relative;
 	margin-top:10px;
 }
 
+
 .tm-bubble4 .tm-entry-view,.tm-bubble5 .tm-entry-view,.tm-bubble6 .tm-entry-view {
-	margin-top:10px;
 }
 
 .tm-legend {

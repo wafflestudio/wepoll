@@ -376,7 +376,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 				this.curve.unmouseout func1
 			this.curve.mouseout func1
 			return
-		if obj == this.curve and relTarget == this.textel.node.children[0]
+		if obj == this.curve and relTarget == this.textel.node.childNodes[0]
 			func2 = (evt) =>
 				out_.call(this, evt, this.textel)
 				this.textel.unmouseout func2
@@ -400,7 +400,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 	out = (evt) ->
 		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
 		found = false
-		if this.textel && relTarget == this.textel.node.children[0]
+		console.log(relTarget)
+		if this.textel && relTarget == this.textel.node.childNodes[0]
 			func = (evt)=>
 				out_.call(this, evt, this.textel)
 				this.textel.unmouseout func

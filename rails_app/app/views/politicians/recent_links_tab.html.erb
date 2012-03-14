@@ -1,44 +1,27 @@
 <div class="politician-recent-links">
   <div class="politician-recent-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
-      <div id="p<%=i+1%>-recent-links" class="sep-subsection <%= i==0?"left":"right"%>">
-        <% if !@entries[i].nil? %>
-          <% entries = @entries[i]%>
-          <%= render entries %>
-          <div id="recent-paginator-politician-<%=politician.id %>">
-            <% unless entries.current_page == entries.num_pages %>
-              <%= link_to '>',  recent_links_of_politician_path(politician, :page => entries.current_page + 1), :id => "recent-next-page-#{politician.id}"%>
-            <% end -%>
-          </div>
-        <% else -%>
-          <div class="link_entries">
-            <div class="link_header" style="border-bottom: 0">
-              링크 없음 
+      <div class="sep-subsection <%= i==0?"left":"right"%>">
+        <div id="p<%=i+1%>-recent-links">
+          <% if !@entries[i].nil? %>
+            <% entries = @entries[i]%>
+            <%= render entries %>
+            <div id="recent-paginator-politician-<%=politician.id %>">
+              <% unless entries.current_page == entries.num_pages %>
+                <%= link_to '>',  recent_links_of_politician_path(politician, :page => entries.current_page + 1), :id => "recent-next-page-#{politician.id}", :class => 'next-links-page'%>
+              <% end -%>
             </div>
-          </div>
-        <% end -%>
+          <% else -%>
+            <div class="link_entries">
+              <div class="link_header" style="border-bottom: 0">
+                 링크 없음 
+              </div>
+            </div>
+          <% end -%>
+        </div>
+        <div id="bottom-indicator-recent-<%=i +1 %>" class="bottom-indicator">hihi</div>
+        <div class="loading-indicator" id="loading-indicator-recent-<%= politician.id %>">&nbsp;</div>
       </div>
     <% end -%>
   </div>
 </div>
-
-<script type="text/javascript">
-      $(".link_reply_input").keyup(function() {
-        var $this = $(this);
-        var max = 140;
-        var len = 0;
-        var $textarea = $("textarea", $this);
-        var len = $textarea.val().length;
-        if (len > max) {
-        $textarea.val($textarea.val().substr(0, max));
-        len = $textarea.val().length;
-        }
-        $this.find(".current-comment-length").text(len);
-
-        $this.children("#link-reply-button").click(function() {
-          //  $(this).attr("disabled", true);
-          return true;
-        });
-      });
-
-</script>
