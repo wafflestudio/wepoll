@@ -53,7 +53,9 @@
             $("#bottom-indicator-popular-1").waypoint('remove');
             var url = $('#popular-next-page-<%= @politicians[0].id%>').attr('href');
             console.log("load "+ url);
+            $("#loading-indicator-popular-<%=@politicians[0].id%>").show();
             $.get(url, function(data) {
+              $("#loading-indicator-popular-<%=@politicians[0].id %>").hide();
               console.log("loaded");
               var $data = $(data);
               var $objs = $data.filter(".link_entries");
@@ -76,11 +78,15 @@
             $("#bottom-indicator-popular-2").waypoint('remove');
             var url = $('#popular-next-page-<%= @politicians[1].id%>').attr('href');
             console.log("load "+ url);
+            $("#loading-indicator-popular-<%=@politicians[1].id%>").show();
+            if (!url)
+              alert("alert");
             $.get(url, function(data) {
               console.log("loaded");
               var $data = $(data);
               var $objs = $data.filter(".link_entries");
               console.log("new entries = " + $objs.length);
+              $("#loading-indicator-popular-<%=@politicians[1].id%>").hide();
               $("#p2-popular-links").append($objs);
               var new_href = $data.find('#popular-next-page-<%= @politicians[1].id%>').attr("href");
               $('#popular-next-page-<%= @politicians[1].id%>').attr("href", new_href);
@@ -101,7 +107,9 @@
             $("#bottom-indicator-recent-1").waypoint('remove');
             var url = $('#recent-next-page-<%= @politicians[0].id%>').attr('href');
             console.log("load "+ url);
+            $("#loading-indicator-recent-<%=@politicians[0].id%>").show();
             $.get(url, function(data) {
+              $("#loading-indicator-recent-<%=@politicians[0].id%>").hide();
               console.log("loaded");
               var $data = $(data);
               var $objs = $data.filter(".link_entries");
@@ -124,7 +132,9 @@
             $("#bottom-indicator-recent-2").waypoint('remove');
             var url = $('#recent-next-page-<%= @politicians[1].id%>').attr('href');
             console.log("load "+ url);
+            $("#loading-indicator-recent-<%=@politicians[1].id%>").show();
             $.get(url, function(data) {
+              $("#loading-indicator-recent-<%=@politicians[1].id%>").hide();
               console.log("loaded");
               var $data = $(data);
               var $objs = $data.filter(".link_entries");
@@ -151,30 +161,33 @@
     }
 
     $(function() {
-        $(".tab").click(function(){
-        if ($(this).hasClass('disabled'))
+      $(".tab").click(function(){
+        if ($(this).hasClass('disabled')) {
+          alert("준비중입니다^^");
           return false;
+        }
+
         loadTab($(this));
         return false;
-        });
-          $(".selected").click();
+      });
+      $(".selected").click();
 
-        var timelineInitialized = false
-        $('#show-timeline').click( function() {
-          $('#timeline-container').jqmShow();
+      var timelineInitialized = false
+      $('#show-timeline').click( function() {
+        $('#timeline-container').jqmShow();
 
-          if(!timelineInitialized)
-          {
+        if(!timelineInitialized)
+        {
           timelineController.reset()
-          }
-          timelineInitialized = true;
-          return false
-          });
+        }
+        timelineInitialized = true;
+        return false
+      });
 
-        $('#timeline-container').jqm({overlay:1});
+      $('#timeline-container').jqm({overlay:1});
 
-        $(".link-button").click(function() {
-          $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
+      $(".link-button").click(function() {
+        $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
           activateTimelineEntryForm();
           $('.tm-entry-form').submit( function() {
             $.colorbox.close();
@@ -184,7 +197,13 @@
 
         }
         });
-        });
+      });
+      <% if params[:timeline_entry_id] -%>
+//        $("#show-timeline").click();
+        var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
+        alert(url);
+        $.colorbox({href:url});
+      <% end -%>
     });
  </script>
 <script type="text/javascript" src="/assets/waypoints.js"></script>
@@ -222,7 +241,7 @@
     <div id="tabs" class="clearfix">
       <%= link_to '최신링크',
         recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "politician-recent-links" %>
+        :class => 'tab alpha', "data-id" => "politician-recent-links" %>
       <%= link_to '인기링크',
         popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
         :class => 'tab', "data-id" => "politician-popular-links" %>
@@ -236,3 +255,5 @@
     </div> <!-- end of tab conainer -->
   </div>
 </div>
+
+

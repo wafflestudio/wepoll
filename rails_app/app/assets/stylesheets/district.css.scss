@@ -206,7 +206,7 @@
 
 #tabs {
   a {
-    width:130px;
+    width:132px;
     height:38px - 14px;
     padding-top:14px;
     float:left;
@@ -224,7 +224,7 @@
     -webkit-border-radius:7px 7px 0 0;
     behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
 
-    margin:0 4px;
+    margin:0 5px;
 
     &.selected {
       color:#000;
@@ -531,4 +531,12 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 
 .next-links-page {
   display:none;
+}
+
+.loading-indicator {
+  width:32px;
+  height:32px;
+  margin:0 auto;
+  display:block;
+  background:url(/assets/ajax-loader-link.gif);
 }

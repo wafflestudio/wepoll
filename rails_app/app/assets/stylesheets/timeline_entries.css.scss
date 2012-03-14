@@ -149,8 +149,11 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-detail-wrapper {
-  width:688px;
+  width:697px + 16px;
   padding-top:20px;
+  .grid_11 {
+    width:697px + 16px;
+  }
 }
 
 #link-thumbnail {
