@@ -16,7 +16,7 @@ CSV.foreach(Rails.root+"init_data/seoul_twitter_0314.csv",:encoding => "UTF-8") 
 	name = csv[2]
 	screen_name = csv[5]
 	p = Politician.where(:name => name).first
-	if p.nil?
+	if p.nil? || screen_name.nil?
 		puts name+"is nil"
 	else
 		p.tweet_name = screen_name
