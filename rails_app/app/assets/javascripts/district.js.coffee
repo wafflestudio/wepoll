@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 # =require jquery.simple_bar_graph
-# =require raphael-min
+# =require timeline
 # =require raphael-piechart
 # =require raphael-donutchart
 # =require jcombox-1.0b.packed
@@ -56,5 +56,3 @@ $ () ->
       $clicked = $ e.target
       if (! $clicked.parents().hasClass("dropdown"))
         $("dd ul", $this).hide()
-
-

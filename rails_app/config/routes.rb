@@ -1,4 +1,6 @@
 Wepoll::Application.routes.draw do
+  resources :suggestions
+
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
@@ -61,13 +63,13 @@ Wepoll::Application.routes.draw do
   match '/sns_verify/:user_id/:token_id/:key' => 'me/sns#verify_sns_link',
     :via => :get, :as => :sns_link_verify
 
-  match 'forum/:politician_id' => 'main#forum' , :as => :forum
+  match 'forum/:politician_id' => 'tweets#forum' , :as => :forum
   match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
 
   resources :tweets do
     get 'like', :on => :member
     post 'tweet_replies' => 'tweet_replies#create', :as => :tweet_replies
-    get 'tweet_replies' => 'tweets#replies', :as => :tweet_replies
+    get 'tweet_replies' => 'tweet_replies#index', :as => :tweet_replies
   end
   resources :tweet_replies do
     get 'blame', :on => :member

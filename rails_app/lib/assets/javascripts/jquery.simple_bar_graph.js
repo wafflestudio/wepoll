@@ -52,8 +52,6 @@
 			if (r == 0) w = options.minWidth;
 			else w = Math.round(r*width);
 
-			console.log("bar width = " + w);
-
 			//make bar
 			var $bar = $("<div></div>");
 
@@ -137,7 +135,7 @@
 					duration:3000,
 					easing:"swing",
 					step:function(now, fx) {
-						$lbl.text(options.label(now/w*value), fx);
+						$lbl.text(options.label(now == 0  ? 0 : now/w*value), fx);
 					}
 				});
 			}

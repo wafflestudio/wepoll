@@ -1,0 +1,2 @@
+$('#replies_wrapper').html('<%= escape_javascript(render @replies) %>');
+$('#replies_paginator').html('<%= escape_javascript(paginate(@replies, :param_name => "replies_page", :remote => true).to_s) %>');

@@ -1,7 +1,11 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
-  <div class="tweet-bubble <%= index==0?"left":"right"%>">
-    <%= tweet ? link_to(tweet.content, forum_path(politician)) : "최근 트윗이 없습니다." %>
-  </div>
+  <% unless politician.nil? -%>
+    <%= link_to forum_path(politician) do  %>
+      <div class="tweet-bubble <%= index==0?"left":"right"%>">
+        <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+      </div>
+    <% end -%>
+  <% end -%>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
     <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square100) : "http://placehoold.it/160", :class => "photo" %>
@@ -13,7 +17,8 @@
     <dd>
     <ul>
       <% @politicians.each do |p| -%>
-        <li><a href="#" class="<%= p.id == politician.id ? "current":"" %>" data-id="<%= p.id%>"><span class="value"><%=p.id%></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= p.party%></span>&nbsp;<span class="name"><%= p.name%></span></a></li>
+        <% next if p.id == (index==0?@p2 : @p1).id -%>
+        <li><a href="#" class="<%= p.id == politician.id ? "current":"" %>" data-id="<%= p.id%>"><span class="value"><%=p.id%></span><span class="party" style="color:<%= @party_color[p.party]||"black" %>"><%= p.party%></span>&nbsp;<span class="name"><%= p.name%></span></a></li>
       <% end -%>
     </ul>
     </dd>
@@ -28,7 +33,7 @@
       data-height="10,8"
       data-ref="#p<%= 2-index%>-good-link"
       data-float="<%= index==0 ? "right" : "left"%>"
-      data-value="<%= (politician ? politician.good_link_count : 0 ); 30 %>">
+      data-value="<%= politician ? politician.good_link_count : 0%>">
     </div>
     <div class="clear"></div>
 
@@ -39,7 +44,7 @@
       data-height="10,8"
       data-float="<%= index==0 ? "right" : "left"%>"
       data-ref="#p<%= 2-index%>-bad-link"
-      data-value="<%= (politician ? politician.bad_link_count : 0);30%>">
+      data-value="<%= politician ? politician.bad_link_count : 0%>">
     </div>
   </div>
   <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'}"%>

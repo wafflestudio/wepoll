@@ -15,7 +15,7 @@
   <div class="profile-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="<%= i==0?"left":"right"%>">
-        <%= politician.military.length == 0 ? "정보없음" : politician.military %>
+        <%= politician.military.nil? || politician.military.length == 0  ?  "정보없음" : politician.military %>
       </div>
       <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
     <% end -%>
@@ -24,7 +24,7 @@
   <div class="profile-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="<%= i==0?"left":"right"%>">
-        <%= politician.job || "정보없음" %>
+        <%= politician.job.nil? || politician.job.length == 0 ? "정보없음" : politician.job %>
       </div>
       <% if i==0 -%><div class="subsection-label">현직</div><% end -%>
     <% end -%>
@@ -34,7 +34,7 @@
   <div class="profile-item clearfix"> 
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="<%= i==0?"left":"right"%>">
-        <%= politician.education || "정보없음"%>
+        <%= politician.education.nil? || politician.education.length == 0 ? "정보없음" : politician.education%>
       </div>
       <% if i==0 -%><div class="subsection-label">학력</div><% end -%>
     <% end -%>
@@ -44,7 +44,7 @@
   <div class="profile-item clearfix"> 
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="<%= i==0?"left":"right"%>">
-        <%= politician.experiences || "정보없음"%>
+        <%= politician.experiences.nil? || politician.experiences.length == 0 ? "정보없음" : politician.experiences%>
       </div>
       <% if i==0 -%><div class="subsection-label">주요경력</div><% end -%>
     <% end -%>

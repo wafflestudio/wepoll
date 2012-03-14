@@ -43,15 +43,6 @@ class MainController < ApplicationController
       render :text => 'hello'
   end
 
-
-  def forum
-    @politician = Politician.find(params[:politician_id])
-    @best = @politician.tweets.desc('like').first
-    @today_best = @politician.tweets.desc('today_like').first
-    @links = TimelineEntry.asc('like')
-    @total_replies = @politician.total_replies.sort{|a,b| b.created_at <=> a.created_at}
-  end
-
   def search
     Rails.logger.info "======================"
     Rails.logger.info params.inspect

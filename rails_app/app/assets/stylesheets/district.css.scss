@@ -32,6 +32,11 @@
 }
 
 .namecard {
+	a {
+		text-decoration: none;
+    color: black;
+  	line-height: 140%;
+  }
   float:left;
   width:280px;
   margin-bottom:35px;
@@ -47,11 +52,6 @@
 }
 
 .tweet-bubble {
-	a {
-		text-decoration: none;
-    color: black;
-  	line-height: 140%;
-  }
   &.left {
     background:url(/assets/bubble_tweet_left.jpg) no-repeat;
     margin-left:12px;
@@ -62,11 +62,13 @@
   }
 
   width:260px - 40px - 25px;
-  height:160px - 34px - 25px;
-  padding-top: 34px;
+  height:160px - 20px - 30px;
+  padding-top: 20px;
   padding-left: 40px;
   padding-right:25px;
-  padding-bottom:25px;
+  padding-bottom:30px;
+
+  font-size:8.5pt;
 }
 
 #split-bar {
@@ -453,7 +455,7 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   margin-bottom:20px;
   .subsection-label {
     margin-top:-10px;
-    background:url(/assets/bg_subsection_label_gray.gif) no-repeat;
+    background:url(/assets/bg_subsection_label_blue.gif) no-repeat;
   }
 
   .left, .right {
@@ -713,3 +715,15 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   font-weight:bold;
 }
 
+
+// not 18
+.not_18 {
+  background: url(/assets/icn_not_18.gif) no-repeat 65px 0;
+  color:#4f4f50;
+  width:180px;
+  margin:0 auto;
+  padding-top:50px;
+  font-size:10pt;
+  font-weight:normal;
+  text-align:center;
+}

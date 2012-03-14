@@ -1,3 +1,5 @@
-<% unless @result -%>
+<% if @result -%>
+  alert("신고하셨습니다.");
+<% else -%>
   alert("이미 신고하셨습니다.");
 <% end -%>
