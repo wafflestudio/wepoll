@@ -1,6 +1,66 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
+    function loadTab($obj) {
+      $(".tab").removeClass("selected");
+      $obj.addClass("selected");
+      var id = $obj.attr('data-id');
+      if (!id) {
+        return false;
+      }
+      $(".tab-section").hide();
+      $tab_section = $("#"+id);
+      if ($tab_section.length > 0) {
+        $tab_section.show();
+        return false;
+      }
+
+      $tab_section = $('<div class="alpha omega tab-section"></div>');
+      $tab_section.attr('id', id);
+
+      $tab_section.load($obj.attr('href'), function() {
+          if (id == 'politician-recent-links') {
+    $('#p1-recent-links').infinitescroll({
+        navSelector:"#recent-paginator-politician-<%=@politicians[0].id %>",
+        nextSelector:"a#recent-next-page-<%=@politicians[0].id %>",
+        itemSelector:"div.link_entries",
+        debug:true
+    });
+    $('#p2-recent-links').infinitescroll({
+        navSelector:"#recent-paginator-politician-<%=@politicians[1].id %>",
+        nextSelector:"a#recent-next-page-<%=@politicians[1].id %>",
+        itemSelector:"div.link_entries",
+        debug:true
+    });
+    }
+    else if (id == 'politician-popular-links') {
+    $('#p1-popular-links').infinitescroll({
+        navSelector:"#popular-paginator-politician-<%=@politicians[0].id %>",
+        nextSelector:"a#popular-next-page-<%=@politicians[0].id %>",
+        itemSelector:"div.link_entries"
+    });
+    $('#p2-popular-links').infinitescroll({
+        navSelector:"#popular-paginator-politician-<%=@politicians[1].id %>",
+        nextSelector:"a#popular-next-page-<%=@politicians[1].id %>",
+        itemSelector:"div.link_entries"
+    });
+    }
+
+      });
+
+      $("#tab-sections-container").append($tab_section);
+
+      return false;
+    }
+
     $(function() {
+        $(".tab").click(function(){
+        if ($(this).hasClass('disabled'))
+          return false;
+        loadTab($(this));
+        return false;
+        });
+          $(".selected").click();
+
         var timelineInitialized = false
         $('#show-timeline').click( function() {
           $('#timeline-container').jqmShow();
@@ -29,7 +89,7 @@
         });
     });
  </script>
-<script type="text/javascript" src="/assets/infinitescroll.min.js"></script>
+<script type="text/javascript" src="/assets/jquery.infinitescroll.js"></script>
 <% end -%>
 
 <%= render 'timeline_entries/index' %>
@@ -38,6 +98,7 @@
 <div class="grid_12" id="vs-content-wrapper">
   <div id="district-title">
     이 공간은 <span id="district-label"><%= @district %></span> 대결 페이지입니다.
+    <div class="fb-like" style="float: right;" data-href="http://wepoll.or.kr<%= request.fullpath %>" data-send="false" data-layout="button_count" data-width="100" data-show-faces="false"></div>
   </div>
 
   <div id="district-desc">
@@ -62,14 +123,14 @@
   <div id="tab-wrapper">
     <div id="tabs" class="clearfix">
       <%= link_to '최신링크',
-        recent_links_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+        recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
         :class => 'tab', "data-id" => "politician-recent-links" %>
       <%= link_to '인기링크',
-        popular_links_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab selected', "data-id" => "politician-popular-links" %>
+        popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+        :class => 'tab', "data-id" => "politician-popular-links" %>
       <%= link_to '국회활동',
         bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "bill-activity" %>
+        :class => 'tab selected', "data-id" => "bill-activity" %>
       <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
       <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
     </div>

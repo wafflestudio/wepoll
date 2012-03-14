@@ -2,6 +2,11 @@
 class TweetRepliesController < ApplicationController
   before_filter :authenticate_user!, :only => [:create, :like]
 
+  def index
+    @tweet = Tweet.find(params[:tweet_id])
+    @replies = @tweet.tweet_replies.desc('created_at')
+  end
+
   def create
     if current_user.nil?
       render :json => {:status => "error", :message => "로그인 해 주십시오"}

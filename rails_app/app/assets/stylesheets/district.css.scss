@@ -32,6 +32,11 @@
 }
 
 .namecard {
+	a {
+		text-decoration: none;
+    color: black;
+  	line-height: 140%;
+  }
   float:left;
   width:280px;
   margin-bottom:35px;
@@ -47,11 +52,6 @@
 }
 
 .tweet-bubble {
-	a {
-		text-decoration: none;
-    color: black;
-  	line-height: 140%;
-  }
   &.left {
     background:url(/assets/bubble_tweet_left.jpg) no-repeat;
     margin-left:12px;
@@ -329,6 +329,13 @@ a.init-bills-link {
       padding: 5px;
       margin-left: 5px;
       font-size: 14px;
+      a {
+        color: black;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
     }
   }
   .link_reply { 
