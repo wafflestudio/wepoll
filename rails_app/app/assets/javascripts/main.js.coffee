@@ -221,7 +221,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		y = parseInt(coordinates[1]) + 95
 			
 		if this.textel?
-			this.textel.attr('opacity',1.0)
+			this.textel.attr('opacity',1.0).show()
 		else
 			this.textel = r.text x, y, worldmap.names[this.id]
 
@@ -242,12 +242,14 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
 			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
 
-			if ((checkVersion() < 9) && (checkVersion() > 5))
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40)
-			else if (checkVersion() < 0)
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
-			else
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
+			
+			if !this.arrow?
+				if ((checkVersion() < 9) && (checkVersion() > 5))
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 40, end_y + 90, 40, 40)
+				else if (checkVersion() < 0)
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
+				else
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
 
 			endInfo = this.curve.getPointAtLength(this.curve.getTotalLength())
 			beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
@@ -269,12 +271,13 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
 			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
 
-			if ((checkVersion() < 9) && (checkVersion() > 5))
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40)
-			else if (checkVersion() < 0)
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
-			else
-				this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
+			if !this.arrow?
+				if ((checkVersion() < 9) && (checkVersion() > 5))
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x - 50, end_y + 80, 40, 40)
+				else if (checkVersion() < 0)
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
+				else
+					this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 30, 40, 40)
 
 			endInfo = this.curve.getPointAtLength this.curve.getTotalLength()
 			beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
@@ -356,9 +359,11 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			}
 		bubbleOut()
 		this.curve.show()
+		this.arrow.show()
 
 	# obj is "from", evt.relatedTarget is "to"	
 	out_ = (evt, obj)->
+
 		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
 		if relTarget && relTarget == this.node
 			return
@@ -379,13 +384,15 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		if this.curve?
 			this.curve.hide()#remove()
 		if this.arrow?
-			this.arrow.remove()
+			this.arrow.hide()
 
 		$("#vs-container").hide()
 		this.stop().animate {fill: this.c}, 500
 		if this.textel
 			textel = this.textel
-			this.textel.animate {"opacity":0}, 200
+			this.textel.animate {"opacity":0,callback:()->
+				textel.hide()
+			}, 200
 		bubbleIn()
 
 	out = (evt) ->
@@ -393,13 +400,13 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		found = false
 		if this.textel && relTarget == this.textel.node.children[0]
 			func = (evt)=>
-				out_.call(this,evt, this.textel)
+				out_.call(this, evt, this.textel)
 				this.textel.unmouseout func
 			this.textel.mouseout func
 			found = true
 		else if this.curve && relTarget == this.curve.node
 			func = (evt)=>
-				out_.call(this,evt, this.curve)
+				out_.call(this, evt, this.curve)
 				this.curve.unmouseout func
 			this.curve.mouseout func
 			found = true
