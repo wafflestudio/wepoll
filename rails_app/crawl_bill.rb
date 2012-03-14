@@ -4,8 +4,8 @@ require 'open-uri'
 require 'nokogiri'
 require 'csv'
 
-first_page = 15
-last_page = 152 # http://watch.peoplepower21.org/New/monitor_voteresult.php?page=#{page}의 마지막 페이지
+first_page = 98
+last_page = 155 # http://watch.peoplepower21.org/New/monitor_voteresult.php?page=#{page}의 마지막 페이지
 
 first_page.upto(last_page) do |page|
   begin # 열려라 국회에서 본회의표결 리스트 뽑기
@@ -20,7 +20,7 @@ first_page.upto(last_page) do |page|
   2.upto(17) do |i| 
     page_path = page_doc.xpath("html/body/center/table/tr[4]/td/table/tr/td[3]/table[4]/tr/td/table/tr[#{i}]/td[3]") # start from index 2
     break if page_path.empty? # 페이지의 마지막 법안
-    
+
     if page_path.xpath("a").nil?
       puts "=== ERROR : #{page} - #{i} 페이지 검색 실패 ==="
       next
@@ -30,7 +30,7 @@ first_page.upto(last_page) do |page|
     begin # 본회의 표결 리스트 중에서 하나를 자세히 보기
       sub_page_raw = Net::HTTP.get(URI.parse(url)) # ex) http://watch.peoplepower21.org/New/c_monitor_voteresult_detail.php?mbill=6687 
     rescue
-      puts "=== ERROR : #{url} 페이지 검색 실패 ==="
+      puts "=== ERROR : #{url} 본회의 페이지 검색 실패 ==="
       exit 1
     end
 
@@ -49,7 +49,7 @@ first_page.upto(last_page) do |page|
     begin # 국회 의안정보시스템으로 자세히 보기 
       main_page_raw = Net::HTTP.get(URI.parse(sub_url))
     rescue
-      puts "=== ERROR : #{sub_url} 페이지 검색 실패 ==="
+      puts "=== ERROR : #{sub_url} 의안정보 페이지 검색 실패 ==="
       exit 1
     end
 
@@ -63,6 +63,10 @@ first_page.upto(last_page) do |page|
     initiated_at = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[2]/div").inner_text.to_s
     voted_at = main_page_path.xpath("tr[10]/td[2]/table/tbody/tr[2]/td[2]/div").inner_text.to_s[0..9]
     result = main_page_path.xpath("tr[10]/td[2]/table/tbody/tr[2]/td[4]/div").inner_text.to_s
+    number = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[1]/div").inner_text.to_s
+    initiator_name = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[3]/div").inner_text.strip
+    initiator_img = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[3]/div/img")
+
     case result
     when "가결"
       result = "approved"
@@ -95,10 +99,7 @@ first_page.upto(last_page) do |page|
       commitee = "재정"
     end
     code = sub_url[60..100]
-    number = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[1]/div").inner_text.to_s
     summary = "''"
-    initiator_name = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[3]/div").inner_text.strip
-    initiator_img = main_page_path.xpath("tr[2]/td[2]/table/tbody/tr[2]/td[3]/div/img")
     if !initiator_img.empty?
       initiator_name = initiator_name.strip[0..2]
     end
@@ -112,9 +113,37 @@ first_page.upto(last_page) do |page|
       p.save
     end
 
-    coactor_names = ""
-    supporter_names = ""
-    dissenter_names = "" 
+    coactor_names = []
+    supporter_names = []
+    dissenter_names = []
+
+    sub_page_row = sub_page_doc.xpath("html/body/center/table/tr/td/table/tr/td[2]/table[3]/tr/td/table/tr/td/table")
+
+    #puts "===TITLE: #{title}"
+    2.upto(8).each do |i|
+      opinion = sub_page_row.xpath("tr[#{i}]/td[1]").children[0].to_s.strip
+      break if opinion.empty?
+      if opinion == "찬성" || opinion == "반대"
+        #printf "=====#{opinion}:"
+        cnt = sub_page_row.xpath("tr[#{i}]/td[1]").children[2].to_s.strip.sub("(", "").sub("명)", "").to_i 
+
+        k = 2
+        while(true)
+          sub_cnt = sub_page_row.xpath("tr[#{i}]/td[2]").children[k].to_s.strip.sub(": ","").sub(" (","").to_i
+          party = sub_page_row.xpath("tr[#{i}]/td[2]").children[k-1].inner_text.to_s
+          party = "새누리당" if party == "한나라당"
+          1.upto(sub_cnt) do |l|
+            name = sub_page_row.xpath("tr[#{i}]/td[2]").children[k+2*l-1].inner_text.to_s
+            #printf " #{name}(#{party})"
+            po = Politician.where(name: name, party: party).first
+            supporter_names << po if !p.nil? && opinion == "찬성"
+            dissenter_names << po if !p.nil? && opinion == "반대"
+          end
+          k += 2 * sub_cnt + 3
+          break if sub_page_row.xpath("tr[#{i}]/td[2]").children[k-1].nil?
+        end
+      end
+    end #end of opinion
 
     if title.empty?
       puts "### ERROR"
@@ -124,9 +153,16 @@ first_page.upto(last_page) do |page|
       if b.nil?
         b = Bill.new(title: title, initiated_at: initiated_at, voted_at: voted_at, complete: true, result: result, commitee: commitee, code: code, number: number, summary: summary)
         b.initiator = p
-        puts " #=== 성공 ===# #{p.name}" if b.save
+        b.coactors = coactor_names
+        b.supporters = supporter_names
+        b.dissenters = dissenter_names
+        puts " #=== 성공 ===# #{p.name} #{supporter_names.count}" if b.save
       else
-        puts " #======== 존재 ===# #{title}"
+        b.initiator = p
+        b.coactors = coactor_names
+        b.supporters = supporter_names
+        b.dissenters = dissenter_names
+        puts " #======== 존재 ===# #{title} #{supporter_names.count}" if b.save
       end
     end
   end
