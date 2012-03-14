@@ -1,0 +1,26 @@
+<div class="politician-recent-links">
+  <div class="politician-recent-links-item clearfix">
+    <% @politicians.each_with_index do |politician, i| -%>
+      <div class="sep-subsection <%= i==0?"left":"right"%>">
+        <div id="p<%=i+1%>-recent-links">
+          <% if !@entries[i].nil? %>
+            <% entries = @entries[i]%>
+            <%= render entries %>
+            <div id="recent-paginator-politician-<%=politician.id %>">
+              <% unless entries.current_page == entries.num_pages %>
+                <%= link_to '>',  recent_links_of_politician_path(politician, :page => entries.current_page + 1), :id => "recent-next-page-#{politician.id}", :class => 'next-links-page'%>
+              <% end -%>
+            </div>
+          <% else -%>
+            <div class="link_entries">
+              <div class="link_header" style="border-bottom: 0">
+                링크 없음 
+              </div>
+            </div>
+          <% end -%>
+        </div>
+        <div id="bottom-indicator-recent-<%=i +1 %>" class="bottom-indicator">hihi</div>
+      </div>
+    <% end -%>
+  </div>
+</div>

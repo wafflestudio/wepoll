@@ -1,56 +1,6 @@
-<div class="politician-popular-links">
-  <div class="politician-popular-links-item clearfix">
-    <% @politicians.each_with_index do |politician, i| -%>
-      <div class="sep-subsection <%= i==0?"left":"right"%>">
-        <% if !politician.timeline_entries.empty? -%>
-          <% politician.timeline_entries[0..2].each_with_index do |e, j| -%>
-            <%= render :partial => "timeline_entries/list", :locals => { :e => e } %>
-          <% end -%>
-          <div class="more_button">
-            더 보기
-          </div>
-        <% else -%>
-          <div class="link_entries">
-            <div class="link_header" style="border-bottom: 0">
-              링크 없음 
-            </div>
-          </div>
-        <% end -%>
-      </div>
-    <% end -%>
-  </div>
+<%= render @entries %>
+<div id="popular-paginator-politician-<%=@p.id %>">
+  <% unless @entries.current_page == @entries.num_pages %>
+    <%= link_to '>', popular_links_of_politician_path(@p, :page => @entries.current_page + 1), :id => "popular-next-page-#{@p.id}", :class => "next-links-page" %>
+  <% end -%>
 </div>
-
-<script type="text/javascript">
-  $(function() {
-      $("#main-content").infinitescroll({
-navSelector:"div.more_button",
-nextSelector:"div.more_button",
-itemSelector:"div.link_reply:first",
-loadingImg:"assets/ajax-loader-link.gif",
-localMode:true
-});
-});
-</script>
-
-<script type="text/javascript">
-  $(function() {
-      $(".link_reply_input").keyup(function() {
-        var $this = $(this);
-        var max = 140;
-        var len = 0;
-        var $textarea = $("textarea", $this);
-        var len = $textarea.val().length;
-        if (len > max) {
-        $textarea.val($textarea.val().substr(0, max));
-        len = $textarea.val().length;
-        }
-        $this.find(".current-comment-length").text(len);
-
-        $this.children("#link-reply-button").click(function() {
-          //  $(this).attr("disabled", true);
-          return true;
-          });
-        });
-      });
-</script>

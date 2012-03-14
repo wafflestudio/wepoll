@@ -1,7 +1,7 @@
 <% content_for :scripts do %>
 <script type="text/javascript">
 $(function() {
-$('span.checkbox').addClass("unchecked");
+  $('span.checkbox').addClass("unchecked");
   $(".checkbox").click(function(){
     if($(this).children("input").attr("checked")){
       // uncheck
@@ -14,6 +14,11 @@ $('span.checkbox').addClass("unchecked");
       $(this).removeClass("unchecked");
       $(this).addClass("checked");
     }
+  });
+  $('#replies_wrapper.total').infinitescroll({
+    navSelector: "#replies_paginator",
+    nextSelector: "#replies_paginator a:first",
+    itemSelector: "#replies_wrapper div.reply_item"
   });
 });
 </script>
@@ -57,12 +62,10 @@ $('span.checkbox').addClass("unchecked");
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
     <% end -%>
   </div>
-  <div id="replies_wrapper" class="grid_4 alpha omega">
-    <% if @total_replies.count == 0 %>
-      <div class="reply_item">
-        등록된 댓글이 없습니다.
-      </div>
-    <% end -%>
-    <%= render @total_replies %> 
+  <div id="replies_wrapper" class="grid_4 alpha omega total">
+    <%= render @replies %> 
+  </div>
+  <div id="replies_paginator">
+    <%= paginate @replies, :param_name => "replies_page" %>
   </div>
 <% end -%>
