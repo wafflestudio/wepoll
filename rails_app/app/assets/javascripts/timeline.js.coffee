@@ -1,3 +1,29 @@
+#= require timeline/underscore
+#= require timeline/json2
+#= require timeline/module
+#= require timeline/raphael-min
+#= require timeline/date-ko-KR
+#= require timeline/backbone 
+#= require timeline/bill
+#= require timeline/bill_collection
+#= require timeline/bill_view
+#= require timeline/timeline_entry
+#= require timeline/timeline_entry_collection
+#= require timeline/timeline_entry_navigator
+#= require timeline/timeline_entry_view
+#= require timeline/timeline_slider
+#= require timeline/timeline_vgroup
+#= require timeline/timeline_hgroup
+#= require timeline/timeline_views
+#
+#
+#= require timeline/jquery-ui-1.8.18.custom.min
+#XXX : jquery corner 씀?
+#= require timeline/jquery.corner
+#= require timeline/jquery.easing.1.3
+#= require timeline/jquery.mousewheel.min
+#= require timeline/jquery.tagsinput
+# =require timeline/jqModal
 
 TimelineEntry = modules.TimelineEntry
 TimelineEntryCollection = modules.TimelineEntryCollection

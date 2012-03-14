@@ -20,6 +20,7 @@
     <!-- Le javascript
     ================================================== -->
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag params[:controller] %>
     <%= yield :scripts %>
     <script type="text/javascript">
       function show_auth_dialog(href) {
@@ -54,6 +55,7 @@
       }
 
       $(document).ready(function() {
+
         $('#notices li').not($('#notices li').eq(0)).hide();
 
         $list = $('#notices li');
@@ -77,17 +79,18 @@
               },
             focus: function() {return false;}}); 
           }
+
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
             $.gritter.add({title:" ",text:"<%= flash[level]%>"});
           <% end %>
         <% end %>
       });
-<% if session[:need_login] -%>
-  $.colorbox({href:"/users/sign_in", width: 520, height: 250});
-  <% session.delete :need_login -%>
-<% else -%>
-<% end -%>
+      <% if session[:need_login] -%>
+        $.colorbox({href:"/users/sign_in", width: 520, height: 250});
+        <% session.delete :need_login -%>
+      <% else -%>
+      <% end -%>
     </script>
 
     <!-- Le styles -->

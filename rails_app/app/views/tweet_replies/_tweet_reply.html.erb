@@ -2,7 +2,7 @@
     <p><%= tweet_reply.user.nickname unless tweet_reply.user.nil? %> <%= tweet_reply.content %></p>
     <span class="reply_date"><%= tweet_reply.created_at.strftime("%Y-%m-%d") %></span>
     <p class="links">
-    <%= link_to '신고', tweet_reply_blame_path(tweet_reply), :class => "report_link" %>
-    <%= link_to '공감'+tweet_reply.like_count.to_s, tweet_reply_like_path(tweet_reply), :class => "recommend_link" %>
+    <%= link_to '신고', blame_tweet_reply_path(tweet_reply), :class => "report_link" %>
+    <%= link_to '공감'+tweet_reply.like_count.to_s, like_tweet_reply_path(tweet_reply), :class => "recommend_link" %>
     </p>
   </div>

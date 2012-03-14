@@ -13,26 +13,10 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//
 //= require placeholder
-//= require timeline/underscore
-//= require timeline/json2
-//= require timeline/module
-//= require timeline/raphael-min
-//= require timeline/date-ko-KR
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
-//= require timeline/backbone 
-//= require timeline/bill
-//= require timeline/bill_collection
-//= require timeline/bill_view
-//= require timeline/timeline_entry
-//= require timeline/timeline_entry_collection
-//= require timeline/timeline_entry_navigator
-//= require timeline/timeline_entry_view
-//= require timeline/timeline_slider
-//= require timeline/timeline_vgroup
-//= require timeline/timeline_hgroup
-//= require timeline/timeline_views
-//= require timeline
-//= require_tree . exclude: "admin" exclude: "cssrefresh"
+//
+//= require login_info
 ////// JUST USE FOR DEVELOPMENT ///////
