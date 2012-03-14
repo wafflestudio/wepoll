@@ -7,6 +7,7 @@ require 'csv'
 # 3. 발의자가 사람일 경우에 공동 발의자 추가하기(Rails.root + crawl_bill.rb 참고)
 ###
 
+=begin
 # 동명이인 처리
 puts "동명이인 처리"
 CSV.foreach(Rails.root + "init_data/duplicated.csv") do |csv|
@@ -30,6 +31,7 @@ CSV.foreach(Rails.root + "init_data/duplicated.csv") do |csv|
 end
 puts "동명이인 처리 완료"
 # 동명이인 처리 완료
+=end
 
 # 지역구 변경
 puts "지역구 변경"
@@ -41,11 +43,13 @@ Politician.all.each do |p|
   elsif  p.district == "금천구"
     p.district = "금천"
   end
+  p.party = p.party[0..3]
   p.save
 end
 puts "지역구 변경 완료"
 # 지역구 변경 완료
 
+=begin
 # 당명 변경
 puts "=== 당명 변경 ==="
 Politician.all.each do |p|
@@ -173,3 +177,4 @@ Politician.calculate_attendance
 # 공동발의 일치도 계산
 Politician.calculate_joint_initiate
 # 공동발의 일치도 완료
+=end
