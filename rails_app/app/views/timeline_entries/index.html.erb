@@ -158,7 +158,7 @@ function activateTimelineEntryForm() {
 // FEED IN DATA
 var pol1 = <%= @p1.to_json.html_safe %>;
 var pol2 = <%= @p2.to_json.html_safe %>;
-var entries = <%= @timeline_entries.to_json.html_safe %>;
+var entries = <%= @timeline_entries.to_json(:include => {:link_replies => {:only =>[:count]}}).html_safe %>;
 // On Load
 $(function() {
 	console.warn('start');
@@ -284,7 +284,6 @@ $(function() {
 	var router = new AppRouter()
 	Backbone.history.start();
 	router.navigate();
-
 
 })
 </script>

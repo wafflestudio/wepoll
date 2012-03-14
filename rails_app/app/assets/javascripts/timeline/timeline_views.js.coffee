@@ -5,7 +5,7 @@ BillView = modules.BillView
 Bill = modules.Bill
 
 class TimelineView
-	@EntryWidth: 210
+	@EntryWidth: 240
 
 	constructor:(@collection,@billcollection)->
 
