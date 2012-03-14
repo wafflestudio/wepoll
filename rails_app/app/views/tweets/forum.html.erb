@@ -27,7 +27,7 @@ $(function() {
 <div class="grid_10 push_1 alpha">
   <div id="politician_box" class="grid_10 alpha omega">
     <div id="politician_profile_picture" class="grid_2 alpha">
-      <%= image_tag @politician.profile_photo.url(:square160), :size => "140x140" %>
+      <%= image_tag @politician.profile_photo.url(:square160), :size => "120x120" %>
     </div>
     <div id="politician_info" class="grid_8 omega">
       <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %>
