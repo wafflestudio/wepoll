@@ -112,6 +112,9 @@
   position:absolute;
   top: 0;
   z-index: 500;
+  text {
+    cursor: pointer;
+  }
 }
 
 #line-canvas {

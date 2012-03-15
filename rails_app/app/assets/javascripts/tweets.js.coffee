@@ -13,7 +13,7 @@ $ ->
   $('#replies_paginator').hide()
 
   # tweet box click handler
-  $('.tweet_item').click ->
+  $('.tweet_item').live 'click', ->
     $.get($(this).attr("data-href"))
     return
   # report btn 
@@ -47,7 +47,7 @@ $ ->
     false
 
   # reply btn (in tweet box)
-  $('.reply_btn').click (e) ->
+  $('.reply_btn').live 'click', (e) ->
     $reply_box.css 'top', e.clientY-60
     $reply_box.show()
     $('#reply_box form').eq(0).attr 'action',this.href
