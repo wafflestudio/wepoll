@@ -33,10 +33,10 @@ class Politician #정치인 모델
 
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
-    :styles => {:square100 => "100x100#", :square160 => "160x160#"},
+    :styles => {:square100 => "100x100#", :square160 => "160x160#",
+    :default_url => "/public/anonymous_:style.gif"},
     :url => "/system/politician_profile_photos/:id/:style.:extension",
-    :path => Rails.root.to_s+"/public/system/politician_profile_photos/:id/:style.:extension",
-    :convert_options => { :all => '-strip -colorspace RGB'} #fucking IE
+    :path => Rails.root.to_s+"/public/system/politician_profile_photos/:id/:style.:extension"
 
   #=== Association ===
   # maybe this politician has a user account

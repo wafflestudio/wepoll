@@ -31,7 +31,7 @@ class ApiController < ApplicationController
 		if preview != nil and !params[:force_get]
 			result[:created_at] = preview.created
 			result[:title] = preview.title
-			result[:description ] = preview.description
+			result[:description ] = preview.description[0...117]  + "..."# 120자 제한!
 			result[:image] = preview.image_url
 		else
 			doc = Nokogiri::HTML(open(target_link))

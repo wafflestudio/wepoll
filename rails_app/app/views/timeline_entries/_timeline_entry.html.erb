@@ -1,4 +1,4 @@
-<div class="link_entries" id="link-entry-<%= timeline_entry.id%>">
+<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%= timeline_entry.url%>">
   <div class="link_header clearfix">
     <%= image_tag timeline_entry.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
     <div class="link_profile_info"> 
@@ -11,9 +11,6 @@
     <p>
     <%= timeline_entry.title %>
     </p>
-    <script>
-      loadUrl("<%= timeline_entry.url %>", "#link-entry-<%= timeline_entry.id %>");
-    </script>
     <div class="preview-wrap clearfix">
       <div class="preview-image"></div>
       <div class="preview-text">
@@ -68,8 +65,8 @@
         <div style="float: right; margin-right:10px;">
           <div id="comment-length">
             <span class="current-comment-length">0</span>/140자
+            <%= f.submit '등록', :class => 'link-reply-button' %>
           </div>
-          <%= f.submit '등록', :class => 'link-reply-button' %>
         </div>
       <% end -%>
     </div>
