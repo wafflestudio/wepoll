@@ -65,6 +65,10 @@
               var $objs = $data.filter(".link_entries");
               console.log("new entries = " + $objs.length);
               $("#p1-popular-links").append($objs);
+              $objs.each(function(i, elem) {
+                var $elem = $(elem);
+                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+              });
               var new_href = $data.find('#popular-next-page-<%= @politicians[0].id%>').attr("href");
               $('#popular-next-page-<%= @politicians[0].id%>').attr("href", new_href);
               console.log("new page href = " + new_href);
@@ -93,6 +97,11 @@
               console.log("new entries = " + $objs.length);
               $("#loading-indicator-popular-<%=@politicians[1].id%>").hide();
               $("#p2-popular-links").append($objs);
+              $objs.each(function(i, elem) {
+                var $elem = $(elem);
+                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+              });
+
               var new_href = $data.find('#popular-next-page-<%= @politicians[1].id%>').attr("href");
               $('#popular-next-page-<%= @politicians[1].id%>').attr("href", new_href);
               console.log("new page href = " + new_href);
@@ -122,6 +131,11 @@
               var $objs = $data.filter(".link_entries");
               console.log("new entries = " + $objs.length);
               $("#p1-recent-links").append($objs);
+              $objs.each(function(i, elem) {
+                var $elem = $(elem);
+                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+              });
+
               var new_href = $data.find('#recent-next-page-<%= @politicians[0].id%>').attr("href");
               $('#recent-next-page-<%= @politicians[0].id%>').attr("href", new_href);
               console.log("new page href = " + new_href);
@@ -150,6 +164,11 @@
               var $objs = $data.filter(".link_entries");
               console.log("new entries = " + $objs.length);
               $("#p2-recent-links").append($objs);
+              $objs.each(function(i, elem) {
+                var $elem = $(elem);
+                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+              });
+
               var new_href = $data.find('#recent-next-page-<%= @politicians[1].id%>').attr("href");
               $('#recent-next-page-<%= @politicians[1].id%>').attr("href", new_href);
               console.log("new page href = " + new_href);
