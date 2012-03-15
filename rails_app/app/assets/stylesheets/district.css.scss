@@ -316,6 +316,51 @@ a.init-bills-link {
     .link_contents {
       padding: 10px;
       margin: 5px 0;
+      p {
+        word-wrap: break-word;
+        margin-bottom: 10px;
+      }
+      .preview-wrap {
+        background-color: #f6f7f8;
+        .preview-image {
+          width: 91px;
+          float: left;
+          margin-right: 6px;
+          img {
+            width: 90px;
+          }
+        }
+        .preview-text {
+          font-size: 11px;
+          float: left;
+          padding: 5px;
+          width: 200px;
+          .preview-title {
+            margin-bottom: 5px;
+            a {
+              color: #23408b;
+              font-weight: bold;
+              text-decoration: none;
+           }
+           a:hover {
+            text-decoration: underline;
+          }
+          }
+          .preview-url, .preview-desc {
+            color: #8d7f7b;
+          }
+          .preview-url {
+            margin-bottom: 12px;
+            a {
+              color: #8d7f7b;
+              text-decoration: none;
+            }
+            a:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
   }
   .link_footer {
     padding: 5px;

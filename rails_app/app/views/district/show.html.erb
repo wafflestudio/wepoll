@@ -74,6 +74,8 @@
               }
               else {
               }
+              charLimit();
+              //loadUrl(url, "#link-entry-<%=@politicians[0].id%>");
             });
           }, opts);
 
@@ -100,9 +102,10 @@
               }
               else {
               }
+              charLimit();
+              //loadUrl(url, "#link-entry-<%=@politicians[1].id%>");
             });
           }, opts);
-
         }
         else if (id == 'politician-recent-links') {
           $("#bottom-indicator-recent-1").waypoint(function(event, direction) {
@@ -128,6 +131,8 @@
               }
               else {
               }
+              charLimit();
+              //loadUrl(url, "#link-entry-<%=@politicians[0].id%>");
             });
           }, opts);
 
@@ -154,14 +159,14 @@
               }
               else {
               }
+              charLimit();
+              //loadUrl(url, "#link-entry-<%=@politicians[1].id%>");
             });
           }, opts);
         }
       }
-
       );
       $("#tab-sections-container").append($tab_section);
-
       return false;
     }
 
@@ -214,6 +219,34 @@
  </script>
 <script type="text/javascript" src="/assets/waypoints.js"></script>
 <% end -%>
+<script type="text/javascript">
+  function charLimit() { $(".link_reply_input").keyup(function() {
+    var $this = $(this);
+    var max = 140;
+    var len = 0;
+    var $textarea = $("textarea", $this);
+    var len = $textarea.val().length;
+    if (len > max) {
+      $textarea.val($textarea.val().substr(0, max));
+      len = $textarea.val().length;
+    }
+    $this.find(".current-comment-length").text(len);
+
+    $this.children(".link-reply-button").click(function() {
+      return true;
+    });
+    });};
+	function loadUrl(url, parentDiv)  {
+		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
+			function(data)  { 
+				console.warn(data)
+				$(".preview-title a", parentDiv).html(data.title);
+				$(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" );
+				$(".preview-desc", parentDiv).html(data.description);
+			} 
+		}); 
+	};
+</script>
 
 <%= render 'timeline_entries/index' %>
 <a href="#" id="show-timeline">&nbsp;</a>
@@ -250,10 +283,10 @@
         :class => 'tab alpha', "data-id" => "politician-recent-links" %>
       <%= link_to '인기링크',
         popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "politician-popular-links" %>
+        :class => 'tab selected', "data-id" => "politician-popular-links" %>
       <%= link_to '국회활동',
         bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab selected', "data-id" => "bill-activity" %>
+        :class => 'tab', "data-id" => "bill-activity" %>
       <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
       <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
     </div>
@@ -261,5 +294,4 @@
     </div> <!-- end of tab conainer -->
   </div>
 </div>
-
 
