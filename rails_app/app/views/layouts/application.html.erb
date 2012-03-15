@@ -19,6 +19,19 @@
     <%= stylesheet_link_tag "preload/preload", :media => "all" %>
     <!-- Le javascript
     ================================================== -->
+    <script type="text/javascript">
+      var alertFallback = false;
+      if (typeof console === "undefined" || typeof console.log === "undefined") {
+        console = {};
+        if (alertFallback) {
+          console.log = function(msg) {
+            alert(msg);
+          };
+        } else {
+          console.log = function() {};
+        }
+      }
+    </script>
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag params[:controller] %>
     <%= yield :scripts %>

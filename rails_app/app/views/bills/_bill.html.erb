@@ -2,6 +2,26 @@
   <td class="cell-date"><%= bill.initiated_at.strftime("%Y-%m-%d") %></td>
   <td class="cell-commitee"><%= bill.commitee %></td>
   <td class="cell-title"><%=link_to_function bill.title, "law_title_click($(this), '#{bill.id}')", :class => 'show-bill' %></td>
-  <td class="cell-result"><%= bill.complete ? "처리" : "계류"%></td>
+  <td class="cell-result">
+    <% if !bill.complete -%>
+      <a title="계류">△</a>
+    <% elsif bill.result == Bill::RESULT_APPROVED -%>
+      <a title="가결">◯</a>
+    <% elsif bill.result == Bill::RESULT_REJECTED -%>
+      <a title="부결">✕</a>
+    <% elsif bill.result == Bill::RESULT_DISPOSAL -%>
+      <a title="폐기">✕</a>
+    <% elsif bill.result == Bill::RESULT_WITHDRAW -%>
+      <a title="철회">✕</a>
+    <% elsif bill.result == Bill::RESULT_EXPIRED -%>
+      <a title="임기만료폐기">✕</a>
+    <% else -%>
+      <% if bill.result =~ /폐기/ -%>
+        <a title="<%= bill.result%>">✕</a>
+      <% else -%>
+        <a title="<%= bill.result.nil? || bill.result.length == 0 ? "계류" : bill.result%>">△</a>
+      <% end -%>
+    <% end -%>
+  </td>
 </tr>
 
