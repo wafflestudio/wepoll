@@ -25,11 +25,21 @@
 <div class="container_16" id="link-detail-wrapper">
   <div class="grid_11 alpha omega">
     <div class="grid_6 alpha" id="replies-left">
-      <div class="grid_2 alpha" id="link-like-count">
-        <span id="like-count"><%= @timeline_entry.like_count %></span><br />
-        <span style="color:#48d822;font-size:9pt;">공감</span>
-      </div>
 
+      <div class="grid_2 alpha">
+        <div class="grid_2 alpha omega" id="link-like-count">
+          <span id="like-count"><%= @timeline_entry.like_count %></span><br />
+          <span style="color:#48d822;font-size:9pt;">공감</span>
+        </div>
+
+        <div class="grid_2 alpha omega" id="sns-links">
+          <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
+          <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
+          <iframe allowtransparency="true" frameborder="0" scrolling="no"
+            src="//platform.twitter.com/widgets/tweet_button.html"
+            style="width:90px; height:20px;"></iframe></iframe>
+        </div>
+      </div>
       <div class="grid_4 omega" style="width:315px">
         <div id="link-title"><%= @timeline_entry.title %></div>
         <div class="clear"></div>
@@ -43,15 +53,6 @@
         </div>
       </div>
 
-      <div class="clear"></div>
-
-      <div class="grid_2 alpha" id="sns-links">
-        <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
-        <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
-        <iframe allowtransparency="true" frameborder="0" scrolling="no"
-          src="//platform.twitter.com/widgets/tweet_button.html"
-          style="width:90px; height:20px;"></iframe></iframe>
-      </div>
     </div>
 
     <div class="grid_5 omega" id="replies-right">

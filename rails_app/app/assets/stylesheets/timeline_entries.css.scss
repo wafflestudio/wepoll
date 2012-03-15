@@ -149,10 +149,10 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-detail-wrapper {
-  width:424px + 304px + 16px;
+  width:771px;
   padding-top:20px;
   .grid_11 {
-    width:424px + 304px + 16px;
+    width:771px;
   }
 }
 
@@ -581,12 +581,9 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   overflow-y: auto;
 }
 
-#replies-right {
-  width:280px;
-}
 
 #replies-left {
-  width:424px - 1px;
+  width:447px - 1px;
   border-right:1px dashed #bdbbbc;
 }
 
