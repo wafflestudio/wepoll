@@ -73,13 +73,21 @@ class TimelineController
 				@collection.add(entry)
 		
 		# Growl
-		@collection.on "add", (model)->
-			$("#timeline-msg-noentry").hide()
+		@collection.on "add", (model)=>
+			$("#timeline-msg-noentry1").hide() if model.get('politician_id') == @pol1._id
+			$("#timeline-msg-noentry2").hide() if model.get('politician_id') == @pol2._id
 			console.log('Entry added to collection')
 			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
-		@collection.on "remove", (model)->
-			if @collection.length == 0
-				$("#timeline-msg-noentry").show()
+		@collection.on "remove", (model)=>
+			p1_num = 0
+			p2_num = 0
+			@collection.each (entry)=>
+				p1_num = p1_num + 1 if entry.get('politician_id') == @pol1._id
+				p2_num = p2_num + 1 if entry.get('politician_id') == @pol2._id
+			
+			$("#timeline-msg-noentry1").show() if p1_num == 0
+			$("#timeline-msg-noentry2").show() if p2_num == 0
+
 			console.log('Entry removed from collection')
 			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
 
@@ -87,7 +95,7 @@ class TimelineController
 			console.log('Entry changed in collection')
 			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
 
-
+	
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
 	changeScale: (scaleName, start)->
@@ -135,8 +143,11 @@ class TimelineController
 
 		@currentScale.trigger('viewportChange')
 
-		$("<div id='timeline-msg-noentry'>항목이 없습니다.</div>").appendTo(@$el)
-		$("#timeline-msg-noentry").hide() if @collection.length > 0
+		$("<div id='timeline-msg-noentry1'>항목이 없습니다.</div>").appendTo(@$el)
+		$("<div id='timeline-msg-noentry2'>항목이 없습니다.</div>").appendTo(@$el)
+		@collection.each (entry)=>
+			$("#timeline-msg-noentry1").hide() if entry.get('politician_id') == @pol1._id
+			$("#timeline-msg-noentry2").hide() if entry.get('politician_id') == @pol2._id
 
 	onViewportChange:()=>
 		bounds = @currentScale.bounds

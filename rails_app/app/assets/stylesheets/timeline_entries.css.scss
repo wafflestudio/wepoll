@@ -349,10 +349,9 @@ z-index:10;
 	background:url('/assets/icn_timeline_right.gif') no-repeat;
 }
 
-#timeline-msg-noentry {
+#timeline-msg-noentry1, #timeline-msg-noentry2 {
 	position:relative;
 	text-align:center;
-	top:200px;
 	padding:5px;
 	margin-left:auto;
 	margin-right:auto;
@@ -360,6 +359,13 @@ z-index:10;
 	background-color:#ccc;
 }
 
+#timeline-msg-noentry1 {
+	top:80px;
+}
+
+#timeline-msg-noentry2 {
+	top:280px;
+}
 
 .tm-sl-holder {
 position:relative;
