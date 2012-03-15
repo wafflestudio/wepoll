@@ -14,5 +14,15 @@ class TimelineEntry extends Backbone.Model
 	# (validation functionality is to be implemented)
 	validate: (attrs)->
 		return false
+	#TODO: out-of-band data (twitter send)
+	save: (attrs, options, oob)->
+		console.log('save',oob)
+		super(attrs,options)
+	toJSON: ()->
+		attrs = _.clone(this.attributes)
+		#attrs["id"] = attrs["_id"]
+		#delete attrs["_id"]
+		wrapped = {timeline_entry: attrs}
+		return wrapped
 
 modules.TimelineEntry = TimelineEntry

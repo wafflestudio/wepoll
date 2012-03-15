@@ -18,7 +18,7 @@
 #
 #
 #= require timeline/jquery-ui-1.8.18.custom.min
-#XXX : jquery corner 씀?
+#XXX : jquery corner 씀? A: 안씀ㅋ
 #= require timeline/jquery.corner
 #= require timeline/jquery.easing.1.3
 #= require timeline/jquery.mousewheel.min

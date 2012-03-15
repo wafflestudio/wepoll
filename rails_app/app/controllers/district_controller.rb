@@ -31,19 +31,19 @@ class DistrictController < ApplicationController
     @tweets = [@t1, @t2]
 
 
-    # Timeline => See timeline_controller.rb.
-    if params[:from]
-      q_time = {:updated_at => {'$gte' => params[:from]}}
-    elsif params[:after]
-      q_time = {:updated_at => {'$gt' => params[:after]}}
-    else
-      q_time = {:deleted => false} # (all except deleted)
-    end
-
-    @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
-
     respond_to do |format|
-      format.html
+      format.html do
+				#timeline bootstrap
+				# Timeline => See timeline_controller.rb.
+				if params[:from]
+					q_time = {:updated_at => {'$gte' => params[:from]}}
+				elsif params[:after]
+					q_time = {:updated_at => {'$gt' => params[:after]}}
+				else
+					q_time = {:deleted => false} # (all except deleted)
+				end
+    		@timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
+      end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
     end
   end

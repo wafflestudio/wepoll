@@ -130,7 +130,11 @@ class TimelineEntriesController < ApplicationController
   # PUT /timeline_entries/1
   # PUT /timeline_entries/1.json
   def update
-    @timeline_entry = TimelineEntry.find(params[:id])
+  	
+    @timeline_entry = TimelineEntry.find(params[:id],:user_id => current_user.id)
+		# prevent updating from previous value
+		params[:timeline_entry].delete :like_count
+		params[:timeline_entry].delete :link_count
 
     respond_to do |format|
       if @timeline_entry.update_attributes(params[:timeline_entry])
