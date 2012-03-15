@@ -5,7 +5,7 @@
       <p class="name"><%= timeline_entry.user.nickname %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
-    <%= image_tag "good_point.png", :style => "float: right;" %>
+    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;" %>
   </div>
   <div class="link_contents">
     <p>
