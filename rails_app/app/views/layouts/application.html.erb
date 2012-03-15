@@ -7,6 +7,7 @@
     <meta property="og:image"       content="http://wepoll.or.kr/btn_wepoll.png" />
     <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
     <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="http://wepoll.or.kr" />
 
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
@@ -123,7 +124,7 @@
     <script>
       FB.init({
         appId      : '<%= FACEBOOK_CLIENT[:key]%>', // App ID
-        channelUrl : '//wepoll.dev/channel.html', // Channel File
+        channelUrl : '//wepoll.or.kr/channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
