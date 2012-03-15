@@ -14,7 +14,7 @@ $ ->
 
   # tweet box click handler
   $('.tweet_item').live 'click', ->
-    $.get($(this).attr("data-href"))
+    $.get $(this).attr("data-href")
     return
   # report btn 
   $('.reply_item p.links a.report_link').live 'click', ->
