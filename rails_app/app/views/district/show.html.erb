@@ -217,6 +217,19 @@
 
         $(".link-button.new").click(function() {
           $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
+            $("#timeline_entry_title").keyup(function() {
+              var $this = $(this);
+              var max = parseInt($this.attr('maxlength'));
+              var len = $this.val().length;
+              if (len > max) {
+                console.log("len>max");
+                $this.val($this.val().substr(0, max));
+                len = $this.val().length;
+              }
+
+              $("#timeline-entry-comment-length").text(len);
+            });
+
           activateTimelineEntryForm();
           $('.tm-entry-form').submit( function() {
             $.colorbox.close();
