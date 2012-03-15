@@ -3,7 +3,7 @@
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
         <div id="p<%=i+1%>-recent-links">
-          <% if !@entries[i].nil? %>
+          <% if !@entries[i].empty? %>
             <% entries = @entries[i]%>
             <%= render entries %>
             <div id="recent-paginator-politician-<%=politician.id %>">

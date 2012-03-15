@@ -65,8 +65,8 @@
         <div style="float: right; margin-right:10px;">
           <div id="comment-length">
             <span class="current-comment-length">0</span>/140자
+            <%= f.submit '등록', :class => 'link-reply-button' %>
           </div>
-          <%= f.submit '등록', :class => 'link-reply-button' %>
         </div>
       <% end -%>
     </div>
@@ -75,4 +75,3 @@
     loadUrl("<%= timeline_entry.url %>", "#link-entry-<%= timeline_entry.id %>");
   </script>
 </div>
-
