@@ -475,9 +475,6 @@ class TimelineView
 class TermView extends TimelineView
 	@unit : "term"
 
-	constructor: (@collection)->
-		super(@collection)
-		
 	fetch: (startTerm, endTerm)->
 		options =
 			start: startTerm

@@ -10,9 +10,9 @@ createView = (model)->
 			<!--<p>링크: #{model.escape('url')}</p>-->
 			<!--<p>날짜: #{formatDate(Date.parse(model.get('posted_at')))}</p>-->
 			<!--<p>코멘트: #{model.escape('comment')}<p>-->
-			<div class='tm-entry-tags'>#{model.escape('tags')}</div>
 			</div>
 			<div class='tm-entry-footer'>
+				<div class='tm-entry-tags'>#{model.escape('tags')}</div>
 				<div class='tm-entry-numlike'>공감 #{if model.get('like_count')? then model.get('like_count') else 0}</div>
 				<div class='tm-entry-numreply'>댓글 #{if model.get('link_replies')? then model.get('link_replies').length else 0}</div>
 

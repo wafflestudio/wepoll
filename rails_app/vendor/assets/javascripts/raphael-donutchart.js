@@ -15,7 +15,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 
 		return paper.path(["M", x1, y1, "A", r, r, 0, +(endAngle - startAngle > 180), 0, x2, y2, "L", x3,y3,"A",r2,r2,0,+(endAngle-startAngle>180),1,x4,y4, "z"]).attr(params);
 	}
-
+	
+	var txt_r = values.length < 8 ? r : r + 10;
 	var angle = 0,
 	total = 0,
 	rects = [],
@@ -32,8 +33,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		bcolor =  color,
 		p = sector(cx, cy, r, angle, angle + angleplus, {fill: "90-" + bcolor + "-" + color, stroke: stroke, "stroke-width": 1});
 
-		var txt_x = cx + (r - 10) * Math.cos(-popangle * rad);
-		var txt_y = cy + (r) * Math.sin(-popangle * rad);
+		var txt_x = cx + (txt_r - 10) * Math.cos(-popangle * rad);
+		var txt_y = cy + (txt_r) * Math.sin(-popangle * rad);
 	
 		var txt = paper.text(txt_x, txt_y, labels[j])
 		.attr({fill: "#000", stroke: "none", opacity:1, "font-size": 10});
