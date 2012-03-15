@@ -1,3 +1,4 @@
 $("#bills-content").html("<%= escape_javascript render(@bills)%>");
 $("#bills-paginator").html("<%= escape_javascript(paginate(@bills, :remote => true))%>");
 $("#bill-summary-popup").hide();
+$.colorbox.resize();

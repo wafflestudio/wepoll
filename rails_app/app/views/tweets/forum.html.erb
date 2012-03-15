@@ -27,7 +27,7 @@ $(function() {
 <div class="grid_10 push_1 alpha">
   <div id="politician_box" class="grid_10 alpha omega">
     <div id="politician_profile_picture" class="grid_2 alpha">
-      <%= image_tag @politician.profile_photo.url %>
+      <%= image_tag @politician.profile_photo.url(:square160), :size => "120x120" %>
     </div>
     <div id="politician_info" class="grid_8 omega">
       <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %>
@@ -62,9 +62,18 @@ $(function() {
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
     <% end -%>
   </div>
+  <% if @replies.empty? %>
+    <div id="replies_wrapper" class="grid_4 alpha omega">
+      <div class="reply_item">
+        <p>댓글이 없습니다.</p>
+      </div>
+    </div>
+  <% else -%>
+
   <div id="replies_wrapper" class="grid_4 alpha omega total">
     <%= render @replies %> 
   </div>
+  <% end -%>
   <div id="replies_paginator">
     <%= paginate @replies, :param_name => "replies_page" %>
   </div>
