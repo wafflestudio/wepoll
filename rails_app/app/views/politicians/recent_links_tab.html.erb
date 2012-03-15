@@ -22,6 +22,11 @@
         <div id="bottom-indicator-recent-<%=i +1 %>" class="bottom-indicator">hihi</div>
         <div class="loading-indicator" id="loading-indicator-recent-<%= politician.id %>">&nbsp;</div>
       </div>
+      <script>
+        <% entries.each do |timeline_entry| -%>
+          loadUrl("<%= timeline_entry.url %>", "#p<%=i+1 %>-recent-links .link-entry-<%= timeline_entry.id %>");
+        <% end -%>
+      </script>
     <% end -%>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<div class="link_entries" id="link-entry-<%= timeline_entry.id%>" data-url="<%= timeline_entry.url%>">
+<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%= timeline_entry.url%>">
   <div class="link_header clearfix">
     <%= image_tag timeline_entry.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
     <div class="link_profile_info"> 
@@ -71,8 +71,5 @@
       <% end -%>
     </div>
   </div>
-  <script>
-    loadUrl("<%= timeline_entry.url %>", "#link-entry-<%= timeline_entry.id %>");
-  </script>
 </div>
 
