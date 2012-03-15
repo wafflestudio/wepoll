@@ -42,6 +42,9 @@
         return false;
       }
 
+      function show_login() {
+        $.colorbox({href:'/users/sign_in', width: 520, height: 250});
+      }
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>",width:800,height:600});
       }

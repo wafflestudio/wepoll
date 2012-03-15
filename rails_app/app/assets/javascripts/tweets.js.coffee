@@ -47,7 +47,7 @@ $ ->
     false
 
   # reply btn (in tweet box)
-  $('.reply_btn').live 'click', (e) ->
+  $('.reply_btn.new').live 'click', (e) ->
     $reply_box.css 'top', e.clientY-60
     $reply_box.show()
     $('#reply_box form').eq(0).attr 'action',this.href

@@ -6,8 +6,8 @@
     <%= link_to '신고', blame_tweet_reply_path(tweet_reply), :class => "report_link" %>
     <%= link_to '공감'+tweet_reply.like_count.to_s, like_tweet_reply_path(tweet_reply), :class => "recommend_link" %>
   <% else -%>
-    <%= link_to_function '신고', "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
-    <%= link_to_function '공감'+tweet_reply.like_count.to_s, "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
+    <%= link_to_function '신고', "show_login()" %>
+    <%= link_to_function '공감'+tweet_reply.like_count.to_s, "show_login()" %>
   <% end -%>
   </p>
 </div>

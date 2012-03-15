@@ -7,10 +7,10 @@
       <span class="tweet_author"><%= tweet.name if tweet.name? %> <%= "@#{tweet.screen_name}" if tweet.screen_name? %></span>
       <% if user_signed_in? -%>
         <%= link_to '공감하기', like_tweet_path(tweet), :class => "tweet_recommend_btn" %>
-        <%= link_to '댓글달기', tweet_tweet_replies_path(tweet), :class => "reply_btn", "data-status_id" => tweet.status_id %>
+        <%= link_to '댓글달기', tweet_tweet_replies_path(tweet), :class => "reply_btn new", "data-status_id" => tweet.status_id %>
       <% else -%>
-        <%= link_to_function '공감하기', "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
-        <%= link_to_function '댓글달기', "$.colorbox({href:'/users/sign_in', width: 520, height: 250})", :class => "reply_btn" %>
+        <%= link_to_function '공감하기', "show_login()", :class => "tweet_recommend_btn" %>
+        <%= link_to_function '댓글달기', "show_login()", :class => "reply_btn" %>
       <% end -%>
     </div>
     <div class="clear"></div>

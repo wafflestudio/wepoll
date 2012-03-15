@@ -50,6 +50,6 @@
   <% if user_signed_in? -%>
     <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'} new"%>
   <% else -%>
-    <%= link_to_function '링크등록', "$.colorbox({href:'/users/sign_in', width: 520, height: 250});", :class => "link-button #{index==0?'left':'right'} login" %>
+    <%= link_to_function '링크등록', "show_login()", :class => "link-button #{index==0?'left':'right'} login" %>
   <% end -%>
 </div>
