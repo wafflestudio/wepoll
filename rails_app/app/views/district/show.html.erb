@@ -200,16 +200,16 @@
       $(".selected").click();
 
       var timelineInitialized = false
-      $('#show-timeline').click( function() {
-        $('#timeline-container').jqmShow();
-
-        if(!timelineInitialized)
-        {
-          timelineController.reset()
-        }
-        timelineInitialized = true;
-        return false
-      });
+//      $('#show-timeline').click( function() {
+//        $('#timeline-container').jqmShow();
+//
+//        if(!timelineInitialized)
+//        {
+//          timelineController.reset()
+//        }
+//        timelineInitialized = true;
+//        return false
+//      });
 
       $('#timeline-container').jqm({overlay:1});
 
@@ -278,7 +278,7 @@
 </script>
 
 <%= render 'timeline_entries/index' %>
-<a href="#" id="show-timeline">&nbsp;</a>
+<!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
 <div class="grid_12" id="vs-content-wrapper">
   <div id="district-title">
