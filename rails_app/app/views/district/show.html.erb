@@ -55,7 +55,7 @@
             if (direction == 'up') return;
             $("#bottom-indicator-popular-1").waypoint('remove');
             var url = $('#popular-next-page-<%= @politicians[0].id%>').attr('href');
-            if (!url) {alert('nourl');return;}
+            if (!url) {return;}
             console.log("load "+ url);
             $("#loading-indicator-popular-<%=@politicians[0].id%>").show();
             $.get(url, function(data) {
@@ -84,8 +84,6 @@
             if (!url) return;
             console.log("load "+ url);
             $("#loading-indicator-popular-<%=@politicians[1].id%>").show();
-            if (!url)
-              alert("alert");
             $.get(url, function(data) {
               console.log("loaded");
               var $data = $(data);
