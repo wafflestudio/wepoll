@@ -7,7 +7,7 @@
 <script type="text/javascript">
   var bill_counts_<%= politician.id%> = [<%= bill_counts.join(",") %>];
   var bill_categories_<%=politician.id %> = $.parseJSON('<%=raw bill_categories.to_json %>');
-  Raphael("<%= politician.id %>-bill-graph", 260, 240).donutChart(240/2+10,240/2,95,46, bill_counts_<%= politician.id%>, bill_categories_<%= politician.id%>, "#FFF", 1, <%= index%>, "<%= @party_color[politician.party] || '#f00' %>");
+  Raphael("<%= politician.id %>-bill-graph", 260, 240).donutChart(240/2+10,240/2,95,46, bill_counts_<%= politician.id%>, bill_categories_<%= politician.id%>, "#FFF", 1, <%= index%>, "<%= @party_color[politician.party] || '#4f4f50' %>");
   $(".init-bills-link").colorbox();
 
   $("#<%= politician.id%>-bill-bar-graph").simpleBarGraph({

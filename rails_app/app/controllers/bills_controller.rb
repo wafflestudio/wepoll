@@ -23,7 +23,7 @@ class BillsController < ApplicationController
     @bill = Bill.find(params[:id])
 	  respond_to do |format|
       format.json { render json: @bill}
+      format.html 
     end
-
   end
 end

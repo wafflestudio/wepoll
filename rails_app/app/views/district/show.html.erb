@@ -20,7 +20,10 @@
       $div.stop().slideDown();
 
       //load html
-      $("#summary-popup-content").load("/bills/"+ id);
+      $.get("/bills/"+ id, {}, function(data) {
+        $("#summary-popup-content").html(data);
+        $.colorbox.resize();
+      }, "html"); 
       return false;
     }
 
@@ -52,6 +55,7 @@
             if (direction == 'up') return;
             $("#bottom-indicator-popular-1").waypoint('remove');
             var url = $('#popular-next-page-<%= @politicians[0].id%>').attr('href');
+            if (!url) {alert('nourl');return;}
             console.log("load "+ url);
             $("#loading-indicator-popular-<%=@politicians[0].id%>").show();
             $.get(url, function(data) {
@@ -79,6 +83,7 @@
             if (direction == 'up') return;
             $("#bottom-indicator-popular-2").waypoint('remove');
             var url = $('#popular-next-page-<%= @politicians[1].id%>').attr('href');
+            if (!url) return;
             console.log("load "+ url);
             $("#loading-indicator-popular-<%=@politicians[1].id%>").show();
             if (!url)
@@ -109,6 +114,7 @@
             if (direction == 'up') return;
             $("#bottom-indicator-recent-1").waypoint('remove');
             var url = $('#recent-next-page-<%= @politicians[0].id%>').attr('href');
+            if (!url) return;
             console.log("load "+ url);
             $("#loading-indicator-recent-<%=@politicians[0].id%>").show();
             $.get(url, function(data) {
@@ -136,6 +142,7 @@
             if (direction == 'up') return;
             $("#bottom-indicator-recent-2").waypoint('remove');
             var url = $('#recent-next-page-<%= @politicians[1].id%>').attr('href');
+            if (!url) return;
             console.log("load "+ url);
             $("#loading-indicator-recent-<%=@politicians[1].id%>").show();
             $.get(url, function(data) {
@@ -263,7 +270,7 @@
       <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
       <% if i==0 -%>
         <div id="split-bar">
-          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph", :style => "margin-top:360px;" %>
+          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph", :style => "margin-top:400px;" %>
           <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph", :style => "margin-top:20px;" %>
         </div>
       <% end -%>
