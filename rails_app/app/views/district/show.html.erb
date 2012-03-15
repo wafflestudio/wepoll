@@ -236,6 +236,22 @@
             return false;
           });
 
+  $('span.checkbox').addClass("unchecked");
+  $(".checkbox").click(function(){
+    if($(this).children("input").attr("checked")){
+      // uncheck
+      $(this).children("input").removeAttr("checked");
+      $(this).removeClass("checked");
+      $(this).addClass("unchecked");
+    }else{
+      // check
+      $(this).children("input").attr({checked: "checked"});
+      $(this).removeClass("unchecked");
+      $(this).addClass("checked");
+    }
+  });
+
+
         }
         });
       });

@@ -52,12 +52,16 @@ class MainController < ApplicationController
     sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
     id = params[:query_id]
 
-    if type == 0
+    if type == 0 && !sub_query.empty?
       @politician = Politician.where(district: sub_query).first
-    elsif type == 1
-      @politician = Politician.find(sub_query)
-    else
-      @politician = Politician.where(district: sub_query).first
+	elsif type == 1
+@politician = Politician.find(sub_query)
+	else
+	if !sub_query.empty?
+	@politician = Politician.where(district: sub_query).first
+	else
+	@politician = nil
+	end
     end
 
     if !@politician.nil?

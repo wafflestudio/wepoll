@@ -62,8 +62,22 @@ module Wepoll
     config.assets.paths << Rails.root.join("app", "assets", "stylesheets", "preload")
     config.assets.paths << Rails.root.join("app", "assets", "stylesheets", "admin")
     config.assets.paths << Rails.root.join("app", "assets", "javascripts", "admin")
+    config.assets.paths << Rails.root.join("app", "assets", "javascripts", "users")
+    config.assets.paths << Rails.root.join("app", "assets", "javascripts", "me")
     config.assets.precompile += ["preload/preload.css"]
-    config.assets.precompile += ["admin/admin.js", "admin/*.css", "search.js"]
+
+
+jss = %w(	me/dashboard.js 	me/me.js 	me/sns.js
+	link_replies.js	 suggestions.js    tweets.js
+	api.js district.js	   login_info.js    notices.js	 
+	users/omniauth_callbacks.js 	users/registrations.js users/sessions.js
+	application.js	 jquery.infinitescroll.js  main.js politicians.js timeline.js
+	jcombox-1.0b.packed.js  jquery.gritter.min.js   jquery.tokeninput.js    raphael-min.js          
+	cssrefresh.js           jquery.colorbox-min.js  jquery.path.js          placeholder.js          raphael-piechart.js     
+	infinitescroll.min.js   jquery.form.js          jquery.selectBox.js     raphael-donutchart.js   waypoints.js
+	bills.js jquery-standalone.js	   map.js		   search.js		  tweet_replies)
+
+    config.assets.precompile += (["admin/admin.js", "admin/*.css", "search.js"] + jss + ["me/*png","app/assets/stylesheets/timeline/*.css"])
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
