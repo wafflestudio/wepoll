@@ -11,7 +11,7 @@ class DistrictController < ApplicationController
       @p1 = @politicians.where(:_id => params[:p1_id]).first
       @p2 = @politicians.where(:_id => params[:p2_id]).first
     else
-      @p1 = @politicians[0]
+      @p1 ||= @politicians[0]
       @p2 = @politicians[1]
     end
 
@@ -77,8 +77,8 @@ class DistrictController < ApplicationController
       end
       @district = str
     elsif !params[:politician_id].nil?
-      p = Politician.find(params[:politician_id])
-      @district = p.district
+      @p1 = Politician.find(params[:politician_id])
+      @district = @p1.district
     end
   end
 end
