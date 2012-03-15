@@ -2,7 +2,7 @@
   <% unless politician.nil? -%>
     <%= link_to forum_path(politician) do  %>
       <div class="tweet-bubble <%= index==0?"left":"right"%>">
-        <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+        <%= tweet ? (tweet.content.length>111 ? tweet.content[0..110]+"..." : tweet.content ) : "최근 트윗이 없습니다." %>
       </div>
     <% end -%>
   <% end -%>
