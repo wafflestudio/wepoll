@@ -5,7 +5,7 @@ class DistrictController < ApplicationController
   def show
     @politicians = Politician.where(:district => @district).desc(:good_link_count)
 
-    @party_color = {"자유선진당" => "#007DC5", "통합진보당" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합당" => "#257a01", "새누리당" => "#c2271e" }
+    @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
 
     if (params[:p1_id] && params[:p2_id])
       @p1 = @politicians.where(:_id => params[:p1_id]).first
