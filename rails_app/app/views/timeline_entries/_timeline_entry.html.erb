@@ -1,8 +1,8 @@
 <div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%= timeline_entry.url%>">
   <div class="link_header clearfix">
-    <%= image_tag timeline_entry.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
+    <%= image_tag timeline_entry.user.profile_picture.url(:square50), :class => "link_profile_img", :style => "width:40px;" unless timeline_entry.user.nil? %>
     <div class="link_profile_info"> 
-      <p class="name"><%= timeline_entry.user.nickname %></p>
+      <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
     <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;" %>
