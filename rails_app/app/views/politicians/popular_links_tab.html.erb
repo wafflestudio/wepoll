@@ -4,7 +4,7 @@
       <div class="sep-subsection <%= i==0?"left":"right"%>">
         <div id="p<%=i+1%>-popular-links">
           <% entries = @entries[i]%>
-          <% if !@entries[i].nil? %>
+          <% if entries.any? %>
             <%= render entries %>
             <div id="popular-paginator-politician-<%=politician.id %>">
               <% unless entries.current_page == entries.num_pages %>
