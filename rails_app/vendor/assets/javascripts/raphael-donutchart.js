@@ -47,7 +47,7 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		var f1 = function() {
 			p.stop().animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, ">");
 			txt.stop().animate({opacity: 1}, ms);
-			rect.stop().animate({opacity:0.8}, ms)
+			rect.stop().animate({opacity:1.0}, ms)
 		};
 
 		var f2 = function () {
@@ -59,7 +59,8 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		p.mouseover(function () {
 			p.animate({transform: "s1.1 1.1 " + cx + " " + cy}, ms, ">");
 			txt.animate({opacity: 1}, ms);
-			rect.animate({opacity:0.8}, ms);
+			txt.attr('font-weight','bold')
+			rect.animate({opacity:1.0}, ms);
 			rect.unmouseover();
 			rect.mouseout(f2);
 
@@ -68,6 +69,7 @@ Raphael.fn.donutChart = function (cx, cy, r, r2, values, labels, stroke, strokeW
 		}).mouseout(function () {
 			p.animate({transform: ""}, ms, ">");
 			txt.animate({opacity: 0.5}, ms);
+			txt.attr('font-weight','')
 			rect.animate({opacity:0.5}, ms);
 			rect.mouseover(f1);
 			rect.unmouseout();
