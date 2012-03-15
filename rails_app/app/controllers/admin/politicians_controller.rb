@@ -1,3 +1,4 @@
+#coding: utf-8
 require 'yaml'
 class Admin::PoliticiansController < Admin::AdminController
   #XXX : for just debugging or external test connection
@@ -49,6 +50,7 @@ class Admin::PoliticiansController < Admin::AdminController
   end
 
   def update
+    params[:politician][:district] = "" if params[:politician][:district] == "없음"
     params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
     params[:politician][:promises] = YAML::load params[:promises]
     #XXX : elections가 확정적이 되면 이 필드는 필요없다
