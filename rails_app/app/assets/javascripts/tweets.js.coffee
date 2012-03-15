@@ -33,7 +33,7 @@ $ ->
       if data.status == "error"
         alert data.message
       else
-        $(obj).text data.count
+        $($('.count[data-status_id*="'+$(obj).attr('data-status_id')+'"]')).text data.count
     false
 
   # reply recommend btn
