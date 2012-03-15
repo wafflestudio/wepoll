@@ -79,18 +79,30 @@
         $("input#query").placeholder();
         //notification bars
             if(search_source) {
+              var search_result = false;
               $("input#query").autocomplete({
               source: search_source,
               delay: 50,
-              max: 10,
-              autoFocus: true,
+              minLength: 2,
               select: function(event, ui) {
                 $("#query_hidden").val(ui.item.query);
                 $("#query_type").val(ui.item.type);
                 $("#query").val(ui.item.form);
+                search_result = true;
                 return false;
               },
-            focus: function() {return false;}}); 
+              autoFocus: true,
+              close: function(event, ui) {
+              if(!search_result) {
+                $("#query_hidden").val("");
+                $("#query_type").val("");
+                search_result = false;
+              }
+              },
+              focus: function(event, ui) {
+                search_result = true;
+                return false;
+             }}); 
           }
 
         <% [:notice, :error, :alert].each do |level| %>
@@ -115,6 +127,12 @@
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
     <!--    <link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">-->
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
+    <% if !flash[:search_error].to_s.empty? %>
+      <style>
+        #query::-webkit-input-placeholder { color:#f00; }
+        #query:-moz-placeholder { color:#f00; }
+      </style>
+    <% end %>
   </head>
   <body>
     <div id="fb-root"></div>
@@ -143,13 +161,6 @@
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
               <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
-
-<% if !flash[:search_error].to_s.empty? %>
-  <style>
-    #query::-webkit-input-placeholder { color:#f00; }
-    #query:-moz-placeholder { color:#f00; }
-  </style>
-<% end %>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
