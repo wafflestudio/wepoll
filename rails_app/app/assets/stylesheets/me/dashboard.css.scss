@@ -8,6 +8,33 @@
   }
   #mypage_dashboard {
 
+    #change_form {
+      label {
+        padding: 5px;
+      	font-size: 11pt;
+        margin-right: 10px;
+        background-color: #FFFFFF;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        behavior:url(http://choco.wafflestudio.net:7765/PIE.htc); 
+      }
+      #user_nickname {
+        padding: 5px;
+        width: 140px;
+        border: none;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        behavior:url(http://choco.wafflestudio.net:7765/PIE.htc); 
+      }
+      #change_btn {
+        border: none;
+        padding: 5px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        behavior:url(http://choco.wafflestudio.net:7765/PIE.htc); 
+      }
+    }
     .alert {
       position: relative;
       margin-top: 5px;
