@@ -1,5 +1,4 @@
 #coding:utf-8
-require 'iconv'
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
@@ -61,9 +60,8 @@ class DistrictController < ApplicationController
   def simplify_district_name
     if !params[:name].nil?
       if request.env["HTTP_USER_AGENT"] =~ /MSIE/
-        iconv = Iconv.new("UTF-8", "EUC-KR")
         begin
-          params[:name] = iconv.iconv(params[:name])
+          params[:name] = params[:name].encode("utf-8")
         rescue
           #do nothing
         end

@@ -1,6 +1,6 @@
 #coding: utf-8
 class LinkRepliesController < ApplicationController
-  before_filter :authenticate_user!, :except => [:show]
+  before_filter :authenticate_user!, :except => [:show, :list]
   layout false
   def list
     @entry = TimelineEntry.find(params[:link_reply_id])

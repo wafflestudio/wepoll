@@ -1,4 +1,4 @@
-<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%= timeline_entry.url%>">
+<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%=raw timeline_entry.url%>">
   <div class="link_header clearfix">
     <%= image_tag timeline_entry.user.profile_picture.url(:square50), :class => "link_profile_img", :style => "width:40px;" unless timeline_entry.user.nil? %>
     <div class="link_profile_info"> 
@@ -14,8 +14,8 @@
     <div class="preview-wrap clearfix">
       <div class="preview-image"></div>
       <div class="preview-text">
-        <div class="preview-title"><a href="<%= timeline_entry.url %>"></a></div>
-        <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url %></div>
+        <div class="preview-title"><a href="<%= raw timeline_entry.url %>"></a></div>
+        <div class="preview-url"><%= link_to timeline_entry.url[0..30] + "...", timeline_entry.url %></div>
         <div class="preview-desc"></div>
       </div>
     </div>

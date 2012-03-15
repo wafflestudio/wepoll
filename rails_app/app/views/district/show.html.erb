@@ -281,7 +281,6 @@
     });
     });};
 	function loadUrl(url, parentDiv)  {
-    if ($(parentDiv).length == 0) alert("!!!");
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 			function(data)  { 
 				console.warn(data)

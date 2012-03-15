@@ -84,6 +84,7 @@
               source: search_source,
               delay: 50,
               max: 10,
+	      minLength: 2,
               autoFocus: true,
               select: function(event, ui) {
                 $("#query_hidden").val(ui.item.query);
@@ -110,6 +111,12 @@
     <!-- Le styles -->
     <%= stylesheet_link_tag    "application", :media => "all" %>
 
+<% if !flash[:search_error].to_s.empty? %>
+  <style type="text/css">
+    #query::-webkit-input-placeholder { color:#f00; }
+    #query:-moz-placeholder { color:#f00; }
+  </style>
+<% end %>
 
     <!-- Le fav and touch icons -->
     <!--    <link href="images/favicon.ico" rel="shortcut icon">-->
@@ -143,15 +150,7 @@
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
-              <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
-
-<% if !flash[:search_error].to_s.empty? %>
-  <style>
-    #query::-webkit-input-placeholder { color:#f00; }
-    #query:-moz-placeholder { color:#f00; }
-  </style>
-<% end %>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
@@ -169,7 +168,7 @@
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
             </div>
 
-            <div id="search-bar-wrapper-small" class="grid_5">
+            <div id="search-bar-wrapper-small" class="grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
                 <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
@@ -180,7 +179,6 @@
             </div>
           </div>
           <% end -%>
-
 
           <div class="grid_12 alpha omega">
             <%= yield %>

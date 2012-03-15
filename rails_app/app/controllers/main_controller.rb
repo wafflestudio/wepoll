@@ -2,6 +2,7 @@
 require 'oauth2'
 require 'csv'
 class MainController < ApplicationController
+layout false, :only => [:provision, :privacy]
   def index
     @politicians = Politician.all.asc('name').limit(10)
     @big_header = true
@@ -68,7 +69,7 @@ class MainController < ApplicationController
       if type != 1
         redirect_to district_name_path(sub_query)
       else
-        redirect_to forum_path(@politician._id)
+        redirect_to district_politician_path(@politician._id)
       end
     else
       flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
