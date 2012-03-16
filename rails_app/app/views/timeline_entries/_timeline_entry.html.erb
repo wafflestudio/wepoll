@@ -15,7 +15,7 @@
       <div class="preview-image"></div>
       <div class="preview-text">
         <div class="preview-title"><a href="<%= raw timeline_entry.url %>"></a></div>
-        <div class="preview-url"><%= link_to timeline_entry.url[0..30] + "...", timeline_entry.url %></div>
+        <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url, :target => "_blank" %></div>
         <div class="preview-desc"></div>
       </div>
     </div>

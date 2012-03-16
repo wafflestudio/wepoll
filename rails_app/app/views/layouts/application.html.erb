@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta property="fb:app_id"      content="<%= FACEBOOK_CLIENT[:key] %>" />
     <meta property="og:title"       content="Wepoll" />
-    <meta property="og:image"       content="http://wepoll.or.kr/btn_wepoll.png" />
+    <meta property="og:image"       content="http://wikipolitics.co.kr/btn_wepoll.png" />
     <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
     <meta property="og:type"        content="website" />
-    <meta property="og:url"         content="http://wepoll.or.kr" />
+    <meta property="og:url"         content="<%= request.url %>" />
 
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
@@ -42,6 +42,9 @@
         return false;
       }
 
+      function show_login() {
+        $.colorbox({href:'/users/sign_in', width: 520, height: 250});
+      }
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>",width:800,height:600});
       }
@@ -92,6 +95,9 @@
                 $("#query").val(ui.item.form);
                 return false;
               },
+		search: function(event, ui) {
+		$(".ui-autocomplete").css({"maxHeight":"600px","overflowY":"scroll","overflowX":"hidden"});
+		},
             focus: function() {return false;}}); 
           }
 

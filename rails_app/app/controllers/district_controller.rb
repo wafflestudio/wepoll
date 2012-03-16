@@ -1,8 +1,9 @@
 #coding:utf-8
+require 'iconv'
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
-    @politicians = Politician.where(:district => @district).desc(:good_link_count)
+    @politicians = Politician.where(:district => @district).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
 
     @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
 
@@ -10,8 +11,18 @@ class DistrictController < ApplicationController
       @p1 = @politicians.where(:_id => params[:p1_id]).first
       @p2 = @politicians.where(:_id => params[:p2_id]).first
     else
-      @p1 ||= @politicians[0]
-      @p2 = @politicians[1]
+      if @p1.nil?
+				@p1 = @politicians[0]
+	      @p2 = @politicians[1]
+			else
+				if @p1.id == @politicians[0].id
+					@p1 = @politicians[1]
+					@p2 = @politicians[0]
+				else
+					@p1 = @politicians[0]
+					@p2 = @politicians[1]
+				end
+			end
     end
 
     p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
@@ -59,15 +70,15 @@ class DistrictController < ApplicationController
   protected
   def simplify_district_name
     if !params[:name].nil?
-      if request.env["HTTP_USER_AGENT"] =~ /MSIE/
-        begin
-          params[:name] = params[:name].encode("utf-8")
-        rescue
-          #do nothing
-        end
-      end
-      Rails.logger.info params[:name]
+#      if request.env["HTTP_USER_AGENT"] =~ /MSIE/
+#	iconv = Iconv.new("UTF-8//IGNORE", "EUC-KR")
+	begin
+          params[:name] = params[:name].encode("UTF-8")
+	rescue
+	end
+#      end
       str = params[:name]
+      redirect_to root_url if str == "undefined"
       if str && (%w(구 시).include? str[-2]) && (%w(갑 을 병 정 무 기 경 신 임 계).include? str[-1])
         if str.length-2 >= 2
           str = str[0...-2]+str[-1]
@@ -75,8 +86,14 @@ class DistrictController < ApplicationController
       end
       @district = str
     elsif !params[:politician_id].nil?
-      @p1 = Politician.find(params[:politician_id])
-      @district = @p1.district
+      str = params[:politician_id].to_s
+      if str == "undefined"
+      redirect_to root_url
+	else
+@p1 = Politician.find(str)
+	@district = @p1.district
+	redirect_to root_url if @district.empty?
+	end
     end
   end
 end

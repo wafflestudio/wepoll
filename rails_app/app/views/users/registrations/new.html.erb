@@ -116,7 +116,7 @@
       <div id="middle">
         <div class="agree_container">
           <textarea class="text_box" readonly>
-            <%= File.read(Rails.root + "public/provision.html")%>
+            <%= File.read(Rails.root + "public/provision.txt")%>
           </textarea>
           <%= check_box_tag :agree_provision %><%= label_tag :agree_provision, '약관에 동의합니다.' %>
         </div>

@@ -1,7 +1,6 @@
 #coding: utf-8
+require 'open-uri'
 class ApiController < ApplicationController
-
-	require 'open-uri'
 	def parsing_test
 			target_link = params[:url].gsub /&amp;/, '&'
 			doc = Nokogiri::HTML(open(target_link))
@@ -16,7 +15,7 @@ class ApiController < ApplicationController
 	#기사 파싱하는 api    input : url
 	#											output : title, image, description // json형식
 	def article_parsing
-		render :nothing => true if params[:url].nil? || params[:url].length == 0
+		(render :nothing => true ;return) if params[:url].nil? || params[:url].strip.length == 0
 		target_link = params[:url].gsub /&amp;/,'&'
 		if !target_link.match("^http://")
 			target_link = "http://" + target_link
