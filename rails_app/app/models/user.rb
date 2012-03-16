@@ -54,6 +54,7 @@ class User
 
   has_mongoid_attached_file :profile_picture,
     :styles => {:square50 => "50x50#"},
+    :default_url => "/system/user_profile_photos/anonymous_:style.gif",
     :url => "/system/user_profile_pictures/:id/:style",
     :path => Rails.root.to_s + "/public/system/user_profile_pictures/:id/:style"
 

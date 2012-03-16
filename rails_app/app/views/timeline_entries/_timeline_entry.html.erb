@@ -1,6 +1,6 @@
 <div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%=raw timeline_entry.url%>">
   <div class="link_header clearfix">
-    <%= image_tag timeline_entry.user.profile_picture.url(:square50), :class => "link_profile_img", :style => "width:40px;" unless timeline_entry.user.nil? %>
+    <%= image_tag (timeline_entry.user ? timeline_entry.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :class => "link_profile_img", :style => "width:40px;" %>
     <div class="link_profile_info"> 
       <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
@@ -36,9 +36,9 @@
     <% end %>
     <% timeline_entry.link_replies.reverse[0..2].reverse.each do |r| %>
       <div class="link_replies clearfix">
-        <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
+        <%= image_tag (r.user ? r.user.profile_picture : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "width: 40px; float: left; margin-right: 10px;" %>
         <div class="link_replies_body">
-          <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>
+          <p class="name"><%= (r.user ? r.user.nickname : "") %> <span class="date"><%= r.posted_ago? %></span></p>
           <p><%= r.body %></p>
         </div>
       </div>
@@ -52,7 +52,7 @@
           <% if user_signed_in? -%>
             <%= image_tag current_user.profile_picture %>
           <% else -%>
-            <%= image_tag '/assets/anonymous.gif'%>
+            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
           <% end -%>
 
           <% if user_signed_in? -%>
