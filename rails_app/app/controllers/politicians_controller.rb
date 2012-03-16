@@ -38,13 +38,13 @@ class PoliticiansController < ApplicationController
   end
 
   def recent_links_tab
-    @entries = @politicians.map {|p| p.timeline_entries.desc("created_at").page(params[:page]).per(3)}
+    @entries = @politicians.map {|p| p ? p.timeline_entries.desc("created_at").page(params[:page]).per(3) : []}
     @link = LinkReply.new 
     render :layout => false
   end
 
   def popular_links_tab
-    @entries = @politicians.map {|p| p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)}
+    @entries = @politicians.map {|p| p ? p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3) : []}
     @link = LinkReply.new 
     render :layout => false
   end
@@ -65,6 +65,6 @@ class PoliticiansController < ApplicationController
 
   protected
   def prepare_politicians
-    @politicians = [Politician.find(params[:id1]), Politician.find(params[:id2])]
+    @politicians = [params[:id1] ? Politician.find(params[:id1]) : nil, params[:id2] ? Politician.find(params[:id2]) : nil]
   end
 end

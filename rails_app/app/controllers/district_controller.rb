@@ -4,21 +4,24 @@ class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
     @politicians = Politician.where(:district => @district).where(:candidate => true).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
-
     @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
 
-    if (params[:p1_id] && params[:p2_id])
-      @p1 = @politicians.find {|p| p.id.to_s == params[:p1_id]}
-      @p2 = @politicians.find {|p| p.id.to_s == params[:p2_id]}
+    if @politicians.count == 1
+      @p1 = @politicians.first
     else
-      if @p1.nil?
-        @p1 = @politicians[0]
-        @p2 = @politicians[1]
+      if (params[:p1_id] && params[:p2_id])
+        @p1 = @politicians.find {|p| p.id.to_s == params[:p1_id]}
+        @p2 = @politicians.find {|p| p.id.to_s == params[:p2_id]}
       else
-        if @p1.id == @politicians[0].id
+        if @p1.nil?
+          @p1 = @politicians[0]
           @p2 = @politicians[1]
         else
-          @p2 = @politicians[0]
+          if @p1.id == @politicians[0].id
+            @p2 = @politicians[1]
+          else
+            @p2 = @politicians[0]
+          end
         end
       end
     end

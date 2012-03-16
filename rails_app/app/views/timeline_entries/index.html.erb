@@ -173,10 +173,8 @@ $(function() {
 			return;
 		$.get("/timeline_entries/"+model.id+"/entry", 
 			function(html) {
-				if(pol1._id == model.get("politician_id"))
-					$("#p1-recent-links").prepend(html)
-				else if(pol2._id == model.get("politician_id"))
-					$("#p2-recent-links").prepend(html)
+        alert("hihi")
+        $("#politician-"+model.get("politician_id")+"-recent-links").prepend(html)
 			})
 		}
 	);

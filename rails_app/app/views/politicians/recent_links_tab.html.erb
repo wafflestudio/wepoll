@@ -2,11 +2,11 @@
   <div class="politician-recent-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
-        <div class="timeline-entries-container" id="politician-<%=politician.id %>-recent-links">
+        <div class="timeline-entries-container" id="politician-<%=politician ? politician.id : "none" %>-recent-links">
           <% entries = @entries[i]%>
           <% if entries.any? %>
             <%= render entries %>
-            <div id="recent-paginator-politician-<%=politician.id %>">
+            <div id="recent-paginator-politician-<%=politician ? politician.id : "none" %>">
               <% unless entries.current_page == entries.num_pages %>
                 <%= link_to '>',  recent_links_of_politician_path(politician, :page => entries.current_page + 1), :id => "recent-next-page-#{politician.id}", :class => 'next-links-page'%>
               <% end -%>
@@ -19,8 +19,8 @@
             </div>
           <% end -%>
         </div>
-        <div id="bottom-indicator-recent-<%=politician.id %>" class="bottom-indicator">hihi</div>
-        <div class="loading-indicator" id="loading-indicator-recent-<%= politician.id %>">&nbsp;</div>
+        <div id="bottom-indicator-recent-<%=politician ? politician.id : "none" %>" class="bottom-indicator">hihi</div>
+        <div class="loading-indicator" id="loading-indicator-recent-<%=politician ? politician.id : "none" %>">&nbsp;</div>
       </div>
       <script>
         <% entries.each do |timeline_entry| -%>

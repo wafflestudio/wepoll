@@ -47,12 +47,20 @@
       $("#tab-sections-container").append($tab_section);
       $tab_section.load($obj.attr('href'), function() {
         if (id == 'politician-popular-links') {
-          loadLinks("<%= @p1.id%>", 'popular');
-          loadLinks("<%= @p2.id%>", 'popular');
+          <% if @p1 -%>
+            loadLinks("<%= @p1.id%>", 'popular');
+          <% end -%>
+          <% if @p2 -%>
+            loadLinks("<%= @p2.id%>", 'popular');
+          <% end -%>
         }
         else if (id == 'politician-recent-links') {
-          loadLinks("<%= @p1.id%>", 'recent');
-          loadLinks("<%= @p2.id%>", 'recent');
+          <% if @p1 -%>
+            loadLinks("<%= @p1.id%>", 'recent');
+          <% end -%>
+          <% if @p2 -%>
+            loadLinks("<%= @p2.id%>", 'recent');
+          <% end -%>
         }
       });
       return false;

@@ -5,19 +5,27 @@
         <%= tweet ? (tweet.content.length>107 ? tweet.content[0..106]+"..." : tweet.content ) : "최근 트윗이 없습니다." %>
       </div>
     <% end -%>
+  <% else -%>
+      <div class="tweet-bubble <%= index==0?"left":"right"%>">
+        후보자가 없습니다.
+      </div>
   <% end -%>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
-    <%= image_tag politician.profile_photo.url(:square160) , :class => "photo" %>
+    <%= image_tag (politician ? politician.profile_photo.url(:square160) : "/system/politician_profile_photos/anonymous_square160.gif"), :class => "photo" %>
     <div class="photo-frame"></div>
   </div>
 
   <dl data-district="<%= @district%>" id="<%= "politician#{(index==0 ?  1 : 2)}"%>" class="dropdown <%= index==0?"left":"right"%>">
+    <% if politician -%>
     <dt><a href="#"><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
+    <% else -%>
+    <dt><a href="#"><span class="name">후보없음</span></a></dt>
+    <% end -%>
     <dd>
     <ul>
       <% @politicians.each do |p| -%>
-        <% next if p.id == (index==0?@p2 : @p1).id -%>
+        <% next if p.id == (index==0?(@p2 || @p1) : @p1).id -%>
         <li><a href="#" class="<%= p.id == politician.id ? "current":"" %>" data-id="<%= p.id%>"><span class="value"><%=p.id%></span><span class="party" style="color:<%= @party_color[p.party]||"black" %>"><%= p.party%></span>&nbsp;<span class="name"><%= p.name%></span></a></li>
       <% end -%>
     </ul>
@@ -47,9 +55,11 @@
       data-value="<%= politician ? politician.bad_link_count : 0%>">
     </div>
   </div>
-  <% if user_signed_in? -%>
-    <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'} new"%>
-  <% else -%>
-    <%= link_to_function '링크등록', "show_login()", :class => "link-button #{index==0?'left':'right'} login" %>
+  <% if politician -%>
+    <% if user_signed_in? -%>
+      <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'} new"%>
+    <% else -%>
+      <%= link_to_function '링크등록', "show_login()", :class => "link-button #{index==0?'left':'right'} login" %>
+    <% end -%>
   <% end -%>
 </div>
