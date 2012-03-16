@@ -341,7 +341,13 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			$("#vs-politician1 .bad_links").text p1?.bad_link_count
 			$("#vs-politician2 .bad_links").text p2?.bad_link_count
 
+			total_links = p1?.good_link_count + p2?.good_link_count + p1?.bad_link_count + p2?.bad_link_count
 			#draw bar grpah
+			$("#vs-politician1 .good_links").attr "data-total", total_links
+			$("#vs-politician2 .good_links").attr "data-total", total_links
+			$("#vs-politician1 .bad_links").attr "data-total", total_links
+			$("#vs-politician2 .bad_links").attr "data-total", total_links
+
 			$("#vs-politician1 .good_links").attr "data-value",p1?.good_link_count
 			$("#vs-politician2 .good_links").attr "data-value",p2?.good_link_count
 
@@ -437,7 +443,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			start_x = parseInt(point[0]) - 50
 			start_y = parseInt(point[1]) + 95
 			console.log(start_x, start_y)
-			r.image("/assets/hot-district.png", start_x - 150, start_y - 70, 80, 40)
+			r.image("/assets/hot-district.png", start_x - 40, start_y - 30, 40, 20)
 
 	world = r.setFinish()
 	world.hover over, out
