@@ -2,7 +2,7 @@
 class TimelineEntriesController < ApplicationController
 
 
-	before_filter :authenticate_user!, :except => [:index,:list,:show]
+	before_filter :authenticate_user!, :except => [:index,:list,:show,:entry]
 
   # GET /timeline_entries
   # GET /timeline_entries.json
@@ -172,6 +172,13 @@ class TimelineEntriesController < ApplicationController
     @result = @t.blame(current_user)
     @timeline_entry = @t
   end
+  
+	def entry
+    @link = LinkReply.new 
+    @entry = TimelineEntry.find(params[:id])
+    render :partial => "timeline_entry", :locals => {:timeline_entry => @entry}, :layout => false
+  end
+
 
 protected
   def tweet_after_create

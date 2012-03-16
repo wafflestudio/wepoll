@@ -305,8 +305,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		if ($("#vs-container").attr("data-district") == worldmap.names[this.id])
 			return
 		else
-			$img1.attr "src",""
-			$img2.attr "src",""
+			$img1.attr "src","/assets/ajax-loader-politician-photo.gif"
+			$img2.attr "src","/assets/ajax-loader-politician-photo.gif"
 
 		$("#vs-district").text worldmap.names[this.id]
 

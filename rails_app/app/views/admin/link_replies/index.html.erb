@@ -1,0 +1,33 @@
+<div class="top-bar">
+  <h1>리플 <small>(<%= LinkReply.count %>개)</small></h1>
+</div>
+
+<div class="table">
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <tr>
+      <th>내용</th>
+      <th>사용자ID</th>
+      <th>대상정치인</th>
+      <th>대상링크</th>
+      <th>생성일자</th>
+    </tr>
+    <% @link_replies.each do |r| -%>
+      <tr>
+        <td><%= link_to truncate(r.body, :length => 40), admin_link_reply_path(r)%></td>
+        <td><%= r.user.nil? ? "정보없음" : link_to(r.user.userid, admin_user_path(r.user))%></td>
+        <% pol = r.timeline_entry.politician %>
+        <td><%= pol.nil? ? "정보없음" : link_to("#{pol.party} #{pol.name}" , admin_politician_path(pol))%></td>
+        <td><%= r.timeline_entry ? link_to(truncate(r.timeline_entry.title, :length => 40), admin_timeline_entry_path(r.timeline_entry)) : "정보없음" %></td>
+        <td><%= r.created_at.strftime("%Y.%m.%d") %></td>
+      </tr>
+    <% end -%>
+    <% if @link_replies.empty? -%>
+      <tr>
+        <td colspan="5">등록된 리플이 없습니다.</td>
+      </tr>
+    <% end -%>
+  </table>
+</div>
+
+<%= paginate @link_replies%>
+
