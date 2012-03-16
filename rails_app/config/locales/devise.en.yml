@@ -1,3 +1,4 @@
+#encdoing: utf-8
 # Additional translations at https://github.com/plataformatec/devise/wiki/I18n
 
 en:
@@ -13,7 +14,7 @@ en:
 
   devise:
     failure:
-      already_authenticated: 'You are already signed in.'
+      already_authenticated: '반갑습니다. 함께 만들어가는 총선! 위폴입니다.'
       unauthenticated: 'You need to sign in or sign up before continuing.'
       unconfirmed: 'You have to confirm your account before continuing.'
       locked: 'Your account is locked.'
@@ -22,8 +23,8 @@ en:
       timeout: 'Your session expired, please sign in again to continue.'
       inactive: 'Your account was not activated yet.'
     sessions:
-      signed_in: 'Signed in successfully.'
-      signed_out: 'Signed out successfully.'
+      signed_in: '반갑습니다. 함께 만들어가는 총선! 위폴입니다.'
+      signed_out: '함께 만들어가는 총선! 위폴입니다. 감사합니다.'
     passwords:
       send_instructions: 'You will receive an email with instructions about how to reset your password in a few minutes.'
       updated: 'Your password was changed successfully. You are now signed in.'

@@ -59,6 +59,7 @@ class TweetsController < ApplicationController
 
   def forum
     @politician = Politician.find(params[:politician_id])
+    redirect_to root_url if @politician.nil? || !@politician.candidate
     @tweets = @politician.tweets.desc('created_at').page(params[:tweets_page]).per(20)
     @best = @politician.tweets.desc('like').first
     @today_best = @politician.tweets.desc('today_like').first
