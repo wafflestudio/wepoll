@@ -1,5 +1,6 @@
 <div id="mypage_dashboard">
   <div class="row">
+<% if false %>
     <div id="change_form" class="span5" style="float: right;">
       <%= form_for current_user, :url => "/users", :html => { :method => "put"} do |f| %>
         <%= f.label :nickname, 'Nickname : ' %>
@@ -8,6 +9,7 @@
       <% end -%>
     </div>
     <div class="clear"></div>
+<% end %>
     <div class="span5 status">
       <% if current_user.facebook_token -%>
         <div class="alert alert-success facebook">
