@@ -112,7 +112,7 @@ worldmap = {
 				 48: "강남을"
 			 },
 		points: {
-							1: "365 285 0 0",
+							1: "365 285 0 1",
 							2: "460 142 0 0",
 							3: "453 84 0 0",
 							4: "520 90 0 0",
@@ -141,11 +141,11 @@ worldmap = {
 							27: "542 440 1 0",
 							28: "454 428 1 0",
 							29: "419 505 1 0",
-							30: "341 462 1 0",
+							30: "341 462 1 1",
 							31: "400 450 1 0",
 							32: "360 395 0 0",
 							33: "300 367 0 0",
-							34: "224 334 0 0",
+							34: "224 334 0 1",
 							35: "179 403 0 0",
 							36: "278 413 0 0",
 							37: "297 447 1 0",
@@ -159,7 +159,7 @@ worldmap = {
 							45: "139 368 0 0",
 							46: "100 315 0 0",
 							47: "400 150 0 0",
-							48: "537 500 1 0",
+							48: "537 500 1 1",
 						}
 }
 getInternetExplorerVersion = () ->
@@ -431,6 +431,13 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 	for country, shape of worldmap.shapes
 		r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+	for country, points of worldmap.points
+		point = points.split " "
+		if point[3] == "1"	
+			start_x = parseInt(point[0]) - 50
+			start_y = parseInt(point[1]) + 95
+			console.log(start_x, start_y)
+			r.image("/assets/hot-district.png", start_x - 150, start_y - 70, 80, 40)
 
 	world = r.setFinish()
 	world.hover over, out
