@@ -2,9 +2,9 @@
   <div class="politician-recent-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
-        <div id="p<%=i+1%>-recent-links">
-          <% if !@entries[i].nil? %>
-            <% entries = @entries[i]%>
+        <div class="timeline-entries-container" id="politician-<%=politician.id %>-recent-links">
+          <% entries = @entries[i]%>
+          <% if entries.any? %>
             <%= render entries %>
             <div id="recent-paginator-politician-<%=politician.id %>">
               <% unless entries.current_page == entries.num_pages %>
@@ -14,14 +14,38 @@
           <% else -%>
             <div class="link_entries">
               <div class="link_header" style="border-bottom: 0">
-                 링크 없음 
+                링크 없음 
               </div>
             </div>
           <% end -%>
         </div>
-        <div id="bottom-indicator-recent-<%=i +1 %>" class="bottom-indicator">hihi</div>
+        <div id="bottom-indicator-recent-<%=politician.id %>" class="bottom-indicator">hihi</div>
         <div class="loading-indicator" id="loading-indicator-recent-<%= politician.id %>">&nbsp;</div>
       </div>
+      <script>
+        <% entries.each do |timeline_entry| -%>
+          loadUrl("<%= timeline_entry.url %>", "#politician-<%= timeline_entry.politician.id%>-recent-links .link-entry-<%= timeline_entry.id %>");
+        <% end -%>
+      </script>
     <% end -%>
   </div>
 </div>
+
+<script type="text/javascript">
+  $(".link_reply_input").keyup(function() {
+    var $this = $(this);
+    var max = 140;
+    var len = 0;
+    var $textarea = $("textarea", $this);
+    var len = $textarea.val().length;
+    if (len > max) {
+      $textarea.val($textarea.val().substr(0, max));
+      len = $textarea.val().length;
+    }
+    $this.find(".current-comment-length").text(len);
+
+    $this.children(".link-reply-button").click(function() {
+      return true;
+    });
+  });
+</script>

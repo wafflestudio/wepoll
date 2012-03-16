@@ -1,5 +1,4 @@
 <% if !@tabsection -%>
-  alert('apple');
   <% if @reply.persisted? -%>
     $("#link-reply-list").html("<%= escape_javascript render(@reply.timeline_entry.link_replies.desc('created_at')) %>");
     $('#link-reply-count').text("<%= @reply.timeline_entry.link_replies.count %>");
@@ -7,10 +6,10 @@
     $.colorbox.resize();
   <% else -%>
     //error 상황
-  alert("에러!");
+  alert("에러가 발생했습니다.");
   <% end -%>
   $(this).removeAttr("disabled");
 <% else -%>
-  $("textarea", "#link-entry-<%= @reply.timeline_entry.id %>").val("");
-  $(".link_reply_input", "#link-entry-<%= @reply.timeline_entry.id %>").before("<%= escape_javascript render(:partial => "district_link_reply", :locals => { :r => @reply}) %>");
+  $("textarea", ".link-entry-<%= @reply.timeline_entry.id %>").val("");
+  $(".link_reply_input", ".link-entry-<%= @reply.timeline_entry.id %>").before("<%= escape_javascript render(:partial => "district_link_reply", :locals => { :r => @reply}) %>");
 <% end -%>

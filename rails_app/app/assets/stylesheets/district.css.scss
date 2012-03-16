@@ -11,10 +11,13 @@
   -moz-border-radius:14px;
   -webkit-border-radius:14px;
   border-radius:14px;
-  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+  behavior:url(http://wepoll.or.kr/PIE.htc);
 }
 
 #district-title {
+  .fb-like {
+    float: right;
+  }
   font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕sans-serif;
   font-weight:bold;
   font-size:15pt;
@@ -61,11 +64,11 @@
     margin-left:12px;
   }
 
-  width:260px - 40px - 25px;
-  height:160px - 20px - 30px;
-  padding-top: 20px;
+  width:260px - 40px - 45px;
+  height:160px - 30px - 30px;
+  padding-top: 30px;
   padding-left: 40px;
-  padding-right:25px;
+  padding-right:45px;
   padding-bottom:30px;
 
   font-size:8.5pt;
@@ -223,7 +226,7 @@
     -o-border-radius:7px 7px 0 0;
     -moz-border-radius:7px 7px 0 0;
     -webkit-border-radius:7px 7px 0 0;
-    behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+    behavior:url(http://wepoll.or.kr/PIE.htc);
 
     margin:0 5px;
 
@@ -277,7 +280,7 @@ a.init-bills-link {
   width:700 - 20px;
   background-color:#fff;
   @include border-radius(7px);
-  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+  behavior:url(http://wepoll.or.kr/PIE.htc);
   position:relative;
   margin-bottom:8px;
   .left {
@@ -316,6 +319,11 @@ a.init-bills-link {
     .link_contents {
       padding: 10px;
       margin: 5px 0;
+      p {
+        word-wrap: break-word;
+        margin-bottom: 10px;
+      }
+
   }
   .link_footer {
     padding: 5px;
@@ -326,7 +334,7 @@ a.init-bills-link {
       -o-border-radius: 10px;
       -moz-border-radius: 10px;
       -webkit-border-radius: 10px;
-      behavior: url(http://wafflestudio.net:4010/PIE.htc);
+      behavior: url(http://wepoll.or.kr/PIE.htc);
       padding: 5px;
       margin-left: 5px;
       font-size: 14px;
@@ -390,7 +398,7 @@ textarea {
   border-radius:5px;
   -webkit-border-radius:5px;
   -moz-border-radius:5px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   border:0;
   background-color:#fede4d;
   padding:3px 5px;
@@ -540,4 +548,47 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   margin:0 auto;
   display:block;
   background:url(/assets/ajax-loader-link.gif);
+  display:none;
 }
+
+      .preview-wrap {
+        background-color: #f6f7f8;
+        .preview-image {
+          width: 91px;
+          float: left;
+          margin-right: 6px;
+          img {
+            width: 90px;
+          }
+        }
+        .preview-text {
+          font-size: 11px;
+          float: left;
+          padding: 5px;
+          width: 200px;
+          .preview-title {
+            margin-bottom: 5px;
+            a {
+              color: #23408b;
+              font-weight: bold;
+              text-decoration: none;
+           }
+           a:hover {
+            text-decoration: underline;
+          }
+          }
+          .preview-url, .preview-desc {
+            color: #8d7f7b;
+          }
+          .preview-url {
+            margin-bottom: 12px;
+            a {
+              color: #8d7f7b;
+              text-decoration: none;
+            }
+            a:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }

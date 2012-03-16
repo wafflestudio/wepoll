@@ -1,2 +1,2 @@
-$(".link_more", "#link-entry-<%= @entry.id %>").after("<%= escape_javascript render(:file  => "link_replies/list.html.erb") %>");
-$(".link_more", "#link-entry-<%= @entry.id %>").remove();
+$(".link_more", ".link-entry-<%= @entry.id %>").after("<%= escape_javascript render(:file  => "link_replies/list.html.erb") %>");
+$(".link_more", ".link-entry-<%= @entry.id %>").remove();

@@ -22,7 +22,7 @@
 
 
   <div class="prefix_1 grid_8 suffix_1 alpha omega field">
-    <label class="grid_1 alpha">제목</label>
+    <label class="grid_1 alpha">코멘트</label>
     <div class="grid_7 omega">
       <div id="reply_check" class="timeline_new">
         <span class="checkbox twitter"><input name="timeline_entry[tweet]" type="checkbox" /></span>
@@ -31,16 +31,16 @@
       <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
     </div>
 
-    <label class="grid_1 alpha" id="wepoll-logo-square">로고</label>
-    <div class="grid_6"><%= f.text_area :title, :class => 'comment' %></div>
-    <div class="grid_1 omega" id="comment-length-indicator"><span id="comment-length">00</span>/50자</div>
+    <div class="grid_1 alpha" id="wepoll-logo-square"><%= image_tag current_user.profile_picture if !current_user.nil? %></div>
+    <div class="grid_6"><%= f.text_area :title, :class => 'comment', :maxlength => 50 %></div>
+    <div class="grid_1 omega" id="comment-length-indicator"><span id="timeline-entry-comment-length">00</span>/50</div>
   </div>
 
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
     <label class="grid_1 alpha">링크날짜</label>
     <div class="grid_6 omega">
       <%= f.date_select('posted_at', :order => [:year, :month, :day])%>
-      <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>
+      <!--      <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>-->
     </div>
 
     <!--<div class="prefix_1 grid_6 alpha omega">
@@ -57,10 +57,11 @@
     </div>
   </div>
 
-  <div class="prefix_1 grid_7 suffix_2 alpha omega field">
+  <!-- 인기태그 구현해야해요 -->
+  <!-- <div class="prefix_1 grid_7 suffix_2 alpha omega field">
     <label class="grid_1 alpha">인기태그</label>
     <div class="grid_6 omega" id="popular-tags">태그1, 태그2, ...</div>
-  </div>
+  </div>-->
 
   <div id="actions">
     <button href="#" id="link-cancel" class="action" onclick="$.colorbox.close()">돌아가기</button>

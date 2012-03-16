@@ -1,16 +1,24 @@
-<div class="link_entries" id="link-entry-<%= timeline_entry.id%>">
+<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%=raw timeline_entry.url%>">
   <div class="link_header clearfix">
-    <%= image_tag timeline_entry.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
+    <%= image_tag (timeline_entry.user ? timeline_entry.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :class => "link_profile_img", :style => "width:40px;" %>
     <div class="link_profile_info"> 
-      <p class="name"><%= timeline_entry.user.nickname %></p>
+      <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
-    <%= image_tag "good_point.png", :style => "float: right;" %>
+    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;" %>
   </div>
   <div class="link_contents">
     <p>
     <%= timeline_entry.title %>
     </p>
+    <div class="preview-wrap clearfix">
+      <div class="preview-image"></div>
+      <div class="preview-text">
+        <div class="preview-title"><a href="<%= raw timeline_entry.url %>"></a></div>
+        <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url, :target => "_blank" %></div>
+        <div class="preview-desc"></div>
+      </div>
+    </div>
   </div>
   <div class="link_footer clearfix">
     <div class="button">
@@ -28,9 +36,9 @@
     <% end %>
     <% timeline_entry.link_replies.reverse[0..2].reverse.each do |r| %>
       <div class="link_replies clearfix">
-        <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
+        <%= image_tag (r.user ? r.user.profile_picture : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "width: 40px; float: left; margin-right: 10px;" %>
         <div class="link_replies_body">
-          <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>
+          <p class="name"><%= (r.user ? r.user.nickname : "") %> <span class="date"><%= r.posted_ago? %></span></p>
           <p><%= r.body %></p>
         </div>
       </div>
@@ -44,7 +52,7 @@
           <% if user_signed_in? -%>
             <%= image_tag current_user.profile_picture %>
           <% else -%>
-            <%= image_tag '/assets/anonymous.gif'%>
+            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
           <% end -%>
 
           <% if user_signed_in? -%>
@@ -57,8 +65,8 @@
         <div style="float: right; margin-right:10px;">
           <div id="comment-length">
             <span class="current-comment-length">0</span>/140자
+            <%= f.submit '등록', :class => 'link-reply-button' %>
           </div>
-          <%= f.submit '등록', :class => 'link-reply-button' %>
         </div>
       <% end -%>
     </div>

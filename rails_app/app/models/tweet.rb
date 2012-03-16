@@ -1,3 +1,4 @@
+#coding:utf-8
 class Tweet
   include Mongoid::Document
 
@@ -44,11 +45,11 @@ class Tweet
 
 
 
-    Politician.all.each do |p|
+    Politician.where(:candidate => true).each do |p|
       politician = p
       screen_name = politician.tweet_name
       #get tweet if politician's tweet isn't protected and politician isn't nil
-      unless (screen_name.nil?)
+      unless (screen_name.nil? || screen_name == '없음')
         puts "start getting #{politician.name}'s tweet"
         Rails.logger.info "start getting #{politician.name}'s tweet"
         need_more = false

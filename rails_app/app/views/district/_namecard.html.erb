@@ -2,13 +2,13 @@
   <% unless politician.nil? -%>
     <%= link_to forum_path(politician) do  %>
       <div class="tweet-bubble <%= index==0?"left":"right"%>">
-        <%= tweet ? tweet.content : "최근 트윗이 없습니다." %>
+        <%= tweet ? (tweet.content.length>111 ? tweet.content[0..110]+"..." : tweet.content ) : "최근 트윗이 없습니다." %>
       </div>
     <% end -%>
   <% end -%>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
-    <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square100) : "http://placehoold.it/160", :class => "photo" %>
+    <%= image_tag politician.profile_photo.url(:square160) , :class => "photo" %>
     <div class="photo-frame"></div>
   </div>
 
@@ -29,7 +29,7 @@
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
     <div id="p<%= index+1 %>-good-link" class="bar-graph good-links"
       data-color="#81d9fb,#60cbfa"
-      data-total="-1"
+      data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
       data-ref="#p<%= 2-index%>-good-link"
       data-float="<%= index==0 ? "right" : "left"%>"
@@ -40,16 +40,16 @@
     <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
     <div id="p<%=index+1 %>-bad-link" class="bar-graph bad-links"
       data-color="#686868,#4a4a4a"
-      data-total="-1"
+      data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
       data-float="<%= index==0 ? "right" : "left"%>"
-      data-ref="#p<%= 2-index%>-bad-link"
+      data-ref="#p<%= index+1%>-good-link"
       data-value="<%= politician ? politician.bad_link_count : 0%>">
     </div>
   </div>
   <% if user_signed_in? -%>
     <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'} new"%>
   <% else -%>
-    <%= link_to_function '링크등록', "$.colorbox({href:'/users/sign_in', width: 520, height: 250});", :class => "link-button #{index==0?'left':'right'} login" %>
+    <%= link_to_function '링크등록', "show_login()", :class => "link-button #{index==0?'left':'right'} login" %>
   <% end -%>
 </div>

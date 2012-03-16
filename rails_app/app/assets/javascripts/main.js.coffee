@@ -112,7 +112,7 @@ worldmap = {
 				 48: "강남을"
 			 },
 		points: {
-							1: "365 285 0 0",
+							1: "365 285 0 1",
 							2: "460 142 0 0",
 							3: "453 84 0 0",
 							4: "520 90 0 0",
@@ -141,13 +141,13 @@ worldmap = {
 							27: "542 440 1 0",
 							28: "454 428 1 0",
 							29: "419 505 1 0",
-							30: "341 462 1 0",
+							30: "341 462 1 1",
 							31: "400 450 1 0",
 							32: "360 395 0 0",
 							33: "300 367 0 0",
-							34: "224 334 0 0",
+							34: "224 334 0 1",
 							35: "179 403 0 0",
-							36: "278 413 1 0",
+							36: "278 413 0 0",
 							37: "297 447 1 0",
 							38: "345 530 1 0",
 							39: "287 538 1 0",
@@ -159,7 +159,7 @@ worldmap = {
 							45: "139 368 0 0",
 							46: "100 315 0 0",
 							47: "400 150 0 0",
-							48: "537 500 1 0",
+							48: "537 500 1 1",
 						}
 }
 getInternetExplorerVersion = () ->
@@ -224,8 +224,12 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			this.textel.attr('opacity',1.0).show()
 		else
 			this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
-			this.textel.click ()=>
-				$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+			this.textel.click () ->
+				if worldmap.names[this.id]
+					$(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[this.id])
+				else
+					return false
+		
 
 		if parseInt(coordinates[2]) == 0
 			end_x = 635
@@ -242,8 +246,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			y2 = end_y - len * Math.sin(Math.PI / 4 + alpha)
 
 			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
-			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
-
+			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f", "cursor":"pointer"})
 			
 			if !this.arrow?
 				if ((checkVersion() < 9) && (checkVersion() > 5))
@@ -302,12 +305,12 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		if ($("#vs-container").attr("data-district") == worldmap.names[this.id])
 			return
 		else
-			$img1.attr "src",""
-			$img2.attr "src",""
+			$img1.attr "src","/assets/ajax-loader-politician-photo.gif"
+			$img2.attr "src","/assets/ajax-loader-politician-photo.gif"
 
 		$("#vs-district").text worldmap.names[this.id]
 
-		$.getJSON "/district/"+worldmap.names[this.id], (data) ->
+		$.getJSON "/district/"+encodeURIComponent(worldmap.names[this.id]),{utf8: "✓"}, (data) ->
 			$("#vs-container").attr "data-district", worldmap.names[this.id]
 
 			p1 = data[0]
@@ -359,7 +362,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 				label: (x, fx) ->
 					return "#{Math.round(x)}"
 			}
-		bubbleOut()
+		#bubbleOut()
 		this.curve.show()
 		this.arrow.show()
 
@@ -395,12 +398,12 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			this.textel.animate {"opacity":0,callback:()->
 				textel.hide()
 			}, 200
-		bubbleIn()
+		#bubbleIn()
 
 	out = (evt) ->
 		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
 		found = false
-		console.log(relTarget)
+		#console.log(relTarget)
 		if this.textel && relTarget == this.textel.node.childNodes[0]
 			func = (evt)=>
 				out_.call(this, evt, this.textel)
@@ -419,12 +422,22 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 	
 	click = (e) ->
-		$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+		if worldmap.names[this.id]
+			$(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[this.id])
+		else
+			return false
 
 	r.setStart()
 
 	for country, shape of worldmap.shapes
 		r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+	for country, points of worldmap.points
+		point = points.split " "
+		if point[3] == "1"	
+			start_x = parseInt(point[0]) - 50
+			start_y = parseInt(point[1]) + 95
+			console.log(start_x, start_y)
+			r.image("/assets/hot-district.png", start_x - 150, start_y - 70, 80, 40)
 
 	world = r.setFinish()
 	world.hover over, out

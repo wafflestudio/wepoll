@@ -1,9 +1,8 @@
 #coding: utf-8
+require 'open-uri'
 class ApiController < ApplicationController
-
-	require 'open-uri'
 	def parsing_test
-			target_link = params[:url]
+			target_link = params[:url].gsub /&amp;/, '&'
 			doc = Nokogiri::HTML(open(target_link))
 			arr = {}
 			doc.xpath('//title').each do |title|
@@ -16,7 +15,8 @@ class ApiController < ApplicationController
 	#기사 파싱하는 api    input : url
 	#											output : title, image, description // json형식
 	def article_parsing
-		target_link = params[:url]
+		(render :nothing => true ;return) if params[:url].nil? || params[:url].strip.length == 0
+		target_link = params[:url].gsub /&amp;/,'&'
 		if !target_link.match("^http://")
 			target_link = "http://" + target_link
 		end
@@ -31,7 +31,7 @@ class ApiController < ApplicationController
 		if preview != nil and !params[:force_get]
 			result[:created_at] = preview.created
 			result[:title] = preview.title
-			result[:description ] = preview.description
+			result[:description ] = preview.description[0...117]  + "..."# 120자 제한!
 			result[:image] = preview.image_url
 		else
 			doc = Nokogiri::HTML(open(target_link))

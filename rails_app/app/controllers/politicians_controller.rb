@@ -44,7 +44,7 @@ class PoliticiansController < ApplicationController
   end
 
   def popular_links_tab
-    @entries = @politicians.map {|p| p.timeline_entries.desc("like_count").page(params[:page]).per(3)}
+    @entries = @politicians.map {|p| p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)}
     @link = LinkReply.new 
     render :layout => false
   end
@@ -59,7 +59,7 @@ class PoliticiansController < ApplicationController
   def popular_links
     @link = LinkReply.new 
     @p = Politician.find(params[:id])
-    @entries = @p.timeline_entries.desc("like_count").page(params[:page]).per(3)
+    @entries = @p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)
     render :layout => false
   end
 

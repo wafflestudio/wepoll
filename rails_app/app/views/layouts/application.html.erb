@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta property="fb:app_id"      content="<%= FACEBOOK_CLIENT[:key] %>" />
     <meta property="og:title"       content="Wepoll" />
-    <meta property="og:image"       content="http://choco.wafflestudio.net:3082/btn_wepoll.png" />
+    <meta property="og:image"       content="http://wikipolitics.co.kr/btn_wepoll.png" />
     <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
     <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="<%= request.url %>" />
 
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
@@ -19,6 +20,19 @@
     <%= stylesheet_link_tag "preload/preload", :media => "all" %>
     <!-- Le javascript
     ================================================== -->
+    <script type="text/javascript">
+      var alertFallback = false;
+      if (typeof console === "undefined" || typeof console.log === "undefined") {
+        console = {};
+        if (alertFallback) {
+          console.log = function(msg) {
+            alert(msg);
+          };
+        } else {
+          console.log = function() {};
+        }
+      }
+    </script>
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag params[:controller] %>
     <%= yield :scripts %>
@@ -28,6 +42,9 @@
         return false;
       }
 
+      function show_login() {
+        $.colorbox({href:'/users/sign_in', width: 520, height: 250});
+      }
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>",width:800,height:600});
       }
@@ -70,6 +87,7 @@
               source: search_source,
               delay: 50,
               max: 10,
+	      minLength: 2,
               autoFocus: true,
               select: function(event, ui) {
                 $("#query_hidden").val(ui.item.query);
@@ -77,6 +95,9 @@
                 $("#query").val(ui.item.form);
                 return false;
               },
+		search: function(event, ui) {
+		$(".ui-autocomplete").css({"maxHeight":"600px","overflowY":"scroll","overflowX":"hidden"});
+		},
             focus: function() {return false;}}); 
           }
 
@@ -96,12 +117,19 @@
     <!-- Le styles -->
     <%= stylesheet_link_tag    "application", :media => "all" %>
 
+<% if !flash[:search_error].to_s.empty? %>
+  <style type="text/css">
+    #query::-webkit-input-placeholder { color:#f00; }
+    #query:-moz-placeholder { color:#f00; }
+  </style>
+<% end %>
 
     <!-- Le fav and touch icons -->
     <!--    <link href="images/favicon.ico" rel="shortcut icon">-->
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
     <!--    <link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">-->
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
+    <%= render :partial => '/ga' %>
   </head>
   <body>
     <div id="fb-root"></div>
@@ -109,7 +137,7 @@
     <script>
       FB.init({
         appId      : '<%= FACEBOOK_CLIENT[:key]%>', // App ID
-        channelUrl : '//wepoll.dev/channel.html', // Channel File
+        channelUrl : '//wepoll.or.kr/channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
@@ -128,15 +156,7 @@
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
-              <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
-
-<% if !flash[:search_error].to_s.empty? %>
-  <style>
-    #query::-webkit-input-placeholder { color:#f00; }
-    #query:-moz-placeholder { color:#f00; }
-  </style>
-<% end %>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
@@ -154,7 +174,7 @@
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
             </div>
 
-            <div id="search-bar-wrapper-small" class="grid_5">
+            <div id="search-bar-wrapper-small" class="grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
                 <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
@@ -165,7 +185,6 @@
             </div>
           </div>
           <% end -%>
-
 
           <div class="grid_12 alpha omega">
             <%= yield %>

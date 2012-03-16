@@ -112,6 +112,9 @@
   position:absolute;
   top: 0;
   z-index: 500;
+  text {
+    cursor: pointer;
+  }
 }
 
 #line-canvas {
@@ -155,7 +158,7 @@
   border-radius:10px;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   -o-border-radius:10px;
   padding-bottom:20px;
   margin-bottom:40px;
@@ -309,13 +312,13 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 .good_links {
   margin-bottom:5px;
   .links-bar-label {
-    color:#f1366f;
+    color:#60cbfa;
   }
 }
 
 .bad_links {
   .links-bar-label {
-    color:#606366;
+    color:#4a4a4a;
   }
 }
 

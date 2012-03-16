@@ -7,6 +7,7 @@ Politician.all.each do |member|
   # ...
   # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"}
   # ] 
+  next if member.candidate == false
   next if member.party == "정부"
   s = "{'form':'#{member.name}','query':'#{member._id.to_s}','type':'1','label':'#{member.name}(#{member.party})'},"
   f.write s

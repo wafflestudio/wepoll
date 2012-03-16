@@ -8,12 +8,16 @@
     <% @keys.each_with_index do |k, i| -%>
       <tr>
         <td><strong><%= k%></strong></td>
-        <td style="text-align:left;"><%= v=(@politician.send k); v.class.to_s == 'Array' ? v.join(','): v %></td>
+        <td style="text-align:left;"><%= v=(@politician.send k); v.class.to_s == 'Array' ? v.join(','): (k == 'experiences' ? simple_format(v) : v) %></td>
         <% if i == 0 -%>
-          <td style="width:110px;" rowspan="<%=@keys.count%>"><%= image_tag @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
+          <td style="width:110px;" rowspan="<%=@keys.count+1%>"><%= image_tag @politician.profile_photo.url(:square100) if @politician.profile_photo? %></td>
         <% end -%>
       </tr>
     <% end -%>
+    <tr>
+      <td><strong>트위터</strong></td>
+      <td style="text-align:left;"><%= @politician.tweet_name %></td>
+    </tr>
 
     <tr>
       <td><strong>대표발의법안들</strong></td>

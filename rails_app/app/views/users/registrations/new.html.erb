@@ -2,14 +2,14 @@
 <html>
   <head>
     <title>위폴 가입하기</title>
-    <%= javascript_include_tag 'jquery' %>
-    <%= javascript_include_tag 'jquery_ujs' %>
+    <%= javascript_include_tag 'jquery-standalone' %>
 
     <script type="text/javascript">
       $('#cancel_btn').click(function() {
         window.close();
         return false;
       });
+	window.resizeTo(600,600);
     </script>
     <style type"text/css">
       html {
@@ -65,7 +65,7 @@
         border-radius: 10px 0 0 10px;
         background-color: #bdbdbd;
         padding-left: 10px;
-        behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+        behavior:url(http://wepoll.or.kr/PIE.htc);
       }
       a#cancel_btn {
         height: 23px;
@@ -81,7 +81,7 @@
         -moz-border-radius: 0 10px 10px 0;
         -o-border-radius: 0 10px 10px 0;
         border-radius: 0 10px 10px 0;
-        behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+        behavior:url(http://wepoll.or.kr/PIE.htc);
 
         background-color: #fede4d;
         padding-right: 10px;
@@ -116,7 +116,7 @@
       <div id="middle">
         <div class="agree_container">
           <textarea class="text_box" readonly>
-            <%= File.read(Rails.root + "public/provision.html")%>
+            <%= File.read(Rails.root + "public/provision.txt")%>
           </textarea>
           <%= check_box_tag :agree_provision %><%= label_tag :agree_provision, '약관에 동의합니다.' %>
         </div>

@@ -2,9 +2,20 @@
 require 'open-uri'
 require 'oauth2/access_token'
 class Users::RegistrationsController < Devise::RegistrationsController
+  skip_before_filter :authenticate_user!
   layout false, :only => [:new, :create, :after_auth]
   def new
     super
+  end
+  
+  def update
+    current_user.nickname = params[:user][:nickname]
+    if current_user.save
+      redirect_to me_dashboard_path
+    else
+      flash[:error] = "Error occured."
+      redirect_to me_dashboard_path
+    end
   end
 
   def create

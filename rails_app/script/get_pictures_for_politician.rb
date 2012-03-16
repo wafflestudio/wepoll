@@ -17,8 +17,9 @@ csv_list.each do |csv_path|
       img_to = "init_data/profile_photos_19/" + party.romanize + "_" + name.romanize + ".jpg"
 
       if !File.exists?(Rails.root + img_to)
-        puts img_to
-        puts name + " " + party
+puts "다운 중====================="
+#        puts img_to
+#        puts name + " " + party
 
         img_read = open(img_src).read
 
