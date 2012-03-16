@@ -29,7 +29,7 @@
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
     <div id="p<%= index+1 %>-good-link" class="bar-graph good-links"
       data-color="#81d9fb,#60cbfa"
-      data-total="-1"
+      data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
       data-ref="#p<%= 2-index%>-good-link"
       data-float="<%= index==0 ? "right" : "left"%>"
@@ -40,7 +40,7 @@
     <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
     <div id="p<%=index+1 %>-bad-link" class="bar-graph bad-links"
       data-color="#686868,#4a4a4a"
-      data-total="-1"
+      data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
       data-float="<%= index==0 ? "right" : "left"%>"
       data-ref="#p<%= index+1%>-good-link"

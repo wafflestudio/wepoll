@@ -2,7 +2,7 @@
   <div class="politician-recent-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
-        <div id="p<%=i+1%>-recent-links">
+        <div class="timeline-entries-container" id="politician-<%=politician.id %>-recent-links">
           <% entries = @entries[i]%>
           <% if entries.any? %>
             <%= render entries %>
@@ -14,17 +14,17 @@
           <% else -%>
             <div class="link_entries">
               <div class="link_header" style="border-bottom: 0">
-                 링크 없음 
+                링크 없음 
               </div>
             </div>
           <% end -%>
         </div>
-        <div id="bottom-indicator-recent-<%=i +1 %>" class="bottom-indicator">hihi</div>
+        <div id="bottom-indicator-recent-<%=politician.id %>" class="bottom-indicator">hihi</div>
         <div class="loading-indicator" id="loading-indicator-recent-<%= politician.id %>">&nbsp;</div>
       </div>
       <script>
         <% entries.each do |timeline_entry| -%>
-          loadUrl("<%= timeline_entry.url %>", "#p<%=i+1 %>-recent-links .link-entry-<%= timeline_entry.id %>");
+          loadUrl("<%= timeline_entry.url %>", "#politician-<%= timeline_entry.politician.id%>-recent-links .link-entry-<%= timeline_entry.id %>");
         <% end -%>
       </script>
     <% end -%>

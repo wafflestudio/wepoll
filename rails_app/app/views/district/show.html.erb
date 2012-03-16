@@ -44,125 +44,61 @@
       $tab_section = $('<div class="alpha omega tab-section"></div>');
       $tab_section.attr('id', id);
 
-      var opts = {
+      $("#tab-sections-container").append($tab_section);
+      $tab_section.load($obj.attr('href'), function() {
+        if (id == 'politician-popular-links') {
+          loadLinks("<%= @p1.id%>", 'popular');
+          loadLinks("<%= @p2.id%>", 'popular');
+        }
+        else if (id == 'politician-recent-links') {
+          loadLinks("<%= @p1.id%>", 'recent');
+          loadLinks("<%= @p2.id%>", 'recent');
+        }
+      });
+      return false;
+    }
+
+    function loadLinks(pol_id, category) {
+      var waypoint_opts = {
         offset: '100%'
       };
 
-      $("#tab-sections-container").append($tab_section);
-      $tab_section.load($obj.attr('href'), function() {
-        if (id == 'politician-popular-links'){
-          $("#bottom-indicator-popular-1").waypoint(function(event, direction) {
-            if (direction == 'up') return;
-            $("#bottom-indicator-popular-1").waypoint('remove');
-            var url = $('#popular-next-page-<%= @politicians[0].id%>').attr('href');
-            if (!url) {return;}
-            $("#loading-indicator-popular-<%=@politicians[0].id%>").show();
-            $.get(url, function(data) {
-              $("#loading-indicator-popular-<%=@politicians[0].id %>").hide();
-              var $data = $(data);
-              var $objs = $data.filter(".link_entries");
-              $("#p1-popular-links").append($objs);
-              $objs.each(function(i, elem) {
-                var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#p1-popular-links .link-entry-"+$elem.attr("data-id"));
-              });
-              var new_href = $data.find('#popular-next-page-<%= @politicians[0].id%>').attr("href");
-              $('#popular-next-page-<%= @politicians[0].id%>').attr("href", new_href);
-              if (new_href) {
-                $("#bottom-indicator-popular-1").waypoint(opts);
-              }
-              else {
-              }
-              charLimit();
-            });
-          }, opts);
+      var $bottom_bar = $("#bottom-indicator-"+category+"-"+pol_id);
+      $bottom_bar.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $bottom_bar.waypoint('remove');
 
-          $("#bottom-indicator-popular-2").waypoint(function(event, direction) {
-            if (direction == 'up') return;
-            $("#bottom-indicator-popular-2").waypoint('remove');
-            var url = $('#popular-next-page-<%= @politicians[1].id%>').attr('href');
-            if (!url) return;
-            $("#loading-indicator-popular-<%=@politicians[1].id%>").show();
-            $.get(url, function(data) {
-              var $data = $(data);
-              var $objs = $data.filter(".link_entries");
-              $("#loading-indicator-popular-<%=@politicians[1].id%>").hide();
-              $("#p2-popular-links").append($objs);
-              $objs.each(function(i, elem) {
-                var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#p2-popular-links .link-entry-"+$elem.attr("data-id"));
-              });
+        var $next_page_link = $("#"+category+"-next-page-"+pol_id);
+        var next_page_url = $next_page_link.attr("href");
+        if (!next_page_url) return;
 
-              var new_href = $data.find('#popular-next-page-<%= @politicians[1].id%>').attr("href");
-              $('#popular-next-page-<%= @politicians[1].id%>').attr("href", new_href);
-              if (new_href) {
-                $("#bottom-indicator-popular-2").waypoint(opts);
-              }
-              else {
-              }
-              charLimit();
-            });
-          }, opts);
-        }
-        if (id == 'politician-recent-links') {
-          $("#bottom-indicator-recent-1").waypoint(function(event, direction) {
-            if (direction == 'up') return;
-            $("#bottom-indicator-recent-1").waypoint('remove');
-            var url = $('#recent-next-page-<%= @politicians[0].id%>').attr('href');
-            if (!url) return;
-            $("#loading-indicator-recent-<%=@politicians[0].id%>").show();
-            $.get(url, function(data) {
-              $("#loading-indicator-recent-<%=@politicians[0].id%>").hide();
-              var $data = $(data);
-              var $objs = $data.filter(".link_entries");
-              $("#p1-recent-links").append($objs);
-              $objs.each(function(i, elem) {
-                var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#p1-recent-links .link-entry-"+$elem.attr("data-id"));
-              });
+        //loading image
+        var $loading_indicator = $("#loading-indicator-"+category+"-"+pol_id);
 
-              var new_href = $data.find('#recent-next-page-<%= @politicians[0].id%>').attr("href");
-              $('#recent-next-page-<%= @politicians[0].id%>').attr("href", new_href);
-              if (new_href) {
-                $("#bottom-indicator-recent-1").waypoint(opts);
-              }
-              else {
-              }
-              charLimit();
-            });
-          }, opts);
+        //go ajax
+        $.get(next_page_url, function(data) {
+          $loading_indicator.hide();
 
-          $("#bottom-indicator-recent-2").waypoint(function(event, direction) {
-            if (direction == 'up') return;
-            $("#bottom-indicator-recent-2").waypoint('remove');
-            var url = $('#recent-next-page-<%= @politicians[1].id%>').attr('href');
-            if (!url) return;
-            $("#loading-indicator-recent-<%=@politicians[1].id%>").show();
-            $.get(url, function(data) {
-              $("#loading-indicator-recent-<%=@politicians[1].id%>").hide();
-              var $data = $(data);
-              var $objs = $data.filter(".link_entries");
-              $("#p2-recent-links").append($objs);
-              $objs.each(function(i, elem) {
-                var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#p2-recent-links .link-entry-"+$elem.attr("data-id"));
-              });
+          var $doc = $(data);
+          var $link_entries = $doc.filter(".link_entries");
 
-              var new_href = $data.find('#recent-next-page-<%= @politicians[1].id%>').attr("href");
-              $('#recent-next-page-<%= @politicians[1].id%>').attr("href", new_href);
-              if (new_href) {
-                $("#bottom-indicator-recent-2").waypoint(opts);
-              }
-              else {
-              }
-              charLimit();
-              //loadUrl(url, "#link-entry-<%=@politicians[1].id%>");
-            });
-          }, opts);
-        }
-      }
-      );
-      return false;
+          $("#politician-"+pol_id+"-"+category+"-links").append($link_entries);
+          $link_entries.each(function(i, link) {
+            var $link_entry = $(link);
+            var link_url = $link_entry.attr("data-url");
+            var link_id = $link_entry.attr("data-id");
+            loadUrl(link_url,
+            "#politician-"+pol_id+"-"+category+"-links .link-entry-"+link_id);
+          }); //end of each
+
+          next_page_url = $doc.find("#"+category+"-next-page-"+pol_id).attr("href");
+          $next_page_link.attr("href", next_page_url);
+
+          if (next_page_url) {
+            $bottom_bar.waypoint(waypoint_opts);
+          }
+        }); //end of get
+      }, waypoint_opts); //end of waypoint
     }
 
     $(function() {

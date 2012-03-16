@@ -3,26 +3,24 @@ require 'iconv'
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
   def show
-    @politicians = Politician.where(:district => @district).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
+    @politicians = Politician.where(:district => @district).where(:candidate => true).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
 
     @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
 
     if (params[:p1_id] && params[:p2_id])
-      @p1 = @politicians.find(params[:p1_id]).first
-      @p2 = @politicians.find(params[:p2_id]).first
+      @p1 = @politicians.find {|p| p.id.to_s == params[:p1_id]}
+      @p2 = @politicians.find {|p| p.id.to_s == params[:p2_id]}
     else
       if @p1.nil?
-				@p1 = @politicians[0]
-	      @p2 = @politicians[1]
-			else
-				if @p1.id == @politicians[0].id
-					@p1 = @politicians[1]
-					@p2 = @politicians[0]
-				else
-					@p1 = @politicians[0]
-					@p2 = @politicians[1]
-				end
-			end
+        @p1 = @politicians[0]
+        @p2 = @politicians[1]
+      else
+        if @p1.id == @politicians[0].id
+          @p2 = @politicians[1]
+        else
+          @p2 = @politicians[0]
+        end
+      end
     end
 
     p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
@@ -43,16 +41,16 @@ class DistrictController < ApplicationController
 
     respond_to do |format|
       format.html do
-				#timeline bootstrap
-				# Timeline => See timeline_controller.rb.
-				if params[:from]
-					q_time = {:updated_at => {'$gte' => params[:from]}}
-				elsif params[:after]
-					q_time = {:updated_at => {'$gt' => params[:after]}}
-				else
-					q_time = {:deleted => false} # (all except deleted)
-				end
-    		@timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
+        #timeline bootstrap
+        # Timeline => See timeline_controller.rb.
+        if params[:from]
+          q_time = {:updated_at => {'$gte' => params[:from]}}
+        elsif params[:after]
+          q_time = {:updated_at => {'$gt' => params[:after]}}
+        else
+          q_time = {:deleted => false} # (all except deleted)
+        end
+        @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
       end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
     end
@@ -70,13 +68,13 @@ class DistrictController < ApplicationController
   protected
   def simplify_district_name
     if !params[:name].nil?
-#      if request.env["HTTP_USER_AGENT"] =~ /MSIE/
-#	iconv = Iconv.new("UTF-8//IGNORE", "EUC-KR")
-	begin
-          params[:name] = params[:name].encode("UTF-8")
-	rescue
-	end
-#      end
+      #      if request.env["HTTP_USER_AGENT"] =~ /MSIE/
+      #	iconv = Iconv.new("UTF-8//IGNORE", "EUC-KR")
+      begin
+        params[:name] = params[:name].encode("UTF-8")
+      rescue
+      end
+      #      end
       str = params[:name]
       redirect_to root_url if str == "undefined"
       if str && (%w(구 시).include? str[-2]) && (%w(갑 을 병 정 무 기 경 신 임 계).include? str[-1])
@@ -88,12 +86,12 @@ class DistrictController < ApplicationController
     elsif !params[:politician_id].nil?
       str = params[:politician_id].to_s
       if str == "undefined"
-      redirect_to root_url
-	else
-@p1 = Politician.find(str)
-	@district = @p1.district
-	redirect_to root_url if @district.empty?
-	end
+        redirect_to root_url
+      else
+        @p1 = [Politician.find(str)]
+        @district = @p1.district
+        redirect_to root_url if @district.empty?
+      end
     end
   end
 end
