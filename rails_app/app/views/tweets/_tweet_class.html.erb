@@ -1,5 +1,5 @@
 <div data-href="<%= tweet_tweet_replies_path(t) %>" class="tweet_item clearfix <%= c %>">
-  <div class="count">
+  <div class="count" data-status_id="<%= t.status_id %>">
     <%= t.like_count %>
   </div>
   <div class="content">
