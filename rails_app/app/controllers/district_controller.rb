@@ -38,8 +38,8 @@ class DistrictController < ApplicationController
 
     @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
 
-    @t1 = @p1.nil? ? nil : @p1.tweets.asc('created_at').first
-    @t2 = @p2.nil? ? nil : @p2.tweets.asc('created_at').first
+    @t1 = @p1.nil? ? nil : @p1.tweets.desc('created_at').first
+    @t2 = @p2.nil? ? nil : @p2.tweets.desc('created_at').first
     @tweets = [@t1, @t2]
 
 

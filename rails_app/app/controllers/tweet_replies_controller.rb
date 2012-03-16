@@ -97,7 +97,7 @@ class TweetRepliesController < ApplicationController
       begin
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
-        Rails.logger.info @graph.put_object("me","feed",:message => params[:tweet_reply][:content], :link => params[:link], :picture => "http://choco.wafflestudio.net:3082/btn_wepoll.png" )
+        Rails.logger.info @graph.put_object("me","feed",:message => params[:tweet_reply][:content], :link => params[:link], :picture => "http://wepoll.or.kr/btn_wepoll.png" )
         true
       rescue StandardError => e
         Rails.logger.info e.message

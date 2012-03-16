@@ -31,6 +31,8 @@ class Politician #정치인 모델
   field :good_link_count, type: Integer, default: 0
   field :bad_link_count, type: Integer, default: 0
 
+index :district
+
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
     :styles => {:square100 => "100x100#", :square160 => "160x160#"},

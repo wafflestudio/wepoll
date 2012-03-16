@@ -14,7 +14,7 @@
     <div class="preview-wrap clearfix">
       <div class="preview-image"><img src='<%= (timeline_entry.preview and timeline_entry.preview.image_url) ? timeline_entry.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
       <div class="preview-text">
-			<div class="preview-title"><a href="<%= raw timeline_entry.url %>"><%= timeline_entry.preview.title if timeline_entry.preview %></a></div>
+			<div class="preview-title"><a target="_blank" href="<%= raw timeline_entry.url %>"><%= timeline_entry.preview.title if timeline_entry.preview %></a></div>
         <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url, :target => "_blank" %></div>
         <div class="preview-desc"><%= timeline_entry.preview.description if timeline_entry.preview %></div>
       </div>

@@ -217,7 +217,7 @@ protected
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
         Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
-        @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://choco.wafflestudio.net:3082"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+@politician.profile_photo(:square50), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
+        @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
         true
       rescue StandardError => e
         Rails.logger.info e.message
