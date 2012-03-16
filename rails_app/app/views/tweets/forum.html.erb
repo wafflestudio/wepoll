@@ -49,7 +49,7 @@ $(function() {
     <%= render @tweets %>
   </div>
   <div id="tweets_paginator">
-    <%= link_to_next_page @tweets, 'next', :param_name => "tweets_page", :remote => true %>
+    <%= link_to_next_page @tweets, 'more', :param_name => "tweets_page", :remote => true %>
   </div>
 </div>
 
