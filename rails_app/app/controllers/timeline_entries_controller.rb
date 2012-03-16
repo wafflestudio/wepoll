@@ -72,6 +72,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new
     @politician = Politician.find(params[:politician_id])
     @timeline_entry.politician = @politician
+    @timeline_entry.preview = Preview.new
 
     respond_to do |format|
       format.html { render :layout => false }# new.html.erb
@@ -92,6 +93,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new(params[:timeline_entry])
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
+    
     @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
@@ -176,6 +178,7 @@ class TimelineEntriesController < ApplicationController
 	def entry
     @link = LinkReply.new 
     @entry = TimelineEntry.find(params[:id])
+    @entry.preview = Preview.where(:url => @entry.url).first
     render :partial => "timeline_entry", :locals => {:timeline_entry => @entry}, :layout => false
   end
 

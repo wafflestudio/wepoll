@@ -5,6 +5,8 @@ class TimelineEntry
   include Mongoid::MultiParameterAttributes
   include Mongoid::Paperclip
 
+	attr_accessor :preview
+
 	validates_associated :user
 	validates_presence_of :url,:posted_at
 
@@ -53,7 +55,7 @@ class TimelineEntry
   has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_timeline_entries
 
 	# url cache
-	has_many :previews
+	belongs_to :preview
 
   before_destroy :adjust_link_count_of_politician
 

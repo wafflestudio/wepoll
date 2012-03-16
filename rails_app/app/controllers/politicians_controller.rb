@@ -60,6 +60,7 @@ class PoliticiansController < ApplicationController
     @link = LinkReply.new 
     @p = Politician.find(params[:id])
     @entries = @p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)
+
     render :layout => false
   end
 
