@@ -97,6 +97,8 @@ Wepoll::Application.routes.draw do
   end
 
   match "/search" => "main#search"
+match '/provision' => 'main#provision'
+match '/privacy' => 'main#privacy'
 
   root :to => 'main#index'
 
