@@ -22,6 +22,7 @@ class DistrictController < ApplicationController
         end
       end
     end
+    redirect_to district_politician_path(@p1) if @p1 == @p2
 
     p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
     p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories
@@ -88,7 +89,7 @@ class DistrictController < ApplicationController
       if str == "undefined"
         redirect_to root_url
       else
-        @p1 = [Politician.find(str)]
+        @p1 = Politician.find(str)
         @district = @p1.district
         redirect_to root_url if @district.empty?
       end
