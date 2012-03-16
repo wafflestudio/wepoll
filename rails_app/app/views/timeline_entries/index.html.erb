@@ -169,12 +169,11 @@ $(function() {
 	timelineController.on("addEntry", function(model)  {
 		// ignore if already exists
 		
-		if($("#link-entry-" + model.id).length >0)
+		if($(".link-entry-" + model.id).length >0)
 			return;
 		$.get("/timeline_entries/"+model.id+"/entry", 
 			function(html) {
-        alert("hihi")
-        $("#politician-"+model.get("politician_id")+"-recent-links").prepend(html)
+				$("#politician-" + model.get("politician_id") + "-recent-links").prepend(html)
 			})
 		}
 	);

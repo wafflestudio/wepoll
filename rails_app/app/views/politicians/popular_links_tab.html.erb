@@ -22,11 +22,7 @@
         <div id="bottom-indicator-popular-<%=politician.id %>" class="bottom-indicator">hihi</div>
         <div class="loading-indicator" id="loading-indicator-popular-<%= politician.id %>">&nbsp;</div>
       </div>
-      <script>
-        <% entries.each do |timeline_entry| -%>
-          loadUrl("<%= timeline_entry.url %>", "#politician-<%=timeline_entry.politician.id%>-popular-links .link-entry-<%= timeline_entry.id %>");
-        <% end -%>
-      </script>
+
     <% end -%>
   </div>
 </div>
