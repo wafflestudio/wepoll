@@ -52,6 +52,9 @@ class TimelineEntry
   has_and_belongs_to_many :like_users, :class_name => "User", :inverse_of => :like_timeline_entries
   has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_timeline_entries
 
+	# url cache
+	has_many :previews
+
   before_destroy :adjust_link_count_of_politician
 
   def like(user)
