@@ -134,7 +134,6 @@
               var max = parseInt($this.attr('maxlength'));
               var len = $this.val().length;
               if (len > max) {
-                console.log("len>max");
                 $this.val($this.val().substr(0, max));
                 len = $this.val().length;
               }
@@ -197,9 +196,8 @@
 	function loadUrl(url, parentDiv)  {
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 			function(data)  { 
-				console.warn(data)
 				$(".preview-title a", parentDiv).html(data.title);
-				$(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" );
+				$(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "<img src='/assets/dummy-news-1.jpg' />" );
 				$(".preview-desc", parentDiv).html(data.description);
 			} 
 		}); 
@@ -209,7 +207,7 @@
 <%= render 'timeline_entries/index' %>
 <!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
-<div class="grid_12" id="vs-content-wrapper">
+<div class="grid_12" id="vs-content-wrapper" style="margin-bototm: 20px;">
   <div id="district-title">
     이 공간은 <span id="district-label"><%= @district %></span> 대결 페이지입니다.
     <fb:like class="fb-like" href="<%= request.url %>" width="100" show_faces="false" layout="button_count" />
@@ -252,4 +250,3 @@
     </div> <!-- end of tab conainer -->
   </div>
 </div>
-

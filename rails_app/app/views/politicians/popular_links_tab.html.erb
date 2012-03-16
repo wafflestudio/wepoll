@@ -2,7 +2,7 @@
   <div class="politician-popular-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
-        <div class="links-container" id="politician-<%=politician.id%>-popular-links">
+        <div class="timeline-entries-container" id="politician-<%=politician.id%>-popular-links">
           <% entries = @entries[i]%>
           <% if entries.any? %>
             <%= render entries %>
