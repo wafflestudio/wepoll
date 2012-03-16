@@ -4,6 +4,7 @@ Wepoll::Application.routes.draw do
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
+    get 'entry', :on => :member
   end
 
   match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
