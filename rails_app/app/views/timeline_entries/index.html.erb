@@ -113,6 +113,7 @@ function activateTimelineEntryForm() {
 	activateTimelineFormPreview(function successful(data){
 		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.');
 		$('#link-post').removeAttr('disabled');
+		$('#timeline_entry_preview_id').val(data.id)
 		$('#link-form-badlink').hide();
 		if(data.image)  {
 			$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");

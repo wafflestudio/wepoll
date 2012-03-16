@@ -29,6 +29,7 @@ class ApiController < ApplicationController
 		preview = Preview.where(:url => target_link).first
 		result = {}
 		if preview != nil and !params[:force_get]
+			result[:id] = preview.id
 			result[:created_at] = preview.created
 			result[:title] = preview.title
 			result[:description ] = preview.description[0...117]  + "..."# 120자 제한!
@@ -213,7 +214,9 @@ class ApiController < ApplicationController
 				render :json =>result.to_json, :status => 500
 				return
 			end
-			Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
+			preview = Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
+			result[:id] = preview.id
+
 		end
 		render :json => result.to_json
 	end

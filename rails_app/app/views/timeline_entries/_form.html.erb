@@ -1,5 +1,7 @@
 <%= form_for(@timeline_entry,:remote => true, :html =>{:class => 'link-form tm-entry-form'}) do |f| %>
 	<%= f.hidden_field :politician_id %>
+	<%= f.hidden_field :preview_id %>
+
   <div class="prefix_2 grid_8 alpha omega field">
     <div id="link-form-title"><%= current_user.nickname %>님이 <%= @politician.name %> 후보를</div>
     <div class="link-type"><%= f.radio_button 'is_good', 'true' %> 칭찬합니다.</div>
