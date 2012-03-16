@@ -40,6 +40,9 @@ Wepoll::Application.routes.draw do
     end
 
     resources 'notices'
+    resources 'link_replies'
+    resources 'tweet_replies'
+    resources 'tweets'
   end
 
   devise_for :users, :controllers => {
