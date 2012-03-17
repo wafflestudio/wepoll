@@ -501,6 +501,35 @@ class ApiController < ApplicationController
 				result[:created_at] = doc.xpath('//div[@class="news-title-group"]/span').text
 				result[:description] =  doc.xpath('//div[@class="news-cont-group"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '').gsub(/  /, '')
 				result[:image] = '' #없는듯..  
+			elsif target_link.match('mbn\.mk\.co\.kr') #mbn
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				str =  doc.xpath('//div[@class="write"]/span[@class="reg_dt"]').text
+				str[0..4] = ''
+				result[:created_at] = str
+			elsif target_link.match('news\.jtbc\.co\.kr') #jtbc
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				str = doc.xpath('//span[@class="i_date"]').text
+				str[0..2] = ''
+				result[:created_at] = str
+			elsif target_link.match('news\.tv\.chosun\.com') #tv 조선
+				doc = Nokogiri::HTML(open(target_link))
+				result[:image] = get_og_image doc
+				result[:title] = doc.xpath('//div[@class="titleArea"]/h2').text.gsub(/\r/, '').gsub(/\t/, '').gsub(/\n/, '')
+				result[:created_at] = doc.xpath('//p[@class="articleDate"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '')
+				doc.at('body').search('script, noscript, style, a').remove
+				result[:description] =  doc.xpath('//div[@class="articleStory"]').text.gsub(/\t/, '').gsub(/\r/, '').gsub(/\n/, '')
+			elsif target_link.match('news\.ichannela\.com') # A channel
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//div[@class="title"]/p').text.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/).to_s
+				result[:description] = doc.xpath('//div[@class="article"]').text.gsub(/\r/, '').gsub(/\n/,'').gsub(/\t/,'')
+				result[:image] = doc.xpath('//link[@rel="image_src"]').first['href']  #그냥 채널 A이미지.. ㅋㅋ
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'
