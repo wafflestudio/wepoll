@@ -100,13 +100,13 @@ class TimelineEntriesController < ApplicationController
       @politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
     end
 
-    if(params[:tweet])
+    if(params[:timeline_entry][:tweet])
       unless tweet_after_create
         @error = 1
         @message += "tweet을 게시하는데 오류가 발생했습니다."
       end
     end
-    if(params[:facebook])
+    if(params[:timeline_entry][:facebook])
       unless post_after_create
         @error = 1
         @message += "facebook에 포스팅하는데 오류가 발생했습니다."
