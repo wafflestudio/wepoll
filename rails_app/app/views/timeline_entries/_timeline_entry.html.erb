@@ -5,7 +5,11 @@
       <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
+
     <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;", :title => timeline_entry.politician.name  + (timeline_entry.is_good ? "을 칭찬하는 링크" : "을 지적하는 링크"), :class => "tooltip-top2" %>
+    <% if timeline_entry.user == current_user -%>
+      <%#= link_to image_tag('/assets/admin/hr.gif'), timeline_entry_path(timeline_entry), :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "timeline_entry_destroy_btn" %>
+    <% end -%>
   </div>
   <div class="link_contents">
     <p>
@@ -35,7 +39,10 @@
       </div>
     <% end %>
     <% timeline_entry.link_replies.reverse[0..2].reverse.each do |r| %>
-      <div class="link_replies clearfix">
+      <div class="link_replies clearfix <%= r.id %>">
+        <% if r.user == current_user -%>
+          <%= link_to image_tag('/assets/admin/hr.gif'), link_reply_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "link_reply_destroy_btn" %>
+        <% end -%>
         <%= image_tag (r.user ? r.user.profile_picture : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "width: 40px; float: left; margin-right: 10px;" %>
         <div class="link_replies_body">
           <p class="name"><%= (r.user ? r.user.nickname : "") %> <span class="date"><%= r.posted_ago? %></span></p>
@@ -58,7 +65,7 @@
           <% if user_signed_in? -%>
             <%= f.text_area :body, :id => "", :maxlength => 140, :placeholder => "댓글을 입력하세요."%>
           <% else -%>
-            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+              <%= link_to_function f.text_area(:body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다."), 'show_login()' %>
           <% end -%>
         </div>
 

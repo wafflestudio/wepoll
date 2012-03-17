@@ -25,4 +25,18 @@ class LinkRepliesController < ApplicationController
     @reply = LinkReply.find(params[:id])
     @result = @reply.blame(current_user)
   end
+  def destroy
+    @reply = LinkReply.find(params[:id])
+    @success = false
+    @id = params[:id]
+    if @reply.user == current_user
+      if @reply.destroy
+        @success = true
+      else
+        @success = false
+      end
+    else
+      @success = false
+    end
+  end
 end
