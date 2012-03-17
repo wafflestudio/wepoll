@@ -294,9 +294,10 @@ class ApiController < ApplicationController
 			elsif target_link.match('www\.dt\.co\.kr') #디지털타임스
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
-				result[:description] = '' 
-				result[:image] = ''
-				result[:created_at] = ''
+				result[:description] = doc.xpath('//meta[@property="me2:post_body"]').first['content'] 
+				url_time = target_link.match(/article_no=\d*/).to_s.match(/\d\d\d\d\d\d\d\d/).to_s
+				result[:image] = '' #못하겠다. 파싱을 못해... 
+				result[:created_at] = url_time[0,4] + '.' + url_time[4,2]	    
 
 			elsif target_link.match('www\.koreatimes\.co\.kr') #korea times
 				doc = Nokogiri::HTML(open(target_link))
@@ -328,9 +329,17 @@ class ApiController < ApplicationController
 			elsif target_link.match('www\.edaily\.co\.kr') # 이데일리
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
-				result[:description] = '' 
-				result[:image] = ''
-				result[:created_at] = ''
+				result[:description] = doc.xpath('//span[@id="content"]').text 
+				if doc.xpath('//table[@align="left"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="left"]//table//img').first['src']
+				elsif doc.xpath('//table[@align="center"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="center"]//table//img').first['src']
+				elsif doc.xpath('//table[@align="right"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="right"]//table//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@class="time"]').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
 
 			elsif target_link.match('www\.nocutnews\.co\.kr') # 노컷뉴스
 				doc = Nokogiri::HTML(open(target_link))
@@ -376,17 +385,21 @@ class ApiController < ApplicationController
 
 			elsif target_link.match('biz\.heraldm\.com') #헤럴드 경제
 				doc = Nokogiri::HTML(open(target_link))
-				result[:title] = doc.title()
-				result[:description] = '' 
-				result[:image] = ''
-				result[:created_at] = ''
+				result[:title] = doc.xpath('//meta[@name="title"]').first['content']
+				result[:description] =  doc.xpath('//div[@id="NewsAdContent"]').text.gsub(/\r/, '').gsub(/  /, '').gsub(/\n/, '')
+				if  doc.xpath('//center/img').length > 0
+					result[:image] =  doc.xpath('//center/img').first['src']
+				else 
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//p[@class="dt"]').text
 
 			elsif target_link.match('asiae\.co\.kr') # 아시아경제
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
-				result[:description] = '' 
-				result[:image] = ''
-				result[:created_at] = ''
+				result[:description] = doc.xpath('//div[@id="articleTxt"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/<!--.*-->/, '')
+				result[:image] = '' # 파싱 불가능. 스크립트로 불러오는거임 
+				result[:created_at] = doc.xpath('//div[@class="tit"]/p').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
 			elsif target_link.match('koreaherald\.com') # 코리아 헤럴드
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
@@ -425,10 +438,14 @@ class ApiController < ApplicationController
 				result[:created_at] = ''
 			elsif target_link.match('economy\.hankooki\.com') # 서울경제 
 				doc = Nokogiri::HTML(open(target_link))
-				result[:title] = doc.title()
-				result[:description] = '' 
-				result[:image] = ''
-				result[:created_at] = ''
+				result[:title] = doc.xpath('//div[@id="GS_Title"]').text
+				result[:description] = doc.xpath('//div[@id="GS_Content"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+				if doc.xpath('//div[@id="Url_GisaImgNum_1"]').length > 0 
+					result[:image] = doc.xpath('//div[@id="Url_GisaImgNum_1"]').text
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@id="magazine_all"]/script').text.match(/\d\d\d\d\/\d\d\/\d\d \d\d:\d\d:\d\d/).to_s
 			elsif target_link.match('www\.zdnet\.co\.kr') # zdnet 
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
@@ -457,6 +474,33 @@ class ApiController < ApplicationController
 				result[:description] =  doc.xpath('//div[@id="articleBody"]/p').text.gsub(/\r/, '') 
 				result[:image] = ''
 				result[:created_at] = doc.xpath('//div[@id="articleTiile"]/div[@class="text_box"]/p').first.text.match(/\d\d\d\d.\d\d.\d\d/).to_s
+			elsif target_link.match('www\.segye\.com') #세계일보
+				doc = Nokigori::HTML(open(target_link))
+				result[:title] = doc.title()
+				url_time = target_link.match(/\d\d\d\d\d\d\d\d/)
+				result[:created_at] = url_time[0,4] + '.' + url_time[4,2] + '.' + url_time[6,2] 	    
+				if doc.xpath('//center/img').length > 0
+					result[:image] = doc.xpath('//center/img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@id="SG_ArticleContent"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+			elsif target_link.match('www\.fnnews\.com') #파이낸셜 뉴스,  
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] =  doc.xpath('//p[@class="update"]').text.match(/\d\d\d\d-\d\d\-\d\d \d\d:\d\d/).to_s
+				if doc.xpath('//div[@class="news_content"]//table//table//img').length > 0
+					result[:image] = doc.xpath('//div[@class="news_content"]//table//table//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@class="news_content"]').text
+			elsif target_link.match('www\.assembly\.go\.kr') # 국회방송?> natv
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//div[@class="news-title-group"]/h5').text
+				result[:created_at] = doc.xpath('//div[@class="news-title-group"]/span').text
+				result[:description] =  doc.xpath('//div[@class="news-cont-group"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '').gsub(/  /, '')
+				result[:image] = '' #없는듯..  
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'
