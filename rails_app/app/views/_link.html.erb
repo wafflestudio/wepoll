@@ -1,6 +1,6 @@
 <div class="link-excerpt">
     <!-- TODO : 링크걸어주세요 -->
-    <div class="title"><%= link.nil? ? (raw "<span style=\"color:#888\">링크가 없습니다.</span>") : (link_to (link.title||"제목이 없습니다.").truncate(40), '#') %></div>
+    <div class="title"><%= link.nil? ? (raw "<span style=\"color:#888\">링크가 없습니다.</span>") : (link_to truncate(link.title||"제목이 없습니다.",:length => 5), '#') %></div>
   <div class="meta-info clearfix">
     <div class="support-count">공감 <%= link.nil? ? 0 : link.like%></div>
     <!-- TODO : 링크걸어주세요 -->
