@@ -24,7 +24,7 @@
 
   <dl data-district="<%= @district%>" id="<%= "politician#{(index==0 ?  1 : 2)}"%>" class="dropdown <%= index==0?"left":"right"%>">
     <% if politician -%>
-    <dt><a href="#"><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
+    <dt class="tooltip-top" title="<%= @district %>의 다른 후보를 볼 수 있습니다."><a href="#"><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
     <% else -%>
     <dt><a href="#"><span class="name">후보없음</span></a></dt>
     <% end -%>
@@ -41,7 +41,7 @@
 
   <div class="link-graph-wrapper clearfix">
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
-    <div id="p<%= index+1 %>-good-link" class="bar-graph good-links"
+    <div id="p<%= index+1 %>-good-link" class="bar-graph politician-<%=politician.id %> good-links"
       data-color="#81d9fb,#60cbfa"
       data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
@@ -52,7 +52,7 @@
     <div class="clear"></div>
 
     <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
-    <div id="p<%=index+1 %>-bad-link" class="bar-graph bad-links"
+    <div id="p<%=index+1 %>-bad-link" class="bar-graph politician-<%=politician.id%> bad-links"
       data-color="#686868,#4a4a4a"
       data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
@@ -63,9 +63,9 @@
   </div>
   <% if politician -%>
     <% if user_signed_in? -%>
-      <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id)  , :class => "link-button #{index==0?'left':'right'} new"%>
+      <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id), :title => (politician.name + "에 관한 링크를 등록하여 공유하세요"), :class => "link-button #{index==0?'left':'right'} new tooltip-top"%>
     <% else -%>
-      <%= link_to_function '링크등록', "show_login()", :class => "link-button #{index==0?'left':'right'} login" %>
+      <%= link_to_function '링크등록', "show_login()", :title => (politician.name + "에 관한 링크를 등록하여 공유하세요"), :class => "link-button #{index==0?'left':'right'} login tooltip-top" %>
     <% end -%>
   <% end -%>
 </div>

@@ -5,11 +5,11 @@
       <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
-    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;" %>
+
+    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;", :title => timeline_entry.politician.name  + (timeline_entry.is_good ? "을 칭찬하는 링크" : "을 지적하는 링크"), :class => "tooltip-top2" %>
     <% if timeline_entry.user == current_user -%>
       <%#= link_to image_tag('/assets/admin/hr.gif'), timeline_entry_path(timeline_entry), :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "timeline_entry_destroy_btn" %>
     <% end -%>
-
   </div>
   <div class="link_contents">
     <p>
@@ -79,3 +79,7 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+$('.tooltip-top2').qtip()
+console.log('loaded')
+</script>

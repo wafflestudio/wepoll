@@ -4,7 +4,7 @@
       <span style=\"color:#888\">링크가 없습니다.</span>
     <% else -%>
       <%= link_to (link.politician.district + " " + link.politician.name), district_politician_path(link.politician.id), :class => "link-excerpt-politician-name" %>
-      <%= link_to (link.title||"제목이 없습니다.").truncate(32), display_timeline_entry_path(link.id) %>
+      <%= link_to truncate((link.title||"제목이 없습니다."),:length => 20), display_timeline_entry_path(link.id) %>
     <% end -%>
   </div>
   <div class="meta-info clearfix">

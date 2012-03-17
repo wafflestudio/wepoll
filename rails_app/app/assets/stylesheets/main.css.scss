@@ -164,6 +164,11 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   margin-bottom:40px;
   max-height:150px;
   overflow-y:scroll;
+
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  -o-text-overow: ellipsis;
+  -moz-binding:url(js/ellipsis.xml#ellipsis);
 }
 
 .link-excerpt {
@@ -199,6 +204,12 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     a {
       color:black;
       text-decoration:none;
+    white-space:pre-wrap;
+    white-space:-moz-pre-wrap;
+    white-space:-pre-wrap;
+    white-space:-o-pre-wrap;
+    word-wrap:break-word;
+      
     }
 
     a.link-excerpt-politician-name {

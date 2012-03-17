@@ -36,6 +36,7 @@ class ApiController < ApplicationController
 		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
+
 		if preview != nil and !params[:force_get]
 			result[:id] = preview.id
 			result[:created_at] = preview.created
@@ -226,7 +227,7 @@ class ApiController < ApplicationController
 				end
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:created_at] = doc.xpath('//span[@class="num"]').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
-			elsif target_link.match('hankooki\.com') #한국일보
+			elsif target_link.match('news\.hankooki\.com') #한국일보
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title().gsub(/\n/, '')
 				if doc.xpath('//div[@id="Url_GisaImgNum_1"]').length > 0
@@ -240,14 +241,321 @@ class ApiController < ApplicationController
 			elsif target_link.match('mediatoday\.co\.kr')  #미디어 오늘:
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
-				create_time =  doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/\t/, '').split(' ')
-				result[:created_at] = create_time[2] + ''
-				result[:description] =  doc.xpath('//div[@id="media_body"]').text
+				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/\t/, '').match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d/).to_s
+				result[:description] =doc.xpath('//div[@id="media_body"]').text.gsub(/\t/, '').gsub(/\n/, '').gsub(/  /, '').gsub(/\r/, '')
 				if doc.xpath('//td[@align="center"]/img').length > 0 
 					result[:image] = doc.xpath('//td[@align="center"]/img').first['src']
 				else 
 					result[:image] = ''
 				end
+			elsif target_link.match('news\.mk\.co\.kr') # 매일경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				result[:created_at] = doc.xpath('//span[@class="sm_num"]').text  #날짜가 안되네...
+			elsif target_link.match('www\.yonhapnews\.co\.kr') ##연합뉴스 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//div[@id="articleBody"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\/"/, '')
+				if doc.xpath('//dt[@class="pto"]/img').length > 0 
+					result[:image] = doc.xpath('//dt[@class="pto"]/img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] =  doc.xpath('//span[@class="pblsh"]').text.gsub(/[^\d\/: ]/, '')
+#			elsif target_link.match('app\.yonhapnews\.co\.kr') ##연합뉴스, 영상포함  여기 그지같다. 하지 말아야ㅣㅈ .
+#				result[:title] = doc.title()
+#				result[:created_at] = doc.xpath('//li[@class="time"]').text
+#				str = doc.xpath('//span[@id="spnmpic"]/script').text.match(/src="[^"]*/).to_s
+#				str[0..4] = ''
+#				result[:video] = str
+#				result[:description] = 
+			elsif target_link.match('newsis\.com') #뉴시스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//font[@class="text-666666-11"]').text
+				result[:description] = doc.xpath('//div[@id="articleBody"]').text.gsub(/\r\n/, '')
+				if doc.xpath('//div[@class="center_img"]/dl/img').length > 0
+					result[:image] = doc.xpath('//div[@class="center_img"]/dl/img').first['src']
+				else
+					result[:image] = ''
+				end
+			elsif target_link.match('kr\.news\.yahoo\.com') #야후
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				if  doc.xpath('//link[@rel="image_src"]').length > 0 
+					result[:image] =  doc.xpath('//link[@rel="image_src"]').first['href']
+				else 
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@id="content"]').text.gsub(/\n/, '').gsub(/\r/, '')
+				result[:created_at] = doc.xpath('//span[@class="d1"]').text.gsub(/[^\d :]/, '')
+			elsif target_link.match('www\.dt\.co\.kr') #디지털타임스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//meta[@property="me2:post_body"]').first['content'] 
+				url_time = target_link.match(/article_no=\d*/).to_s.match(/\d\d\d\d\d\d\d\d/).to_s
+				result[:image] = '' #못하겠다. 파싱을 못해... 
+				result[:created_at] = url_time[0,4] + '.' + url_time[4,2]	    
+
+			elsif target_link.match('www\.koreatimes\.co\.kr') #korea times
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+				
+			elsif target_link.match('www\.ytn\.co\.kr') # ytn
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.dailian\.co\.kr') # 데일리안
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('koreajoongangdaily\.joinsmsn\.com') # 중앙데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.edaily\.co\.kr') # 이데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//span[@id="content"]').text 
+				if doc.xpath('//table[@align="left"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="left"]//table//img').first['src']
+				elsif doc.xpath('//table[@align="center"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="center"]//table//img').first['src']
+				elsif doc.xpath('//table[@align="right"]//table//img').length > 0
+					result[:image] = doc.xpath('//table[@align="right"]//table//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@class="time"]').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
+
+			elsif target_link.match('www\.nocutnews\.co\.kr') # 노컷뉴스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('mydaily\.co\.kr') # 마이데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('sports\.donaga\.com') # 스포츠 동아닷컴
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.reuters\.com') # 로이터
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('news\.inuews24\.com') # inews 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('osen\.mt\.co\.kr') # Osen 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('biz\.heraldm\.com') #헤럴드 경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//meta[@name="title"]').first['content']
+				result[:description] =  doc.xpath('//div[@id="NewsAdContent"]').text.gsub(/\r/, '').gsub(/  /, '').gsub(/\n/, '')
+				if  doc.xpath('//center/img').length > 0
+					result[:image] =  doc.xpath('//center/img').first['src']
+				else 
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//p[@class="dt"]').text
+
+			elsif target_link.match('asiae\.co\.kr') # 아시아경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//div[@id="articleTxt"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/<!--.*-->/, '')
+				result[:image] = '' # 파싱 불가능. 스크립트로 불러오는거임 
+				result[:created_at] = doc.xpath('//div[@class="tit"]/p').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
+			elsif target_link.match('koreaherald\.com') # 코리아 헤럴드
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('realtime\.wsj\.com') # 코리아 리얼타임 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('cast\.wowtv\.co\.kr') # 한국경제 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('isplus\.joinsman\.com') # 일간스포츠
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('news\.sportsseoul\.com') #스포츠서울
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.sportalkorea\.com') #스포탈 코리아 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('economy\.hankooki\.com') # 서울경제 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//div[@id="GS_Title"]').text
+				result[:description] = doc.xpath('//div[@id="GS_Content"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+				if doc.xpath('//div[@id="Url_GisaImgNum_1"]').length > 0 
+					result[:image] = doc.xpath('//div[@id="Url_GisaImgNum_1"]').text
+				else
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//div[@id="magazine_all"]/script').text.match(/\d\d\d\d\/\d\d\/\d\d \d\d:\d\d:\d\d/).to_s
+			elsif target_link.match('www\.zdnet\.co\.kr') # zdnet 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.bloter\.net') #불로터 닷 넷 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.naeil\.com') #내일신문
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//td[@class="titleArticle"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '')
+				result[:description] = doc.xpath('//div[@id="_article"]').text.gsub(/\r\n/, '').gsub(/\r/, '').gsub(/\t/, '')
+				if doc.xpath('//center/img').length > 0 
+					result[:image] = doc.xpath('//center/img').first['src'] 
+				else 
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '').gsub(/[^\d-: ]/, '')
+			elsif target_link.match('www\.etnews\.com') #전자신문
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:description] =  doc.xpath('//div[@id="articleBody"]/p').text.gsub(/\r/, '') 
+				result[:image] = ''
+				result[:created_at] = doc.xpath('//div[@id="articleTiile"]/div[@class="text_box"]/p').first.text.match(/\d\d\d\d.\d\d.\d\d/).to_s
+			elsif target_link.match('www\.segye\.com') #세계일보
+				doc = Nokigori::HTML(open(target_link))
+				result[:title] = doc.title()
+				url_time = target_link.match(/\d\d\d\d\d\d\d\d/)
+				result[:created_at] = url_time[0,4] + '.' + url_time[4,2] + '.' + url_time[6,2] 	    
+				if doc.xpath('//center/img').length > 0
+					result[:image] = doc.xpath('//center/img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@id="SG_ArticleContent"]').text.gsub(/\r\n/, '').gsub(/\t/, '')
+			elsif target_link.match('www\.fnnews\.com') #파이낸셜 뉴스,  
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] =  doc.xpath('//p[@class="update"]').text.match(/\d\d\d\d-\d\d\-\d\d \d\d:\d\d/).to_s
+				if doc.xpath('//div[@class="news_content"]//table//table//img').length > 0
+					result[:image] = doc.xpath('//div[@class="news_content"]//table//table//img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@class="news_content"]').text
+			elsif target_link.match('www\.assembly\.go\.kr') # 국회방송?> natv
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//div[@class="news-title-group"]/h5').text
+				result[:created_at] = doc.xpath('//div[@class="news-title-group"]/span').text
+				result[:description] =  doc.xpath('//div[@class="news-cont-group"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '').gsub(/  /, '')
+				result[:image] = '' #없는듯..  
+			elsif target_link.match('mbn\.mk\.co\.kr') #mbn
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				str =  doc.xpath('//div[@class="write"]/span[@class="reg_dt"]').text
+				str[0..4] = ''
+				result[:created_at] = str
+			elsif target_link.match('news\.jtbc\.co\.kr') #jtbc
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				str = doc.xpath('//span[@class="i_date"]').text
+				str[0..2] = ''
+				result[:created_at] = str
+			elsif target_link.match('news\.tv\.chosun\.com') #tv 조선
+				doc = Nokogiri::HTML(open(target_link))
+				result[:image] = get_og_image doc
+				result[:title] = doc.xpath('//div[@class="titleArea"]/h2').text.gsub(/\r/, '').gsub(/\t/, '').gsub(/\n/, '')
+				result[:created_at] = doc.xpath('//p[@class="articleDate"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '')
+				doc.at('body').search('script, noscript, style, a').remove
+				result[:description] =  doc.xpath('//div[@class="articleStory"]').text.gsub(/\t/, '').gsub(/\r/, '').gsub(/\n/, '')
+			elsif target_link.match('news\.ichannela\.com') # A channel
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//div[@class="title"]/p').text.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/).to_s
+				result[:description] = doc.xpath('//div[@class="article"]').text.gsub(/\r/, '').gsub(/\n/,'').gsub(/\t/,'')
+				result[:image] = doc.xpath('//link[@rel="image_src"]').first['href']  #그냥 채널 A이미지.. ㅋㅋ
+			elsif target_link.match('tistory\.com') # tistory
+			  doc = Nokogiri::HTML(open(target_link))
+			  result[:title] =  doc.xpath('//div[@class="titleWrap"]//a').first.text
+			  if doc.xpath('//div[@class="titleWrap"]//span[@class="info"]').length > 0
+			  	result[:created_at] = doc.xpath('//div[@class="titleWrap"]//span[@class="info"]').first.text.gsub(/\t/, '').gsub(/\n/, '').gsub(/\r/,'')
+			  elsif doc.xpath('//div[@class="titleWrap"]//span[@class="date"]').length > 0
+			  	result[:created_at] = doc.xpath('//div[@class="titleWrap"]//span[@class="date"]').first.text.gsub(/\t/, '').gsub(/\n/, '').gsub(/\r/,'')
+			  else
+			  	result[:created_at] = ''
+			  end
+			  if doc.xpath('//div[@class="imageblock center"]//img').length > 0
+			  	result[:image] = doc.xpath('//div[@class="imageblock center"]//img').first['src']
+			  elsif doc.xpath('//div[@class="imageblock left"]//img').length > 0
+			  	result[:image] = doc.xpath('//div[@class="imageblock left"]//img').first['src']
+			  elsif doc.xpath('//div[@class="imageblock right"]/img').length > 0
+			  	result[:image] = doc.xpath('//div[@class="imageblock right"]//img').first['src']
+			  else
+			  	result[:image] = ''
+			  end
+			  doc.at('body').search('script').remove
+			  if doc.xpath('//div[@class="article"]').length > 0
+			  	result[:description] = doc.xpath('//div[@class="article"]').text.gsub(/\r/, '').gsub(/\n/, '').gsub(/\t/, '').gsub(/  /, '')
+			 	elsif doc.xpath('//div[@class="desc"]').length > 0 
+			 		result[:description] = doc.xpath('//div[@class="desc"]').text.gsub(/\r/, '').gsub(/\t/,'').gsub(/\n/,'').gsub(/  /, '') 
+			 	end
+
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'
