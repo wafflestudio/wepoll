@@ -79,7 +79,9 @@
           <% if user_signed_in? -%>
             <%= f.text_area :body, :maxlength => 140%>
           <% else -%>
-            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+            <%= link_to_function 'show_login()' do %>
+              <%= link_to_function  f.text_area(:body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다."), 'show_login()' %>
+            <% end -%>
           <% end -%>
         </div>
 

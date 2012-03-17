@@ -1,4 +1,7 @@
-<div class="reply_item">
+<div class="reply_item <%= tweet_reply.id %>">
+  <% if tweet_reply.user == current_user -%>
+    <%= link_to image_tag('/assets/admin/hr.gif'), tweet_reply_path(tweet_reply), :method => 'delete', :remote => true, :confirm => '삭제하시겠습니까?', :class => "tweet_reply_destroy_btn" %>
+  <% end -%>
   <p><%= tweet_reply.user.nickname unless tweet_reply.user.nil? %> <%= tweet_reply.content %></p>
   <span class="reply_date"><%= tweet_reply.created_at.strftime("%Y-%m-%d") %></span>
   <p class="links">

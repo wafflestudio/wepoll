@@ -76,6 +76,7 @@ Wepoll::Application.routes.draw do
   resources :tweet_replies do
     get 'blame', :on => :member
     get 'like', :on => :member
+    delete 'destroy', :on => :member
   end
 
   match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback
