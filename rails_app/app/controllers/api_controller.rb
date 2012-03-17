@@ -36,6 +36,7 @@ class ApiController < ApplicationController
 		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
+		
 		if preview != nil and !params[:force_get]
 			result[:id] = preview.id
 			result[:created_at] = preview.created

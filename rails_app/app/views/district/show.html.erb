@@ -172,9 +172,9 @@
   });
 
 
-        }
-        });
-      });
+	}
+	});
+});
       <% if params[:timeline_entry_id] -%>
 //        $("#show-timeline").click();
         var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
@@ -184,6 +184,13 @@
     });
  </script>
 <% end -%>
+<script type="text/javascript">
+/// tooltip
+$(document).ready( function() {
+	$('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
+	$('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+})
+</script>
 <script type="text/javascript">
   function charLimit() { $(".link_reply_input").keyup(function() {
     var $this = $(this);
@@ -232,8 +239,8 @@
       <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
       <% if i==0 -%>
         <div id="split-bar">
-          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph", :style => "margin-top:400px;" %>
-          <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph", :style => "margin-top:20px;" %>
+          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph tooltip-top", :style => "margin-top:400px;", :title=> '칭찬을 받은 횟수입니다.' %>
+          <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph tooltip-bottom", :style => "margin-top:20px;", :title=> '지적을 받은 횟수입니다.'%>
         </div>
       <% end -%>
     <% end -%>

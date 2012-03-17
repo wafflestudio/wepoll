@@ -17,6 +17,7 @@
 //= require placeholder
 //= require jquery.colorbox-min
 //= require jquery.gritter.min
+//= require jquery.qtip.min
 //= require search
 //
 //= require login_info

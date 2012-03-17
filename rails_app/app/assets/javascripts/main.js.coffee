@@ -219,7 +219,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
     x = parseInt(coordinates[0]) - 50
     y = parseInt(coordinates[1]) + 95
-      
+    
     if this.textel?
       this.textel.attr('opacity',1.0).show()
     else
