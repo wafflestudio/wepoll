@@ -1,4 +1,5 @@
 #coding: utf-8
+require 'timeout'
 require 'open-uri'
 class ApiController < ApplicationController
 	def parsing_test
@@ -17,12 +18,19 @@ class ApiController < ApplicationController
 	def article_parsing
 		(render :nothing => true ;return) if params[:url].nil? || params[:url].strip.length == 0
 		target_link = params[:url].gsub /&amp;/,'&'
-		if !target_link.match("^http://")
+		if !target_link.match(/^http:\/\//i)
 			target_link = "http://" + target_link
 		end
 
-	 # short url 처리 
-		response = Net::HTTP.get_response(URI(target_link))
+		# 자기 자신을 호출하는 걸 막아야함. Temporary measure
+		domain = target_link[7..-1].split(/[\/?]/)[0]
+		return if domain.match("wepoll.or.kr") || domain.match("choco.wafflestudio.net")
+		
+	 	# short url 처리
+		response = Timeout::timeout(6) do
+			Net::HTTP.get_response(URI(target_link))
+		end
+
 		if response == Net::HTTPRedirection then
 			target_link = response['location']
 		end

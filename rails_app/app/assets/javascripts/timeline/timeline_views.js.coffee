@@ -507,7 +507,7 @@ class YearView extends TimelineView
 	@unit : "year"
 
 	calcPosition: (date)->
-		d = new Date(date)
+		d = Date.parse(date)
 		year = d.getFullYear()
 		return year
 	
@@ -529,7 +529,7 @@ class QuarterView extends TimelineView
 	@unit : "quarter"
 
 	calcPosition: (date)->
-		d = new Date(date)
+		d = Date.parse(date)
 		year = d.getFullYear()
 		quarter = parseInt(d.getMonth()/3) # not 4!
 		return year*4 + quarter
@@ -574,7 +574,7 @@ class MonthView extends TimelineView
 	@unit : "month"
 
 	calcPosition: (date)->
-		d = new Date(date)
+		d = Date.parse(date)
 		year = d.getFullYear()
 		month = d.getMonth()
 		return year*12+month
@@ -602,7 +602,7 @@ class WeekView extends TimelineView
 	@unit : "week"
 
 	calcPosition: (date)->
-		d = new Date(date)
+		d = Date.parse(date)
 		year = d.getFullYear()
 		week = parseInt(getDayOfYear(d)/7)
 		return year*53+week
@@ -647,7 +647,7 @@ class DayView extends TimelineView
 	@unit : "day"
 
 	calcPosition: (date)->
-		d = new Date(date)
+		d = Date.parse(date)
 		year = d.getFullYear()
 		dayofyear = getDayOfYear(d)
 		return year*366+dayofyear

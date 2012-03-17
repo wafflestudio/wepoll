@@ -26,8 +26,6 @@ class HorizontalGroup
 
 	setPos:(pos)->
 		return if @pos == pos
-		# DEBUG
-		#@$el.attr('title',"Pos:#{@pos}, Epoch:#{@epoch}, Span:#{@span}")
 		@$holder.animate({left: (@epoch - pos)*modules.TimelineView.EntryWidth},{queue:false})
 		@pos = pos
 		@$el.data("pos",pos)
