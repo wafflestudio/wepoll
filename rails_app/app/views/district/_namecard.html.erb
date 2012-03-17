@@ -41,7 +41,7 @@
 
   <div class="link-graph-wrapper clearfix">
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
-    <div id="p<%= index+1 %>-good-link" class="bar-graph good-links"
+    <div id="p<%= index+1 %>-good-link" class="bar-graph politician-<%=politician.id %> good-links"
       data-color="#81d9fb,#60cbfa"
       data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
@@ -52,7 +52,7 @@
     <div class="clear"></div>
 
     <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
-    <div id="p<%=index+1 %>-bad-link" class="bar-graph bad-links"
+    <div id="p<%=index+1 %>-bad-link" class="bar-graph politician-<%=politician.id%> bad-links"
       data-color="#686868,#4a4a4a"
       data-total="<%= [@p1, @p2].inject(0) {|s,p| s + (p ? (p.good_link_count+p.bad_link_count) : 0)}  %>"
       data-height="10,8"
