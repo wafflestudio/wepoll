@@ -153,9 +153,22 @@ function activateTimelineEntryForm() {
 	})
 	
 	tags = $("#timeline_entry_tag_text").val();
-	var tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'5',defaultText:'태그추가'});
-	if(tags)
+	var tagInput;
+	var numTags = 0;
+	function onAddTag(tag) {
+		console.info('add', arguments)
+		numTags ++;
+		if(numTags > 5)
+			tagInput.removeTag(tag)
+	}
+	function onRemoveTag() {
+		numTags --;
+	}
+	tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'10',defaultText:'태그추가',onAddTag:onAddTag,onRemoveTag:onRemoveTag});
+	if(tags)  {
+		numTags = tags.split(",").length
 		tagInput.importTags(tags);
+	}
 
 
 }
