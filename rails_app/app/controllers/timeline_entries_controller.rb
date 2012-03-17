@@ -93,7 +93,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new(params[:timeline_entry])
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
-    
+
     @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
@@ -119,8 +119,12 @@ class TimelineEntriesController < ApplicationController
           format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created. SNS post error.' }
           format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
         else
-          format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
-          format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
+          format.html {
+           render json: @timeline_entry, status: :created, location: @timeline_entry
+          }
+          format.json {
+           render json: @timeline_entry, status: :created, location: @timeline_entry
+          }
         end
       else
         format.html { render action: "new" }
