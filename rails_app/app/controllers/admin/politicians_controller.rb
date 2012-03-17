@@ -91,8 +91,10 @@ class Admin::PoliticiansController < Admin::AdminController
 
   def upload_photo
     tmp_file_name = (0...8).map{ ('a'..'z').to_a[rand(26)] }.join + "_" + Time.now.to_i.to_s
-    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
-    FileUtils.copy(Paperclip::Thumbnail.new(params[:data], :geometry => params[:geometry]).make, Rails.root + "public/" + "#{tmp_file_name}_thumb")
-    render :text => {:file_name => tmp_file_name, :thumb_url => "/#{tmp_file_name}_thumb"}.to_json
+    #convert
+    Rails.logger.info %x[convert #{params[:data].path} -format jpg #{Rails.root + "public/#{tmp_file_name}.jpg"}]
+#    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
+    FileUtils.copy(Paperclip::Thumbnail.new(File.open(Rails.root + "public/#{tmp_file_name}.jpg"), :geometry => params[:geometry], :format => 'jpg').make, Rails.root + "public/" + "#{tmp_file_name}_thumb.jpg")
+    render :text => {:file_name => tmp_file_name+".jpg", :thumb_url => "/#{tmp_file_name}_thumb.jpg"}.to_json
   end
 end
