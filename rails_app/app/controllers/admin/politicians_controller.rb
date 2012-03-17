@@ -95,6 +95,8 @@ class Admin::PoliticiansController < Admin::AdminController
     Rails.logger.info %x[convert #{params[:data].path} -format jpg #{Rails.root + "public/#{tmp_file_name}.jpg"}]
 #    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
     FileUtils.copy(Paperclip::Thumbnail.new(File.open(Rails.root + "public/#{tmp_file_name}.jpg"), :geometry => params[:geometry], :format => 'jpg').make, Rails.root + "public/" + "#{tmp_file_name}_thumb.jpg")
+File.open(Rails.root+"public/#{tmp_file_name}.jpg").chmod 0555
+File.open(Rails.root+"public/#{tmp_file_name}_thumb.jpg").chmod 0555
     render :text => {:file_name => tmp_file_name+".jpg", :thumb_url => "/#{tmp_file_name}_thumb.jpg"}.to_json
   end
 end
