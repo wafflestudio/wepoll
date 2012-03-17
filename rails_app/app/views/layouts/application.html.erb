@@ -57,9 +57,6 @@
       function show_privacy() {
         $.colorbox({href:"/privacy",width:800,height:600});
       }
-      function show_suggestion() {
-        $.colorbox({href:"<%= new_suggestion_path %>",width:430,height:600});
-      }
       function loop_notice(i,count) {
         $list.eq(i).fadeOut(1800,"swing",function() {
           $list.eq(i+1).fadeIn(1800,"swing",function(){

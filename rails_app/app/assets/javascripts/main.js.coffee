@@ -374,7 +374,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
     sector_id = this.id
 
     if (!vs_cache[sector_id])
-      $.getJSON "/district/"+worldmap.names[this.id], (data) ->
+      $.getJSON "/district/"+encodeURIComponent(worldmap.names[this.id]), {utf8:"✓"}, (data) ->
         vs_cache[sector_id] = data
         show_vs(data)
     else
