@@ -373,11 +373,11 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		sector_id = this.id
 
 		if (!vs_cache[sector_id])
-      $.getJSON "/district/"+worldmap.names[this.id], (data) ->
-        vs_cache[sector_id] = data
-        show_vs(data)
+	    $.getJSON "/district/"+worldmap.names[this.id], (data) ->
+	      vs_cache[sector_id] = data
+	      show_vs(data)
 		else
-		    show_vs(vs_cache[sector_id]) 
+		    show_vs(vs_cache[sector_id])
 
 		#bubbleOut()
 		this.curve.show()
@@ -448,15 +448,18 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 	for country, shape of worldmap.shapes
 		r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
-	for country, points of worldmap.points
-		point = points.split " "
-		if point[3] == "1"	
-			start_x = parseInt(point[0]) - 50
-			start_y = parseInt(point[1]) + 95
-			console.log(start_x, start_y)
-			r.image("/assets/hot-district.png", start_x - 40, start_y - 30, 40, 20)
 
 	world = r.setFinish()
+	
+	for country, points of worldmap.points
+		point = points.split " "
+		if point[3] == "1"
+			start_x = parseInt(point[0]) - 50
+			start_y = parseInt(point[1]) + 95
+			#console.log(start_x, start_y)
+			r.image("/assets/hot-district.png", start_x - 40, start_y - 30, 40, 20)
+
+
 	world.hover over, out
 	world.click click
 	r.setViewBox(-94,95,500,640,false)
