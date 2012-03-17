@@ -56,6 +56,7 @@ $ ->
 
   # reply submit btn 
   $('#reply_submit_btn').live 'click', ->
+    $('#reply-loading-indicator').show()
     $form = $('#reply_box form')
     $.post $form[0].action, $form.serialize(), reset_box(), "script"
     false
@@ -64,9 +65,13 @@ $ ->
     $reply_box.hide()
     return
   $('#reply_text_box').placeholder()
+  $('#tweets_paginator a').live 'click', ->
+    $('.loading-indicator').show()
+    return
 
   # function
   reset_box = ->
     $('#reply_close').click()
     $('#reply_text_box').val("")
+    $('#reply-loading-indicator').hide()
   return
