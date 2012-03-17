@@ -1,13 +1,11 @@
 Wepoll::Application.routes.draw do
-  resources :suggestions
-
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
     get 'entry', :on => :member
   end
 
-  match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
+  match 'timeline/:timeline_entry_id' => 'district#show_timeline_entry', :via => :get, :as => :display_timeline_entry
 #  match "timeline_entries/list/:id" => "timeline_entries#list", :as => "timeline_entries_list"
 
   resources :bills

@@ -22,14 +22,14 @@ layout false, :only => [:provision, :privacy]
 
     if type == 0 && !sub_query.empty?
       @politician = Politician.where(district: sub_query).first
-	elsif type == 1
-@politician = Politician.find(sub_query)
-	else
-	if !sub_query.empty?
-	@politician = Politician.where(district: sub_query).first
-	else
-	@politician = nil
-	end
+    elsif type == 1
+      @politician = Politician.find(sub_query)
+    else
+      if !sub_query.empty?
+        @politician = Politician.where(district: sub_query).first
+      else
+        @politician = nil
+      end
     end
 
     if !@politician.nil?
