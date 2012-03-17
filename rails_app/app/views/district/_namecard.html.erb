@@ -1,8 +1,14 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
   <% unless politician.nil? -%>
-    <%= link_to forum_path(politician) do  %>
+    <% unless politician.tweet_name.nil? -%>
+      <%= link_to forum_path(politician.tweet_name) do  %>
+        <div class="tweet-bubble <%= index==0?"left":"right"%>">
+          <%= tweet ? (tweet.content.length>100 ? tweet.content[0..100]+"..." : tweet.content ) : "최근 트윗이 없습니다." %>
+        </div>
+      <% end -%>
+    <% else -%>
       <div class="tweet-bubble <%= index==0?"left":"right"%>">
-        <%= tweet ? (tweet.content.length>107 ? tweet.content[0..106]+"..." : tweet.content ) : "최근 트윗이 없습니다." %>
+        후보의 트위터 아이디가 없습니다.
       </div>
     <% end -%>
   <% else -%>

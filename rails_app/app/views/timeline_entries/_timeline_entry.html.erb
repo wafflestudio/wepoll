@@ -16,7 +16,7 @@
       <div class="preview-text">
 			<div class="preview-title"><a target="_blank" href="<%= raw timeline_entry.url %>"><%= timeline_entry.preview.title if timeline_entry.preview %></a></div>
         <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url, :target => "_blank" %></div>
-        <div class="preview-desc"><%= timeline_entry.preview.description if timeline_entry.preview %></div>
+        <div class="preview-desc"><%= (s=timeline_entry.preview.description;s.length > 120 ? s[0...117]+"...": s) if timeline_entry.preview %></div>
       </div>
     </div>
   </div>

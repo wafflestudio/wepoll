@@ -215,22 +215,21 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
     this.attr {"cursor":"pointer"}
     this.c = this.c || this.attr("fill")
     this.stop().animate {fill: "#64C8CB"}, 200
-
     coordinates = worldmap.points[this.id].split " "
 
     x = parseInt(coordinates[0]) - 50
     y = parseInt(coordinates[1]) + 95
-
+      
     if this.textel?
       this.textel.attr('opacity',1.0).show()
     else
       this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
-      this.textel.click () ->
+      this.textel.click () =>
         if worldmap.names[this.id]
           $(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[this.id])
         else
           return false
-
+    
 
     if parseInt(coordinates[2]) == 0
       end_x = 635
@@ -245,8 +244,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
       x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
       y2 = end_y - len * Math.sin(Math.PI / 4 + alpha)
-
-      this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
+      if !this.curve?
+        this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y)
       this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f", "cursor":"pointer"})
       
       if !this.arrow?
@@ -256,6 +255,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
           this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
         else
           this.arrow = r.image("/assets/arrow_hd.gif", end_x, end_y - 15, 40, 40)
+
 
       endInfo = this.curve.getPointAtLength(this.curve.getTotalLength())
       beta = endInfo.alpha > 360 ? endInfo.alpha - 360 : 180 - endInfo.alpha
@@ -274,7 +274,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
       x2 = end_x - len * Math.cos(Math.PI / 4 + alpha)
       y2 = end_y + len * Math.sin(Math.PI / 4 + alpha)
 
-      this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
+      if !this.curve?
+        this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y)
       this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
 
       if !this.arrow?
@@ -373,7 +374,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
     sector_id = this.id
 
     if (!vs_cache[sector_id])
-      $.getJSON "/district/"+encodeURIComponent(worldmap.names[this.id]), {data:"✓"}, (data) ->
+      $.getJSON "/district/"+worldmap.names[this.id], (data) ->
         vs_cache[sector_id] = data
         show_vs(data)
     else
@@ -387,22 +388,32 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
   out_ = (evt, obj)->
 
     relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
+    
     if relTarget && relTarget == this.node
       return
 
-    if obj == this.textel and relTarget == this.curve.node
+    if (obj == this.textel or obj == this.hot) and relTarget == this.curve.node
       func1 = (evt) =>
         out_.call(this, evt, this.curve)
         this.curve.unmouseout func1
       this.curve.mouseout func1
       return
-    if obj == this.curve and relTarget == this.textel.node.childNodes[0]
+
+    if (obj == this.curve or obj == this.hot) and relTarget == this.textel.node.childNodes[0]
       func2 = (evt) =>
         out_.call(this, evt, this.textel)
         this.textel.unmouseout func2
       this.textel.mouseout func2
       return
 
+    if (obj == this.curve or obj == this.textel) and (this.hot and relTarget == this.hot.node)
+      func3 = (evt) =>
+        out_.call(this, evt, this.hot)
+        this.textel.unmouseout func2
+      this.textel.mouseout func2
+      return
+
+  
     if this.curve?
       this.curve.hide()
     if this.arrow?
@@ -420,7 +431,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
   out = (evt) ->
     relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
     found = false
-    #console.log(relTarget)
+    
     if this.textel && relTarget == this.textel.node.childNodes[0]
       func = (evt)=>
         out_.call(this, evt, this.textel)
@@ -432,6 +443,12 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
         out_.call(this, evt, this.curve)
         this.curve.unmouseout func
       this.curve.mouseout func
+      found = true
+    else if this.hot && relTarget == this.hot.node
+      func = (evt)=>
+        out_.call(this, evt, this.hot)
+        this.hot.unmouseout func
+      this.hot.mouseout func
       found = true
 
     if !found
@@ -446,18 +463,27 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
   r.setStart()
 
+  worldmap.paths = [null]  #id starts from 1!
   for country, shape of worldmap.shapes
-    r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+    path = r.path(shape).attr {stroke: "#454b4f", "stroke-width": 6, fill: "#fff", "stroke-opacity": 1}
+    worldmap.paths.push path
 
   world = r.setFinish()
   
-  for country, points of worldmap.points
+  for id, points of worldmap.points
     point = points.split " "
     if point[3] == "1"
       start_x = parseInt(point[0]) - 50
       start_y = parseInt(point[1]) + 95
-      #console.log(start_x, start_y)
-      r.image("/assets/hot-district.png", start_x - 40, start_y - 30, 40, 20)
+      worldmap.paths[id].hot = r.image("/assets/hot-district.png", start_x - 40, start_y - 30, 40, 20)
+      _click = (_id)->
+        ()->
+          if worldmap.names[_id]
+            $(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[_id])
+          else
+            return false
+
+      worldmap.paths[id].hot.click _click(id)
 
 
   world.hover over, out
