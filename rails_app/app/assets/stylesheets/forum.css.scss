@@ -187,6 +187,13 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     -moz-border-radius: 5px;
 behavior:url(http://wepoll.or.kr/PIE.htc);
   }
+  #reply-loading-indicator {
+    width:24px;
+    height:24px;
+    float: right;
+    background:url(/assets/forum/ajax-loader-reply-box.gif);
+    display:none;
+  }
 }
 #replies_wrapper {
   overflow-y: auto;

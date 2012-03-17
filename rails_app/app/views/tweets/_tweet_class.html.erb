@@ -15,7 +15,7 @@
     </div>
     <div class="clear"></div>
     <div class="tweet_message">
-      <%= t.content %>
+      <%= raw t.content.html_safe %>
     </div>
     <div>
       <%= t.created_at.strftime("%Y-%m-%d %I:%M%P") %> 댓글<%= t.tweet_replies.count %>개
