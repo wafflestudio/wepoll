@@ -21,9 +21,9 @@ class ApplicationController < ActionController::Base
   end
 
   def prepare_links
-    @recent_timeline_entries = TimelineEntry.all.desc("created_at").limit(5)
+    @recent_timeline_entries = TimelineEntry.desc("created_at").limit(5)
     #TODO : 인기 링크 정렬 방식 고민
-    @popular_timeline_entries = TimelineEntry.all.desc("like").limit(5)
+    @popular_timeline_entries = TimelineEntry.desc("like_count").limit(5)
     @notices = Notice.desc('created_at').limit(5)
   end
   def back
