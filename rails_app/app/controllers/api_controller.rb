@@ -241,14 +241,56 @@ class ApiController < ApplicationController
 			elsif target_link.match('mediatoday\.co\.kr')  #미디어 오늘:
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title()
-				create_time =  doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/\t/, '').split(' ')
-				result[:created_at] = create_time[2] + ''
-				result[:description] =  doc.xpath('//div[@id="media_body"]').text
+				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/\t/, '').match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d/).to_s
+				result[:description] =doc.xpath('//div[@id="media_body"]').text.gsub(/\t/, '').gsub(/\n/, '').gsub(/  /, '').gsub(/\r/, '')
 				if doc.xpath('//td[@align="center"]/img').length > 0 
 					result[:image] = doc.xpath('//td[@align="center"]/img').first['src']
 				else 
 					result[:image] = ''
 				end
+			elsif target_link.match('news\.mk\.co\.kr') # 매일경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:image] = get_og_image doc
+				result[:description] = get_og_description doc
+				result[:created_at] = doc.xpath('//span[@class="sm_num"]').text  #날짜가 안되네...
+			elsif target_link.match('www\.yonhapnews\.co\.kr') ##연합뉴스 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = doc.xpath('//div[@id="articleBody"]').text.gsub(/\r\n/, '').gsub(/\t/, '').gsub(/\/"/, '')
+				if doc.xpath('//dt[@class="pto"]/img').length > 0 
+					result[:image] = doc.xpath('//dt[@class="pto"]/img').first['src']
+				else
+					result[:image] = ''
+				end
+				result[:created_at] =  doc.xpath('//span[@class="pblsh"]').text.gsub(/[^\d\/: ]/, '')
+#			elsif target_link.match('app\.yonhapnews\.co\.kr') ##연합뉴스, 영상포함  여기 그지같다. 하지 말아야ㅣㅈ .
+#				result[:title] = doc.title()
+#				result[:created_at] = doc.xpath('//li[@class="time"]').text
+#				str = doc.xpath('//span[@id="spnmpic"]/script').text.match(/src="[^"]*/).to_s
+#				str[0..4] = ''
+#				result[:video] = str
+#				result[:description] = 
+			elsif target_link.match('newsis\.com') #뉴시스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:created_at] = doc.xpath('//font[@class="text-666666-11"]').text
+				result[:description] = doc.xpath('//div[@id="articleBody"]').text.gsub(/\r\n/, '')
+				if doc.xpath('//div[@class="center_img"]/dl/img').length > 0
+					result[:image] = doc.xpath('//div[@class="center_img"]/dl/img').first['src']
+				else
+					result[:image] = ''
+				end
+			elsif target_link.match('kr\.news\.yahoo\.com') #야후
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				if  doc.xpath('//link[@rel="image_src"]').length > 0 
+					result[:image] =  doc.xpath('//link[@rel="image_src"]').first['href']
+				else 
+					result[:image] = ''
+				end
+				result[:description] = doc.xpath('//div[@id="content"]').text.gsub(/\n/, '').gsub(/\r/, '')
+				result[:created_at] = doc.xpath('//span[@class="d1"]').text.gsub(/[^\d :]/, '')
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'

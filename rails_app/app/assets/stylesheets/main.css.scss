@@ -164,6 +164,11 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   margin-bottom:40px;
   max-height:150px;
   overflow-y:scroll;
+
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  -o-text-overow: ellipsis;
+  -moz-binding:url(js/ellipsis.xml#ellipsis);
 }
 
 .link-excerpt {
