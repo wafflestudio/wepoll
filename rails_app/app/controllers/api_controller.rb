@@ -36,7 +36,7 @@ class ApiController < ApplicationController
 		end
 		preview = Preview.where(:url => target_link).first
 		result = {}
-		
+
 		if preview != nil and !params[:force_get]
 			result[:id] = preview.id
 			result[:created_at] = preview.created
@@ -227,7 +227,7 @@ class ApiController < ApplicationController
 				end
 				result[:description] = doc.xpath('//meta[@name="description"]').first['content']
 				result[:created_at] = doc.xpath('//span[@class="num"]').text.match(/\d\d\d\d.\d\d.\d\d \d\d:\d\d/).to_s
-			elsif target_link.match('hankooki\.com') #한국일보
+			elsif target_link.match('news\.hankooki\.com') #한국일보
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = doc.title().gsub(/\n/, '')
 				if doc.xpath('//div[@id="Url_GisaImgNum_1"]').length > 0
@@ -291,6 +291,172 @@ class ApiController < ApplicationController
 				end
 				result[:description] = doc.xpath('//div[@id="content"]').text.gsub(/\n/, '').gsub(/\r/, '')
 				result[:created_at] = doc.xpath('//span[@class="d1"]').text.gsub(/[^\d :]/, '')
+			elsif target_link.match('www\.dt\.co\.kr') #디지털타임스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.koreatimes\.co\.kr') #korea times
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+				
+			elsif target_link.match('www\.ytn\.co\.kr') # ytn
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.dailian\.co\.kr') # 데일리안
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('koreajoongangdaily\.joinsmsn\.com') # 중앙데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.edaily\.co\.kr') # 이데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.nocutnews\.co\.kr') # 노컷뉴스
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('mydaily\.co\.kr') # 마이데일리
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('sports\.donaga\.com') # 스포츠 동아닷컴
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('www\.reuters\.com') # 로이터
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('news\.inuews24\.com') # inews 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('osen\.mt\.co\.kr') # Osen 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('biz\.heraldm\.com') #헤럴드 경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+
+			elsif target_link.match('asiae\.co\.kr') # 아시아경제
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('koreaherald\.com') # 코리아 헤럴드
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('realtime\.wsj\.com') # 코리아 리얼타임 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('cast\.wowtv\.co\.kr') # 한국경제 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('isplus\.joinsman\.com') # 일간스포츠
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('news\.sportsseoul\.com') #스포츠서울
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.sportalkorea\.com') #스포탈 코리아 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('economy\.hankooki\.com') # 서울경제 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.zdnet\.co\.kr') # zdnet 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.bloter\.net') #불로터 닷 넷 
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.title()
+				result[:description] = '' 
+				result[:image] = ''
+				result[:created_at] = ''
+			elsif target_link.match('www\.naeil\.com') #내일신문
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = doc.xpath('//td[@class="titleArticle"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '')
+				result[:description] = doc.xpath('//div[@id="_article"]').text.gsub(/\r\n/, '').gsub(/\r/, '').gsub(/\t/, '')
+				if doc.xpath('//center/img').length > 0 
+					result[:image] = doc.xpath('//center/img').first['src'] 
+				else 
+					result[:image] = ''
+				end
+				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '').gsub(/[^\d-: ]/, '')
+			elsif target_link.match('www\.etnews\.com') #전자신문
+				doc = Nokogiri::HTML(open(target_link))
+				result[:title] = get_og_title doc
+				result[:description] =  doc.xpath('//div[@id="articleBody"]/p').text.gsub(/\r/, '') 
+				result[:image] = ''
+				result[:created_at] = doc.xpath('//div[@id="articleTiile"]/div[@class="text_box"]/p').first.text.match(/\d\d\d\d.\d\d.\d\d/).to_s
 			else
 				result[:url] = target_link
 				result[:error] = '해당 기사는 지원되지 않습니다.'
