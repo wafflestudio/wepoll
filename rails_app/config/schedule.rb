@@ -22,3 +22,7 @@
 every :hour do
   runner "Tweet.get_tweet"
 end
+
+every :day do
+  runner "Tweet.reset_today_like_count"
+end

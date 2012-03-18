@@ -28,6 +28,13 @@ class Tweet
     end
   end
 
+  def self.reset_today_like_count
+    Tweet.all.each do |t|
+      t.today_like_count = 0
+      t.save
+    end
+  end
+
   def self.get_tweet
 
     Twitter.configure do |config|
