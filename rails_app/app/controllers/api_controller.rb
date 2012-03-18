@@ -26,15 +26,20 @@ class ApiController < ApplicationController
 		domain = target_link[7..-1].split(/[\/?]/)[0]
 		return if domain.match("wepoll.or.kr") || domain.match("choco.wafflestudio.net")
 		
-	 	# short url 처리
-		response = Timeout::timeout(6) do
-			Net::HTTP.get_response(URI(target_link))
-		end
-
-		if response == Net::HTTPRedirection then
-			target_link = response['location']
-		end
 		preview = Preview.where(:url => target_link).first
+	 	# short url 처리
+
+	 	if preview == nil 
+			response = Timeout::timeout(10) do
+				Net::HTTP.get_response(URI(target_link))
+			end
+
+			if response == Net::HTTPRedirection then
+				target_link = response['location']
+				preview = Preview.where(:url => target_link).first
+			end
+		end
+		#preview = Preview.where(:url => target_link).first
 		result = {}
 
 		if preview != nil and !params[:force_get]

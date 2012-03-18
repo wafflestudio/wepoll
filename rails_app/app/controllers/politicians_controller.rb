@@ -64,6 +64,16 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
+  def link_counts
+    if params[:id]
+      @pol = Politician.find(params[:id])
+      render :json => {:good_link_count => @pol.good_link_count , :bad_link_count => @pol.bad_link_count}
+    elsif params[:district]
+      @pol = Politician.where(:district => params[:district])
+      render :json => @pol.to_json(:only => [:_id, :good_link_count, :bad_link_count])
+    end
+  end
+
   protected
   def prepare_politicians
     @politicians = [params[:id1] ? Politician.find(params[:id1]) : nil, params[:id2] ? Politician.find(params[:id2]) : nil]

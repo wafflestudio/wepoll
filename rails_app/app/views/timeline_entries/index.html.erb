@@ -176,21 +176,23 @@ function activateTimelineEntryForm() {
 
 // On Load
 $(function() {
-	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>});
-	timelineController.appendTo($("#timeline"));
-	
-	// update entry for recent-links
-	timelineController.on("addEntry", function(model)  {
-		// ignore if already exists
-		
-		if($(".link-entry-" + model.id).length >0)
-			return;
-		$.get("/timeline_entries/"+model.id+"/entry", 
-			function(html) {
-				$("#politician-" + model.get("politician_id") + "-recent-links").prepend(html)
-			})
-		}
-	);
+  timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>});
+  timelineController.appendTo($("#timeline"));
+
+  // update entry for recent-links
+  timelineController.on("addEntry", function(model)  {
+    //update links count graph
+    updateGraphCount(model.get("politician_id"));
+    // ignore if already exists
+
+    if($(".link-entry-" + model.id).length >0)
+      return;
+    $.get("/timeline_entries/"+model.id+"/entry", 
+      function(html) {
+        $("#politician-" + model.get("politician_id") + "-recent-links").prepend(html);
+      });
+    }
+  );
 
 	<% if user_signed_in? %>
   $(".link-new").click(function() {

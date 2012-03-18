@@ -1,4 +1,7 @@
-<div class="link_replies clearfix">
+<div class="link_replies clearfix <%= r.id %>">
+  <% if r.user == current_user -%>
+    <%= link_to image_tag('/assets/admin/hr.gif'), link_reply_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "link_reply_destroy_btn" %>
+  <% end -%>
   <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
   <div class="link_replies_body">
     <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>

@@ -1,5 +1,6 @@
 #politician_box {
   padding: 10px;
+  height: 122px;
   background-color: white;
   border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -213,6 +214,9 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     padding-bottom: 10px;
     border-bottom: 2px dotted #BCBCBC;
     
+    .tweet_reply_destroy_btn {
+      float: right;
+    }
     .reply_date {
       color: #C7A412;
       font-size: 10pt;

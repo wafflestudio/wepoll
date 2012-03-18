@@ -5,6 +5,8 @@ Wepoll::Application.routes.draw do
     get 'entry', :on => :member
   end
 
+  match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
+  match "link_counts/:district" => "politicians#link_counts", :as => :link_counts_of_politician
   match 'timeline/:timeline_entry_id' => 'district#show_timeline_entry', :via => :get, :as => :display_timeline_entry
 #  match "timeline_entries/list/:id" => "timeline_entries#list", :as => "timeline_entries_list"
 
@@ -76,6 +78,7 @@ Wepoll::Application.routes.draw do
   resources :tweet_replies do
     get 'blame', :on => :member
     get 'like', :on => :member
+    delete 'destroy', :on => :member
   end
 
   match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback

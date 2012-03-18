@@ -1,5 +1,20 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
+    function updateGraphCount(pol_id) {
+      $.getJSON("/link_counts/"+encodeURIComponent("<%= @district%>"), function(data) {
+        //update graph
+//        for (var i in data) {
+//          var obj = data[i];
+//          obj._id;
+//          obj.bad_link_count;
+//          obj.good_link_count;
+
+//          $(".good-links.politician-"+obj._id).changeValueTo(obj.good_link_count);
+//          $(".bad-links.politician-"+obj._id).changeValueTo(obj.bad_link_count);
+//        }
+      });
+    }
+
     function law_title_click($elem, id) {
       //show box
       var $div = $("#bill-summary-popup");

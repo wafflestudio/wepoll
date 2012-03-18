@@ -46,6 +46,21 @@ class TweetRepliesController < ApplicationController
     end
   end
 
+  def destroy
+    @reply = TweetReply.find(params[:id])
+    @success = false
+    @id = params[:id]
+    if @reply.user == current_user
+      if @reply.destroy
+        @success = true
+      else
+        @success = false
+      end
+    else
+      @success = false
+    end
+  end
+
 
   def like
     @re = TweetReply.find(params[:id])
