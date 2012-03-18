@@ -2,7 +2,7 @@
 require 'iconv'
 class DistrictController < ApplicationController
   before_filter :simplify_district_name
-  before_filter :ready_politicians
+  before_filter :ready_politicians, :except => [:show_timeline_entry]
   def show
     respond_to do |format|
       format.html do
@@ -25,6 +25,20 @@ class DistrictController < ApplicationController
     @timeline_entry = TimelineEntry.find(params[:timeline_entry_id])
     @p1 = @timeline_entry.politician
     @p2 = Politician.where(:district => @p1.district).reject {|p| p.id == @p1.id}.first
+    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
+    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories
+
+    @p1_bill_counts = p1_bill_categories.map {|c,n| n}
+    @p1_bill_categories = p1_bill_categories.map {|c,n| c}
+
+    @p2_bill_counts = p2_bill_categories.map {|c,n| n}
+    @p2_bill_categories = p2_bill_categories.map {|c,n| c}
+
+    @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
+
+    @t1 = @p1.nil? ? nil : @p1.tweets.desc('created_at').first
+    @t2 = @p2.nil? ? nil : @p2.tweets.desc('created_at').first
+    @tweets = [@t1, @t2]
 
     render :action => 'show'
   end
