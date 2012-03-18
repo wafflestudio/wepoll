@@ -58,6 +58,8 @@ class User
     :url => "/system/user_profile_pictures/:id/:style",
     :path => Rails.root.to_s + "/public/system/user_profile_pictures/:id/:style"
 
+  has_many :messages
+
   ## Encryptable
   # field :password_salt, :type => String
 
