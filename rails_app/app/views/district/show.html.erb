@@ -250,7 +250,7 @@ $(document).ready( function() {
     <% @politicians.each do |politician|
       next if politician.id == @p1.id || politician.id == @p2.id -%>
       <a href="<%= district_politician_path(politician) %>" class="district-candidate-button clearfix">
-        <%= image_tag politician.profile_photo.url(:square95), :class=>"candidate-photo" %>
+        <%= image_tag politician.profile_photo.url(:square100), :class=>"candidate-photo" %>
         <div class="candidate-name">
           <span class="party" style="color:<%=@party_color[politician.party] || "black" %>"><%= politician.party %></span>
           <span class="name" style="font-weight:bold"><%=politician.name %></span>
