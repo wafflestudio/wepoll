@@ -1,4 +1,3 @@
-
 TimelineEntry = modules.TimelineEntry
 
 
@@ -38,7 +37,6 @@ class TimelineEntryCollection extends Backbone.Collection
 					server_ts = Date.parse(entry.get("updated_at"))
 					client_ts = Date.parse(entry.get("updated_at"))
 					target.set(entry.attributes) if client_ts.getTime() < server_ts.getTime()
-
 			})
 
 modules.TimelineEntryCollection = TimelineEntryCollection
