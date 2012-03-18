@@ -22,7 +22,7 @@ class TimelineEntriesController < ApplicationController
 
 		# updated_at
 		if params[:from]
-			q_time = {:updated_at => {'$gte' => params[:from]}}
+		  q_time = {:updated_at => {'$gte' => params[:from]}}
 		elsif params[:after]
 			q_time = {:updated_at => {'$gt' => params[:after]}}
 		else
