@@ -201,8 +201,8 @@ protected
         Twitter.update(params[:timeline_entry][:title]+" http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id)+" \nhttp://wepoll.or.kr 에서 등록")
         true
       rescue Twitter::Error => e
-        Rails.logger.info "Tiwtter tweet error"
-        puts "Tiwtter tweet error"
+        Rails.logger.info "Twitter tweet error"
+        puts "Twitter tweet error"
         Rails.logger.info e.message
         puts e.message
         false
@@ -220,7 +220,7 @@ protected
       begin
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
-        Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
+        Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
         @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"의 "+((params[:timeline_entry][:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
         true
       rescue StandardError => e

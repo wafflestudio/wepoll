@@ -18,7 +18,7 @@
   .fb-like {
     float: right;
   }
-  font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕sans-serif;
+  font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕,sans-serif;
   font-weight:bold;
   font-size:15pt;
   #district-label {
@@ -27,6 +27,7 @@
 
 }
 
+
 #district-candidates {
   color:#969696;
   font-size:12pt;
@@ -34,30 +35,72 @@
   margin-bottom:20px;
 }
 
-.district-candidate-button {
-  margin-bottom:5px;
-  text-decoration:none;
+.district-candidate {
   display:block;
-  border:2px solid #4f4f50;
   float:left;
-  margin-right:10px;
-  font-size:9pt;
-  cursor:pointer;
-  cursor:hand;
-  .candidate-photo {
-    float:left;
-    width:48px;
-    height:48px;
+
+  .district-candidate-button {
+    margin-bottom:5px;
+    text-decoration:none;
     display:block;
-  }
-  .candidate-name {
-    padding:7px;
+    border:2px solid #4f4f50;
     float:left;
-    color:#4f4f50;
-    .party { font-size:9pt; display:block; margin-bottom:3px; }
-    .name { font-size:12pt; display:block; }
+    margin-right:10px;
+    font-size:9pt;
+    cursor:pointer;
+    cursor:hand;
+    .candidate-photo {
+      float:left;
+      width:48px;
+      height:48px;
+      display:block;
+    }
+    .candidate-name {
+      padding:7px;
+      float:left;
+      color:#4f4f50;
+      .party { font-size:9pt; display:block; margin-bottom:3px; }
+      .name { font-size:12pt; display:block; }
+    }
+
   }
+  .candidate-dropdown {
+    background-color:white;
+    position:absolute;
+    font-size:9pt;
+    display:none;
+    text-align:center;
+    border: 1px solid #a8a8a8;
+
+
+    a {
+      text-decoration: none;
+      display:block;
+      color:#4f4f50;
+    }
+    .target {
+      font-weight:bold
+    }
+
+    .vs {
+      color:#FFDE40;
+    }
+
+
+    a:hover {
+      color: white;
+      background-color:#4f4f50;
+    }
+
+    p {
+      padding:8px;
+    }
+
+  }
+
 }
+
+
 
 
 .namecard {
