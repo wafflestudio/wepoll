@@ -23,7 +23,7 @@
       );
 
       $("#politician_elections").tokenInput(
-        [{age:13},{age:14},{age:15},{age:16},{age:17},{age:18},{age:19},{age:20}],
+        [{age:"13"},{age:"14"},{age:"15"},{age:"16"},{age:"17"},{age:"18"},{age:"19"},{age:"20"}],
         {
           tokenValue:"age",
           propertyToSearch:"age",
@@ -83,7 +83,7 @@
       </tr>
       <tr>
         <td><strong>생년월일</strong></td>
-        <td colspan="2"><%= f.date_select :birthday%></td>
+        <td colspan="2"><%= f.date_select :birthday, :start_year => 1930 %></td>
       </tr>
       <tr>
         <td><strong>임기</strong></td>

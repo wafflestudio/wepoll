@@ -5,6 +5,7 @@ require 'csv'
 class Politician #정치인 모델
   include Mongoid::Document
   include Mongoid::Paperclip
+  include Mongoid::MultiParameterAttributes
 
   #=== Mongoid fields ===
   # 기본정보

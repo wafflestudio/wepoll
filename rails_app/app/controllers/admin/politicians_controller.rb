@@ -65,7 +65,13 @@ class Admin::PoliticiansController < Admin::AdminController
   end
 
   def create
+    params[:politician][:district] = "" if params[:politician][:district] == "없음"
+    params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
+    params[:politician][:promises] = YAML::load params[:promises]
+    #XXX : elections가 확정적이 되면 이 필드는 필요없다
+    params[:politician][:election_count] = params[:politician][:elections].count
     @politician = Politician.new(params[:politician])
+
     if @politician.save
       redirect_to admin_politician_path(@politician)
     else
