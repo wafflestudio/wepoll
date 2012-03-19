@@ -4,6 +4,7 @@ require 'csv'
 
 require 'iconv'
 require 'open-uri'
+require 'nokogiri'
 
 class Politician #정치인 모델
   include Mongoid::Document
@@ -302,5 +303,17 @@ class Politician #정치인 모델
       self.save
 
     end #end of each law row
+  end
+
+  def __restore_init_bill_result__
+		code_strip_regex = /GoDetail\(\'([a-z_A-Z0-9]+)\'\)/
+
+    csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name.romanize}.csv")[0]
+    (puts "File doesn't exist"; return -1) unless File.exists? csv_file_path
+    CSV.foreach csv_file_path, :encoding => "UTF-8" do |csv|
+      code = csv[3]
+      result = csv[8]
+      Bill.where(:code => code).first.update_attribute(:result, result)
+    end
   end
 end

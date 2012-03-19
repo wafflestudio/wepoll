@@ -24,12 +24,6 @@ class Bill #법안모델
   AGE[17] = [Date.parse("2008.5.30"),Date.parse("2012.5.29")]
 
 
-  RESULT_APPROVED = "approved" #가결
-  RESULT_REJECTED = "rejected" #부결
-  RESULT_DISPOSAL = "disposal" #폐기
-  RESULT_WITHDRAW = "withdraw" #철회
-  RESULT_EXPIRED  = "expired"  #임기만료 폐기
-
   #=== Mongoid fields ===
   field :title, type: String
   field :initiated_at, type: Date #발의일자
@@ -61,4 +55,5 @@ class Bill #법안모델
   def self.calculate_age
     Bill.all.each {|bill| bill.update_attribute(:age, (AGE.find_index {|s,f| s <= bill.initiated_at && bill.initiated_at <= f })+1) if bill.initiated_at}
   end
+
 end
