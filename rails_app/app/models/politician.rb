@@ -108,27 +108,28 @@ class Politician #정치인 모델
             if party == "한나라당"
               party = "새누리당"
             elsif party == "민주당"
-              party = "민주통합당"
+              party = "민주통합"
             end
+            party = party[0..3]
             if politician != Politician.where(name: name, party: party).first
               puts "###ERROR### #{politician.name.romanize} #{name} #{party}" 
               next
             end
             sum = 0
             list = csv[9].split(")")
-            puts politician.name
+            #puts politician.name
             list.each do |elem|
               e = elem[13..25]
               q = e.match("[0-9]+").to_s.to_i
               total += q
 
               elem = elem[8..12]
-              puts elem
+              #puts elem
               p = elem.match("[0-9]+").to_s.to_i
               sum += p
-              printf "#{sum} / #{total}\n"
+              #printf "#{sum} / #{total}\n"
             end
-            puts (total / Float(sum) * 100).to_i.to_s
+            #puts (total / Float(sum) * 100).to_i.to_s
             politician.attendance = (total / Float(sum) * 100).to_i
             politician.save
           end

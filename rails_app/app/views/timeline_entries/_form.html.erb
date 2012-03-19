@@ -39,7 +39,7 @@
   <div class="prefix_1 grid_7 suffix_2 alpha omega field">
     <label class="grid_1 alpha">링크날짜</label>
     <div class="grid_6 omega">
-      <%= f.date_select('posted_at', :order => [:year, :month, :day])%>
+      <%= f.date_select('posted_at', :order => [:year, :month, :day], :use_month_numbers => true)%>
       <!--      <div class="note">여기에 등록됩니다. 위치를 바꾸시려면 새로운 날짜를 입력하세요.</div>-->
     </div>
 

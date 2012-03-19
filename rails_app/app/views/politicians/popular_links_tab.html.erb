@@ -17,8 +17,8 @@
     <% @politicians.each_with_index do |politician, i| -%>
       <div class="sep-subsection <%= i==0?"left":"right"%>">
         <div id="p<%=i+1%>-popular-links">
-          <% if !@entries[i].empty? %>
-            <% entries = @entries[i]%>
+          <% entries = @entries[i]%>
+          <% if entries.any? %>
             <%= render entries %>
             <div id="popular-paginator-politician-<%=politician.id %>">
               <% unless entries.current_page == entries.num_pages %>
@@ -36,6 +36,11 @@
         <div id="bottom-indicator-popular-<%=i +1 %>" class="bottom-indicator">hihi</div>
         <div class="loading-indicator" id="loading-indicator-popular-<%= politician.id %>">&nbsp;</div>
       </div>
+      <script>
+        <% entries.each do |timeline_entry| -%>
+          loadUrl("<%= timeline_entry.url %>", "#p<%=i+1 %>-popular-links .link-entry-<%= timeline_entry.id %>");
+        <% end -%>
+      </script>
     <% end -%>
   </div>
 </div>

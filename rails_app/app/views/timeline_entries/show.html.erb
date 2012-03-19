@@ -17,34 +17,40 @@
     FB.XFBML.parse($("#fb-link-like")[0]);
 
     !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+
+    loadUrl("<%= @timeline_entry.url %>", "#link-preview");
   });
 </script>
 
 <div class="container_16" id="link-detail-wrapper">
   <div class="grid_11 alpha omega">
     <div class="grid_6 alpha" id="replies-left">
-      <div class="grid_2 alpha" id="link-like-count">
-        <span id="like-count"><%= @timeline_entry.like_count %></span><br />
-        <span style="color:#48d822;font-size:9pt;">공감</span>
-      </div>
 
-      <%= image_tag @timeline_entry.aux_url, :class => "grid_1", :id => "link-thumbnail" %>
-      <div class="grid_3 omega" id="link-title-wrapper">
+      <div class="grid_2 alpha">
+        <div class="grid_2 alpha omega" id="link-like-count">
+          <span id="like-count"><%= @timeline_entry.like_count %></span><br />
+          <span style="color:#48d822;font-size:9pt;">공감</span>
+        </div>
+
+        <div class="grid_2 alpha omega" id="sns-links">
+          <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
+          <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
+          <iframe allowtransparency="true" frameborder="0" scrolling="no"
+            src="//platform.twitter.com/widgets/tweet_button.html"
+            style="width:90px; height:20px;"></iframe></iframe>
+        </div>
+      </div>
+      <div class="grid_4 omega" style="width:315px">
         <div id="link-title"><%= @timeline_entry.title %></div>
-        <div id="link-url"><%= link_to truncate(@timeline_entry.url, :length => 35), @timeline_entry.url%></div>
-      </div>
-
-      <div class="clear"></div>
-
-      <div class="grid_2 alpha" id="sns-links">
-        <%= link_to '공감하기', like_timeline_entry_path(@timeline_entry.id), :id => "link-recommend", :remote => true %>
-        <fb:like href="http://wepoll.or.kr/timeline/<%= @timeline_entry.id%>" layout="button_count"></fb:like>
-        <iframe allowtransparency="true" frameborder="0" scrolling="no"
-          src="//platform.twitter.com/widgets/tweet_button.html"
-          style="width:90px; height:20px;"></iframe></iframe>
-      </div>
-
-      <div class="grid_4 omega" id="link-preview">
+        <div class="clear"></div>
+        <div id="link-preview" class="preview-wrap clearfix">
+          <div class="preview-image"></div>
+          <div class="preview-text">
+            <div class="preview-title"><a href="<%= @timeline_entry.url %>"></a></div>
+            <div class="preview-url"><%= link_to @timeline_entry.url[0..34] + "...", @timeline_entry.url %></div>
+            <div class="preview-desc"></div>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -78,9 +84,9 @@
         </div>
 
       <div style="float: right; margin-right:10px;">
-        <div id="comment-length">
+        <span id="comment-length">
           <span id="current-comment-length">0</span>/140자
-        </div>
+        </span>
         <%= f.submit '등록', :id => 'link-reply-button' %>
       </div>
       <% end -%>

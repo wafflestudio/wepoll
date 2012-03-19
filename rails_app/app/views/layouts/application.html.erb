@@ -7,6 +7,10 @@
     <meta property="og:image"       content="http://choco.wafflestudio.net:3082/btn_wepoll.png" />
     <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
     <meta property="og:type"        content="website" />
+    <iframe src="http://www.facebook.com/plugins/like.php?href=<%= request.url.encode("utf-8") %>
+      &amp;layout=button_count&amp;show_faces=false&amp;send=false&amp;width=450&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true"
+      style="border:none; overflow:hidden; width:450px; height:60px;"></iframe>
+    <iframe id="faba7650" name="f1d0df1fc4" scrolling="no" style="border-width: initial; border-color: initial; overflow-x: hidden; overflow-y: hidden; width: 450px; border-width: initial; border-color: initial; height: 29px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; border-image: initial; " title="Like this content on Facebook." class="fb_ltr" src="https://www.facebook.com/plugins/like.php?api_key=113869198637480&amp;channel_url=https%3A%2F%2Fs-static.ak.fbcdn.net%2Fconnect%2Fxd_proxy.php%23cb%3Df13ff157f4%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff3c99da6f4%26relation%3Dparent.parent%26transport%3Dpostmessage&amp;extended_social_context=false&amp;href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Freference%2Fplugins%2Flike%2F%3Fref%3Dpb&amp;layout=standard&amp;locale=ko_KR&amp;node_type=link&amp;sdk=joey&amp;send=true&amp;show_faces=true&amp;width=450"></iframe>
 
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
@@ -35,6 +39,13 @@
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag params[:controller] %>
     <%= yield :scripts %>
+    <% if !flash[:search_error].to_s.empty? %>
+      <style>
+        #query::-webkit-input-placeholder { color:#f00; }
+        #query:-moz-placeholder { color:#f00; }
+        .ui-autocomplete { height: 200px; overflow-y: scroll; overflow-x: hidden;}   
+      </style>
+    <% end %>
     <script type="text/javascript">
       function show_auth_dialog(href) {
         window.open(href, "authWindow", "width=600,height=600,menubar=0,location=0,toolbar=0,modal=yes,scrollbars=yes,alwaysRaised=yes");
@@ -91,6 +102,18 @@
                 search_result = true;
                 return false;
               },
+              search: function(event, ui) {
+//              var html = "<style type='text/css'>
+//                * html div#division { 
+//                height: expression( this.scrollHeight > 332 ? "333px" : "auto" ); /* sets max-height for IE */
+//                }
+//                div#division {
+//                max-height: 333px; /* sets max-height value for all standards-compliant browsers */
+//                }
+//                </style>";
+//             $(".ui-autocomplte").html(html);
+                $(".ui-autocomplete").css({"maxHeight":"600px","overflowY":"scroll","overflowX":"hidden"});
+              },
               autoFocus: true,
               close: function(event, ui) {
               if(!search_result) {
@@ -127,12 +150,6 @@
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
     <!--    <link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">-->
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
-    <% if !flash[:search_error].to_s.empty? %>
-      <style>
-        #query::-webkit-input-placeholder { color:#f00; }
-        #query:-moz-placeholder { color:#f00; }
-      </style>
-    <% end %>
   </head>
   <body>
     <div id="fb-root"></div>

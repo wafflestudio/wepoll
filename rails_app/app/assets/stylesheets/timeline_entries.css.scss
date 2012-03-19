@@ -149,10 +149,10 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-detail-wrapper {
-  width:697px + 16px;
+  width:771px;
   padding-top:20px;
   .grid_11 {
-    width:697px + 16px;
+    width:771px;
   }
 }
 
@@ -165,6 +165,8 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 #link-title {
   color:#3caea9;
   font-size:10pt;
+  width:315px;
+  margin-bottom:10px;
 }
 
 #link-url a {
@@ -579,12 +581,9 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   overflow-y: auto;
 }
 
-#replies-right {
-  width:280px;
-}
 
 #replies-left {
-  width:392px - 1px;
+  width:447px - 1px;
   border-right:1px dashed #bdbbbc;
 }
 
@@ -600,7 +599,8 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 }
 
 #link-preview {
-  width:218px + 48px + 10px;
+//  width:218px + 48px + 10px;
+width:315px;
 }
 
 #link-recommend {

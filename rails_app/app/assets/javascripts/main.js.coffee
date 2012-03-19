@@ -6,6 +6,7 @@
 # =require raphael-min
 # =require map
 # =require jquery.simple_bar_graph
+vs_cache = new Array(49)
 worldmap = {
 	shapes: {
 				A: "M258.529,325.358c8.278,15.984,10.617,25.116,11.857,31.982c1.404,7.771,1.404,12.64,1.029,16.01c-0.038,0.346-0.081,0.676-0.125,0.991c-0.391,2.761-0.959,4.426-0.623,5.937c0.374,1.686,1.873,3.183,1.498,5.618c-0.374,2.435-2.621,5.804-0.374,11.421c1.895,4.74,6.987,11.078,17.978,25.759c0.71-0.499,1.35-1.029,1.87-1.604c1.874-2.06,2.248-4.683,5.244-6.554s8.612-2.995,15.729-2.246c7.114,0.75,15.729,3.37,24.153,3.933c8.426,0.562,16.665-0.937,25.278-3.089c5.742-1.436,11.648-3.162,19.943-5.154c-0.031-0.151-0.064-0.309-0.098-0.463c-0.73-3.604-1.465-8.444-1.886-15.739c-7.699-2.896-11.028-2.967-13.746-2.236c-3.84,1.028-6.46,3.65-9.083,4.025c-2.621,0.375-5.244-1.498-5.43-4.493c-0.188-2.997,2.059-7.116,2.059-9.363c0-2.248-2.247-2.622-3.369-5.056c-1.124-2.435-1.124-6.927-2.06-9.176c-0.938-2.247-2.81-2.247-4.308-1.685c-1.497,0.562-2.621,1.685-5.617,2.247c-2.994,0.562-7.864,0.562-12.356-0.749c-4.495-1.311-8.615-3.932-11.048-6.928c-2.435-2.996-3.185-6.366-1.873-9.362c1.312-2.996,4.681-5.618,6.366-8.8c1.686-3.184,1.686-6.928,1.312-11.609c-0.374-4.682-1.124-10.298-4.868-19.849c-2.853-7.273-7.442-16.828-14.434-30.898c-1.755,0.444-3.281,0.321-4.665-0.371c-0.688-0.345-1.341-0.829-1.985-1.437c-9.705,6.78-14.243,9.115-17.676,12.203c-4.68,4.212-7.302,9.83-9.736,14.137c-2.435,4.307-4.682,7.302-5.991,11.235c-0.948,2.842-1.406,6.172-2.364,9.498",
@@ -271,7 +272,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			y2 = end_y + len * Math.sin(Math.PI / 4 + alpha)
 
 			this.curve = r.path("M"+x+" "+y+"C"+x1+" "+y1+" "+x2+" "+y2+" "+end_x+" "+end_y) if !this.curve?
-			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f"})
+			this.curve.attr({"stroke-dasharray": "- ", "stroke-width": "4", "stroke": "#454b4f", "cursor":"pointer"})
 
 			if !this.arrow?
 				if ((checkVersion() < 9) && (checkVersion() > 5))
@@ -307,7 +308,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 		$("#vs-district").text worldmap.names[this.id]
 
-		$.getJSON "/district/"+worldmap.names[this.id], (data) ->
+		show_vs = (data) ->
 			$("#vs-container").attr "data-district", worldmap.names[this.id]
 
 			p1 = data[0]
@@ -359,6 +360,17 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 				label: (x, fx) ->
 					return "#{Math.round(x)}"
 			}
+
+		sector_id = this.id
+		if (!vs_cache[sector_id])
+			$.getJSON "/district/"+worldmap.names[this.id], (data) ->
+				vs_cache[sector_id] = data
+				console.log(vs_cache.length)
+				console.log(vs_cache[sector_id])
+				show_vs(data)
+		else
+			show_vs(vs_cache[sector_id])
+
 		bubbleOut()
 		this.curve.show()
 		this.arrow.show()
@@ -400,7 +412,6 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 	out = (evt) ->
 		relTarget = evt.relatedTarget || evt.toElement || evt.originalTarget
 		found = false
-		console.log(relTarget)
 		if this.textel && relTarget == this.textel.node.childNodes[0]
 			func = (evt)=>
 				out_.call(this, evt, this.textel)

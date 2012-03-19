@@ -48,8 +48,8 @@
         offset: '100%'
       };
 
+      $("#tab-sections-container").append($tab_section);
       $tab_section.load($obj.attr('href'), function() {
-
         if (id == 'politician-popular-links'){
           $("#bottom-indicator-popular-1").waypoint(function(event, direction) {
             if (direction == 'up') return;
@@ -67,7 +67,7 @@
               $("#p1-popular-links").append($objs);
               $objs.each(function(i, elem) {
                 var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+                loadUrl($elem.attr("data-url"),"#p1-popular-links .link-entry-"+$elem.attr("data-id"));
               });
               var new_href = $data.find('#popular-next-page-<%= @politicians[0].id%>').attr("href");
               $('#popular-next-page-<%= @politicians[0].id%>').attr("href", new_href);
@@ -79,7 +79,6 @@
               else {
               }
               charLimit();
-              //loadUrl(url, "#link-entry-<%=@politicians[0].id%>");
             });
           }, opts);
 
@@ -99,7 +98,7 @@
               $("#p2-popular-links").append($objs);
               $objs.each(function(i, elem) {
                 var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+                loadUrl($elem.attr("data-url"),"#p2-popular-links .link-entry-"+$elem.attr("data-id"));
               });
 
               var new_href = $data.find('#popular-next-page-<%= @politicians[1].id%>').attr("href");
@@ -112,11 +111,10 @@
               else {
               }
               charLimit();
-              //loadUrl(url, "#link-entry-<%=@politicians[1].id%>");
             });
           }, opts);
         }
-        else if (id == 'politician-recent-links') {
+        if (id == 'politician-recent-links') {
           $("#bottom-indicator-recent-1").waypoint(function(event, direction) {
             if (direction == 'up') return;
             $("#bottom-indicator-recent-1").waypoint('remove');
@@ -133,7 +131,8 @@
               $("#p1-recent-links").append($objs);
               $objs.each(function(i, elem) {
                 var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+                console.log("loadurl : " + $elem.attr("data-url"));
+                loadUrl($elem.attr("data-url"),"#p1-recent-links .link-entry-"+$elem.attr("data-id"));
               });
 
               var new_href = $data.find('#recent-next-page-<%= @politicians[0].id%>').attr("href");
@@ -146,7 +145,6 @@
               else {
               }
               charLimit();
-              //loadUrl(url, "#link-entry-<%=@politicians[0].id%>");
             });
           }, opts);
 
@@ -166,7 +164,8 @@
               $("#p2-recent-links").append($objs);
               $objs.each(function(i, elem) {
                 var $elem = $(elem);
-                loadUrl($elem.attr("data-url"),"#"+$elem.attr("id"));
+                console.log("loadurl : " + $elem.attr("data-url"));
+                loadUrl($elem.attr("data-url"),"#p2-recent-links .link-entry-"+$elem.attr("data-id"));
               });
 
               var new_href = $data.find('#recent-next-page-<%= @politicians[1].id%>').attr("href");
@@ -185,7 +184,6 @@
         }
       }
       );
-      $("#tab-sections-container").append($tab_section);
       return false;
     }
 
@@ -244,7 +242,6 @@
       <% if params[:timeline_entry_id] -%>
 //        $("#show-timeline").click();
         var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
-        alert(url);
         $.colorbox({href:url});
       <% end -%>
     });
@@ -269,6 +266,7 @@
     });
     });};
 	function loadUrl(url, parentDiv)  {
+    if ($(parentDiv).length == 0) alert("!!!");
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 			function(data)  { 
 				console.warn(data)
