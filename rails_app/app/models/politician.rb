@@ -65,11 +65,11 @@ class Politician #정치인 모델
   end
 
   def most_good_link
-    timeline_entries.where(:is_good => true).desc("like").limit(1)
+    timeline_entries.where(:is_good => true).desc("like_count").limit(1)
   end
 
   def most_bad_link
-    timeline_entries.where(:is_good => false).desc("like").limit(1)
+    timeline_entries.where(:is_good => false).desc("like_count").limit(1)
   end
 
   def initiate_bills_categories(age)
