@@ -53,6 +53,9 @@ index :district
   #타임라인 관련
   has_many :timeline_entries
 
+  #공약 관련
+  has_many :promises
+
   def total_replies
     self.tweets.map {|t| t.tweet_replies}.flatten
   end

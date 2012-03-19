@@ -9,6 +9,7 @@ class Message
 
 	belongs_to :user
 	belongs_to :preview
+	belongs_to :promise
 
 	has_many :replies, inverse_of: :parent_message, :class_name => 'Message'
 	belongs_to :parent_message, inverse_of: :replies, :class_name => 'Message'
