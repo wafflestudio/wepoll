@@ -55,6 +55,9 @@ index :district
 
   #공약 관련
   has_many :promises
+ 
+  #한마디
+  has_many :messages
 
   def total_replies
     self.tweets.map {|t| t.tweet_replies}.flatten

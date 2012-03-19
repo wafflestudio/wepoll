@@ -110,31 +110,31 @@ function activateTimelineFormPreview(onload,onerror)  {
 
 
 function activateTimelineEntryForm() {
-	activateTimelineFormPreview(function successful(data){
+	activatetimelineformpreview(function successful(data){
 		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.');
-		$('#link-post').removeAttr('disabled');
+		$('#link-post').removeattr('disabled');
 		$('#timeline_entry_preview_id').val(data.id)
 		$('#link-form-badlink').hide();
 		if(data.image)  {
 			$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");
-			$('#link-form-preview-txt').removeClass('prefix_1');
+			$('#link-form-preview-txt').removeclass('prefix_1');
 		}
 		else
-			$('#link-form-preview-txt').addClass('prefix_1');
+			$('#link-form-preview-txt').addclass('prefix_1');
 		
 		if(data.created_at)  {
-			var d = Date.parse(data.created_at);
+			var d = date.parse(data.created_at);
 			if(!d)  {
 				var match = data.created_at.match(/[0-9\.\-]+/);
 				if(match)  {
-					d = Date.parse(match[0].replace(/\./g,"-"));
+					d = date.parse(match[0].replace(/\./g,"-"));
 				}
 				
 			}
 			if(d)  {
-				$('#timeline_entry_posted_at_1i').val(d.getFullYear());
-				$('#timeline_entry_posted_at_2i').val(d.getMonth()+1);
-				$('#timeline_entry_posted_at_3i').val(d.getDate());
+				$('#timeline_entry_posted_at_1i').val(d.getfullyear());
+				$('#timeline_entry_posted_at_2i').val(d.getmonth()+1);
+				$('#timeline_entry_posted_at_3i').val(d.getdate());
 			}
 
 		}

@@ -4,6 +4,10 @@ Wepoll::Application.routes.draw do
     get 'like', :on => :member
     get 'entry', :on => :member
   end
+  
+  resources :messages do 
+
+  end
 
   match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
   match "link_counts/:district" => "politicians#link_counts", :as => :link_counts_of_politician
