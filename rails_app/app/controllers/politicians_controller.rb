@@ -4,9 +4,9 @@ class PoliticiansController < ApplicationController
   def initiate_bills
     @politician = Politician.find(params[:id])
     if params[:result]
-      @bills = @politician.initiate_bills.where(:result => Bill::RESULT_APPROVED).page(params[:page]).per(8)
+      @bills = @politician.initiate_bills.where(:result => Bill::RESULT_APPROVED).where(:age => params[:age]).page(params[:page]).per(8)
     else
-      @bills = @politician.initiate_bills.page(params[:page]).per(8)
+      @bills = @politician.initiate_bills.page(params[:page]).where(:age => params[:age]).per(8)
     end
 
     respond_to do |format|

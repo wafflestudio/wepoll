@@ -25,6 +25,11 @@ class Admin::PoliticiansController < Admin::AdminController
     end
   end
 
+  def crawl_init_bills
+    @politician = Politician.find(params[:id])
+    @politician.crawl_init_bills
+  end
+
   def show
     @politician = Politician.find(params[:id])
     @keys = Politician.fields.keys.reject {|k| k.index("_") || k =~ /id$/}

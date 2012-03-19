@@ -3,6 +3,27 @@ class Bill #법안모델
   include Mongoid::Document
   include Mongoid::MultiParameterAttributes
 
+  AGE = []
+  AGE[0]  = [Date.parse("1948.5.31"),Date.parse("1950.5.30")]
+  AGE[1]  = [Date.parse("1950.5.31"),Date.parse("1954.5.30")]
+  AGE[2]  = [Date.parse("1954.5.31"),Date.parse("1958.5.30")]
+  AGE[3]  = [Date.parse("1958.5.31"),Date.parse("1960.7.28")]
+  AGE[4]  = [Date.parse("1960.7.29"),Date.parse("1961.5.16")]
+  AGE[5]  = [Date.parse("1963.12.17"),Date.parse("1967.6.30")]
+  AGE[6]  = [Date.parse("1967.7.1"),Date.parse("1971.6.30")]
+  AGE[7]  = [Date.parse("1971.7.1"),Date.parse("1972.10.17")]
+  AGE[8]  = [Date.parse("1973.3.12"),Date.parse("1979.3.11")]
+  AGE[9]  = [Date.parse("1979.3.12"),Date.parse("1980.10.27")]
+  AGE[10] = [Date.parse("1981.4.11"),Date.parse("1985.4.10")]
+  AGE[11] = [Date.parse("1985.4.11"),Date.parse("1988.5.29")]
+  AGE[12] = [Date.parse("1988.5.30"),Date.parse("1992.5.29")]
+  AGE[13] = [Date.parse("1992.5.30"),Date.parse("1996.5.29")]
+  AGE[14] = [Date.parse("1996.5.30"),Date.parse("2000.5.29")]
+  AGE[15] = [Date.parse("2000.5.30"),Date.parse("2004.5.29")]
+  AGE[16] = [Date.parse("2004.5.30"),Date.parse("2008.5.29")]
+  AGE[17] = [Date.parse("2008.5.30"),Date.parse("2012.5.29")]
+
+
   RESULT_APPROVED = "approved" #가결
   RESULT_REJECTED = "rejected" #부결
   RESULT_DISPOSAL = "disposal" #폐기
@@ -20,8 +41,11 @@ class Bill #법안모델
   field :number, type: Integer #국회에서 쓰이는 법안 번호
   field :summary, type: String
   field :tags, type: Array #comma separated된 값들
+  field :age, type: Integer #언제 ''발의''된 법안인가?
 
   field :unregistered_coactor_names, type: Array #공동발의자이긴 한데 안잡힌 사람들
+  #=== FOR DUPLICATE NAME ===
+  field :duplicated_coactors_name, :type => Array, default: [] #공동발의자이긴 한데, 디비에 두명이상 존재하는 인간들
 
   #아래 값들은 타임라인 상에서 보이는건데, 이중 keyword는 tags에 포함될수도 있음.
   #개념정리가 좀 필요함
@@ -33,4 +57,8 @@ class Bill #법안모델
   has_and_belongs_to_many :coactors, class_name: "Politician" #공동발의자
   has_and_belongs_to_many :dissenters, class_name: "Politician" #법안 반대자
   has_and_belongs_to_many :supporters, class_name: "Politician" #법안 찬성자
+
+  def self.calculate_age
+    Bill.all.each {|bill| bill.update_attribute(:age, (AGE.find_index {|s,f| s <= bill.initiated_at && bill.initiated_at <= f })+1) if bill.initiated_at}
+  end
 end
