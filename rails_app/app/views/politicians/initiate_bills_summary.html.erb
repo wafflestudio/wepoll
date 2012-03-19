@@ -1,0 +1,27 @@
+<a href="<%= init_bills_by_politician_path(@politician, :age => @age ) %>" class="init-bills-link">
+<div id="<%= @politician.id %>-bill-graph" class="bill-graph" style="float:<%=@index==0?"right":"left" %>; margin-<%=@index==0?"right":"left" %>:10px">
+  <!-- TODO : canvas를 쓸 수 있는지 없는지 구분해서 raphael을 쓸지 말지 결정 -->
+</div>
+</a>
+<div class="clear"></div>
+<script type="text/javascript">
+  var bill_counts_<%= @politician.id%> = [<%= @bill_counts.join(",") %>];
+  var bill_categories_<%=@politician.id %> = $.parseJSON('<%=raw @bill_categories.to_json %>');
+
+  Raphael("<%= @politician.id %>-bill-graph", 260, 240).donutChart(240/2+10,240/2,95,46, bill_counts_<%= @politician.id%>, bill_categories_<%= @politician.id%>, "#FFF", 1, <%= @index%>, "<%= @party_color[@politician.party] || '#4f4f50' %>");
+  $(".init-bills-link").colorbox();
+
+  $("#<%= @politician.id%>-bill-bar-graph").simpleBarGraph({
+    width:200,
+    height:15,
+    labelWidth:30,
+    backgroundColor:"#fff",
+    animate:false,
+    labelPosition:"inside",
+    labelClass:"bill-label",
+    label:function(x,fx) {
+      return x+"개";
+    }
+  });
+
+</script>

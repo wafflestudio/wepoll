@@ -28,7 +28,7 @@ class Politician #정치인 모델
   field :education, type: String
   field :experiences, type: String
   field :promises, type: Array, default: []
-  field :attendance, type: Integer, default: 0
+  field :attendance, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = 0;a}
 
   # 법안관련
   field :joint_initiate_bill_politicians, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = [];a}
@@ -72,8 +72,8 @@ class Politician #정치인 모델
     timeline_entries.where(:is_good => false).desc("like").limit(1)
   end
 
-  def initiate_bills_categories
-    initiate_bills.map {|b| b.commitee}.reject { |bt| bt.nil? }.sort.inject([]) do |s,x|
+  def initiate_bills_categories(age)
+    initiate_bills.where(:age => age).map {|b| b.commitee}.reject { |bt| bt.nil? }.sort.inject([]) do |s,x|
       s.last.nil? ? s<<[x,1] : s.last.first == x ? s[0...-1] << [s.last.first, s.last.last+1] : s << [x,1]
     end
   end
@@ -86,23 +86,27 @@ class Politician #정치인 모델
     end
   end
 
+  def calculate_joint_initiate(age=18)
+    return unless elections.include? age
+    h = {}
+
+    initiate_bills.where(:age => age).each do |bill|
+      co = bill.coactors.reject {|coactor| coactor.id == id || !coactor.elections.include?(age)}
+      co.each {|coactor| h[coactor.id] = (h[coactor.id] || 0) + 1 }
+      bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1} if !bill.unregistered_coactor_names.nil?
+    end
+
+    joint_initiate_bill_politicians[age] = h.to_a.sort {|x,y| y[1] <=> x[1]}
+    save
+  end
+
   def self.calculate_joint_initiate
     puts "=== 공동발의 일치도 계산 ==="
-    (16..18).to_a.each do |age|
-      puts "=== #{age}대 ==="
+    (1..18).to_a.reverse.each do |age|
+      puts "\n=== #{age}대 ==="
       Politician.all.each do |politician|
-        next unless politician.elections.include? age
-        print "#{politician.name}\t"
-        h = {}
-
-        politician.initiate_bills.where(:age => age).each do |bill|
-          co = bill.coactors.reject {|coactor| coactor.id == politician.id}
-          co.each {|coactor| h[coactor.id] = (h[coactor.id] || 0) + 1 }
-          bill.unregistered_coactor_names.each {|name| h[name] = (h[name] || 0)+1} if !bill.unregistered_coactor_names.nil?
-        end
-
-        politician.joint_initiate_bill_politicians[age] = h.to_a.sort {|x,y| y[1] <=> x[1]}
-        politician.save
+        print politician.name+"\t"
+        politician.calculate_joint_initiate(age)
       end
     end
     puts "=== 공동발의 일치도 계산 완료 ==="
@@ -188,121 +192,126 @@ class Politician #정치인 모델
     puts "=====#{self.name} #{init_num}건====="
 
 
-    1.upto(init_num).each do |i|
-      row=doc.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[#{i*2}]")
-      break if row.xpath("td").count == 1
-      #의안번호
-      num = row.xpath("td[1]").children[0].to_s.strip
-      #의안제목(의원명 포함)
-      strip_title = title = row.xpath("td[2]/a").attr('title').to_s
-      #의안코드(사이트내부적으로 쓰이는듯)
-      code = row.xpath("td[2]/a").attr("href").to_s.match(code_strip_regex)[1]
-      #의안제목
-      tmp = title.match(title_strip_regex)
-      strip_title = tmp[1] unless tmp.nil?
-      puts "##{i} #{strip_title} #{code}"
-      #처리 플래그 (처리=true, 계류=false)
-      complete = row.xpath("td[2]/img").attr("src").to_s.split("/").last == "icon_02.gif"
-      #발의일자
-      init_date = row.xpath("td[4]").children[0].to_s.strip
-      #의결일자
-      complete_date = row.xpath("td[5]").children[0].to_s.strip
-      #의결결과
-      result = row.xpath("td[6]").children[0].to_s.strip
+    CSV.open(Rails.root+"init_data/law_csvs/csvs4/laws_#{name.romanize}.csv", "w") do |csv|
+      1.upto(init_num).each do |i|
+        row=doc.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[#{i*2}]")
+        break if row.xpath("td").count == 1
+        #의안번호
+        num = row.xpath("td[1]").children[0].to_s.strip
+        #의안제목(의원명 포함)
+        strip_title = title = row.xpath("td[2]/a").attr('title').to_s
+        #의안코드(사이트내부적으로 쓰이는듯)
+        code = row.xpath("td[2]/a").attr("href").to_s.match(code_strip_regex)[1]
+        #의안제목
+        tmp = title.match(title_strip_regex)
+        strip_title = tmp[1] unless tmp.nil?
+        puts "##{i} #{strip_title} #{code}"
+        #처리 플래그 (처리=true, 계류=false)
+        complete = row.xpath("td[2]/img").attr("src").to_s.split("/").last == "icon_02.gif"
+        #발의일자
+        init_date = row.xpath("td[4]").children[0].to_s.strip
+        #의결일자
+        complete_date = row.xpath("td[5]").children[0].to_s.strip
+        #의결결과
+        result = row.xpath("td[6]").children[0].to_s.strip
 
-      #의안 써머리
-      doc2_raw = ""
-      if File.exists? "raw_data/law_summary_#{code}.html"
-        doc2_raw = File.read("raw_data/law_summary_#{code}.html")
-      else
-        begin
-          sleep(1)
-          doc2_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/SummaryPopup.jsp?bill_id=#{code}").read)
-          f = File.open("raw_data/law_summary_#{code}.html", "w")
-          f.write doc2_raw
-          f.close
-        rescue Error => e
-          puts "=====ERR : #{code} summary failed, #{e.message}  ====="
+        #의안 써머리
+        doc2_raw = ""
+        if File.exists? "raw_data/law_summary_#{code}.html"
+          doc2_raw = File.read("raw_data/law_summary_#{code}.html")
+        else
+          begin
+            sleep(1)
+            doc2_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/SummaryPopup.jsp?bill_id=#{code}").read)
+            f = File.open("raw_data/law_summary_#{code}.html", "w")
+            f.write doc2_raw
+            f.close
+          rescue Error => e
+            puts "=====ERR : #{code} summary failed, #{e.message}  ====="
+          end
         end
-      end
-      doc2 = Nokogiri::HTML(doc2_raw)
-      summary = doc2.xpath("/html/body/table/tbody/tr[3]/td/table/tbody/tr/td[2]/span[2]").inner_text.strip
+        doc2 = Nokogiri::HTML(doc2_raw)
+        summary = doc2.xpath("/html/body/table/tbody/tr[3]/td/table/tbody/tr/td[2]/span[2]").inner_text.strip
 
-      #위원회
-      doc3_raw = ""
-      if File.exists? "raw_data/law_detail_#{code}.html"
-        doc3_raw = File.read("raw_data/law_detail_#{code}.html")
-      else
-        begin
-          sleep(1)
-          doc3_raw = open("http://likms.assembly.go.kr/bill/jsp/BillDetail.jsp?bill_id=#{code}").read
-          f = File.open("raw_data/law_detail_#{code}.html", "w")
-          f.write doc3_raw
-          f.close
-        rescue Error => e
-          puts "=====ERR : #{code} detail failed, #{e.message}====="
+        #위원회
+        doc3_raw = ""
+        if File.exists? "raw_data/law_detail_#{code}.html"
+          doc3_raw = File.read("raw_data/law_detail_#{code}.html")
+        else
+          begin
+            sleep(1)
+            doc3_raw = open("http://likms.assembly.go.kr/bill/jsp/BillDetail.jsp?bill_id=#{code}").read
+            f = File.open("raw_data/law_detail_#{code}.html", "w")
+            f.write doc3_raw
+            f.close
+          rescue Error => e
+            puts "=====ERR : #{code} detail failed, #{e.message}====="
+          end
         end
-      end
-      doc3 = Nokogiri::HTML(doc3_raw)
-      commitee = doc3.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[6]/td[2]/table/tbody/tr[2]/td/div").children[0].to_s
+        doc3 = Nokogiri::HTML(doc3_raw)
+        commitee = doc3.xpath("/html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[4]/td[2]/table/tbody/tr[6]/td[2]/table/tbody/tr[2]/td/div").children[0].to_s
 
-      #발의의원
-      doc4_raw = ""
-      if File.exists? "raw_data/law_coactors_#{code}.html"
-        doc4_raw = File.read "raw_data/law_coactors_#{code}.html"
-      else
-        begin
-          sleep(1)
-          doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
-          f = File.open("raw_data/law_coactors_#{code}.html", "w")
-          f.write doc4_raw
-          f.close
-        rescue Error => e
-          puts "=====ERR : #{code} coactors failed, #{e.message}====="
+        #발의의원
+        doc4_raw = ""
+        if File.exists? "raw_data/law_coactors_#{code}.html"
+          doc4_raw = File.read "raw_data/law_coactors_#{code}.html"
+        else
+          begin
+            sleep(1)
+            doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
+            f = File.open("raw_data/law_coactors_#{code}.html", "w")
+            f.write doc4_raw
+            f.close
+          rescue Error => e
+            puts "=====ERR : #{code} coactors failed, #{e.message}====="
+          end
         end
-      end
-      doc4 = Nokogiri::HTML(doc4_raw)
-      coactors = doc4.xpath("/html/body/table[2]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[1]/td").map {|elem| elem.inner_text.to_s}
+        doc4 = Nokogiri::HTML(doc4_raw)
+        coactors = doc4.xpath("/html/body/table[2]/tr[2]/td[1]/table/tr[2]/td[2]/table/tr[1]/td").map {|elem| elem.inner_text.to_s}
 
-      commitee = commitee[0.. commitee.index("위원회")] if commitee.index("위원회") #소관위원회
-      case commitee
-      when "외교통상통일"
-        commitee = "외교통상"
-      when "교육과학기술"
-        commitee = "교육과학"
-      when "문화체육관광방송통신"
-        commitee = "문화∙미디어"
-      when "농림수산식품"
-        commitee = "농림수산"
-      when "법제사법"
-        commitee = "사법"
-      when "정무"
-        commitee = "국정총괄"
-      when "정보"
-        commitee = "국가정보"
-      when "기획재정"
-        commitee = "재정"
-      when "지식경제"
-        commitee = "경제"
-      end
+        commitee = commitee[0.. commitee.index("위원회")] if commitee.index("위원회") #소관위원회
+        case commitee
+        when "외교통상통일"
+          commitee = "외교통상"
+        when "교육과학기술"
+          commitee = "교육과학"
+        when "문화체육관광방송통신"
+          commitee = "문화∙미디어"
+        when "농림수산식품"
+          commitee = "농림수산"
+        when "법제사법"
+          commitee = "사법"
+        when "정무"
+          commitee = "국정총괄"
+        when "정보"
+          commitee = "국가정보"
+        when "기획재정"
+          commitee = "재정"
+        when "지식경제"
+          commitee = "경제"
+        end
 
-      only_names = []
+        csv << [name, init_num, num, code, strip_title, (complete ? "의결" : "계류"), init_date, complete_date, result, summary, coactors.join(","), commitee]
 
-      duplicated_coactors_name = []
-      coactors.each do |coactor|
-        (puts "#{title},#{code},#{name}"; duplicated_coactors_name << coactor) if Politician.where(:name => coactor).count > 1
-      end
+        only_names = []
 
-      coactors = coactors.map {|name| p1 = Politician.where(:name => name).first; only_names << name if p1.nil?; p1}.reject {|p2| p2.nil? || self.id == p2.id || Politician.where(name: name).count != 1 }
+        duplicated_coactors_name = []
+        coactors.each do |coactor|
+          duplicated_coactors_name << coactor if Politician.where(:name => coactor).count > 1
+        end
 
-      bill = Bill.new(:title => strip_title, :number => num, :code => code, :initiated_at => Date.parse(init_date), :result => result, :commitee => commitee, :initiator => self, :summary => summary, :complete => complete, :unregistered_coactor_names => only_names, :duplicated_coactors_name => duplicated_coactors_name, :coactors => coactors)
-      bill.voted_at = Date.parse(complete_date) unless (complete_date.nil? || complete_date.length == 0)
+        coactors = coactors.map {|name| p1 = Politician.where(:name => name).first; only_names << name if p1.nil?; p1}.reject {|p2| p2.nil? || self.id == p2.id || Politician.where(name: name).count != 1 }
 
-      bill.save
-      self.crawl_init_bill_completed = true
-      self.save
+        bill = Bill.new(:title => strip_title, :number => num, :code => code, :initiated_at => Date.parse(init_date), :result => result, :commitee => commitee, :initiator => self, :summary => summary, :complete => complete, :unregistered_coactor_names => only_names, :duplicated_coactors_name => duplicated_coactors_name, :coactors => coactors)
+        bill.voted_at = Date.parse(complete_date) unless (complete_date.nil? || complete_date.length == 0)
 
-    end #end of each law row
+        bill.save
+        self.crawl_init_bill_completed = true
+        self.save
+        bill.calculate_age
+
+      end #end of each law row
+    end #end of CSV
   end
 
   def __restore_init_bill_result__
@@ -312,8 +321,7 @@ class Politician #정치인 모델
     (puts "File doesn't exist"; return -1) unless File.exists? csv_file_path
     CSV.foreach csv_file_path, :encoding => "UTF-8" do |csv|
       code = csv[3]
-      result = csv[8]
-      Bill.where(:code => code).first.update_attribute(:result, result)
+      Bill.where(:code => code).first.update_attribute(:result, csv[8])
     end
   end
 end

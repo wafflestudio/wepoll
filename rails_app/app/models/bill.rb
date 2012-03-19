@@ -53,7 +53,10 @@ class Bill #법안모델
   has_and_belongs_to_many :supporters, class_name: "Politician" #법안 찬성자
 
   def self.calculate_age
-    Bill.all.each {|bill| bill.update_attribute(:age, (AGE.find_index {|s,f| s <= bill.initiated_at && bill.initiated_at <= f })+1) if bill.initiated_at}
+    Bill.all.each {|bill| bill.calculate_age}
   end
 
+  def calculate_age
+    update_attribute(:age, (AGE.find_index {|s,f| s <= initiated_at && initiated_at <= f })+1) if initiated_at
+  end
 end

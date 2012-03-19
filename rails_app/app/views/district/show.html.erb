@@ -1,7 +1,8 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
     var politician_selected_1 = [];
- 
+    var attendances = {"<%=@p1.id%>":[<%= @p1.attendance.join(",") %>], "<%=@p2.id%>":[<%=@p2.attendance.join(",")%>]};
+
     function updateGraphCount(pol_id) {
       $.getJSON("/link_counts/"+encodeURIComponent("<%= @district%>"), function(data) {
         //update graph
@@ -15,6 +16,30 @@
 //          $(".bad-links.politician-"+obj._id).changeValueTo(obj.bad_link_count);
 //        }
       });
+    }
+
+    function load_bill_activities(pol_id, age, t) {
+      if ($(t).hasClass("selected")) return;
+
+      var $old = $("#age-selector-"+pol_id+" .age-select.selected");
+      $old.text(parseInt($old.text()));
+
+      $("#age-selector-" + pol_id+" .age-select").removeClass("selected");
+      $(t).addClass("selected");
+      $(t).text($(t).text() + "대 국회");
+
+      $("#init-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+      $("#joint-initiate-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+
+      $("#init-bills-"+pol_id).load("/politicians/"+pol_id+"/initiate_bills_summary?age="+age);
+      $("#joint-initiate-"+pol_id).load("/politicians/"+pol_id+"/top_joint_initiate_bills?age="+age);
+      var att = attendances[pol_id][age];
+      if (att)
+        att = att +"%";
+      else
+        att = '<span style="font-size:12pt">정보없음</span>';
+
+      $("#attendance-"+pol_id).html(att);
     }
 
     function law_title_click($elem, id) {
@@ -308,7 +333,7 @@ $(document).ready( function() {
         popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
         :class => 'tab', "data-id" => "politician-popular-links" %>
       <%= link_to '국회활동',
-        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
+        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id, :ages => "18,18"),
         :class => 'tab selected', "data-id" => "bill-activity" %>
       <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
       <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
