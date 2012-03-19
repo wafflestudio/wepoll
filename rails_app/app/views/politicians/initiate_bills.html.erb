@@ -1,6 +1,6 @@
 <%= javascript_tag do %>
-  all_url = "<%=j init_bills_by_politician_path(@politician) %>"
-  accepted_url = "<%=j init_bills_by_politician_path(@politician)+'?result=true' %>"
+  all_url = "<%=j init_bills_by_politician_path(@politician, :age => @age) %>"
+  accepted_url = "<%=j init_bills_by_politician_path(@politician, :age => @age ,:result=>true) %>"
 <% end -%>
 <div class="alpha omega clearfix" id="popup-bills">
   <div id="popup-profile-photo">
@@ -11,7 +11,7 @@
   </div>
   <div id="popup-bills-categories">
     <h3 class="bill-count">전체 <span class="bill-count"><%= @bills.count%></span>건</h3>
-    <h3 class="bill-count">본회의 통과 <span class="bill-count"><%= @bills.where(:result => Bill::RESULT_APPROVED).count%></span>건</h3>
+    <h3 class="bill-count">본회의 통과 <span class="bill-count"><%= @bills.where(:result => "가결").count%></span>건</h3>
     <div class="clear"></div>
     <div id="bills-categories" class="clearfix">
       <% @bill_categories.each do |c, n| -%>
@@ -34,7 +34,7 @@
     <table id="bills">
       <thead>
         <tr>
-          <th class="header-date">제안일</th>
+          <th class="header-date">제안일(<%=@age %>대)</th>
           <th class="header-commitee">상임위</th>
           <th class="header-title">법안명</th>
           <th class="header-result">처리결과</th>

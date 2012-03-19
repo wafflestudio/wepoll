@@ -25,6 +25,12 @@ class Admin::PoliticiansController < Admin::AdminController
     end
   end
 
+  def crawl_init_bills
+    @politician = Politician.find(params[:id])
+    @politician.crawl_init_bills
+    redirect_to admin_politician_path(@politician)
+  end
+
   def show
     @politician = Politician.find(params[:id])
     @keys = Politician.fields.keys.reject {|k| k.index("_") || k =~ /id$/}
@@ -53,6 +59,8 @@ class Admin::PoliticiansController < Admin::AdminController
     params[:politician][:district] = "" if params[:politician][:district] == "없음"
     params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
     params[:politician][:promises] = YAML::load params[:promises]
+    #XXX: eval은 위험
+    params[:politician][:attendance] = eval params[:politician][:attendance]
     #XXX : elections가 확정적이 되면 이 필드는 필요없다
     params[:politician][:election_count] = params[:politician][:elections].count
     @politician = Politician.find(params[:id])
@@ -68,6 +76,8 @@ class Admin::PoliticiansController < Admin::AdminController
     params[:politician][:district] = "" if params[:politician][:district] == "없음"
     params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
     params[:politician][:promises] = YAML::load params[:promises]
+    #XXX: eval은 위험
+    params[:politician][:attendance] = eval params[:politician][:attendance]
     #XXX : elections가 확정적이 되면 이 필드는 필요없다
     params[:politician][:election_count] = params[:politician][:elections].count
     @politician = Politician.new(params[:politician])
