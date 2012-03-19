@@ -156,14 +156,14 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1
   # DELETE /timeline_entries/1.json
   def destroy
-    @timeline_entry = TimelineEntry.find(params[:id],:user_id => current_user.id)
+    @timeline_entry = TimelineEntry.find(params[:id])
+    @id = @timeline_entry.id
+    @success = false
     # rather than @timeline_entry.destroy, we mark deleted
-    @timeline_entry.deleted = true
-    @timeline_entry.save
-
-    respond_to do |format|
-      format.html { redirect_to timeline_entries_url }
-      format.json { head :no_content }
+    if @timeline_entry.destroy
+      @success = true
+    else
+      @success = false
     end
   end
 

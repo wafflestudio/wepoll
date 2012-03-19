@@ -8,7 +8,7 @@
 
     <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;", :title => timeline_entry.politician.name  + (timeline_entry.is_good ? "을 칭찬하는 링크" : "을 지적하는 링크"), :class => "tooltip-top2" %>
     <% if timeline_entry.user == current_user -%>
-      <%#= link_to image_tag('/assets/admin/hr.gif'), timeline_entry_path(timeline_entry), :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "timeline_entry_destroy_btn" %>
+      <%= link_to image_tag('/assets/admin/hr.gif'), timeline_entry_path(timeline_entry), :remote => true, :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "timeline_entry_destroy_btn" %>
     <% end -%>
   </div>
   <div class="link_contents">

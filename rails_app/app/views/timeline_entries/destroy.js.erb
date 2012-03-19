@@ -1,0 +1,5 @@
+<% if @success -%>
+  $('.link-entry-<%= @id %>').remove();
+<% else -%>
+  alert("링크를 삭제하는데 실패했습니다.");
+<% end -%>
