@@ -319,8 +319,8 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
       p2 = data[1]
 
       #photo
-      photourl1 = if p1? then  "/system/politician_profile_photos/"+p1._id+"/square100.jpg" else ""
-      photourl2 = if p2? then  "/system/politician_profile_photos/"+p2._id+"/square100.jpg" else ""
+      photourl1 = if p1? then  "/system/politician_profile_photos/"+p1._id+"/square100.jpg?13328608" else ""
+      photourl2 = if p2? then  "/system/politician_profile_photos/"+p2._id+"/square100.jpg?13328608" else ""
 
       if photourl1 == ""
         $img1.fadeOut()
