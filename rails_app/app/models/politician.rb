@@ -318,10 +318,15 @@ class Politician #정치인 모델
 		code_strip_regex = /GoDetail\(\'([a-z_A-Z0-9]+)\'\)/
 
     csv_file_path = Dir.glob("init_data/law_csvs/csvs*/laws_#{name.romanize}.csv")[0]
-    (puts "File doesn't exist"; return -1) unless File.exists? csv_file_path
+    (puts "File doesn't exist"; return -1) unless csv_file_path && File.exists?(csv_file_path)
     CSV.foreach csv_file_path, :encoding => "UTF-8" do |csv|
       code = csv[3]
-      Bill.where(:code => code).first.update_attribute(:result, csv[8])
+      b = Bill.where(:code => code).first
+      if b == nil
+        puts code + " doesn't exist"
+      else
+        b.update_attribute(:result, csv[8])
+      end
     end
   end
 end
