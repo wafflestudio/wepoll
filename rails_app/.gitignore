@@ -21,3 +21,4 @@ public/system/politician_profile_photos/
 !public/system/politician_profile_photos/anonymous_square100.gif
 !public/system/politician_profile_photos/anonymous_square160.gif
 !public/system/user_profile_pictures/anonymous_square50.gif
+config/mongoid.yml
