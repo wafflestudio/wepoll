@@ -1,46 +1,12 @@
-class TimelineArray
+SortedArray = modules.SortedArray
+
+class TimelineArray extends SortedArray
   constructor: (@array = [], options = {})->
     #_.extend Backbone.Events
-    @compare = options.compare if options.compare
+    super(@array, options)
     @func = @sparse
     @func = options.func if options.func
 
-  add: (num)->
-    for value,index in @array
-      if @compare(num, value) < 0
-        @array.splice(index,0,num)
-        return @array
-
-    @array.splice(@array.length,0,num)
-    return @array
-
-
-  remove: (num)->
-    for value,index in @array
-      if value == num
-        @array.splice(index,1)
-        return @array
-
-    return @array
-
-  compare: (a,b)->
-    return a - b
-
-  sortBy: (compare)->
-    @compare = compare
-    @array.sort(@compare)
-
-  sortDesc: ()->
-    desc = (a,b)->
-      b - a
-    @compare = desc
-    @array.sort(desc)
-
-  sortAsc: ()->
-    asc = (a,b)->
-      a - b
-    @compare = asc
-    @array.sort(asc)
 
   getValue: (num)->
     return func(num)
@@ -56,18 +22,19 @@ class TimelineArray
   get_sparse_func: ()->
     
     self = this
-
     (num)->
       arr = self.arr
       # empty array
-      return null if arr.length == 0 
+      return null if arr.length == 0
 
       # borders
       if num < arr[0]
         return arr[0]
       if num > arr[arr.length-1]
         return arr[arr.length-1]
-       
+      
+      num_ = Math.floor(num)
+
 #      for value,index in arr
         
 
@@ -137,3 +104,4 @@ TimelineArrayTest = ()->
 
 #TimelineArrayTest()
 
+modules.TimelineArray = TimelineArray
