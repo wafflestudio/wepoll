@@ -1,0 +1,36 @@
+<div class="politician-recent-links">
+  <div class="politician-recent-links-item clearfix">
+    <% @messages.each_with_index do |message, i| -%>
+      <div class="sep-subsection center">
+        <div class="timeline-entries-container" id="politician-<%=message.politician ? message.politician.id : "none" %>-recent-links">
+            <%= render message %>
+            <div id="recent-paginator-politician-<%=message.politician ? message.politician.id : "none" %>">
+              <% unless @messages.current_page == @messages.num_pages %>
+                <%= link_to '>',  messages_of_politician_path(@p1, :page => message.current_page + 1, :id2 =>@p2 ), :id => "message-next-page-#{message.politician.id}", :class => 'next-links-page'%>
+              <% end -%>
+            </div>
+        </div>
+        <div class="loading-indicator" id="loading-indicator-recent-<%=message.politician ? message.politician.id : "none" %>">&nbsp;</div>
+      </div>
+    <% end -%>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(".link_reply_input").keyup(function() {
+    var $this = $(this);
+    var max = 250;
+    var len = 0;
+    var $textarea = $("textarea", $this);
+    var len = $textarea.val().length;
+    if (len > max) {
+      $textarea.val($textarea.val().substr(0, max));
+      len = $textarea.val().length;
+    }
+    $this.find(".current-comment-length").text(len);
+
+    $this.children(".link-reply-button").click(function() {
+      return true;
+    });
+  });
+</script>

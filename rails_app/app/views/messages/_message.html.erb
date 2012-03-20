@@ -55,38 +55,41 @@
       </div>
     <% end %>
     <div class="link_reply_input clearfix">
-      <%= form_for @message, :remote => true do |f| -%>
-        <%= hidden_field_tag 'parent_message_id', message.id.to_s %>
-        <input id="message_preview_id_<%=message.id.to_s%>" name="message[preview_id]" type="hidden">
-        <%= hidden_field_tag 'tabsection', "true" %>
+			<form accept-charset="UTF-8" action="/messages" class="new_message" data-remote="true" id="new_message_<%=message.id.to_s%>" method="post">
+				<div style="margin:0;padding:0;display:inline">
+					<input name="utf8" type="hidden" value="✓">
+					<input name="authenticity_token" type="hidden" value="4jEYDr9zpnQ9KDdKCut7jdg9/THK5PxITKnQZzGRZYI=">
+				</div>     
+					<%= hidden_field_tag 'parent_message_id', message.id.to_s %>
+					<input id="message_preview_id_<%=message.id.to_s%>" name="message[preview_id]" type="hidden">
 
-        <div class="clearfix">
-          <% if user_signed_in? -%>
-            <%= image_tag current_user.profile_picture %>
-          <% else -%>
-            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
-          <% end -%>
+					<div class="clearfix">
+						<% if user_signed_in? -%>
+							<%= image_tag current_user.profile_picture %>
+						<% else -%>
+							<%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
+						<% end -%>
 
-          <% if user_signed_in? -%>
-            <%= f.text_area :body, :class => 'message_reply_write', :id => "message_reply_write_#{message.id}", :maxlength => 140, :placeholder => "댓글을 입력하세요."%>
-          <% else -%>
-              <%= link_to_function f.text_area(:body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다."), 'show_login()' %>
-          <% end -%>
-        </div>
-        <div class="clearfix">
-					<div id="link-form-preview_<%=message.id%>" class="alpha omega field preview-wrap clearfix">
-						<div id="link-form-preview-img_<%=message.id%>" class="preview-image"></div>
-						<div id="link-form-preview-txt_<%=message.id%>" class="preview-desc"></div>
+						<% if user_signed_in? -%>
+							<textarea class="message_reply_write" cols="40" id="message_reply_write_<%=message.id.to_s%>" maxlength="140" name="message[body]" placeholder="댓글을 입력하세요." rows="20"></textarea>
+						<% else -%>
+								<a href="#" onclick="show_login(); return false;"><textarea cols="40" disabled="disabled" id="message_body" name="message[body]" placeholder="로그인하면 댓글을 남길 수 있습니다." rows="20"></textarea></a>
+						<% end -%>
+					</div>
+					<div class="clearfix">
+						<div id="link-form-preview_<%=message.id%>" class="alpha omega field preview-wrap clearfix">
+							<div id="link-form-preview-img_<%=message.id%>" class="preview-image"></div>
+							<div id="link-form-preview-txt_<%=message.id%>" class="preview-desc"></div>
+						</div>
+					</div>
+
+				<div style="float: right; margin-right:10px;">
+					<div id="comment-length">
+					<span class="current-comment-length">0</span>/250자
+					<input class="link-reply-button" name="commit" type="submit" value="등록" onclick="message_reply_submit('<%=message.id.to_s%>'); return false;">
 					</div>
 				</div>
-
-        <div style="float: right; margin-right:10px;">
-          <div id="comment-length">
-            <span class="current-comment-length">0</span>/250자
-            <%= f.submit '등록', :class => 'link-reply-button' %>
-          </div>
-        </div>
-      <% end -%>
+			</form>
     </div>
   </div>
 </div>
@@ -110,6 +113,25 @@ $(document).ready(function(){
 	});
 
 });
+
+
+function message_reply_submit(id) {
+		var data_string = $('#new_message_'+id).serialize();
+		$.ajax({
+			type: "POST",
+			url: "/messages",
+			data: data_string,
+			dataType: 'json',
+			success: function(data) {
+				if (data.result == 'success') {
+						//id가지고 찾아서 댓글에 붙이면 됨..
+						
+				} else {
+
+				}
+			}
+		});
+}
 
 function loadUrl(url, id)  {
 	$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 

@@ -23,7 +23,7 @@ class MessagesController < ApplicationController
 			@parent_message.replies << @message
 			@message.parent_message = @parent_message
 		end
-		result = []
+		result = {}
 		if @message.save
 			 result[:result] = 'success'
 			 result[:message] = @message

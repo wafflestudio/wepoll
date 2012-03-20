@@ -17,6 +17,7 @@ class DistrictController < ApplicationController
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
         @message = Message.new
+     		@messages = Message.where(:politician_id.in => [@p1.id, @p2.id]).desc("created_at").page(params[:page]).per(10)
       end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
     end

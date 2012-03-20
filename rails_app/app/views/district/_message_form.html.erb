@@ -49,7 +49,28 @@
 			}
 			$("#message-body-length").text(len);
 		});
+
+	$('#new_message').submit(function() {
+		var data_string = $('#new_message').serialize();
+		//console.log(data_string);
+		$.ajax({
+			type: "POST",
+			url: "/messages",
+			data: data_string,
+			dataType: 'json',
+			success: function(data) {
+				if (data.result == 'success') {
+					//message 라인에 붙이면 될듯..
+						
+				} else {
+
+				}
+			}
+		});
+		return false;
 	});
+});
+
 
 	function loadUrl(url)  {
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
