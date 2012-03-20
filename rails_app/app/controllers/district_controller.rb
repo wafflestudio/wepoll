@@ -27,8 +27,8 @@ class DistrictController < ApplicationController
     @timeline_entry = TimelineEntry.find(params[:timeline_entry_id])
     @p1 = @timeline_entry.politician
     @p2 = Politician.where(:district => @p1.district).reject {|p| p.id == @p1.id}.first
-    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
-    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories
+    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories((params[:age]||18).to_i)
+    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories((params[:age]||18).to_i)
 
     @p1_bill_counts = p1_bill_categories.map {|c,n| n}
     @p1_bill_categories = p1_bill_categories.map {|c,n| c}

@@ -9,12 +9,8 @@
 
     <div class="subsection <%= i==0? "left":"right"%>">
       <div id="age-selector-<%=politician.id%>" class="bills-age-selector clearfix <%= i==0? "left":"right"%>">
-        <% ages.each do |age| -%>
-          <% if politician.elections.include? age -%>
-            <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, event.target)", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
-          <% else -%>
-            <%= link_to_function age.to_s, '', :class => 'age-select disabled', :title => "#{age}대 국회의원이 아닙니다."%>
-          <% end -%>
+        <% politician.elections.sort.each do |age| -%>
+	    <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, (event.srcElement ? event.srcElement:event.target))", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
         <% end -%>
       </div>
     </div>
@@ -54,8 +50,7 @@
   <% end -%>
 </div>
 
-<script>
-  $(function() {
+<script type="text/javascript">
     <% @politicians.each_with_index do |politician,i| -%>
       <% if politician.elections.include? @ages[i] %>
         $("#init-bills-<%= politician.id %>").load("<%= init_bills_summary_of_politician_path(politician.id, :age => @ages[i], :index => i) %>");
@@ -69,5 +64,4 @@
         $("#attendance-<%=politician.id%>").html(att);
       <% end -%>
     <% end -%>
-  });
 </script>
