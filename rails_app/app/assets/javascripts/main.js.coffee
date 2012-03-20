@@ -5,6 +5,7 @@
 # =require jquery.path
 # =require raphael-min
 # =require map
+# =require jquery.cookie
 # =require jquery.simple_bar_graph
 vs_cache = new Array(49)
 worldmap = {

@@ -94,6 +94,8 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
 
+    params[:timeline_entry].delete :preview_id if params[:timeline_entry][:preview_id] and params[:timeline_entry][:preview_id] == "nil"
+
     @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
@@ -141,6 +143,7 @@ class TimelineEntriesController < ApplicationController
 		# prevent updating from previous value
 		params[:timeline_entry].delete :like_count
 		params[:timeline_entry].delete :link_count
+    params[:timeline_entry].delete :preview_id if params[:timeline_entry][:preview_id] and params[:timeline_entry][:preview_id] == "nil"
 
     respond_to do |format|
       if @timeline_entry.update_attributes(params[:timeline_entry])

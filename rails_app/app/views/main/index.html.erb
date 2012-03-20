@@ -29,7 +29,16 @@
 </div>
 
 <script type="text/javascript">
-//	$(function() {show_about();});
+function hideToday() {
+  $.cookie('hidemainpopup','ok',{expires:1});
+  $.colorbox.close();
+}
+
+<% if cookies["hidemainpopup"] != 'ok' %>
+$(function() {
+$.colorbox({href:'/about'});
+});
+<% end %>
 </script>
 
 <% content_for :sidebar do -%>
