@@ -49,6 +49,20 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
+  def messages_tab
+  	 @p1 = params[:id1]
+  	 @p2 = params[:id2]
+     @messages = Message.where(:politician_id.in => [params[:id1],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
+  end
+
+  def messages
+     @messages = Message.where(:politician_id.in => [params[:id],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
+  end
+
   def recent_links
     @link = LinkReply.new 
     @p = Politician.find(params[:id])

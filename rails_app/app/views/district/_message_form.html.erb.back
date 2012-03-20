@@ -22,7 +22,6 @@
   		<div id="link-form-preview-img" class="grid_1 alpha"></div>
   		<div id="link-form-preview-txt" class="grid_5 omega note"></div>
   	</div>
-  	<%= f.submit '한마디 등록' %>
   </div>
 	<% end %>
 </div>
@@ -30,8 +29,10 @@
 	$(document).ready(function(){
 		var loaded_url = '';
 		$('#message_body').keyup(function(event) {
-				var str = $('#message_body').val();
+			//console.log('key up event called!' + event.keyCode);
+			// keyCode 32 = space 
 			if (event.keyCode == 32) {
+				var str = $('#message_body').val();
 				var regex = /\b([\d\w\.\/\+\-\?\:]*)((ht|f)tp(s|)\:\/\/|[\d\d\d|\d\d]\.[\d\d\d|\d\d]\.|www\.|\.tv|\.ac|\.com|\.edu|\.gov|\.int|\.mil|\.net|\.org|\.biz|\.info|\.name|\.pro|\.museum|\.co)([\d\w\.\/\%\+\-\=\&amp;\?\:\\\&quot;\'\,\|\~\;]*)\b/gi;
 				var url = str.match(regex);
 				if (url != null && loaded_url != url) {
@@ -39,16 +40,8 @@
 					loaded_url = url;
 				}
 			}
-
-			var $this = $(this);
-			var max = 250;
-			var len = str.length;
-			if (len > max) {
-				$('#message_body').val(str.substr(0, max));
-				len = $('#message_body').val().length;
-			}
-			$("#message-body-length").text(len);
 		});
+
 	});
 
 	function loadUrl(url)  {
