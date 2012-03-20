@@ -16,6 +16,7 @@ class DistrictController < ApplicationController
           q_time = {:deleted => false} # (all except deleted)
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
+        @bills = Bill.limit(20)
       end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
     end

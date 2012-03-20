@@ -1,0 +1,23 @@
+<div id="timeline" style="position:relative;height:1024px"></div>
+
+
+
+<script type="text/javascript">
+  var data = <%= @bills.to_json.html_safe %>;
+  $(function() {
+    var paper = Raphael($("#timeline").get(0), 1024, 1024);
+
+    function rect() {
+      paper.rect
+    }
+
+    for(var i = 0; i < data.length; i ++)  {
+      paper.text(500, i*40, data[i].title).attr('text-anchor','end');
+    }
+
+
+    paper.path("M512,0L512,1024").attr({stroke:"#000"})
+
+  })
+
+</script>
