@@ -17,21 +17,22 @@ class MessagesController < ApplicationController
 		@message = Message.new(params[:message])
 		@message.user_id = current_user.id
 
+	
 		if params[:parent_message_id] != nil
 			@parent_message = Message.find(params[:parent_message_id])
 			@parent_message.replies << @message
 			@message.parent_message = @parent_message
 		end
-
-
+		result = []
 		if @message.save
-			 
+			 result[:result] = 'success'
+			 result[:message] = @message
 		else
-
+			 result[:result] = 'fail'
 		end
-
+		
 		respond_to do |format|
-			format.json {render json: @message.to_json}
+			format.json {render json: result.to_json}
 		end
 	end
 

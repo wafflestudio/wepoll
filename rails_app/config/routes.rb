@@ -6,7 +6,7 @@ Wepoll::Application.routes.draw do
   end
   
   resources :messages do 
-
+		match '/list' => 'messages#list', :as => "list"
   end
 
   match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
@@ -103,6 +103,9 @@ Wepoll::Application.routes.draw do
 
     get 'profile', :on => :collection, :as => :profiles_of
     get 'promises', :on => :collection, :as => :promises_of
+    get 'messages_tab', :on => :collection, :as => :messages_tab_of
+
+    get 'messages', :on => :collection, :as => :messages_of
   end
 
   match "/search" => "main#search"

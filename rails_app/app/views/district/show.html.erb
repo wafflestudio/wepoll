@@ -304,15 +304,15 @@ $(document).ready( function() {
       <%= link_to '최신링크',
         recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
         :class => 'tab alpha', "data-id" => "politician-recent-links" %>
-      <%= link_to '인기링크',
+      <%= link_to "메시지", messages_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "politician_messages" %> 
+      <!-- <%= link_to '인기링크',
         popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "politician-popular-links" %>
+        :class => 'tab', "data-id" => "politician-popular-links" %> -->
       <%= link_to '국회활동',
         bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
         :class => 'tab selected', "data-id" => "bill-activity" %>
       <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
       <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
-      <%= link_to "메시지", messages_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "politician_messages" %> 
     </div>
     <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
     </div> <!-- end of tab conainer -->

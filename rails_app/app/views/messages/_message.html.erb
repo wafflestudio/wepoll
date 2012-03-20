@@ -19,7 +19,7 @@
     <div class="preview-wrap clearfix">
       <div class="preview-image"><img src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
       <div class="preview-text">
-			<div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
+				<div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
         <div class="preview-url"><%= link_to message.preview.url[0..34] + "...", message.preview.url, :target => "_blank" %></div>
         <div class="preview-desc"><%= (s=message.preview.description;s.length > 120 ? s[0...117]+"...": s) if message.preview %></div>
       </div>
@@ -44,7 +44,7 @@
 						<div class="preview-wrap clearfix">
 							<div class="preview-image"><img src='<%= (r.preview and r.preview.image_url and r.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
 							<div class="preview-text">
-							<div class="preview-title"><a target="_blank" href="<%= raw r.preview.url if r.preview != nil%>"><%= r.preview.title if r.preview %></a></div>
+								<div class="preview-title"><a target="_blank" href="<%= raw r.preview.url if r.preview != nil%>"><%= r.preview.title if r.preview %></a></div>
 								<div class="preview-url"><%= link_to r.preview.url[0..34] + "...", r.preview.url, :target => "_blank" %></div>
 								<div class="preview-desc"><%= (s=r.preview.description;s.length > 120 ? s[0...117]+"...": s) if r.preview %></div>
 							</div>
