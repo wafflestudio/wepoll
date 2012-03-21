@@ -22,7 +22,7 @@
   <% @politicians.each_with_index do |politician, i| -%>
 
     <div id="init-bills-<%=politician.id %>" class="<%=i==0 ? "left":"right" %> init_bills">
-      <div class="not_18" style="margin-top:80px;height:110px;">자료를 준비 중입니다.</div>
+      <div class="not_18" style="margin-top:80px;height:110px;">자료가 없습니다.</div>
     </div>
 
     <% if i==0 -%><div class="subsection-label" style="margin-top:100px;">발의한법안</div><% end -%>
@@ -32,7 +32,7 @@
 <div class="alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
     <div id="joint-initiate-<%=politician.id%>" class="<%= i==0?"left":"right"%>">
-      <div class="not_18" style="margin-top:90px;height:108px">자료를 준비 중입니다.</div>
+      <div class="not_18" style="margin-top:90px;height:108px">자료가 없습니다.</div>
     </div>
 
     <% if i==0 -%><div class="subsection-label" style="margin-top:110px;"><small>함께발의한의원</small></div><% end -%>
@@ -43,7 +43,7 @@
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
       <div id="attendance-<%=politician.id%>" class="attendance" style="color:<%= @party_color[politician.party] || 'red' %>">
-        <div class="not_18" style="margin-top:-15px;">자료를 준비 중입니다.</div>
+        <div class="not_18" style="margin-top:-15px;">자료가 없습니다.</div>
       </div>
     </div>
     <% if i==0 -%><div class="subsection-label" style="margin-top:20px;">본회의출석률</div><% end -%>
