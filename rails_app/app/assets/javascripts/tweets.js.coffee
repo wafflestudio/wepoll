@@ -13,8 +13,8 @@ $ ->
   $('#replies_paginator').hide()
 
   # tweet box click handler
-  $('.tweet_item').click ->
-    $.get($(this).attr("data-href"))
+  $('.tweet_item').live 'click', ->
+    $.get $(this).attr("data-href")
     return
   # report btn 
   $('.reply_item p.links a.report_link').live 'click', ->
@@ -33,7 +33,7 @@ $ ->
       if data.status == "error"
         alert data.message
       else
-        $(obj).text data.count
+        $($('.count[data-status_id*="'+$(obj).attr('data-status_id')+'"]')).text data.count
     false
 
   # reply recommend btn
@@ -47,7 +47,7 @@ $ ->
     false
 
   # reply btn (in tweet box)
-  $('.reply_btn').click (e) ->
+  $('.reply_btn.new').live 'click', (e) ->
     $reply_box.css 'top', e.clientY-60
     $reply_box.show()
     $('#reply_box form').eq(0).attr 'action',this.href
@@ -56,6 +56,7 @@ $ ->
 
   # reply submit btn 
   $('#reply_submit_btn').live 'click', ->
+    $('#reply-loading-indicator').show()
     $form = $('#reply_box form')
     $.post $form[0].action, $form.serialize(), reset_box(), "script"
     false
@@ -64,9 +65,13 @@ $ ->
     $reply_box.hide()
     return
   $('#reply_text_box').placeholder()
+  $('#tweets_paginator a').live 'click', ->
+    $('.loading-indicator').show()
+    return
 
   # function
   reset_box = ->
     $('#reply_close').click()
     $('#reply_text_box').val("")
+    $('#reply-loading-indicator').hide()
   return

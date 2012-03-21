@@ -1,12 +1,13 @@
 Wepoll::Application.routes.draw do
-  resources :suggestions
-
   resources :timeline_entries do
     get 'blame', :on => :member
     get 'like', :on => :member
+    get 'entry', :on => :member
   end
 
-  match 'timeline/:id' => 'district#show_timeline_entry', :as => :display_timeline_entry
+  match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
+  match "link_counts/:district" => "politicians#link_counts", :as => :link_counts_of_politician
+  match 'timeline/:timeline_entry_id' => 'district#show_timeline_entry', :via => :get, :as => :display_timeline_entry
 #  match "timeline_entries/list/:id" => "timeline_entries#list", :as => "timeline_entries_list"
 
   resources :bills
@@ -40,6 +41,9 @@ Wepoll::Application.routes.draw do
     end
 
     resources 'notices'
+    resources 'link_replies'
+    resources 'tweet_replies'
+    resources 'tweets'
   end
 
   devise_for :users, :controllers => {
@@ -63,7 +67,7 @@ Wepoll::Application.routes.draw do
   match '/sns_verify/:user_id/:token_id/:key' => 'me/sns#verify_sns_link',
     :via => :get, :as => :sns_link_verify
 
-  match 'forum/:politician_id' => 'tweets#forum' , :as => :forum
+  get 'forum/:tweet_name' => 'tweets#forum' , :as => :forum
   match '/get_tweet/:screen_name' => 'tweets#get_tweet', :as => :get_tweet
 
   resources :tweets do
@@ -74,6 +78,7 @@ Wepoll::Application.routes.draw do
   resources :tweet_replies do
     get 'blame', :on => :member
     get 'like', :on => :member
+    delete 'destroy', :on => :member
   end
 
   match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback
@@ -97,6 +102,8 @@ Wepoll::Application.routes.draw do
   end
 
   match "/search" => "main#search"
+match '/provision' => 'main#provision'
+match '/privacy' => 'main#privacy'
 
   root :to => 'main#index'
 

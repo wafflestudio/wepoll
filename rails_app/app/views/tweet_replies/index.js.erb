@@ -1,4 +1,8 @@
-$('#replies_wrapper').html('<%= escape_javascript(render @replies) %>');
+<% if @replies.empty? -%>
+  $('#replies_wrapper').html('<div class="reply_item"><p>댓글이 없습니다.</p></div>');
+<% else -%>
+  $('#replies_wrapper').html('<%= escape_javascript(render @replies) %>');
+<% end -%>
 $('#replies_wrapper').animate({scrollTop:0},200);
 $('#replies_paginator').remove();
 $(window).unbind('.infscr');

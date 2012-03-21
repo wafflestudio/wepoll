@@ -38,13 +38,13 @@ class PoliticiansController < ApplicationController
   end
 
   def recent_links_tab
-    @entries = @politicians.map {|p| p.timeline_entries.desc("created_at").page(params[:page]).per(3)}
+    @entries = @politicians.map {|p| p ? p.timeline_entries.desc("created_at").page(params[:page]).per(3) : []}
     @link = LinkReply.new 
     render :layout => false
   end
 
   def popular_links_tab
-    @entries = @politicians.map {|p| p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)}
+    @entries = @politicians.map {|p| p ? p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3) : []}
     @link = LinkReply.new 
     render :layout => false
   end
@@ -60,11 +60,22 @@ class PoliticiansController < ApplicationController
     @link = LinkReply.new 
     @p = Politician.find(params[:id])
     @entries = @p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3)
+
     render :layout => false
+  end
+
+  def link_counts
+    if params[:id]
+      @pol = Politician.find(params[:id])
+      render :json => {:good_link_count => @pol.good_link_count , :bad_link_count => @pol.bad_link_count}
+    elsif params[:district]
+      @pol = Politician.where(:district => params[:district])
+      render :json => @pol.to_json(:only => [:_id, :good_link_count, :bad_link_count])
+    end
   end
 
   protected
   def prepare_politicians
-    @politicians = [Politician.find(params[:id1]), Politician.find(params[:id2])]
+    @politicians = [params[:id1] ? Politician.find(params[:id1]) : nil, params[:id2] ? Politician.find(params[:id2]) : nil]
   end
 end

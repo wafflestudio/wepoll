@@ -1,6 +1,10 @@
 <% content_for(:scripts) do %>
 <script type="text/javascript">
 var timelineController = {};
+// FEED IN DATA
+var pol1 = <%= @p1.to_json.html_safe %>;
+var pol2 = <%= @p2.to_json.html_safe %>;
+var entries = <%= @timeline_entries.to_json(:include => {:link_replies => {:only =>[:count]}}).html_safe %>;
 
 Backbone.Model.prototype.toJSON = function() {
   return _(_.clone(this.attributes)).extend({
@@ -43,17 +47,22 @@ function submitTimelineEntryForm(element,id)  {
 		attrs['posted_at'] = new Date(date[0],date[1]-1,date[2],0,0,0)
 
 	if(typeof id != 'undefined')  {
-		timelineController.updateEntry(id,attrs, {error: function() {
-				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."});
+		timelineController.updateEntry(id,attrs, {success:function(model) {
+		}
+		,error: function() {
 			}
 		});
 	}
 	else  {	
-		timelineController.createEntry(attrs, {error: function() {
-				$.gritter({title:"저장에 실패하였습니다.",text:"관리자에 문의하십시오."});
+		timelineController.createEntry(attrs, {success:function(model) {
+			}
+			,error: function() {
 			}
 		});
 	}
+	// update recent links view
+
+//	$.load "/timeline_entries/
 }
 
 function loadPreview(url,onload,onerror)  {
@@ -104,6 +113,7 @@ function activateTimelineEntryForm() {
 	activateTimelineFormPreview(function successful(data){
 		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.');
 		$('#link-post').removeAttr('disabled');
+		$('#timeline_entry_preview_id').val(data.id)
 		$('#link-form-badlink').hide();
 		if(data.image)  {
 			$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");
@@ -113,12 +123,10 @@ function activateTimelineEntryForm() {
 			$('#link-form-preview-txt').addClass('prefix_1');
 		
 		if(data.created_at)  {
-			console.warn('date', data.created_at);
 			var d = Date.parse(data.created_at);
 			if(!d)  {
 				var match = data.created_at.match(/[0-9\.\-]+/);
 				if(match)  {
-					console.log(match[0].replace(/\./g,"-"));
 					d = Date.parse(match[0].replace(/\./g,"-"));
 				}
 				
@@ -127,11 +135,9 @@ function activateTimelineEntryForm() {
 				$('#timeline_entry_posted_at_1i').val(d.getFullYear());
 				$('#timeline_entry_posted_at_2i').val(d.getMonth()+1);
 				$('#timeline_entry_posted_at_3i').val(d.getDate());
-				console.warn('date success',d);
 			}
 
 		}
-
 
 		$('#link-form-preview-txt').html(data.title);
 
@@ -147,26 +153,47 @@ function activateTimelineEntryForm() {
 	})
 	
 	tags = $("#timeline_entry_tag_text").val();
-	var tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'5',defaultText:'태그추가'});
-	if(tags)
+	var tagInput;
+	var numTags = 0;
+	function onAddTag(tag) {
+		console.info('add', arguments)
+		numTags ++;
+		if(numTags > 5)
+			tagInput.removeTag(tag)
+	}
+	function onRemoveTag() {
+		numTags --;
+	}
+	tagInput = $("#timeline_entry_tag_text").tagsInput({maxChars:'10',defaultText:'태그추가',onAddTag:onAddTag,onRemoveTag:onRemoveTag});
+	if(tags)  {
+		numTags = tags.split(",").length
 		tagInput.importTags(tags);
+	}
 
 
 }
 
 
-// FEED IN DATA
-var pol1 = <%= @p1.to_json.html_safe %>;
-var pol2 = <%= @p2.to_json.html_safe %>;
-var entries = <%= @timeline_entries.to_json(:include => {:link_replies => {:only =>[:count]}}).html_safe %>;
 // On Load
 $(function() {
-	console.warn('start');
-	timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>});
-	console.warn('end');
-	timelineController.startAutoUpdate();
-	timelineController.appendTo($("#timeline"));
-	
+  timelineController = new modules.TimelineController({pol1:pol1, pol2:pol2, entries:entries <%= if user_signed_in? then ",edit:true" else "" end%>});
+  timelineController.appendTo($("#timeline"));
+
+  // update entry for recent-links
+  timelineController.on("addEntry", function(model)  {
+    //update links count graph
+    updateGraphCount(model.get("politician_id"));
+    // ignore if already exists
+
+    if($(".link-entry-" + model.id).length >0)
+      return;
+    $.get("/timeline_entries/"+model.id+"/entry", 
+      function(html) {
+        $("#politician-" + model.get("politician_id") + "-recent-links").prepend(html);
+      });
+    }
+  );
+
 	<% if user_signed_in? %>
   $(".link-new").click(function() {
     $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
@@ -211,13 +238,13 @@ $(function() {
   });
 
   Raphael(function() {
-
+// IE problem?
   	var src1 = $('.politician-photo1').attr('src');
   	var src2 = $('.politician-photo2').attr('src');
-		$('.politician-photo1').replaceWith("<div class='politician-photo1'></div>");
-		$('.politician-photo2').replaceWith("<div class='politician-photo2'></div>");
-  	Raphael($('.politician-photo1').get(0)).image(src1, 0,0,60,60).rotate(3);
-  	Raphael($('.politician-photo2').get(0)).image(src2, 0,0,60,60).rotate(-3);
+		$('.politician-photo1').replaceWith("<div id='politician_photo1' class='politician-photo1'></div>");
+		$('.politician-photo2').replaceWith("<div id='politician_photo1' class='politician-photo2'></div>");
+  	Raphael($('.politician-photo1').get(0),80,80).image(src1, 0,0,60,60).rotate(3);
+  	Raphael($('.politician-photo2').get(0),80,80).image(src2, 0,0,60,60).rotate(-3);
 
 	},80,80);
 

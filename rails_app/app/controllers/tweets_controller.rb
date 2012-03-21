@@ -58,10 +58,12 @@ class TweetsController < ApplicationController
   end
 
   def forum
-    @politician = Politician.find(params[:politician_id])
-    @best = @politician.tweets.desc('like').first
-    @today_best = @politician.tweets.desc('today_like').first
-    @links = TimelineEntry.asc('like')
+    @politician = Politician.where(:tweet_name => params[:tweet_name]).first
+    #@politician = Politician.find(params[:politician_id])
+    redirect_to root_url if @politician.nil? || !@politician.candidate
+    @tweets = @politician.tweets.desc('created_at').page(params[:tweets_page]).per(20)
+    @best = @politician.tweets.order_by([[:like_count, :desc],[:created_at, :desc]]).first
+    @today_best = @politician.tweets.order_by([[:today_like_count, :desc],[:created_at, :desc]]).first
     @total_replies_origin = @politician.total_replies.sort{|a,b| b.created_at <=> a.created_at}
     @replies = Kaminari.paginate_array(@total_replies_origin).page(params[:replies_page]).per(13)
   end

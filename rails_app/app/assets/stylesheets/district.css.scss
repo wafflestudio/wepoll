@@ -11,11 +11,14 @@
   -moz-border-radius:14px;
   -webkit-border-radius:14px;
   border-radius:14px;
-  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+  behavior:url(http://wepoll.or.kr/PIE.htc);
 }
 
 #district-title {
-  font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕sans-serif;
+  .fb-like {
+    float: right;
+  }
+  font-family:Nanum Gothic, 나눔고딕, 나눔 고딕, NanumGothic, Malgun Gothic, MalgunGothic, 맑은고딕, 맑은 고딕,sans-serif;
   font-weight:bold;
   font-size:15pt;
   #district-label {
@@ -24,12 +27,81 @@
 
 }
 
-#district-desc {
+
+#district-candidates {
   color:#969696;
   font-size:12pt;
   margin-top:13px;
-    margin-bottom:30px;
+  margin-bottom:20px;
 }
+
+.district-candidate {
+  display:block;
+  float:left;
+
+  .district-candidate-button {
+    margin-bottom:5px;
+    text-decoration:none;
+    display:block;
+    border:2px solid #4f4f50;
+    float:left;
+    margin-right:10px;
+    font-size:9pt;
+    cursor:pointer;
+    cursor:hand;
+    .candidate-photo {
+      float:left;
+      width:48px;
+      height:48px;
+      display:block;
+    }
+    .candidate-name {
+      padding:7px;
+      float:left;
+      color:#4f4f50;
+      .party { font-size:9pt; display:block; margin-bottom:3px; }
+      .name { font-size:12pt; display:block; }
+    }
+
+  }
+  .candidate-dropdown {
+    background-color:white;
+    position:absolute;
+    font-size:9pt;
+    display:none;
+    text-align:center;
+    border: 1px solid #a8a8a8;
+
+
+    a {
+      text-decoration: none;
+      display:block;
+      color:#4f4f50;
+    }
+    .target {
+      font-weight:bold
+    }
+
+    .vs {
+      color:#FFDE40;
+    }
+
+
+    a:hover {
+      color: white;
+      background-color:#4f4f50;
+    }
+
+    p {
+      padding:8px;
+    }
+
+  }
+
+}
+
+
+
 
 .namecard {
 	a {
@@ -61,11 +133,11 @@
     margin-left:12px;
   }
 
-  width:260px - 40px - 25px;
-  height:160px - 20px - 30px;
-  padding-top: 20px;
+  width:260px - 40px - 45px;
+  height:160px - 30px - 30px;
+  padding-top: 30px;
   padding-left: 40px;
-  padding-right:25px;
+  padding-right:45px;
   padding-bottom:30px;
 
   font-size:8.5pt;
@@ -223,7 +295,7 @@
     -o-border-radius:7px 7px 0 0;
     -moz-border-radius:7px 7px 0 0;
     -webkit-border-radius:7px 7px 0 0;
-    behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+    behavior:url(http://wepoll.or.kr/PIE.htc);
 
     margin:0 5px;
 
@@ -277,7 +349,7 @@ a.init-bills-link {
   width:700 - 20px;
   background-color:#fff;
   @include border-radius(7px);
-  behavior:url(http://choco.wafflestudio.net:7765/PIE.htc);
+  behavior:url(http://wepoll.or.kr/PIE.htc);
   position:relative;
   margin-bottom:8px;
   .left {
@@ -303,6 +375,10 @@ a.init-bills-link {
     .link_header {
       border-bottom: 1px solid #bebebe;
       padding: 10px;
+      .timeline_entry_destroy_btn {
+        margin-right: 10px;
+        float: right;
+      }
       .name { font-size: 14px; font-weight: bold; margin-bottom: 8px; margin-top: 3px; }
       .time { font-size: 12px; color: gray; }
       .link_profile_img {
@@ -331,7 +407,7 @@ a.init-bills-link {
       -o-border-radius: 10px;
       -moz-border-radius: 10px;
       -webkit-border-radius: 10px;
-      behavior: url(http://wafflestudio.net:4010/PIE.htc);
+      behavior: url(http://wepoll.or.kr/PIE.htc);
       padding: 5px;
       margin-left: 5px;
       font-size: 14px;
@@ -343,6 +419,7 @@ a.init-bills-link {
         text-decoration: underline;
       }
     }
+    .blame_button { background-color: #bfbfbf; }
   }
   .link_reply { 
     padding: 5px;
@@ -363,6 +440,9 @@ a.init-bills-link {
     }
     .link_replies {
       margin-bottom: 3px;
+      .link_reply_destroy_btn {
+        float: right;
+      }
       .link_replies_body {
         float: left;
         font-size: 11px;
@@ -395,7 +475,7 @@ textarea {
   border-radius:5px;
   -webkit-border-radius:5px;
   -moz-border-radius:5px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   border:0;
   background-color:#fede4d;
   padding:3px 5px;
@@ -441,6 +521,7 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   .joint-info {
     text-align:center;
     margin-top:5px;
+    font-weight: bold;
   }
   img {
     border:1px solid #454545;
@@ -545,6 +626,7 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   margin:0 auto;
   display:block;
   background:url(/assets/ajax-loader-link.gif);
+  display:none;
 }
 
       .preview-wrap {

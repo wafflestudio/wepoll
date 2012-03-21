@@ -2,7 +2,7 @@
 class TimelineEntriesController < ApplicationController
 
 
-	before_filter :authenticate_user!, :except => [:index,:list,:show]
+	before_filter :authenticate_user!, :except => [:index,:list,:show,:entry]
 
   # GET /timeline_entries
   # GET /timeline_entries.json
@@ -22,7 +22,7 @@ class TimelineEntriesController < ApplicationController
 
 		# updated_at
 		if params[:from]
-			q_time = {:updated_at => {'$gte' => params[:from]}}
+		  q_time = {:updated_at => {'$gte' => params[:from]}}
 		elsif params[:after]
 			q_time = {:updated_at => {'$gt' => params[:after]}}
 		else
@@ -72,6 +72,7 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new
     @politician = Politician.find(params[:politician_id])
     @timeline_entry.politician = @politician
+    @timeline_entry.preview = Preview.new
 
     respond_to do |format|
       format.html { render :layout => false }# new.html.erb
@@ -92,19 +93,20 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry = TimelineEntry.new(params[:timeline_entry])
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
+
     @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
       @politician.inc(:bad_link_count, 1) unless @timeline_entry.is_good
     end
 
-    if(params[:tweet])
+    if(params[:timeline_entry][:tweet])
       unless tweet_after_create
         @error = 1
         @message += "tweet을 게시하는데 오류가 발생했습니다."
       end
     end
-    if(params[:facebook])
+    if(params[:timeline_entry][:facebook])
       unless post_after_create
         @error = 1
         @message += "facebook에 포스팅하는데 오류가 발생했습니다."
@@ -117,8 +119,12 @@ class TimelineEntriesController < ApplicationController
           format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created. SNS post error.' }
           format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
         else
-          format.html { redirect_to @timeline_entry, notice: 'Timeline entry was successfully created.' }
-          format.json { render json: @timeline_entry, status: :created, location: @timeline_entry }
+          format.html {
+           render json: @timeline_entry, status: :created, location: @timeline_entry
+          }
+          format.json {
+           render json: @timeline_entry, status: :created, location: @timeline_entry
+          }
         end
       else
         format.html { render action: "new" }
@@ -150,14 +156,14 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1
   # DELETE /timeline_entries/1.json
   def destroy
-    @timeline_entry = TimelineEntry.find(params[:id],:user_id => current_user.id)
+    @timeline_entry = TimelineEntry.find(params[:id])
+    @id = @timeline_entry.id
+    @success = false
     # rather than @timeline_entry.destroy, we mark deleted
-    @timeline_entry.deleted = true
-    @timeline_entry.save
-
-    respond_to do |format|
-      format.html { redirect_to timeline_entries_url }
-      format.json { head :no_content }
+    if @timeline_entry.destroy
+      @success = true
+    else
+      @success = false
     end
   end
 
@@ -172,6 +178,14 @@ class TimelineEntriesController < ApplicationController
     @result = @t.blame(current_user)
     @timeline_entry = @t
   end
+  
+	def entry
+    @link = LinkReply.new 
+    @entry = TimelineEntry.find(params[:id])
+    @entry.preview = Preview.where(:url => @entry.url).first
+    render :partial => "timeline_entry", :locals => {:timeline_entry => @entry}, :layout => false
+  end
+
 
 protected
   def tweet_after_create
@@ -187,8 +201,8 @@ protected
         Twitter.update(params[:timeline_entry][:title]+" http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id)+" \nhttp://wepoll.or.kr 에서 등록")
         true
       rescue Twitter::Error => e
-        Rails.logger.info "Tiwtter tweet error"
-        puts "Tiwtter tweet error"
+        Rails.logger.info "Twitter tweet error"
+        puts "Twitter tweet error"
         Rails.logger.info e.message
         puts e.message
         false
@@ -206,8 +220,8 @@ protected
       begin
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
-        Rails.logger.info "페이스북포스팅중, 정치인 이름은 #{@politician.name} "
-        @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://choco.wafflestudio.net:3082"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://choco.wafflestudio.net:3082"+@politician.profile_photo(:square50), :description => "위폴 "+@politician.name+"의 "+((params[:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
+        Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
+        @graph.put_object("me","feed",:message => params[:timeline_entry][:title], :link => "http://wepoll.or.kr"+display_timeline_entry_path(@timeline_entry.id), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"의 "+((params[:timeline_entry][:is_good]==true) ? "칭찬" : "지적") +"링크를 등록하셨습니다." )
         true
       rescue StandardError => e
         Rails.logger.info e.message

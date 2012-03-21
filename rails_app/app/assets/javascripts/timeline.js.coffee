@@ -51,7 +51,7 @@ class TimelineController
 	@displayEdit : false
 
 	constructor: (options)->
-		
+		_.extend(this, Backbone.Events)
 		TimelineController.displayEdit = options.edit if options && options.edit
 		@pol1 = options.pol1 if options.pol1
 		@pol2 = options.pol2 if options.pol2
@@ -77,7 +77,8 @@ class TimelineController
 			$("#timeline-msg-noentry1").hide() if model.get('politician_id') == @pol1._id
 			$("#timeline-msg-noentry2").hide() if model.get('politician_id') == @pol2._id
 			console.log('Entry added to collection')
-			$.gritter.add({title:'추가',text:"항목(#{model.get('title')})이 추가되었습니다."})
+			$.gritter.add({title:'타임라인 추가',text:"제목: '#{model.get('title')}'이 추가되었습니다."})
+			@trigger("addEntry", model)
 		@collection.on "remove", (model)=>
 			p1_num = 0
 			p2_num = 0
@@ -89,12 +90,14 @@ class TimelineController
 			$("#timeline-msg-noentry2").show() if p2_num == 0
 
 			console.log('Entry removed from collection')
-			$.gritter.add({title:'삭제',text:"항목(#{model.get('title')})이 삭제되었습니다."})
+			$.gritter.add({title:'타임라인 삭제',text:"제목: '#{model.get('title')}'이 삭제되었습니다."})
+
+			@trigger("removeEntry", model)
 
 		@collection.on "change", (model)->
 			console.log('Entry changed in collection')
-			$.gritter.add({title:'수정',text:"항목(#{model.get('title')})이 수정되었습니다."})
-
+			$.gritter.add({title:'타임라인 수정',text:"제목: '#{model.get('title')}'이 수정되었습니다."})
+			@trigger("changeEntry", model)
 	
 	
 	# `changeScale` takes name string of the new scale value (*year*, *month*, ...)
@@ -190,8 +193,9 @@ class TimelineController
 	createEntry: (attrs, options)->
 		entry = new TimelineEntry()
 		options.silent = true
-		entry.save(attrs, options) # shouldn't dispatch as update
-		@collection.add(entry)
+		options.success = (model)=>
+			@collection.add(model)
+		entry.save(attrs, options)
 
 	updateEntry: (id, attrs, options)->
 		entry = @collection.get(id)

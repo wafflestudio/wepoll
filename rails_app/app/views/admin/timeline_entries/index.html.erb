@@ -2,27 +2,24 @@
   <h1>타임라인 <small>(<%= TimelineEntry.count %>개)</small></h1>
 </div>
 
-<div class="select-bar">
-  <%= form_tag search_admin_bills_path, :method => 'get' do %>
-    <%= text_field_tag 'query', params[:query], :placeholder => '내용입력' %>
-    <%= submit_tag '검색' %>
-  <% end-%>
-</div>
-
 <div class="table">
   <table class="listing" cellpadding="0" cellspacing="0">
     <tr>
-      <th>링크타입</th>
-      <th>URL</th>
+      <th style="width:30px;">링크타입</th>
+      <th>코멘트(url)</th>
+      <th>칭찬?</th>
       <th>사용자ID</th>
+      <th>대상정치인</th>
       <th>대상시각</th>
       <th>생성일자</th>
     </tr>
     <% @timeline_entries.each do |te| -%>
       <tr>
-        <td><%= te.link_type %></td>
-        <td><%= te.url%></td>
+        <td style="width:30px;"><%= te.link_type %></td>
+        <td><%= link_to truncate(te.title, :length => 40), admin_timeline_entry_path(te)%> (<%= link_to '바로가기', te.url, :target => "_blank" %>)</td>
+        <td><%= te.is_good %></td>
         <td><%= te.user.nil? ? "정보없음" : link_to(te.user.userid, admin_user_path(te.user))%></td>
+        <td><%= te.politician.nil? ? "정보없음" : link_to("#{te.politician.party} #{te.politician.name}" , admin_politician_path(te.politician))%></td>
         <td><%= te.posted_at.strftime("%Y.%m.%d")%></td>
         <td><%= te.created_at.strftime("%Y.%m.%d") %></td>
       </tr>

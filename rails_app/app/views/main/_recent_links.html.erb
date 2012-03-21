@@ -15,7 +15,7 @@
     <%= render :partial => '/main/link', :locals => {:link => link} %>
   <% end -%>
 
-  <% if @recent_timeline_entries.empty? -%>
+  <% if @popular_timeline_entries.empty? -%>
     <%= render :partial => '/main/link', :locals => {:link => nil }%>
   <% end -%>
 </div>

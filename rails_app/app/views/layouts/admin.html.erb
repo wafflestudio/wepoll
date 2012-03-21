@@ -14,15 +14,17 @@
 <body>
     <div id="main">
         <div id="header">
-          <%= link_to image_tag("/assets/logo.png", :style => "width:176px;height:60px;"), admin_path, :class => 'logo' %>
+          <%= link_to image_tag("/assets/logo.png", :style => "width:176px;height:60px;"), root_path, :class => 'logo' %>
             <ul id="top-navigation">
                 <li><%= link_to 'Dashboard', admin_path, :class => params[:controller] == 'admin/admin'?"active":""%></li>
                 <li><%= link_to 'Politician', admin_politicians_path, :class => params[:controller]=='admin/politicians'?"active":"" %></li>
                 <li><%= link_to 'Bill', admin_bills_path, :class => params[:controller]=='admin/bills'?"active":"" %></li>
                 <li><%= link_to 'User', admin_users_path, :class => params[:controller]=='admin/users'?"active":"" %></li>
                 <li><%= link_to 'TimelineEntry', admin_timeline_entries_path, :class => params[:controller]=='admin/timeline_entries'?"active":"" %></li>
-                <li><%= link_to 'LinkReply', '#', :class => params[:controller]=='admin/timeline_entries'?"active":"" %></li>
+                <li><%= link_to 'LinkReply', admin_link_replies_path, :class => params[:controller]=='admin/link_replies'?"active":"" %></li>
                 <li><%= link_to 'Notice', admin_notices_path, :class => params[:controller]=='admin/notices'?"active":"" %></li>
+                <li><%= link_to 'Tweet', admin_tweets_path, :class => params[:controller]=='admin/tweets'?"active":"" %></li>
+                <li><%= link_to 'TweetReply', admin_tweet_replies_path, :class => params[:controller]=='admin/tweet_replies'?"active":"" %></li>
             </ul>
         </div>
         <div id="middle">

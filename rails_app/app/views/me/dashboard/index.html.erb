@@ -1,36 +1,46 @@
 <div id="mypage_dashboard">
   <div class="row">
+<% if false %>
+    <div id="change_form" class="span5" style="float: right;">
+      <%= form_for current_user, :url => "/users", :html => { :method => "put"} do |f| %>
+        <%= f.label :nickname, 'Nickname : ' %>
+        <%= f.text_field :nickname %>
+        <%= f.submit 'Change', :id => "change_btn" %>
+      <% end -%>
+    </div>
+    <div class="clear"></div>
+<% end %>
     <div class="span5 status">
-        <% if current_user.facebook_token -%>
-          <div class="alert alert-success facebook">
-            <%= link_to image_tag('me/unlink.png'), "https://facebook.com/#{current_user.facebook_token.uid}" %>
-          </div>
-        <% else -%>
-          <div class="alert facebook">
-            <%= link_to image_tag('me/link.png'), me_sns_link_path(:facebook), :class => 'btn btn-small' %>
-          </div>
-        <% end -%>
+      <% if current_user.facebook_token -%>
+        <div class="alert alert-success facebook">
+          <%= link_to image_tag('me/unlink.png'), "https://facebook.com/#{current_user.facebook_token.uid}" %>
+        </div>
+      <% else -%>
+        <div class="alert facebook">
+          <%= link_to image_tag('me/link.png'), me_sns_link_path(:facebook), :class => 'btn btn-small' %>
+        </div>
+      <% end -%>
 
-        <% if current_user.twitter_token -%>
-          <div class="alert alert-success twitter">
-            <%= link_to image_tag('me/unlink.png'), "https://twitter.com/users/#{current_user.twitter_token.uid}" %>
-          </div>
-        <% else -%>
-          <div class="alert twitter">
-            <%= link_to image_tag('me/link.png'), me_sns_link_path(:twitter), :class => 'btn btn-small' %>
-          </div>
-        <% end -%>
-        
-        <% if current_user.status["status"] == User::STATUS_OK -%>
-          <div class="alert alert-success user-status">
-            <span class="label">현재상태</span><span class="text good">링크를 올릴 수 있습니다.</span>
-          </div>
-        <% elsif current_user.status["status"] == User::STATUS_SUSPEND -%>
-          <div class="alert user-status">
-            <span class="label">현재상태</span><span class="text"><%= ((current_user.status["end"]-current_user.status["start"])/(3600*24)).to_i %>일간 링크 등록이 금지되었습니다.</span>
-          </div>
-        <% else -%>
-        <% end -%>
+      <% if current_user.twitter_token -%>
+        <div class="alert alert-success twitter">
+          <%= link_to image_tag('me/unlink.png'), "https://twitter.com/users/#{current_user.twitter_token.uid}" %>
+        </div>
+      <% else -%>
+        <div class="alert twitter">
+          <%= link_to image_tag('me/link.png'), me_sns_link_path(:twitter), :class => 'btn btn-small' %>
+        </div>
+      <% end -%>
+      
+      <% if current_user.status["status"] == User::STATUS_OK -%>
+        <div class="alert alert-success user-status">
+          <span class="label">현재상태</span><span class="text good">링크를 올릴 수 있습니다.</span>
+        </div>
+      <% elsif current_user.status["status"] == User::STATUS_SUSPEND -%>
+        <div class="alert user-status">
+          <span class="label">현재상태</span><span class="text"><%= ((current_user.status["end"]-current_user.status["start"])/(3600*24)).to_i %>일간 링크 등록이 금지되었습니다.</span>
+        </div>
+      <% else -%>
+      <% end -%>
     </div>
 
     <div class="grid_14 push_1">

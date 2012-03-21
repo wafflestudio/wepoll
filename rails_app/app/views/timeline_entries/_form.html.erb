@@ -1,5 +1,7 @@
 <%= form_for(@timeline_entry,:remote => true, :html =>{:class => 'link-form tm-entry-form'}) do |f| %>
 	<%= f.hidden_field :politician_id %>
+	<%= f.hidden_field :preview_id %>
+
   <div class="prefix_2 grid_8 alpha omega field">
     <div id="link-form-title"><%= current_user.nickname %>님이 <%= @politician.name %> 후보를</div>
     <div class="link-type"><%= f.radio_button 'is_good', 'true' %> 칭찬합니다.</div>
@@ -31,7 +33,7 @@
       <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
     </div>
 
-    <label class="grid_1 alpha" id="wepoll-logo-square">로고</label>
+    <div class="grid_1 alpha" id="wepoll-logo-square" style="margin-right:0"><%= image_tag current_user.profile_picture if !current_user.nil? %></div>
     <div class="grid_6"><%= f.text_area :title, :class => 'comment', :maxlength => 50 %></div>
     <div class="grid_1 omega" id="comment-length-indicator"><span id="timeline-entry-comment-length">00</span>/50</div>
   </div>
@@ -64,9 +66,10 @@
   </div>-->
 
   <div id="actions">
-    <button href="#" id="link-cancel" class="action" onclick="$.colorbox.close()">돌아가기</button>
-    <%= f.submit '등록하기', :id => 'link-post', :class => 'action' %>
+    <!--<button href="#" id="link-cancel" class="action" onclick="$.colorbox.close()">돌아가기</button>-->
+    <%= f.submit '덕담하기', :id => 'link-post', :class => 'action' %>
+    <%= f.submit '뒷담하기', :id => 'link-post', :class => 'action' %>
   </div>
 
-  <div class="note prefix_1 suffix_1 grid_8" id="post-warning">*타인의 명예를 훼손하거나 사생활을 침해하는 내용 등재 시 처벌의 대상이 될 수 있습니다.</div>
+  <!--<div class="note prefix_1 suffix_1 grid_8" id="post-warning">*타인의 명예를 훼손하거나 사생활을 침해하는 내용 등재 시 처벌의 대상이 될 수 있습니다.</div>-->
 <% end %>

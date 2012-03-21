@@ -35,10 +35,8 @@
 }
 
 #wepoll-logo-square {
-  width:48px;
-  height:48px;
-  background:url(/assets/logo_wepoll_square.gif) no-repeat;
-  text-indent:-999px;
+  width:51px;
+  height:51px;
 }
 
 textarea.comment {
@@ -121,7 +119,7 @@ div.field {
   border-radius:7px;
   -webkit-border-radius:7px;
   -moz-border-radius:7px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   padding:7px;
   margin-bottom:10px;
   width: 290px;
@@ -298,6 +296,7 @@ z-index:10;
 .tm-hg-holder {
 	position:absolute;
 	left:0px;
+	top:0px;
 }
 
 .tm-vgroup {
@@ -305,6 +304,7 @@ z-index:10;
 }
 
 .tm-bill-view {
+	color:red;
 	position:absolute;
 	width:200px;
 	top:175px;
@@ -503,7 +503,7 @@ z-index:3;
   -webkit-border-radius:5px;
   border-radius:5px;
   //TODO : change the URL
-  behavior:url(http://wepoll.dev/PIE.htc);
+  behavior:url(http://wepoll.or.kr/PIE.htc);
 }
 
 #link-comment-action {
@@ -520,7 +520,7 @@ z-index:3;
     border-radius:5px;
     -webkit-border-radius:5px;
     -moz-border-radius:5px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   }
 }
 
@@ -561,14 +561,15 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
   border-radius:6px;
   -webkit-border-radius:6px;
   -moz-border-radius:6px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
 }
 
 #link-reply-button {
+  cursor: pointer;
   border-radius:5px;
   -webkit-border-radius:5px;
   -moz-border-radius:5px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   border:0;
   background-color:#fede4d;
   padding:3px 5px;

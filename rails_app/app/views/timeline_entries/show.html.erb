@@ -47,7 +47,7 @@
           <div class="preview-image"></div>
           <div class="preview-text">
             <div class="preview-title"><a href="<%= @timeline_entry.url %>"></a></div>
-            <div class="preview-url"><%= link_to @timeline_entry.url[0..34] + "...", @timeline_entry.url %></div>
+            <div class="preview-url"><%= link_to @timeline_entry.url[0..34] + "...", @timeline_entry.url, :target => "_blank" %></div>
             <div class="preview-desc"></div>
           </div>
         </div>
@@ -59,7 +59,7 @@
 
       <div id="link-user" class="clearfix">
         <div style="color:#706d5d;font-size:8pt;">올린이</div>
-        <img src="<%=@timeline_entry.user ? @timeline_entry.user.profile_picture.url(:square50) : "/assets/anonymous.gif"%>" id="link-user-photo" />
+        <img src="<%=@timeline_entry.user ? @timeline_entry.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"%>" id="link-user-photo" />
         <div id="link-user-info">
           <span id="link-user-name"><%= @timeline_entry.user ? @timeline_entry.user.nickname : "정보없음" %></span><br />
           <span id="link-time-ago"><%= @timeline_entry.posted_ago? %></span>
@@ -73,13 +73,13 @@
           <% if user_signed_in? -%>
             <%= image_tag current_user.profile_picture.url(:square50), :id => "current-user-photo" %>
           <% else -%>
-            <%= image_tag '/assets/anonymous.gif', :id => "current-user-photo" %>
+            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif', :id => "current-user-photo" %>
           <% end -%>
 
           <% if user_signed_in? -%>
             <%= f.text_area :body, :maxlength => 140%>
           <% else -%>
-            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+            <%= link_to_function  f.text_area(:body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다."), 'show_login()' %>
           <% end -%>
         </div>
 

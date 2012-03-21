@@ -7,5 +7,5 @@ class Preview
   field :image_url, type: String
   field :created, type: String
 
-	index :url, unique: true
+  index :url, unique: true
 end

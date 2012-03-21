@@ -18,7 +18,8 @@ $(function() {
   $('#replies_wrapper.total').infinitescroll({
     navSelector: "#replies_paginator",
     nextSelector: "#replies_paginator a:first",
-    itemSelector: "#replies_wrapper div.reply_item"
+    itemSelector: "#replies_wrapper.total div.reply_item",
+    localMode: true
   });
 });
 </script>
@@ -30,21 +31,27 @@ $(function() {
       <%= image_tag @politician.profile_photo.url(:square160), :size => "120x120" %>
     </div>
     <div id="politician_info" class="grid_8 omega">
-      <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %>
+      <span id="district">지역구: <%= link_to @politician.district, district_politician_path(@politician), :id => "district_link" %></span>
       <h2><%= @politician.name %></h2>
       <h3>@<%= @politician.tweet_name %></h3>
-      <%= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+      <%#= link_to 'get tweets', get_tweet_path(@politician.tweet_name.to_s) unless @politician.tweet_name.nil? %>
+      <div id="follow_btn"><a href="https://twitter.com/<%= @politician.tweet_name %>" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @<%= @politician.tweet_name %></a></div>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></script></a>
     </div>
   </div>
 </div>
 
 <div id="tweets_wrapper" class="grid_12 alpha omega">
-  <%= render :partial => "tweet", :locals => {:t => @best, :c => "best"} unless @best.nil? %>
-  <%= render :partial => "tweet", :locals => {:t => @today_best, :c => "today_best"} unless @today_best.nil? %>
-  <div id="tweet_divider"></div>
-  <% @politician.tweets.desc('created_at').limit(50).each do |t| %>
-    <%= render :partial => "tweet", :locals => {:t => t, :c => ""} %>
-  <% end -%>
+  <%= render :partial => "tweet_class", :locals => {:t => @best, :c => "best"} unless @best.nil? %>
+  <%= render :partial => "tweet_class", :locals => {:t => @today_best, :c => "today_best"} unless @today_best.nil? %>
+  <div id="tweet_divider">&nbsp;</div>
+  <div id="tweets">
+    <%= render @tweets %>
+  </div>
+  <div class="loading-indicator">&nbsp;</div>
+  <div id="tweets_paginator">
+    <%= link_to_next_page @tweets, 'more', :param_name => "tweets_page", :remote => true %>
+  </div>
 </div>
 
 <%= content_for :sidebar do %>
@@ -60,6 +67,7 @@ $(function() {
       <%= text_area_tag 'tweet_reply[content]', nil, :id => "reply_text_box", :placeholder => "댓글을 입력해주세요." %>
       <%= hidden_field_tag :in_reply_to_status_id %>
       <%= submit_tag '등록', :id => "reply_submit_btn" %>
+      <div id="reply-loading-indicator">&nbsp;</div>
     <% end -%>
   </div>
   <% if @replies.empty? %>

@@ -5,6 +5,7 @@ require 'csv'
 class Politician #정치인 모델
   include Mongoid::Document
   include Mongoid::Paperclip
+  include Mongoid::MultiParameterAttributes
 
   #=== Mongoid fields ===
   # 기본정보
@@ -31,10 +32,12 @@ class Politician #정치인 모델
   field :good_link_count, type: Integer, default: 0
   field :bad_link_count, type: Integer, default: 0
 
+index :district
+
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
-    :styles => {:square100 => "100x100#", :square160 => "160x160#",
-    :default_url => "/public/anonymous_:style.gif"},
+    :styles => {:square100 => "100x100#", :square160 => "160x160#"},
+    :default_url => "/system/politician_profile_photos/anonymous_:style.gif",
     :url => "/system/politician_profile_photos/:id/:style.:extension",
     :path => Rails.root.to_s+"/public/system/politician_profile_photos/:id/:style.:extension"
 

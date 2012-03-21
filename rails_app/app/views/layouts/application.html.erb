@@ -4,14 +4,12 @@
     <meta charset="utf-8">
     <meta property="fb:app_id"      content="<%= FACEBOOK_CLIENT[:key] %>" />
     <meta property="og:title"       content="Wepoll" />
-    <meta property="og:image"       content="http://choco.wafflestudio.net:3082/btn_wepoll.png" />
+    <meta property="og:image"       content="http://wikipolitics.co.kr/btn_wepoll.png" />
     <meta property="og:description" content="선거문화를 바꾸는 위폴!" />
     <meta property="og:type"        content="website" />
-    <iframe src="http://www.facebook.com/plugins/like.php?href=<%= request.url.encode("utf-8") %>
-      &amp;layout=button_count&amp;show_faces=false&amp;send=false&amp;width=450&amp;action=like&amp;colorscheme=light" scrolling="no" frameborder="0" allowTransparency="true"
-      style="border:none; overflow:hidden; width:450px; height:60px;"></iframe>
-    <iframe id="faba7650" name="f1d0df1fc4" scrolling="no" style="border-width: initial; border-color: initial; overflow-x: hidden; overflow-y: hidden; width: 450px; border-width: initial; border-color: initial; height: 29px; border-top-style: none; border-right-style: none; border-bottom-style: none; border-left-style: none; border-width: initial; border-color: initial; border-image: initial; " title="Like this content on Facebook." class="fb_ltr" src="https://www.facebook.com/plugins/like.php?api_key=113869198637480&amp;channel_url=https%3A%2F%2Fs-static.ak.fbcdn.net%2Fconnect%2Fxd_proxy.php%23cb%3Df13ff157f4%26origin%3Dhttps%253A%252F%252Fdevelopers.facebook.com%252Ff3c99da6f4%26relation%3Dparent.parent%26transport%3Dpostmessage&amp;extended_social_context=false&amp;href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Freference%2Fplugins%2Flike%2F%3Fref%3Dpb&amp;layout=standard&amp;locale=ko_KR&amp;node_type=link&amp;sdk=joey&amp;send=true&amp;show_faces=true&amp;width=450"></iframe>
-
+    <meta property="og:url"         content="<%= request.url %>" />
+    <link rel="icon" type="image/gif"
+          href="/btn_wepoll.ico" rel="shortcut icon"/>
     <title>Wepoll</title>
     <%= csrf_meta_tags %>
 
@@ -52,6 +50,9 @@
         return false;
       }
 
+      function show_login() {
+        $.colorbox({href:'/users/sign_in', width: 520, height: 250});
+      }
       function show_notices() {
         $.colorbox({href:"<%= notices_path %>",width:800,height:600});
       }
@@ -63,9 +64,6 @@
       }
       function show_privacy() {
         $.colorbox({href:"/privacy",width:800,height:600});
-      }
-      function show_suggestion() {
-        $.colorbox({href:"<%= new_suggestion_path %>",width:430,height:600});
       }
       function loop_notice(i,count) {
         $list.eq(i).fadeOut(1800,"swing",function() {
@@ -89,44 +87,26 @@
         
         $("input#query").placeholder();
         //notification bars
-            if(search_source) {
-              var search_result = false;
-              $("input#query").autocomplete({
-              source: search_source,
-              delay: 50,
-              minLength: 2,
-              select: function(event, ui) {
+        $("input#query").autocomplete({
+            source: function(req, source) {
+                query = $("#query").val();
+                $.getJSON("/search?json=" + query, function(json) {
+                   source(json);
+                });
+            },
+            delay: 50,
+            minLength: 2,
+            select: function(event, ui) {
                 $("#query_hidden").val(ui.item.query);
                 $("#query_type").val(ui.item.type);
                 $("#query").val(ui.item.form);
                 search_result = true;
                 return false;
-              },
-              search: function(event, ui) {
-//              var html = "<style type='text/css'>
-//                * html div#division { 
-//                height: expression( this.scrollHeight > 332 ? "333px" : "auto" ); /* sets max-height for IE */
-//                }
-//                div#division {
-//                max-height: 333px; /* sets max-height value for all standards-compliant browsers */
-//                }
-//                </style>";
-//             $(".ui-autocomplte").html(html);
+            },
+            search: function(event, ui) {
                 $(".ui-autocomplete").css({"maxHeight":"600px","overflowY":"scroll","overflowX":"hidden"});
-              },
-              autoFocus: true,
-              close: function(event, ui) {
-              if(!search_result) {
-                $("#query_hidden").val("");
-                $("#query_type").val("");
-                search_result = false;
-              }
-              },
-              focus: function(event, ui) {
-                search_result = true;
-                return false;
-             }}); 
-          }
+            },
+            focus: function() {return false;}}); 
 
         <% [:notice, :error, :alert].each do |level| %>
           <% unless flash[level].blank? %>
@@ -144,12 +124,19 @@
     <!-- Le styles -->
     <%= stylesheet_link_tag    "application", :media => "all" %>
 
+<% if !flash[:search_error].to_s.empty? %>
+  <style type="text/css">
+    #query::-webkit-input-placeholder { color:#f00; }
+    #query:-moz-placeholder { color:#f00; }
+  </style>
+<% end %>
 
     <!-- Le fav and touch icons -->
     <!--    <link href="images/favicon.ico" rel="shortcut icon">-->
     <!--    <link href="images/apple-touch-icon.png" rel="apple-touch-icon">-->
     <!--    <link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">-->
     <!--    <link href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">-->
+    <%= render :partial => '/ga' %>
   </head>
   <body>
     <div id="fb-root"></div>
@@ -157,7 +144,7 @@
     <script>
       FB.init({
         appId      : '<%= FACEBOOK_CLIENT[:key]%>', // App ID
-        channelUrl : '//wepoll.dev/channel.html', // Channel File
+        channelUrl : '//wepoll.or.kr/channel.html', // Channel File
         status     : true, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
@@ -176,7 +163,6 @@
           <div id="header" class="clearfix">
             <div id="logo-wrapper" class="prefix_1 grid_3">
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
-              <%#= link_to "타임라인 바로가기", timeline_entries_path %>
             </div>
 
             <div id="search-bar-wrapper" class="prefix_1 grid_5" style="z-index: 2000">
@@ -195,7 +181,7 @@
               <a href="/"><h1 class="grid_3 alpha omega">logo here</h1></a>
             </div>
 
-            <div id="search-bar-wrapper-small" class="grid_5">
+            <div id="search-bar-wrapper-small" class="grid_5" style="z-index: 2000">
               <%= form_tag "/search", :id => "main-search-bar" do |f| %>
                 <%= hidden_field_tag :search_pass, "true" %>
                 <%= text_field_tag :query,"", :placeholder => flash[:search].nil? ? "정치인, 동 이름을 입력하세요" : flash[:search], :autocomplete => "off" %>
@@ -206,7 +192,6 @@
             </div>
           </div>
           <% end -%>
-
 
           <div class="grid_12 alpha omega">
             <%= yield %>

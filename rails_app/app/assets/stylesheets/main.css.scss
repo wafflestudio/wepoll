@@ -112,6 +112,9 @@
   position:absolute;
   top: 0;
   z-index: 500;
+  text {
+    cursor: pointer;
+  }
 }
 
 #line-canvas {
@@ -155,12 +158,17 @@
   border-radius:10px;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
-behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
+behavior:url(http://wepoll.or.kr/PIE.htc);
   -o-border-radius:10px;
   padding-bottom:20px;
   margin-bottom:40px;
   max-height:150px;
   overflow-y:scroll;
+
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  -o-text-overow: ellipsis;
+  -moz-binding:url(js/ellipsis.xml#ellipsis);
 }
 
 .link-excerpt {
@@ -196,6 +204,12 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
     a {
       color:black;
       text-decoration:none;
+    white-space:pre-wrap;
+    white-space:-moz-pre-wrap;
+    white-space:-pre-wrap;
+    white-space:-o-pre-wrap;
+    word-wrap:break-word;
+      
     }
 
     a.link-excerpt-politician-name {
@@ -309,13 +323,13 @@ behavior:url(http://choco.wafflestudio.net:4010/PIE.htc);
 .good_links {
   margin-bottom:5px;
   .links-bar-label {
-    color:#f1366f;
+    color:#60cbfa;
   }
 }
 
 .bad_links {
   .links-bar-label {
-    color:#606366;
+    color:#4a4a4a;
   }
 }
 

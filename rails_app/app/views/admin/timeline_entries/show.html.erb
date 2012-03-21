@@ -1,0 +1,52 @@
+<div class="top-bar">
+  <h1>타임라인 링크 보기</h1>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr><th colspan="2">링크정보</th></tr>
+    <tr>
+      <td><strong>URL</strong></td>
+      <td><%= link_to @timeline_entry.url, @timeline_entry.url, :target => '_blank' %></td>
+    </tr>
+    <tr>
+      <td><strong>코멘트</strong></td>
+      <td><%= @timeline_entry.title %></td>
+    </tr>
+    <tr>
+      <td><strong>칭찬?</strong></td>
+      <td><%= @timeline_entry.is_good %></td>
+    </tr>
+    <tr>
+      <td><strong>링크날짜</strong></td>
+      <td><%= @timeline_entry.posted_at.strftime("%Y-%m-%d") %></td>
+    </tr>
+    <tr>
+      <td><strong>공감수</strong></td>
+      <td><%= @timeline_entry.like_count %></td>
+    </tr>
+    <tr>
+      <td><strong>신고수</strong></td>
+      <td><%= @timeline_entry.blame_count %></td>
+    </tr>
+    <tr>
+      <td><strong>태그들</strong></td>
+      <td><%= @timeline_entry.tags.join(",") %></td>
+    </tr>
+  </table>
+</div>
+
+<div class="table">
+  <table class="listing form" cellpadding="0" cellspacing="0">
+    <tr><th colspan="2">미리보기정보</th></tr>
+
+    <tr><td colspan="2">구현해야</td></tr>
+  </table>
+</div>
+
+
+<div class="actions">
+  <%= link_to '목록' , admin_timeline_entries_path, :class => 'action list' %> | 
+  <%= link_to '삭제' , admin_timeline_entry_path(@timeline_entry), :method => 'delete', :confirm => '정말 삭제하시겠습니까?', :class => 'action destroy' %>
+</div>
+

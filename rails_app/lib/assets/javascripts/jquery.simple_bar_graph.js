@@ -1,4 +1,16 @@
 (function($) {
+	$.fn.changeValue = function(opts) {
+		this.each(function() {
+			var $this = $(this);
+			if (parseFloat($this.attr("data-value")) == parseFloat(val))
+				return false;
+			else {
+				opts.total;
+				opts.value;
+			}
+		});
+	}
+
 	$.fn.simpleBarGraph = function(prop) {
 		var options=$.extend({
 			height:10,

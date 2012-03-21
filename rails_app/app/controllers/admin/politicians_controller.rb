@@ -1,3 +1,4 @@
+#coding: utf-8
 require 'yaml'
 class Admin::PoliticiansController < Admin::AdminController
   #XXX : for just debugging or external test connection
@@ -49,6 +50,7 @@ class Admin::PoliticiansController < Admin::AdminController
   end
 
   def update
+    params[:politician][:district] = "" if params[:politician][:district] == "없음"
     params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
     params[:politician][:promises] = YAML::load params[:promises]
     #XXX : elections가 확정적이 되면 이 필드는 필요없다
@@ -63,7 +65,13 @@ class Admin::PoliticiansController < Admin::AdminController
   end
 
   def create
+    params[:politician][:district] = "" if params[:politician][:district] == "없음"
+    params[:politician][:elections] = params[:politician][:elections].split(",").map {|e| e.to_i}
+    params[:politician][:promises] = YAML::load params[:promises]
+    #XXX : elections가 확정적이 되면 이 필드는 필요없다
+    params[:politician][:election_count] = params[:politician][:elections].count
     @politician = Politician.new(params[:politician])
+
     if @politician.save
       redirect_to admin_politician_path(@politician)
     else
@@ -89,8 +97,12 @@ class Admin::PoliticiansController < Admin::AdminController
 
   def upload_photo
     tmp_file_name = (0...8).map{ ('a'..'z').to_a[rand(26)] }.join + "_" + Time.now.to_i.to_s
-    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
-    FileUtils.copy(Paperclip::Thumbnail.new(params[:data], :geometry => params[:geometry]).make, Rails.root + "public/" + "#{tmp_file_name}_thumb")
-    render :text => {:file_name => tmp_file_name, :thumb_url => "/#{tmp_file_name}_thumb"}.to_json
+    #convert
+    Rails.logger.info %x[convert #{params[:data].path} -format jpg #{Rails.root + "public/#{tmp_file_name}.jpg"}]
+#    FileUtils.copy(params[:data].path, Rails.root + "public/" + tmp_file_name)
+    FileUtils.copy(Paperclip::Thumbnail.new(File.open(Rails.root + "public/#{tmp_file_name}.jpg"), :geometry => params[:geometry], :format => 'jpg').make, Rails.root + "public/" + "#{tmp_file_name}_thumb.jpg")
+File.open(Rails.root+"public/#{tmp_file_name}.jpg").chmod 0555
+File.open(Rails.root+"public/#{tmp_file_name}_thumb.jpg").chmod 0555
+    render :text => {:file_name => tmp_file_name+".jpg", :thumb_url => "/#{tmp_file_name}_thumb.jpg"}.to_json
   end
 end

@@ -5,6 +5,8 @@ class TimelineEntry
   include Mongoid::MultiParameterAttributes
   include Mongoid::Paperclip
 
+	attr_accessor :preview
+
 	validates_associated :user
 	validates_presence_of :url,:posted_at
 
@@ -47,10 +49,15 @@ class TimelineEntry
   belongs_to :politician
 
   #댓글들
-  has_many :link_replies, :inverse_of => :timeline_entry
+  has_many :link_replies, :inverse_of => :timeline_entry, :dependent => :destroy
 
   has_and_belongs_to_many :like_users, :class_name => "User", :inverse_of => :like_timeline_entries
   has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_timeline_entries
+
+	# url cache
+	belongs_to :preview
+
+  before_destroy :adjust_link_count_of_politician
 
   def like(user)
     if self.like_users.include? user
@@ -99,4 +106,7 @@ class TimelineEntry
     link_replies.count - 3
   end
 
+  def adjust_link_count_of_politician
+    self.politician.inc (self.is_good ? :good_link_count : :bad_link_count), -1
+  end
 end

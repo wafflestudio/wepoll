@@ -9,7 +9,7 @@
         <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
       <% else %>
         <% unless politician.is_18? %>
-          <div class="not_18" style="margin-top:80px;height:110px;">18대 국회의원이 아닙니다.</div>
+          <div class="not_18" style="margin-top:80px;height:110px;">자료를 준비 중입니다.</div>
         <% end %>
       <% end -%>
     </div>
@@ -24,7 +24,7 @@
       <% if politician.is_18? %>
         <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
       <% else %>
-        <div class="not_18" style="margin-top:90px;height:108px">18대 국회의원이 아닙니다.</div>
+        <div class="not_18" style="margin-top:90px;height:108px">자료를 준비 중입니다.</div>
       <% end -%>
     </div>
 
@@ -39,7 +39,7 @@
         <% if politician.is_18? %>
           <%= politician.attendance%>%
         <% else %>
-          <div class="not_18" style="margin-top:-15px;">18대 국회의원이 아닙니다.</div>
+          <div class="not_18" style="margin-top:-15px;">자료를 준비 중입니다.</div>
         <% end -%>
       </div>
     </div>

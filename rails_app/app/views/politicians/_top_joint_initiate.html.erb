@@ -4,7 +4,7 @@
   <% count += 1 %>
   <div class="joint-politician<%= (i==0 || i==2)?" alpha":(i==1 ||i==3)?" omega":""%>">
     <% p = Politician.where(:_id => tmp[0]).first -%>
-    <% if p && p.profile_photo? -%>
+    <% if p%>
       <% if p.candidate -%>
         <%= link_to image_tag(p.profile_photo.url(:square100)), district_politician_path(p.id) %>
       <% else -%>

@@ -1,27 +1,31 @@
-<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%= timeline_entry.url%>">
+<div class="link_entries link-entry-<%= timeline_entry.id%>" data-id="<%=timeline_entry.id %>" data-url="<%=raw timeline_entry.url%>">
   <div class="link_header clearfix">
-    <%= image_tag timeline_entry.user.profile_picture, :class => "link_profile_img", :style => "width:40px;" %>
+    <%= image_tag (timeline_entry.user ? timeline_entry.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :class => "link_profile_img", :style => "width:40px;" %>
     <div class="link_profile_info"> 
-      <p class="name"><%= timeline_entry.user.nickname %></p>
+      <p class="name"><%= timeline_entry.user.nickname unless timeline_entry.user.nil? %></p>
       <p class="time"><%= timeline_entry.posted_ago? %></p>
     </div>
-    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;" %>
+
+    <%= image_tag (timeline_entry.is_good ? "good_point.gif" : "bad_point.gif"), :style => "float: right;", :title => timeline_entry.politician.name  + (timeline_entry.is_good ? "을 칭찬하는 링크" : "을 지적하는 링크"), :class => "tooltip-top2" %>
+    <% if timeline_entry.user == current_user -%>
+      <%= link_to image_tag('/assets/admin/hr.gif'), timeline_entry_path(timeline_entry), :remote => true, :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "timeline_entry_destroy_btn" %>
+    <% end -%>
   </div>
   <div class="link_contents">
     <p>
     <%= timeline_entry.title %>
     </p>
     <div class="preview-wrap clearfix">
-      <div class="preview-image"></div>
+      <div class="preview-image"><img src='<%= (timeline_entry.preview and timeline_entry.preview.image_url and timeline_entry.preview.image_url.length>0) ? timeline_entry.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
       <div class="preview-text">
-        <div class="preview-title"><a href="<%= timeline_entry.url %>" target="_blank"></a></div>
-        <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url %></div>
-        <div class="preview-desc"></div>
+		<div class="preview-title"><a target="_blank" href="<%= raw timeline_entry.url %>"><%= timeline_entry.preview.title if timeline_entry.preview %></a></div>
+        <div class="preview-url"><%= link_to timeline_entry.url[0..34] + "...", timeline_entry.url, :target => "_blank" %></div>
+        <div class="preview-desc"><%= (s=timeline_entry.preview.description;s.length > 120 ? s[0...117]+"...": s) if timeline_entry.preview %></div>
       </div>
     </div>
   </div>
   <div class="link_footer clearfix">
-    <div class="button">
+    <div class="button blame_button">
       <p><%= link_to "신고 <span class='timeline-blame-count-#{timeline_entry.id}'>#{timeline_entry.blame_count}</span>".html_safe, blame_timeline_entry_path(timeline_entry), :remote => true %></p>
     </div>
     <div class="button">
@@ -35,10 +39,13 @@
       </div>
     <% end %>
     <% timeline_entry.link_replies.reverse[0..2].reverse.each do |r| %>
-      <div class="link_replies clearfix">
-        <%= image_tag r.user.profile_picture, :style => "width: 40px; float: left; margin-right: 10px;" %>
+      <div class="link_replies clearfix <%= r.id %>">
+        <% if r.user == current_user -%>
+          <%= link_to image_tag('/assets/admin/hr.gif'), link_reply_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "link_reply_destroy_btn" %>
+        <% end -%>
+        <%= image_tag (r.user ? r.user.profile_picture : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "width: 40px; float: left; margin-right: 10px;" %>
         <div class="link_replies_body">
-          <p class="name"><%= r.user.nickname %> <span class="date"><%= r.posted_ago? %></span></p>
+          <p class="name"><%= (r.user ? r.user.nickname : "") %> <span class="date"><%= r.posted_ago? %></span></p>
           <p><%= r.body %></p>
         </div>
       </div>
@@ -52,13 +59,13 @@
           <% if user_signed_in? -%>
             <%= image_tag current_user.profile_picture %>
           <% else -%>
-            <%= image_tag '/assets/anonymous.gif'%>
+            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
           <% end -%>
 
           <% if user_signed_in? -%>
             <%= f.text_area :body, :id => "", :maxlength => 140, :placeholder => "댓글을 입력하세요."%>
           <% else -%>
-            <%= f.text_area :body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다." %>
+              <%= link_to_function f.text_area(:body, :disabled => true, :placeholder => "로그인하면 댓글을 남길 수 있습니다."), 'show_login()' %>
           <% end -%>
         </div>
 
@@ -72,3 +79,7 @@
     </div>
   </div>
 </div>
+<script type="text/javascript">
+$('.tooltip-top2').qtip()
+console.log('loaded')
+</script>
