@@ -227,7 +227,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		else
 			this.textel = r.text(x-20, y, worldmap.names[this.id]).attr({'font-size':15})
 			this.textel.click ()=>
-				$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+				$(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[this.id])
 
 		if parseInt(coordinates[2]) == 0
 			end_x = 635
@@ -364,7 +364,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 		sector_id = this.id
 		if (!vs_cache[sector_id])
-			$.getJSON "/district/"+worldmap.names[this.id], (data) ->
+			$.getJSON "/district/"+encodeURIComponent(worldmap.names[this.id]),{utf8:"✓"}, (data) ->
 				vs_cache[sector_id] = data
 				console.log(vs_cache.length)
 				console.log(vs_cache[sector_id])
@@ -431,7 +431,7 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 
 	
 	click = (e) ->
-		$(location).attr 'href',"/district/#{worldmap.names[this.id]}"
+		$(location).attr 'href',"/district/"+encodeURIComponent(worldmap.names[this.id])
 
 	r.setStart()
 
