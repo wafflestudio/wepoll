@@ -1,4 +1,8 @@
 <div id="aboutus">
+  <div style="position:absolute;top:0px;right:0px;">
+  <a class="tooltip-facebook" title="위폴 페이스북 페이지 바로가기" href="http://www.facebook.com/wepoll"style="display:block"><img src="/facebook2.png" alt="페이스북 페이지"/></a>
+  </div>
+
 <h2>WEPOLL?</h2>
 <p>
 후보가 누군지 모르고 투표장에 가신 적 없나요?<br>
@@ -38,7 +42,10 @@
   <span class="by">designed by</span>  <span class="who">디자인 칠</span>
 </div>
 
-<input type="checkbox" onchange="hideToday()" />오늘하루보지않기
+<p><input type="checkbox" onchange="hideToday()" />오늘하루보지않기</p>
 
 </div>
 </div>
+<script type="text/javascript">
+    $(".tooltip-facebook").qtip({position:{my:'bottom center',at:'top center'},style:{classes:'ui-tooltip-dark'}})
+</script>
