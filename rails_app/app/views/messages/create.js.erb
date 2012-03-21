@@ -1,0 +1,15 @@
+<% if @parent_message.nil? -%>
+  <% if @success -%>
+    $('#messages_area').prepend('<%= escape_javascript(render @message) %>');
+    $('#message_body').val("");
+  <% else -%>
+    alert("한마디 작성에 실패했습니다.")
+  <% end -%>
+<% else -%>
+  <% if @success -%>
+    $('.message-entry-<%=@parent_message.id%> .message_reply_input').before('<%= escape_javascript(render :partial => "message_reply", :locals => {:message => @message}) %>');
+    $('.message-entry-<%=@parent_message.id%> .message_reply_write').val("");
+  <% else -%>
+    alert("댓글 작성에 실패했습니다.")
+  <% end -%>
+<% end -%>

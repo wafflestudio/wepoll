@@ -32,7 +32,7 @@ class Message
     context
   end
 
-  def more_link?
+  def more_message?
     if replies.count > 3
       return true
     else
@@ -40,7 +40,7 @@ class Message
     end
   end
 
-  def more_link
+  def more_message
     replies.count - 3
   end
 end

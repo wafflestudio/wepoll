@@ -3,6 +3,11 @@ class MessagesController < ApplicationController
 
 	before_filter :authenticate_user!, :except => [:index, :new, :show]
 
+  def list
+    @entry = Message.find(params[:message_id])
+    @replies = @entry.replies[0...@entry.replies.count - 3]
+  end
+
 	def index
 		@messages = Message.all
 
@@ -16,6 +21,7 @@ class MessagesController < ApplicationController
 	def create
 		@message = Message.new(params[:message])
 		@message.user_id = current_user.id
+    @success = false
 
 	
 		if params[:parent_message_id] != nil
@@ -23,16 +29,10 @@ class MessagesController < ApplicationController
 			@parent_message.replies << @message
 			@message.parent_message = @parent_message
 		end
-		result = {}
 		if @message.save
-			 result[:result] = 'success'
-			 result[:message] = @message
+      @success = true
 		else
-			 result[:result] = 'fail'
-		end
-		
-		respond_to do |format|
-			format.json {render json: result.to_json}
+      @success = false
 		end
 	end
 

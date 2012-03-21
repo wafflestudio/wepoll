@@ -1,101 +1,96 @@
-<div class="link_entries link-entry-<%= message.id%>" data-id="<%=message.id %>" data-url="<%=raw message.preview.url if message.preview != nil %>">
-  <div class="link_header clearfix">
-    <%= image_tag (message.user ? message.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :class => "link_profile_img", :style => "width:40px;" %>
-    <div class="link_profile_info"> 
-      <p class="name"><%= message.user.nickname unless message.user.nil? %></p>
-      <p class="time"><%= message.posted_ago? %></p>
-      <p class="politician"><%= message.politician.name %>의원님에게 </p>
-    </div>
+<div class="message_entries message-entry-<%= message.id%> grid_7 alpha omega <%= @p1 == message.politician ? "left" : "right" %>" data-id="<%=message.id %>" data-url="<%=raw message.preview.url if message.preview != nil %>">
+  <%= image_tag (message.user ? message.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :class => "message_profile_img", :size => "40x40" %>
+  <p class="name"><%= message.user.nickname unless message.user.nil? %></p>
+  <p class="time"><%= message.posted_ago? %></p>
+  <p class="politician"><%= message.politician.name %>후보에게 </p>
+  <% if message.user == current_user -%>
+    <%#= link_to image_tag('/assets/admin/hr.gif'), message_path(message), :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "message_destroy_btn" %>
+  <% end -%>
+  <p> <%= message.body %> </p>
 
-    <% if message.user == current_user -%>
-      <%#= link_to image_tag('/assets/admin/hr.gif'), message_path(message), :method => 'delete', :confirm => '삭제하시겠습니까?', :class => "message_destroy_btn" %>
-    <% end -%>
-  </div>
-  <div class="link_contents">
-    <p>
-    <%= message.body %>
-    </p>
-    <% if message.preview != nil %>
+  <% if message.preview != nil %>
     <div class="preview-wrap clearfix">
-      <div class="preview-image"><img src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
+      <div class="preview-image"><img src='<%= (message.preview and mesage.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
       <div class="preview-text">
-				<div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
+        <div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
         <div class="preview-url"><%= link_to message.preview.url[0..34] + "...", message.preview.url, :target => "_blank" %></div>
         <div class="preview-desc"><%= (s=message.preview.description;s.length > 120 ? s[0...117]+"...": s) if message.preview %></div>
       </div>
     </div>
-    <% end %>
-  </div>
-  <div class="link_reply">
-    <% if message.more_link? %>
-      <div class="link_more">
-        <%= link_to "> #{message.more_link}개의 댓글 더 보기", message_list_path(message, :format => :js), :remote => true %>
+  <% end %>
+
+  <div class="message_reply grid_6 alpha omega prefix_1">
+    <% if message.more_message? %>
+      <div class="message_more">
+        <%= link_to "> #{message.more_message}개의 댓글 더 보기", message_list_path(message), :remote => true, :class => "grid_7 alpha omega", :style => "float: left;"%>
       </div>
     <% end %>
+
     <% message.replies.reverse[0..2].reverse.each do |r| %>
-      <div class="link_replies clearfix <%= r.id %>">
+      <div class="message_replies clearfix <%= r.id %> grid_6 alpha omega">
         <% if r.user == current_user -%>
-          <%= link_to image_tag('/assets/admin/hr.gif'), message_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "link_reply_destroy_btn" %>
+          <%= link_to image_tag('/assets/admin/hr.gif'), message_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "message_reply_destroy_btn" %>
         <% end -%>
-        <%= image_tag (r.user ? r.user.profile_picture : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "width: 40px; float: left; margin-right: 10px;" %>
-        <div class="link_replies_body">
+        <%= image_tag (r.user ? r.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "float: left; margin-right: 10px;", :size => "40x40" %>
+        <div class="message_replies_body">
           <p class="name"><%= (r.user ? r.user.nickname : "") %> <span class="date"><%= r.posted_ago? %></span></p>
           <% if r.preview != nil %>
-						<div class="preview-wrap clearfix">
-							<div class="preview-image"><img src='<%= (r.preview and r.preview.image_url and r.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
-							<div class="preview-text">
-								<div class="preview-title"><a target="_blank" href="<%= raw r.preview.url if r.preview != nil%>"><%= r.preview.title if r.preview %></a></div>
-								<div class="preview-url"><%= link_to r.preview.url[0..34] + "...", r.preview.url, :target => "_blank" %></div>
-								<div class="preview-desc"><%= (s=r.preview.description;s.length > 120 ? s[0...117]+"...": s) if r.preview %></div>
-							</div>
-						</div>
-					<% end %>
+            <div class="preview-wrap clearfix">
+              <div class="preview-image"><img src='<%= (r.preview and r.preview.image_url and r.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
+              <div class="preview-text">
+                <div class="preview-title"><a target="_blank" href="<%= raw r.preview.url if r.preview != nil%>"><%= r.preview.title if r.preview %></a></div>
+                <div class="preview-url"><%= link_to r.preview.url[0..34] + "...", r.preview.url, :target => "_blank" %></div>
+                <div class="preview-desc"><%= (s=r.preview.description;s.length > 120 ? s[0...117]+"...": s) if r.preview %></div>
+              </div>
+            </div>
+          <% end %>
           <p><%= r.body %></p>
         </div>
       </div>
     <% end %>
-    <div class="link_reply_input clearfix">
-			<form accept-charset="UTF-8" action="/messages" class="new_message" data-remote="true" id="new_message_<%=message.id.to_s%>" method="post">
-				<div style="margin:0;padding:0;display:inline">
-					<input name="utf8" type="hidden" value="✓">
-					<input name="authenticity_token" type="hidden" value="4jEYDr9zpnQ9KDdKCut7jdg9/THK5PxITKnQZzGRZYI=">
-				</div>     
-					<%= hidden_field_tag 'parent_message_id', message.id.to_s %>
-					<input id="message_preview_id_<%=message.id.to_s%>" name="message[preview_id]" type="hidden">
+      
+    <div class="message_reply_input alpha omega grid_6 clearfix">
+      <form accept-charset="UTF-8" action="/messages" class="new_message" data-remote="true" id="new_message_<%=message.id.to_s%>" method="post">
+        <div style="margin:0;padding:0;display:inline">
+          <input name="utf8" type="hidden" value="✓">
+          <input name="authenticity_token" type="hidden" value="4jEYDr9zpnQ9KDdKCut7jdg9/THK5PxITKnQZzGRZYI=">
+        </div>     
+        <%= hidden_field_tag 'parent_message_id', message.id.to_s %>
+        <input id="message_preview_id_<%=message.id.to_s%>" name="message[preview_id]" type="hidden">
 
-					<div class="clearfix">
-						<% if user_signed_in? -%>
-							<%= image_tag current_user.profile_picture %>
-						<% else -%>
-							<%= image_tag '/system/user_profile_pictures/anonymous_square50.gif'%>
-						<% end -%>
+        <div class="clearfix">
+          <% if user_signed_in? -%>
+            <%= image_tag current_user.profile_picture.url(:square50), :size => "40x40" %>
+          <% else -%>
+            <%= image_tag '/system/user_profile_pictures/anonymous_square50.gif', :size => "40x40" %>
+          <% end -%>
 
-						<% if user_signed_in? -%>
-							<textarea class="message_reply_write" cols="40" id="message_reply_write_<%=message.id.to_s%>" maxlength="140" name="message[body]" placeholder="댓글을 입력하세요." rows="20"></textarea>
-						<% else -%>
-								<a href="#" onclick="show_login(); return false;"><textarea cols="40" disabled="disabled" id="message_body" name="message[body]" placeholder="로그인하면 댓글을 남길 수 있습니다." rows="20"></textarea></a>
-						<% end -%>
-					</div>
-					<div class="clearfix">
-						<div id="link-form-preview_<%=message.id%>" class="alpha omega field preview-wrap clearfix">
-							<div id="link-form-preview-img_<%=message.id%>" class="preview-image"></div>
-							<div id="link-form-preview-txt_<%=message.id%>" class="preview-desc"></div>
-						</div>
-					</div>
+          <% if user_signed_in? -%>
+            <textarea class="message_reply_write" cols="47" id="message_reply_write_<%=message.id.to_s%>" maxlength="140" name="message[body]" placeholder="댓글을 입력하세요." rows="5"></textarea>
+          <% else -%>
+            <a href="#" onclick="show_login(); return false;"><textarea cols="40" disabled="disabled" id="message_body" name="message[body]" placeholder="로그인하면 댓글을 남길 수 있습니다." rows="20"></textarea></a>
+          <% end -%>
+        </div>
+        <div class="clearfix">
+          <div id="message-form-preview_<%=message.id%>" class="alpha omega field preview-wrap clearfix">
+            <div id="message-form-preview-img_<%=message.id%>" class="preview-image"></div>
+            <div id="message-form-preview-txt_<%=message.id%>" class="preview-desc"></div>
+          </div>
+        </div>
 
-				<div style="float: right; margin-right:10px;">
-					<div id="comment-length">
-					<span class="current-comment-length">0</span>/250자
-					<input class="link-reply-button" name="commit" type="submit" value="등록" onclick="message_reply_submit('<%=message.id.to_s%>'); return false;">
-					</div>
-				</div>
-			</form>
+        <div style="float: right; margin-right:10px;">
+          <div id="comment-length">
+            <span class="current-comment-length">0</span>/250자
+            <input class="message-reply-button" name="commit" type="submit" value="등록" onclick="message_reply_submit('<%=message.id.to_s%>'); return false;">
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 <script type="text/javascript">
 $('.tooltip-top2').qtip()
-$(document).ready(function(){
+$(function(){
 	var loaded_url = '';
 	$('.message_reply_write').keyup(function(event) {
 		//console.log('key up event called!' + event.keyCode);
@@ -121,15 +116,6 @@ function message_reply_submit(id) {
 			type: "POST",
 			url: "/messages",
 			data: data_string,
-			dataType: 'json',
-			success: function(data) {
-				if (data.result == 'success') {
-						//id가지고 찾아서 댓글에 붙이면 됨..
-						
-				} else {
-
-				}
-			}
 		});
 }
 
@@ -138,13 +124,13 @@ function loadUrl(url, id)  {
 		function(data)  { 
 			$('#message_preview_id_'+id).val(data.id)
 			if(data.image)  {
-				$('#link-form-preview-img_'+id).html("<img class='grid_1' src='" + data.image + "'/>");
-				$('#link-form-preview-txt_'+id).removeClass('prefix_1');
+				$('#message-form-preview-img_'+id).html("<img class='grid_1' src='" + data.image + "'/>");
+				$('#message-form-preview-txt_'+id).removeClass('prefix_1');
 			}
 			else
-				$('#link-form-preview-txt_'+id).addClass('prefix_1');
+				$('#message-form-preview-txt_'+id).addClass('prefix_1');
 
-			$('#link-form-preview-txt_'+id).html(data.title +  ' <br /> ' +data.description);
+			$('#message-form-preview-txt_'+id).html(data.title +  ' <br /> ' +data.description);
 		} 
 	}); 
 };

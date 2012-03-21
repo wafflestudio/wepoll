@@ -1,33 +1,35 @@
-<div class="write_message alpha">
-	<%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
-	<%= f.hidden_field :politician_id %>
-	<%= f.hidden_field :preview_id %>
+<div class="write_message grid_10 alpha omega">
+  <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
+    <%= f.hidden_field :politician_id %>
+    <%= f.hidden_field :preview_id %>
 
-	<%= select_tag "message[politician_id]", options_for_select([[@p1.name, @p1.id], [@p2.name, @p2.id]]) %>
+    <%= select_tag "message[politician_id]", options_for_select([[@p1.name, @p1.id], [@p2.name, @p2.id]]) %>
+    <%= f.label :body, '후보에게 한마디 하기' %>
+    <div class="clear"></div>
 
-  <div class="prefix_1 grid_8 suffix_1 alpha omega field">
-    <label class="grid_1 alpha">코멘트</label>
-    <div class="grid_7 omega">
-      <div id="reply_check" class="timeline_new">
-        <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
-        <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
+    <div class="grid_10 alpha omega field">
+      <div class="grid_10 alpha omega">
+        <div id="reply_check" class="timeline_new">
+          <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
+          <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
+          <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
+        </div>
       </div>
-      <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
-    </div>
 
-    <div class="grid_1 alpha" id="wepoll-logo-square" style="margin-right:0"><%= image_tag current_user.profile_picture if !current_user.nil? %></div>
-    <div class="grid_6"><%= f.text_area :body, :class => 'comment', :maxlength => 250 %></div>
-    <div class="grid_1 omega" id="comment-length-indicator"><span id="message-body-length">00</span>/250</div>
-  	<div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
-  		<div id="link-form-preview-img" class="grid_1 alpha"></div>
-  		<div id="link-form-preview-txt" class="grid_5 omega note"></div>
-  	</div>
-  	<%= f.submit '한마디 등록' %>
-  </div>
-	<% end %>
+      <div class="grid_1 alpha" id="wepoll-logo-square" style="margin-right:0"><%= image_tag current_user.profile_picture.url(:square50), :size => "40x40" if !current_user.nil? %></div>
+      <div class="grid_8"><%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %></div>
+      <div class="grid_1 omega" id="comment-length-indicator"><span id="message-body-length">00</span>/250</div>
+      <div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
+        <div id="link-form-preview-img" class="grid_1 alpha"></div>
+        <div id="link-form-preview-txt" class="grid_5 omega note"></div>
+      </div>
+      <%= f.submit '한마디 등록', :id => "message_submit_btn" %>
+    </div>
+  <% end %>
 </div>
+
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(function(){
 		var loaded_url = '';
 		$('#message_body').keyup(function(event) {
 				var str = $('#message_body').val();
@@ -57,15 +59,6 @@
 			type: "POST",
 			url: "/messages",
 			data: data_string,
-			dataType: 'json',
-			success: function(data) {
-				if (data.result == 'success') {
-					//message 라인에 붙이면 될듯..
-						
-				} else {
-
-				}
-			}
 		});
 		return false;
 	});
@@ -87,4 +80,26 @@
 			} 
 		}); 
 	};
+$(function() {
+  $('span.checkbox').addClass("unchecked");
+  $(".checkbox").click(function(){
+    if($(this).children("input").attr("checked")){
+      // uncheck
+      $(this).children("input").removeAttr("checked");
+      $(this).removeClass("checked");
+      $(this).addClass("unchecked");
+    }else{
+      // check
+      $(this).children("input").attr({checked: "checked"});
+      $(this).removeClass("unchecked");
+      $(this).addClass("checked");
+    }
+  });
+  $('#replies_wrapper.total').infinitescroll({
+    navSelector: "#replies_paginator",
+    nextSelector: "#replies_paginator a:first",
+    itemSelector: "#replies_wrapper.total div.reply_item",
+    localMode: true
+  });
+});
 </script>

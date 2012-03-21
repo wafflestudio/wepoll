@@ -299,7 +299,7 @@ $(document).ready( function() {
   </div>
 
   <!-- tab 시작 -->
-  <div id="tab-wrapper">
+  <div id="tab-wrapper" class="clearfix">
     <div id="tabs" class="clearfix">
       <%= link_to '최신링크',
         recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
@@ -317,10 +317,29 @@ $(document).ready( function() {
     <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
     </div> <!-- end of tab conainer -->
   </div>
-	<div class="write_message_area">
+
+	<div class="write_message_area grid_11 alpha omega">
 			<%= render :partial => 'message_form' %>
 	</div>
-	<div id="messages_area">
-			<%= render :partial => 'messages' %>
+	<div id="messages_area" class="grid_11 alpha omega">
+    <%= render @messages %>
 	</div>
 </div>
+<script type="text/javascript">
+  $(".link_reply_input").keyup(function() {
+    var $this = $(this);
+    var max = 250;
+    var len = 0;
+    var $textarea = $("textarea", $this);
+    var len = $textarea.val().length;
+    if (len > max) {
+      $textarea.val($textarea.val().substr(0, max));
+      len = $textarea.val().length;
+    }
+    $this.find(".current-comment-length").text(len);
+
+    $this.children(".link-reply-button").click(function() {
+      return true;
+    });
+  });
+</script>
