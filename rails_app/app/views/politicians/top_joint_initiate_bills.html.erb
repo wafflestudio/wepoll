@@ -1,0 +1,24 @@
+<% count = 0 %>
+<div class="joint-politicians clearfix">
+<% @top_joint_initiate_bill_politicians.each_with_index do |tmp, i| -%>
+  <% count += 1 %>
+  <div class="joint-politician<%= (i==0 || i==2)?" alpha":(i==1 ||i==3)?" omega":""%>">
+    <% p = Politician.where(:_id => tmp[0]).first -%>
+    <% if p%>
+      <% if p.candidate -%>
+        <%= link_to image_tag(p.profile_photo.url(:square100)), district_politician_path(p.id), :title => "#{tmp[1]}개의 법안을 함께 제출했습니다." %>
+      <% else -%>
+        <%= image_tag(p.profile_photo.url(:square100), :title => "#{tmp[1]}개의 법안을 함께 제출했습니다." )%>
+      <% end -%>
+    <% else -%>
+      <%= image_tag("/system/politician_profile_photos/anonymous_square100.gif", :title => "#{tmp[1]}개의 법안을 함께 제출했습니다." )%>
+    <% end -%>
+
+    <div class="joint-info"><%= p.nil? ? tmp[0] : p.name  %>
+    <%= "#{(tmp[1].to_f/@bill_count*100.0).round}%" %></div>
+  </div>
+<% end -%>
+<% if @top_joint_initiate_bill_politicians.empty? -%>
+  함께 발의한 의원 정보가 없습니다.
+<% end -%>
+</div>

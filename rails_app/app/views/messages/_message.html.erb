@@ -10,7 +10,7 @@
   <p class="time"><%= message.posted_ago? %></p>
   <% if message.preview != nil %>
     <div class="preview-wrap clearfix">
-      <div class="preview-image"><img src='<%= (message.preview and mesage.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
+      <div class="preview-image"><img src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
       <div class="preview-text">
         <div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
         <div class="preview-url"><%= link_to message.preview.url[0..34] + "...", message.preview.url, :target => "_blank" %></div>
@@ -106,7 +106,7 @@ $(function(){
 			var regex = /\b([\d\w\.\/\+\-\?\:]*)((ht|f)tp(s|)\:\/\/|[\d\d\d|\d\d]\.[\d\d\d|\d\d]\.|www\.|\.tv|\.ac|\.com|\.edu|\.gov|\.int|\.mil|\.net|\.org|\.biz|\.info|\.name|\.pro|\.museum|\.co)([\d\w\.\/\%\+\-\=\&amp;\?\:\\\&quot;\'\,\|\~\;]*)\b/gi;
 			var url = str.match(regex);
 			if (url != null && loaded_url != url) {
-				loadUrl(url, message_id);
+				loadUrlReply(url, message_id);
 				loaded_url = url;
 			}  
 		}
@@ -124,7 +124,7 @@ function message_reply_submit(id) {
 		});
 }
 
-function loadUrl(url, id)  {
+function loadUrlReply(url, id)  {
 	$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 		function(data)  { 
 			$('#message_preview_id_'+id).val(data.id)
