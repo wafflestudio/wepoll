@@ -28,6 +28,7 @@ Wepoll::Application.routes.draw do
     resources 'politicians' do
       get 'search', :as => 'search', :on => :collection
       post 'upload_photo', :as => 'upload_photo', :on => :collection
+      get 'crawl_init_bills', :as => 'crawl_initiate_bill', :on => :member
     end
     resources 'bills' do
       get 'search', :as => 'search', :on => :collection
@@ -89,6 +90,8 @@ Wepoll::Application.routes.draw do
 
   resources :politicians do
     get 'initiate_bills', :on => :member, :as => :init_bills_by
+    get 'initiate_bills_summary',:on => :member, :as => :init_bills_summary_of
+    get 'top_joint_initiate_bills',:on => :member, :as => :top_joint_initiate_bills_of
     get 'bill_activities', :on => :collection, :as => :bill_activities_of
 
     get 'popular_links', :on => :member, :as => :popular_links_of

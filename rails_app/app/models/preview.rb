@@ -8,4 +8,7 @@ class Preview
   field :created, type: String
 
   index :url, unique: true
+
+
+  has_many :messages
 end

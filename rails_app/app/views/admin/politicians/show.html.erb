@@ -32,6 +32,7 @@
 </div>
 
 <div class="actions">
+  <%= link_to '대표법안생성' , crawl_initiate_bill_admin_politician_path(@politician), :class => 'action list', :confirm => '법안을 조회하고 데이터베이스에 집어넣기까지 오랜시간이 걸립니다. 계속 하시겠습니까?' %> | 
   <%= link_to '목록' , admin_politicians_path, :class => 'action list' %> | 
   <%= link_to '수정' , edit_admin_politician_path(@politician), :class => 'action edit' %> | 
   <%= link_to '삭제' , admin_politician_path(@politician), :method => 'delete', :confirm => '정말 삭제하시겠습니까?', :class => 'action destroy' %>

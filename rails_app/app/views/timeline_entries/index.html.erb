@@ -111,7 +111,7 @@ function activateTimelineFormPreview(onload,onerror)  {
 
 function activateTimelineEntryForm() {
 	activateTimelineFormPreview(function successful(data){
-		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '유효한 링크입니다.');
+		$('.preview-status').attr("src", "/assets/good.gif").attr('title', '링크가 확인되었습니다.');
 		$('#link-post').removeAttr('disabled');
 		$('#timeline_entry_preview_id').val(data.id)
 		$('#link-form-badlink').hide();
@@ -142,10 +142,11 @@ function activateTimelineEntryForm() {
 		$('#link-form-preview-txt').html(data.title);
 
 	},function failed(){
-		var msg = $("#timeline_entry_tag_text").val().length > 0 ? '유효하지 않은 링크입니다.' : '링크를 입력하세요.';
-
-		$('.preview-status').attr("src", "/assets/bad.gif").attr('title',msg);
-		$('#link-post').attr('disabled','disabled');
+		var msg = $(".input-link").val().length > 0 ? '미리보기가 제공되지 않는 링크입니다.' : '링크를 입력하세요.';
+    $('#timeline_entry_preview_id').val("nil")
+		$('.preview-status').removeAttr("src").attr('title',msg);
+// 유효하지 않은 링크가 있어도 등록할 수 있도록
+//		$('#link-post').attr('disabled','disabled');
 		$('#link-form-badlink').show().html(msg);
 		$('#link-form-preview-img').empty();
 		$('#link-form-preview-txt').empty();
