@@ -674,16 +674,16 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     }
   }
 }
+.reply_check {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .write_message_area {
   width: 680px !important;
   padding: 10px;
   margin-top: 10px;
   background-color: #E6E6DC;
 
-  #reply_check {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
   .comment {
     width: 470px;
   }
@@ -705,7 +705,7 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   background-color: #E6E6DC;
 
   .message_entries {
-    padding: 10px;
+    padding: 20px;
     margin: 5px;
     background-color: white;
     border-radius: 10px;
@@ -713,16 +713,27 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     -moz-border-radius: 10px;
     behavior:url(http://wepoll.or.kr/PIE.htc);
 
-    &.left {
-      float: left;
-    }
-    &.right {
-      float: right;
-    }
 
+    p {
+      margin: 5px;
+    }
     .message_profile_img {
       float: left;
       margin-right: 8px;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .politician {
+      text-decoration: underline;
+    }
+    .message_body {
+      display: inline-block;
+      width: 500px;
+
+    }
+    .time {
+      padding-left: 45px;
     }
 
     .message_reply {

@@ -1,5 +1,5 @@
 <% @replies.each do |r| %>
-  <div class="message_replies clearfix <%= r.id %>">
+  <div class="message_replies clearfix <%= r.id %> grid_8 alpha omega">
     <% if r.user == current_user -%>
       <%= link_to image_tag('/assets/admin/hr.gif'), message_path(r), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "message_reply_destroy_btn" %>
     <% end -%>

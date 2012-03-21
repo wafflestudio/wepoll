@@ -30,6 +30,13 @@ class MessagesController < ApplicationController
 			@message.parent_message = @parent_message
 		end
 		if @message.save
+      @politician = @message.politician
+      if params[:message][:tweet]
+        @tweet = tweet_after_create
+      end
+      if params[:message][:facebook]
+        @facebook = post_after_create
+      end
       @success = true
 		else
       @success = false
@@ -63,7 +70,7 @@ protected
       end
 
       begin
-        Twitter.update(params[:message][:body]+" http://wepoll.or.kr"+message_path(@message.id)+" \nhttp://wepoll.or.kr 에서 등록")
+        Twitter.update(params[:message][:body]+" http://wepoll.or.kr"+district_politician_path(@message.politician)+" \nhttp://wepoll.or.kr 에서 등록")
         true
       rescue Twitter::Error => e
         Rails.logger.info "Twitter tweet error"
@@ -86,7 +93,7 @@ protected
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
         Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
-        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+message_path(@message.id), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"에게 메세지를 등록하셨습니다." )
+        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+district_politician_path(@message.politicia), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"에게 메세지를 등록하셨습니다." )
         true
       rescue StandardError => e
         Rails.logger.info e.message
