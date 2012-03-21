@@ -40,6 +40,9 @@ class Politician #정치인 모델
   field :bad_link_count, type: Integer, default: 0
 
   index :district
+  index :name
+  index :party
+  index :candidate
 
   #=== Mongoid attach ===
   has_mongoid_attached_file :profile_photo,
