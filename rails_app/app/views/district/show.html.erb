@@ -293,7 +293,7 @@ $(document).ready( function() {
   </div>
 
   <div id="district-candidates" class="clearfix">
-    <div style="margin-bottom:10px;"><%= @district%>의 후보들</div>
+    <div style="margin-bottom:10px;"><%= @district%>의 후보들을 비교해보세요</div>
     <% @politicians.each do |politician|
       #next if politician.id == @p1.id || politician.id == @p2.id -%>
       <div class="district-candidate">
