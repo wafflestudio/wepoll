@@ -14,8 +14,8 @@ layout false, :only => [:provision, :privacy]
 #    Rails.logger.info "======================"
     json = params[:json].to_s
     if !json.empty?
-      list = [];
-      list += Politician.where(candidate: true).select {|p| p.name.match(json) }.map { |p| JSON.parse({form: p.name, query: p.id, type: "1", label: "#{p.name}(#{p.party})"}.to_json)}
+      list = Politician.find(:all, :conditions => {"$and" => [{:candidate => true},{"$or" => [{:name => /#{json}/}, {:party => /#{json}/}]}]}).map {|p| {form: p.name, query: p.id, type: "1", label: "#{p.name}(#{p.party})"}}
+
       render :json => list
     else
       type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
