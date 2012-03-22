@@ -293,9 +293,9 @@ $(document).ready( function() {
   </div>
 
   <div id="district-candidates" class="clearfix">
-    <div style="margin-bottom:10px;"><%= @district%>의 다른 후보들</div>
+    <div style="margin-bottom:10px;"><%= @district%>의 후보들</div>
     <% @politicians.each do |politician|
-      next if politician.id == @p1.id || politician.id == @p2.id -%>
+      #next if politician.id == @p1.id || politician.id == @p2.id -%>
       <div class="district-candidate">
         <a href="javascript:void(0)" class="district-candidate-button clearfix" title="<%= politician.name %>" style="cursor:default">
           <%= image_tag politician.profile_photo.url(:square100), :class=>"candidate-photo" %>
@@ -303,6 +303,7 @@ $(document).ready( function() {
             <span class="party" style="color:<%=@party_color[politician.party] || "black" %>"><%= politician.party %></span>
             <span class="name" style="font-weight:bold"><%=politician.name %></span>
           </div>
+          <div class="candidate-checkbox-wrap"><span><input type="checkbox" class="candidate-checkbox" name="selected-candidates" value="<%=politician.id%>"/></span></div>
         </a>
         <div class="candidate-dropdown">
           <a href="/district/<%=@district%>/<%=politician.id%>/<%=@p2.id%>"><p class='dropdown-item'><span class="target"><%=  politician.name %></span> <span class="vs">VS</span> <%=@p2.name%></p></a>
@@ -311,6 +312,59 @@ $(document).ready( function() {
       </div>
     <% end -%>
   </div>
+  <script type="text/javascript">
+
+    // activate user friendly UI on candidate list
+    $(document).ready(function(){
+
+      function enter(event){
+        $(event.currentTarget).addClass('hover')
+      }
+
+      function leave(event){
+        $(event.currentTarget).removeClass('hover')
+      }
+
+      // initially check/uncheck candidate list
+      $(".candidate-checkbox").each(function(index,checkbox) {
+        if($(checkbox).val() == '<%=@p1.id%>' || $(checkbox).val() =='<%=@p2.id%>')
+          $(checkbox).attr('checked', 'checked')
+        else
+          $(checkbox).removeAttr('checked')
+      })
+
+
+      $(".candidate-checkbox").click(function() {
+        var theCheckbox = this;
+        var numSelected = 0;
+        $(".candidate-checkbox").each(function(index,checkbox){
+          if($(checkbox).attr('checked'))
+            numSelected ++;
+        })
+
+        if(numSelected > 2)  {
+          $(".candidate-checkbox").each(function(index,checkbox){
+            if(checkbox != theCheckbox)
+              $(checkbox).removeAttr('checked')
+          })
+        }
+        else if(numSelected == 2)  {
+          var checked = []
+          $(".candidate-checkbox").each(function(index,checkbox){
+            if($(checkbox).attr('checked'))
+              checked.push($(checkbox).val())
+          })
+
+          window.location = "/district/" + encodeURIComponent("<%=@district%>") + "/" + checked[0] + "/" + checked[1]
+        }
+
+
+      })
+
+      $(".district-candidate-button").hover(enter,leave)
+
+    })
+  </script>
 
   <div id="name-cards" class="clearfix">
     <% [@p1, @p2].each_with_index do |politician,i| -%>
