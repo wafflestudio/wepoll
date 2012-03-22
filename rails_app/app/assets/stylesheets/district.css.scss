@@ -62,8 +62,18 @@
       .party { font-size:9pt; display:block; margin-bottom:3px; }
       .name { font-size:12pt; display:block; }
     }
+    .candidate-checkbox-wrap {
+      float:left;
+      margin-top:10px;
+      margin-right:5px;
+      width:12pt;
+      height:12pt;
+    }
 
   }
+
+
+
   .candidate-dropdown {
     background-color:white;
     position:absolute;
@@ -100,7 +110,9 @@
 
 }
 
-
+.hover{
+  background-color:#e9e8e8;
+}
 
 
 .namecard {
