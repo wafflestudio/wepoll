@@ -1,4 +1,6 @@
 /* application wide */
+html, body { height:100%;}
+
 body {
   font-family: AppleGothic, Dotum, 돋움, sans-serif;
   font-size:9pt;
@@ -25,9 +27,15 @@ input {
   height:26px;
 }
 
+#wrap {
+  min-height:100%;
+}
+
 #container {
  // background-color:#d3d3d3;
 //  padding-top:30px;
+   overflow:auto;
+   padding-bottom:30px;
 }
 
 
@@ -36,6 +44,9 @@ footer {
   height:30px;
   font-size:9pt;
   text-align:right;
+  position:relative;
+  clear:both;
+  margin-top:-30px;
 }
 #footer-links {
   margin-top:10px;
