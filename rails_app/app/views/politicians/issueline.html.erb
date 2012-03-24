@@ -1,0 +1,17 @@
+<div id="">
+  <%
+     issueName = ""
+  %>
+  <% @bills.each do |bill| %>
+    <% if bill.issue != issueName  %>
+      <h1><%=  bill.issue %></h1>
+      <% issueName = bill.issue %>
+    <% end %>
+    <p><%= bill.title %></p>
+    <p>
+      <% bill.supporters.each do |supporter| %>
+        <%= supporter.party %>
+      <% end %>  
+    </p>
+  <% end %>
+</div>

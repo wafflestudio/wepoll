@@ -1,6 +1,8 @@
 #coding:utf-8
 class PoliticiansController < ApplicationController
+
   before_filter :prepare_politicians, :except => [:initiate_bills, :popular_links, :recent_links]
+
   def initiate_bills
     @age = params[:age].to_i
     @politician = Politician.find(params[:id])
@@ -53,12 +55,19 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
+  def votes_for_issues_tab
+    numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
+    @bills = Bill.where(:number.in => numbers)
+    render :layout => false, :file => 'politicians/issueline'
+  end
+
   def recent_links
     @link = LinkReply.new 
     @p = Politician.find(params[:id])
     @entries = @p.timeline_entries.desc("created_at").page(params[:page]).per(3)
     render :layout => false
   end
+
 
   def popular_links
     @link = LinkReply.new 
@@ -89,6 +98,8 @@ class PoliticiansController < ApplicationController
     Rails.logger.info @bill_categories.to_json
     render :layout => false
   end
+
+
 
   def top_joint_initiate_bills
     @politician = Politician.find(params[:id])

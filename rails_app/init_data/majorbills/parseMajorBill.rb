@@ -73,7 +73,8 @@ for i in 0..(numBills-1) do
     debug = true
   end
   bills[table["의안 번호"][i].strip] = 	
-  {:favored => parseMembers(table["찬성"][i]),
+  {:issue => table["이슈"][i],
+   :favored => parseMembers(table["찬성"][i]),
    :opposed => parseMembers(table["반대"][i]),
    :resigned => parseMembers(table["기권"][i]),
    :didntvote => parseMembers(table["표결에 불참"][i]),
@@ -84,7 +85,6 @@ for i in 0..(numBills-1) do
 end
 
 
-puts bills["1814644"]
 
 def process_samename_politicians!(party, names)
   if names.include? "김선동"
@@ -120,6 +120,8 @@ bills.each do |number,bill|
   b.dissenters = []
   b.attendees = []
   b.absentees = []
+  b.issue = bill[:issue]
+  b.save
 
   if bill[:favored]
     bill[:favored].each do |party,names|
