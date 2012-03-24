@@ -95,9 +95,8 @@
                   return matcher.test(item.label);
                });
                 query = req.term;
-		console.log(query);
-		console.log(encodeURIComponent(query));
                 $.getJSON("/search?json=" + encodeURIComponent(query), function(json) {
+                   console.log(encodeURIComponent(query));
                    source(json.concat(a));
                 });
             },
