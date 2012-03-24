@@ -472,7 +472,7 @@ class ApiController < ApplicationController
 				else 
 					result[:image] = ''
 				end
-				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '').gsub(/[^\d-: ]/, '')
+				result[:created_at] = doc.xpath('//td[@align="right"]').text.gsub(/\r\n/, '').gsub(/  /, '').gsub(/\t/, '').gsub(/[^\d\-: ]/, '')
 			elsif target_link.match('www\.etnews\.com') #전자신문
 				doc = Nokogiri::HTML(open(target_link))
 				result[:title] = get_og_title doc

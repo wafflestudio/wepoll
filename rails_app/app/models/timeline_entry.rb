@@ -8,7 +8,8 @@ class TimelineEntry
 	attr_accessor :preview
 
 	validates_associated :user
-	validates_presence_of :url,:posted_at
+  # no longer mandatory
+	#validates_presence_of :url,:posted_at
 
   #=== Mongoid fields ===
   field :comment, type: String

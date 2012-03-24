@@ -18,7 +18,7 @@
   <% end -%>
 
   <div class="politician-photo-wrapper <%=index==0?"left":"right"%>">
-    <%= image_tag (politician ? politician.profile_photo.url(:square160) : "/system/politician_profile_photos/anonymous_square160.gif"), :class => "photo" %>
+    <%= image_tag politician && politician.profile_photo? ? politician.profile_photo.url(:square160) : "http://placehoold.it/160", :class => "photo" %>
     <div class="photo-frame"></div>
   </div>
 

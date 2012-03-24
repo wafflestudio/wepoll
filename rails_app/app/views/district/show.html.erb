@@ -1,6 +1,31 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
     var politician_selected_1 = [];
+    var attendances = {"<%=@p1.id%>":[<%= @p1.attendance.join(",") %>], "<%=@p2.id%>":[<%=@p2.attendance.join(",")%>]};
+
+    function load_bill_activities(pol_id, age, t) {
+      if ($(t).hasClass("selected")) return;
+
+      var $old = $("#age-selector-"+pol_id+" .age-select.selected");
+      $old.text(parseInt($old.text()));
+
+      $("#age-selector-" + pol_id+" .age-select").removeClass("selected");
+      $(t).addClass("selected");
+      $(t).text($(t).text() + "대 국회");
+
+      $("#init-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+      $("#joint-initiate-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+
+      $("#init-bills-"+pol_id).load("/politicians/"+pol_id+"/initiate_bills_summary?age="+age);
+      $("#joint-initiate-"+pol_id).load("/politicians/"+pol_id+"/top_joint_initiate_bills?age="+age);
+      var att = attendances[pol_id][age];
+      if (att)
+        att = att +"%";
+      else
+        att = '<span style="font-size:12pt">정보없음</span>';
+
+      $("#attendance-"+pol_id).html(att);
+    }
 
     function law_title_click($elem, id) {
       //show box
@@ -120,6 +145,7 @@ $(document).ready( function() {
 </script>
 
 <%= render :file => 'timeline_entries/index' %>
+<%#=  render :partial => 'timeline_entries/timeline' %>
 <!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
 <div class="grid_12" id="vs-content-wrapper" style="margin-bottom: 40px;">

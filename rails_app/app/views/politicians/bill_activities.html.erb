@@ -10,8 +10,8 @@
     <div class="subsection <%= i==0? "left":"right"%>">
       <div id="age-selector-<%=politician.id%>" class="bills-age-selector clearfix <%= i==0? "left":"right"%>">
         <% politician.elections.sort.each do |age| -%>
-            <% next if age < 16  -%>
-            <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, (event.srcElement ? event.srcElement:event.target))", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
+          <% next if age < 16  -%>
+          <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, (event.srcElement ? event.srcElement:event.target))", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
         <% end -%>
       </div>
     </div>

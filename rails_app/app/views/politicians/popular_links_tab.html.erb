@@ -1,3 +1,17 @@
+<script type="text/javascript">
+  charLimit();
+  function loadUrl(url, parentDiv)  {
+    $.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
+        function(data)  { 
+        console.warn(data)
+        $(".preview-title a", parentDiv).html(data.title);
+        $(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "[이미지없음]" );
+        $(".preview-desc", parentDiv).html(data.description);
+        } 
+        }); 
+  };
+</script>
+
 <div class="politician-popular-links">
   <div class="politician-popular-links-item clearfix">
     <% @politicians.each_with_index do |politician, i| -%>
@@ -26,4 +40,3 @@
     <% end -%>
   </div>
 </div>
-

@@ -18,6 +18,7 @@ class DistrictController < ApplicationController
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
         @message = Message.new
      		@messages = Message.where(:politician_id.in => [@p1.id, @p2.id]).desc("created_at").page(params[:page]).per(10)
+        @bills = Bill.limit(20)
       end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
     end
@@ -29,8 +30,8 @@ class DistrictController < ApplicationController
     @timeline_entry = TimelineEntry.find(params[:timeline_entry_id])
     @p1 = @timeline_entry.politician
     @p2 = Politician.where(:district => @p1.district).reject {|p| p.id == @p1.id}.first
-    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
-    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories
+    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories((params[:age]||18).to_i)
+    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories((params[:age]||18).to_i)
 
     @p1_bill_counts = p1_bill_categories.map {|c,n| n}
     @p1_bill_categories = p1_bill_categories.map {|c,n| c}
@@ -106,8 +107,8 @@ class DistrictController < ApplicationController
     end
     redirect_to district_politician_path(:politician_id => @p1.id) if @p1 == @p2
 
-    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories
-    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories
+    p1_bill_categories = @p1.nil? ? [] : @p1.initiate_bills_categories((params[:age] || 18).to_i)
+    p2_bill_categories = @p2.nil? ? [] : @p2.initiate_bills_categories((params[:age] || 18).to_i)
 
     @p1_bill_counts = p1_bill_categories.map {|c,n| n}
     @p1_bill_categories = p1_bill_categories.map {|c,n| c}
