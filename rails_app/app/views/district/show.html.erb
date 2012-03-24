@@ -104,9 +104,9 @@
 <% end -%>
 <script type="text/javascript">
   /// tooltip
-$(document).ready( function() {
-  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
-  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+$(document).ready(function() {
+  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}});
+  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}});
 
   $('.district-candidate').each( function(index, element) {
     var dropdown;
@@ -114,17 +114,18 @@ $(document).ready( function() {
     $(element).mouseenter(function() {
       dropdown = $(element).children(".candidate-dropdown")
       var pos = $(element).position();
-      var w = $(element).outerWidth()
-      var h = $(element).outerHeight()
+      var w = $(element).outerWidth();
+      var h = $(element).outerHeight();
       dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
       //dropdown.show()
 
-    })
+    });
     $(element).mouseleave(function() {
       if(dropdown)  {
-        dropdown.hide()
+        dropdown.hide();
       }
-    )
+    });
+  });
 });
 </script>
 
@@ -178,7 +179,7 @@ $(document).ready( function() {
 
   <div id="messages">
     <%= render :partial => 'message_form' %>
-    <div id="messages_area" class="grid_11 alpha omega">
+    <div id="messages_area">
       <%= render @messages %>
     </div>
   </div>

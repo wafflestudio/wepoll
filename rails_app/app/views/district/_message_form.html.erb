@@ -1,4 +1,4 @@
-<div class="write-message-area grid_11 alpha omega">
+<div class="write-message-area">
   <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
     <%= f.hidden_field :politician_id %>
     <%= f.hidden_field :preview_id %>
@@ -10,9 +10,11 @@
       </div>
       <div id="politicians-box">
         <% @politicians.each do |p| -%>
-          <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)) %>
-          <%= f.radio_button :politician_id, p.id %>
-          <%= f.label 'politician_id_'+p.id.to_s, p.name %>
+          <div class="radio-politician">
+            <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)), :class => "img-label clearfix" %>
+            <%= f.radio_button :politician_id, p.id %>
+            <%= f.label 'politician_id_'+p.id.to_s, p.name, :class => "txt-label" %>
+          </div>
         <% end -%>
       </div>
     </div>
@@ -20,11 +22,12 @@
     <div id="message-body-container">
       <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %>
       <div id="message-length-indicator"><span id="message-body-length">00</span>/250</div>
-      <div id="message-form-preview">
-        <div id="message-form-preview-right">
-          <div id="message-form-preview-title"></div>
-          <div id="message-form-preview-link"></div>
-          <div id="message-form-preview-txt" class="note"></div>
+      <div id="message-form-preview" class="preview">
+        <img class="preview-img" src="" />
+        <div id="message-form-preview-right" class="preview-right">
+          <div id="message-form-preview-title" class="preview-title"></div>
+          <div id="message-form-preview-link" class="preview-link"></div>
+          <div id="message-form-preview-txt" class="preview-txt"></div>
         </div>
       </div>
     </div>
@@ -79,9 +82,10 @@
 			function(data)  { 
 				$('#message_preview_id').val(data.id)
 				if(data.image)
-					$('#message-form-preview').prepend("<img id='message-form-preview-img' src='" + data.image + "'/>");
+					$('#message-form-preview img.preview-img').attr('src', data.image);
 
         $('#message-form-preview-title').html(data.title);
+        $('#message-form-preview-link').html(data.url);
 				$('#message-form-preview-txt').html(data.description);
 				$('#message-body-container .comment').css('border-bottom','none');
         $('#message-form-preview').css('display', 'block');
