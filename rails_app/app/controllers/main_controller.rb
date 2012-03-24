@@ -9,9 +9,9 @@ layout false, :only => [:provision, :privacy]
   end
 
   def search
-#    Rails.logger.info "======================"
-#    Rails.logger.info params.inspect
-#    Rails.logger.info "======================"
+    Rails.logger.info "======================"
+    Rails.logger.info params.inspect
+    Rails.logger.info "======================"
     json = params[:json].to_s
     if !json.empty?
       list = Politician.find(:all, :conditions => {"$and" => [{:candidate => true},{"$or" => [{:name => /#{json}/}, {:party => /#{json}/}]}]}).map {|p| {form: p.name, query: p.id, type: "1", label: "#{p.name}(#{p.party})"}}
@@ -42,9 +42,16 @@ layout false, :only => [:provision, :privacy]
           redirect_to district_politician_path(@politician._id)
         end
       else
+	#find with subquery
+	@pol = Politician.where(:name => /#{params[:query]}/).first
+Rails.logger.info "#{@pol.name}"
+	if @pol
+          redirect_to district_politician_path(@pol._id)
+	else
         flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
         flash[:search_error] = "true"
         redirect_to back
+	end
       end
     end
   end

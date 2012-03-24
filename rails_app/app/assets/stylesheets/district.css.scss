@@ -367,12 +367,12 @@ a.init-bills-link {
   float: left;
   width: 355 - 20px;
   margin-bottom: 8px;
-  .link_entries {
+  .message_entries {
     width: 345 - 10px;
     background-color: #fff;
     @include border-radius(7px);
     margin-bottom: 10px;
-    .link_header {
+    .message_header {
       border-bottom: 1px solid #bebebe;
       padding: 10px;
       .timeline_entry_destroy_btn {
@@ -381,15 +381,15 @@ a.init-bills-link {
       }
       .name { font-size: 14px; font-weight: bold; margin-bottom: 8px; margin-top: 3px; }
       .time { font-size: 12px; color: gray; }
-      .link_profile_img {
+      .message_profile_img {
         float: left;
         margin-right: 8px;
       }
-      .link_profile_info {
+      .message_profile_info {
         float: left;
       }
     }
-    .link_contents {
+    .message_contents {
       padding: 10px;
       margin: 5px 0;
       p {
@@ -398,7 +398,7 @@ a.init-bills-link {
       }
 
   }
-  .link_footer {
+  .message_footer {
     padding: 5px;
     .button {
       float: right;
@@ -421,13 +421,13 @@ a.init-bills-link {
     }
     .blame_button { background-color: #bfbfbf; }
   }
-  .link_reply { 
+  .message_reply { 
     padding: 5px;
-    .link_replies, .link_reply_input, .link_more {
+    .message_replies, .message_reply_input, .message_more {
       background-color: #e9e8e8;
       padding: 7px 5px;
     }
-    .link_more {
+    .message_more {
       border-bottom: 1px solid #d0d0e0;
       a {
         color: #4895d8;
@@ -438,12 +438,12 @@ a.init-bills-link {
         text-decoration: underline;
       }
     }
-    .link_replies {
+    .message_replies {
       margin-bottom: 3px;
-      .link_reply_destroy_btn {
+      .message_reply_destroy_btn {
         float: right;
       }
-      .link_replies_body {
+      .message_replies_body {
         float: left;
         font-size: 11px;
         .name { font-weight: bold; }
@@ -455,7 +455,7 @@ a.init-bills-link {
         }
       }
     }
-    .link_reply_input {
+    .message_reply_input {
 padding-right: 0;
       img {
         width:36px;
@@ -471,7 +471,7 @@ textarea {
   border:1px solid #aaa;
   float:left;
 }
-.link-reply-button {
+.message-reply-button {
   border-radius:5px;
   -webkit-border-radius:5px;
   -moz-border-radius:5px;
@@ -629,44 +629,124 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   display:none;
 }
 
-      .preview-wrap {
-        background-color: #f6f7f8;
-        .preview-image {
-          width: 91px;
-          float: left;
-          margin-right: 6px;
-          img {
-            width: 90px;
-          }
-        }
-        .preview-text {
-          font-size: 11px;
-          float: left;
-          padding: 5px;
-          width: 200px;
-          .preview-title {
-            margin-bottom: 5px;
-            a {
-              color: #23408b;
-              font-weight: bold;
-              text-decoration: none;
-           }
-           a:hover {
-            text-decoration: underline;
-          }
-          }
-          .preview-url, .preview-desc {
-            color: #8d7f7b;
-          }
-          .preview-url {
-            margin-bottom: 12px;
-            a {
-              color: #8d7f7b;
-              text-decoration: none;
-            }
-            a:hover {
-              text-decoration: underline;
-            }
-          }
+.preview-wrap {
+  background-color: #f6f7f8;
+
+  .preview-image {
+    width: 91px;
+    float: left;
+    margin-right: 6px;
+    img {
+      width: 90px;
+    }
+  }
+
+  .preview-text {
+    font-size: 11px;
+    float: left;
+    padding: 5px;
+    width: 200px;
+
+    .preview-title {
+      margin-bottom: 5px;
+
+      a {
+        color: #23408b;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+    .preview-url, .preview-desc {
+      color: #8d7f7b;
+    }
+    .preview-url {
+      margin-bottom: 12px;
+      a {
+        color: #8d7f7b;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+.reply_check {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.write_message_area {
+  width: 680px !important;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #E6E6DC;
+
+  .comment {
+    width: 470px;
+  }
+  #message_submit_btn {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: white;
+    border: none;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    behavior:url(http://wepoll.or.kr/PIE.htc);
+  }
+}
+#messages_area {
+  width: 680px !important;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #E6E6DC;
+
+  .message_entries {
+    padding: 20px;
+    margin: 5px;
+    background-color: white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    behavior:url(http://wepoll.or.kr/PIE.htc);
+
+
+    p {
+      margin: 5px;
+    }
+    .message_profile_img {
+      float: left;
+      margin-right: 8px;
+    }
+    .name {
+      font-weight: bold;
+    }
+    .politician {
+      text-decoration: underline;
+    }
+    .message_body {
+      display: inline-block;
+      width: 500px;
+
+    }
+    .time {
+      padding-left: 45px;
+    }
+
+    .message_reply {
+      background-color: #E6E6DC;
+      padding-top: 7px;
+      margin-top: 7px;
+
+      .message_replies {
+        .message_reply_destroy_btn {
+          float: right;
+          margin-right: 10px;
         }
       }
+    }
+  }
+}

@@ -23,7 +23,6 @@ class PoliticiansController < ApplicationController
 
   def bill_activities
     @ages = @politicians.map {|p| p.elections.sort {|x,y| y<=>x}.first}
-
     c = -1
     bill_categories = @politicians.map {|p| p.initiate_bills_categories(@ages[c+=1])}
 
@@ -59,6 +58,19 @@ class PoliticiansController < ApplicationController
     numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
     @bills = Bill.where(:number.in => numbers)
     render :layout => false, :file => 'politicians/issueline'
+
+  def messages_tab
+  	 @p1 = params[:id1]
+  	 @p2 = params[:id2]
+     @messages = Message.where(:politician_id.in => [params[:id1],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
+  end
+
+  def messages
+     @messages = Message.where(:politician_id.in => [params[:id],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
   end
 
   def recent_links

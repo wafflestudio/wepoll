@@ -1,0 +1,83 @@
+<div class="write_message grid_10 alpha omega">
+  <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
+    <%= f.hidden_field :politician_id %>
+    <%= f.hidden_field :preview_id %>
+
+    <%= select_tag "message[politician_id]", options_for_select([[@p1.name, @p1.id], [@p2.name, @p2.id]]) %>
+    <%= f.label :body, '후보에게 한마디 하기' %>
+    <div class="clear"></div>
+
+    <div class="grid_10 alpha omega field">
+      <div class="grid_10 alpha omega">
+        <div class="reply_check timeline_new">
+          <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
+          <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
+          <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
+        </div>
+      </div>
+
+      <div class="grid_1 alpha" id="wepoll-logo-square" style="margin-right:0"><%= image_tag current_user.profile_picture.url(:square50), :size => "40x40" if !current_user.nil? %></div>
+      <div class="grid_8"><%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %></div>
+      <div class="grid_1 omega" id="comment-length-indicator"><span id="message-body-length">00</span>/250</div>
+      <div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
+        <div id="link-form-preview-img" class="grid_1 alpha"></div>
+        <div id="link-form-preview-txt" class="grid_5 omega note"></div>
+      </div>
+      <%= f.submit '한마디 등록', :id => "message_submit_btn" %>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var loaded_url = '';
+		$('#message_body').keyup(function(event) {
+				var str = $('#message_body').val();
+			if (event.keyCode == 32) {
+				var regex = /\b([\d\w\.\/\+\-\?\:]*)((ht|f)tp(s|)\:\/\/|[\d\d\d|\d\d]\.[\d\d\d|\d\d]\.|www\.|\.tv|\.ac|\.com|\.edu|\.gov|\.int|\.mil|\.net|\.org|\.biz|\.info|\.name|\.pro|\.museum|\.co)([\d\w\.\/\%\+\-\=\&amp;\?\:\\\&quot;\'\,\|\~\;]*)\b/gi;
+				var url = str.match(regex);
+				if (url != null && loaded_url != url) {
+					loadUrl(url);
+					loaded_url = url;
+				}
+			}
+
+			var $this = $(this);
+			var max = 250;
+			var len = str.length;
+			if (len > max) {
+				$('#message_body').val(str.substr(0, max));
+				len = $('#message_body').val().length;
+			}
+			$("#message-body-length").text(len);
+		});
+
+	$('#new_message').submit(function() {
+		var data_string = $('#new_message').serialize();
+		//console.log(data_string);
+		$.ajax({
+			type: "POST",
+			url: "/messages",
+			data: data_string,
+		});
+		return false;
+	});
+});
+
+
+	function loadUrl(url)  {
+		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
+			function(data)  { 
+				$('#message_preview_id').val(data.id)
+				if(data.image)  {
+					$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");
+					$('#link-form-preview-txt').removeClass('prefix_1');
+				}
+				else
+					$('#link-form-preview-txt').addClass('prefix_1');
+
+				$('#link-form-preview-txt').html(data.title +  ' <br /> ' +data.description);
+			} 
+		}); 
+	};
+</script>

@@ -1,0 +1,20 @@
+<div class="message_replies clearfix <%= message.id %> grid_8 alpha omega">
+  <% if message.user == current_user -%>
+    <%= link_to image_tag('/assets/admin/hr.gif'), message_path(message), :method => 'delete', :confirm => '삭제하시겠습니까?', :remote => true, :class => "message_reply_destroy_btn" %>
+  <% end -%>
+  <%= image_tag (message.user ? message.user.profile_picture.url(:square50) : "/system/user_profile_pictures/anonymous_square50.gif"), :style => "float: left; margin-right: 10px;", :size => "40x40" %>
+  <div class="message_replies_body">
+    <p class="name"><%= (message.user ? message.user.nickname : "") %> <span class="date"><%= message.posted_ago? %></span></p>
+    <% if message.preview != nil %>
+      <div class="preview-wrap clearfix">
+        <div class="preview-image"><img src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'></div>
+        <div class="preview-text">
+          <div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
+          <div class="preview-url"><%= link_to message.preview.url[0..34] + "...", message.preview.url, :target => "_blank" %></div>
+          <div class="preview-desc"><%= (s=message.preview.description;s.length > 120 ? s[0...117]+"...": s) if message.preview %></div>
+        </div>
+      </div>
+    <% end %>
+    <p><%= message.body %></p>
+  </div>
+</div>
