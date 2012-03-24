@@ -4,7 +4,7 @@ Wepoll::Application.routes.draw do
     get 'like', :on => :member
     get 'entry', :on => :member
   end
-  
+
   resources :messages do 
 		match '/list' => 'messages#list', :as => "list"
   end
@@ -48,6 +48,9 @@ Wepoll::Application.routes.draw do
     resources 'link_replies'
     resources 'tweet_replies'
     resources 'tweets'
+    resources 'pledges' do
+      get 'search', :as => 'search', :on => :collection
+    end
   end
 
   devise_for :users, :controllers => {
