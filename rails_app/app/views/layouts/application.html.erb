@@ -89,12 +89,18 @@
         //notification bars
         $("input#query").autocomplete({
             source: function(req, source) {
-                query = $("#query").val();
-                $.getJSON("/search?json=" + query, function(json) {
-                   source(json);
+               var re = $.ui.autocomplete.escapeRegex(req.term);
+               var matcher = new RegExp( re, "i" );
+               var a = $.grep( search_source, function(item,index){
+                  return matcher.test(item.label);
+               });
+                query = req.term;
+		console.log(query);
+		console.log(encodeURIComponent(query));
+                $.getJSON("/search?json=" + encodeURIComponent(query), function(json) {
+                   source(json.concat(a));
                 });
             },
-            delay: 50,
             minLength: 2,
             select: function(event, ui) {
                 $("#query_hidden").val(ui.item.query);
