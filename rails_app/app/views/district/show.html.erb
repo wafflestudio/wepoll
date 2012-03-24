@@ -1,21 +1,6 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
     var politician_selected_1 = [];
- 
-    function updateGraphCount(pol_id) {
-      $.getJSON("/link_counts/"+encodeURIComponent("<%= @district%>"), function(data) {
-        //update graph
-//        for (var i in data) {
-//          var obj = data[i];
-//          obj._id;
-//          obj.bad_link_count;
-//          obj.good_link_count;
-
-//          $(".good-links.politician-"+obj._id).changeValueTo(obj.good_link_count);
-//          $(".bad-links.politician-"+obj._id).changeValueTo(obj.bad_link_count);
-//        }
-      });
-    }
 
     function law_title_click($elem, id) {
       //show box
@@ -44,189 +29,66 @@
       return false;
     }
 
-    function loadTab($obj) {
-      $(".tab").removeClass("selected");
-      $obj.addClass("selected");
-      var id = $obj.attr('data-id');
-      if (!id) {
-        return false;
-      }
-      $(".tab-section").hide();
-      $tab_section = $("#"+id);
-      if ($tab_section.length > 0) {
-        $tab_section.show();
-        return false;
-      }
-
-      $tab_section = $('<div class="alpha omega tab-section"></div>');
-      $tab_section.attr('id', id);
-
-      $("#tab-sections-container").append($tab_section);
-      $tab_section.load($obj.attr('href'), function() {
-        if (id == 'politician-popular-links') {
-          <% if @p1 -%>
-            loadLinks("<%= @p1.id%>", 'popular');
-          <% end -%>
-          <% if @p2 -%>
-            loadLinks("<%= @p2.id%>", 'popular');
-          <% end -%>
-        }
-        else if (id == 'politician-recent-links') {
-          <% if @p1 -%>
-            loadLinks("<%= @p1.id%>", 'recent');
-          <% end -%>
-          <% if @p2 -%>
-            loadLinks("<%= @p2.id%>", 'recent');
-          <% end -%>
-        }
-      });
-      return false;
-    }
-
-    function loadLinks(pol_id, category) {
+    $(function() {
       var waypoint_opts = {
         offset: '100%'
       };
 
-      var $bottom_bar = $("#bottom-indicator-"+category+"-"+pol_id);
-      $bottom_bar.waypoint(function(event, direction) {
+      //waypoint
+      var $politician_bill_activities = $("#politician-bill-activities");
+      $politician_bill_activities.waypoint(function(event, direction) {
         if (direction == 'up') return;
-        $bottom_bar.waypoint('remove');
+        $politician_bill_activities.waypoint('remove');
 
-        var $next_page_link = $("#"+category+"-next-page-"+pol_id);
-        var next_page_url = $next_page_link.attr("href");
-        if (!next_page_url) return;
+        var taburl = "<%= bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id)%>";
+        $politician_bill_activities.load(taburl);
+      }, waypoint_opts);
 
-        //loading image
-        var $loading_indicator = $("#loading-indicator-"+category+"-"+pol_id);
+      var $profiles = $("#profiles");
+      $profiles.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $profiles.waypoint('remove');
+        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+        $profiles.load(taburl);
+      }, waypoint_opts);
 
-        //go ajax
-        $.get(next_page_url, function(data) {
-          $loading_indicator.hide();
+      var $promises = $("#promises");
+      $promises.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $promises.waypoint('remove');
+//        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+//        $profiles.load(taburl);
+      }, waypoint_opts);
 
-          var $doc = $(data);
-          var $link_entries = $doc.filter(".link_entries");
-
-          $("#politician-"+pol_id+"-"+category+"-links").append($link_entries);
-          $link_entries.each(function(i, link) {
-            var $link_entry = $(link);
-            var link_url = $link_entry.attr("data-url");
-            var link_id = $link_entry.attr("data-id");
-//            loadUrl(link_url,
-//            "#politician-"+pol_id+"-"+category+"-links .link-entry-"+link_id);
-          }); //end of each
-
-          next_page_url = $doc.find("#"+category+"-next-page-"+pol_id).attr("href");
-          $next_page_link.attr("href", next_page_url);
-
-          if (next_page_url) {
-            $bottom_bar.waypoint(waypoint_opts);
-          }
-        }); //end of get
-      }, waypoint_opts); //end of waypoint
-    }
-
-    $(function() {
-      $(".tab").click(function(){
-        if ($(this).hasClass('disabled')) {
-          alert("준비중입니다^^");
-          return false;
-        }
-
-        loadTab($(this));
-        return false;
-      });
-      $(".selected").click();
-
-      var timelineInitialized = false
-//      $('#show-timeline').click( function() {
-//        $('#timeline-container').jqmShow();
-//
-//        if(!timelineInitialized)
-//        {
-//          timelineController.reset()
-//        }
-//        timelineInitialized = true;
-//        return false
-//      });
-
-      $('#timeline-container').jqm({overlay:1});
-
-        $(".link-button.new").click(function() {
-          $(this).colorbox({title:false,width:'800px',height:'650px',onComplete:function(){
-            $("#timeline_entry_title").keyup(function() {
-              var $this = $(this);
-              var max = parseInt($this.attr('maxlength'));
-              var len = $this.val().length;
-              if (len > max) {
-                $this.val($this.val().substr(0, max));
-                len = $this.val().length;
-              }
-
-              $("#timeline-entry-comment-length").text(len);
-            });
-
-          activateTimelineEntryForm();
-          $('.tm-entry-form').submit( function() {
-            $.colorbox.close();
-            submitTimelineEntryForm(this);
-            return false;
-          });
-
-  $('span.checkbox').addClass("unchecked");
-  $(".checkbox").click(function(){
-    if($(this).children("input").attr("checked")){
-      // uncheck
-      $(this).children("input").removeAttr("checked");
-      $(this).removeClass("checked");
-      $(this).addClass("unchecked");
-    }else{
-      // check
-      $(this).children("input").attr({checked: "checked"});
-      $(this).removeClass("unchecked");
-      $(this).addClass("checked");
-    }
-  });
-
-
-	}
-	});
-});
-      <% if params[:timeline_entry_id] -%>
-//        $("#show-timeline").click();
-        var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
-        $.colorbox({href:url});
-      <% end -%>
-	
     });
- </script>
+  </script>
 <% end -%>
 <script type="text/javascript">
-/// tooltip
+  /// tooltip
 $(document).ready( function() {
-	$('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
-	$('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
+  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
 
-    $('.district-candidate').each( function(index, element) {
-        var dropdown;
+  $('.district-candidate').each( function(index, element) {
+    var dropdown;
 
-        $(element).mouseenter(function() {
-            dropdown = $(element).children(".candidate-dropdown")
-            var pos = $(element).position();
-            var w = $(element).outerWidth()
-            var h = $(element).outerHeight()
-            dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
-            //dropdown.show()
+    $(element).mouseenter(function() {
+      dropdown = $(element).children(".candidate-dropdown")
+      var pos = $(element).position();
+      var w = $(element).outerWidth()
+      var h = $(element).outerHeight()
+      dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
+      //dropdown.show()
 
-        })
-        $(element).mouseleave(function() {
-            if(dropdown)  {
-              dropdown.hide()
-            }
-        })
-
+    })
+    $(element).mouseleave(function() {
+      if(dropdown)  {
+        dropdown.hide()
       }
-    )
+    })
+
+  }
+  )
 })
 </script>
 <script type="text/javascript">
@@ -245,16 +107,16 @@ $(document).ready( function() {
     $this.children(".link-reply-button").click(function() {
       return true;
     });
-    });};
-	function loadUrl(url, parentDiv)  {
-		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
-			function(data)  { 
-				$(".preview-title a", parentDiv).html(data.title);
-				$(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "<img src='/assets/dummy-news-1.jpg' />" );
-				$(".preview-desc", parentDiv).html(data.description);
-			} 
-		}); 
-	};
+  });};
+  function loadUrl(url, parentDiv)  {
+    $.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
+      function(data)  { 
+        $(".preview-title a", parentDiv).html(data.title);
+        $(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "<img src='/assets/dummy-news-1.jpg' />" );
+        $(".preview-desc", parentDiv).html(data.description);
+      } 
+    }); 
+  };
 </script>
 
 <%= render :file => 'timeline_entries/index' %>
@@ -298,32 +160,24 @@ $(document).ready( function() {
     <% end -%>
   </div>
 
-  <!-- tab 시작 -->
-  <div id="tab-wrapper" class="clearfix">
-    <div id="tabs" class="clearfix">
-      <%= link_to '최신링크',
-        recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab alpha', "data-id" => "politician-recent-links" %>
-      <!-- <%= link_to "메시지", messages_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "politician_messages" %> --> 
-      <!-- <%= link_to '인기링크',
-        popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "politician-popular-links" %> -->
-      <%= link_to '국회활동',
-        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab selected', "data-id" => "bill-activity" %>
-      <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
-      <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
-    </div>
-    <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
-    </div> <!-- end of tab conainer -->
+  <h1>국회활동</h1>
+  <div id="politician-bill-activities">
   </div>
 
-	<div class="write_message_area grid_11 alpha omega">
-			<%= render :partial => 'message_form' %>
-	</div>
-	<div id="messages_area" class="grid_11 alpha omega">
+  <h1>프로필</h1>
+  <div id="profiles">
+  </div>
+
+  <h1>공약</h1>
+  <div id="promises">
+  </div>
+
+  <div class="write_message_area grid_11 alpha omega">
+    <%= render :partial => 'message_form' %>
+  </div>
+  <div id="messages_area" class="grid_11 alpha omega">
     <%= render @messages %>
-	</div>
+  </div>
 </div>
 <script type="text/javascript">
   $(".link_reply_input").keyup(function() {

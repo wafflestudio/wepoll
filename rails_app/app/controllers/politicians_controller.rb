@@ -19,7 +19,9 @@ class PoliticiansController < ApplicationController
   end
 
   def bill_activities
-    bill_categories = @politicians.map {|p| p.initiate_bills_categories}
+    @ages = @politicians.map {|p| p.elections.sort {|x,y| y<=>x}.first}
+    c = -1
+    bill_categories = @politicians.map {|p| p.initiate_bills_categories(@ages[c+=1])}
 
     @bill_counts = bill_categories.map {|bc| bc.map {|c,n| n}}
     @bill_categories = bill_categories.map {|bc| bc.map {|c,n| "#{c} #{n}"}}
