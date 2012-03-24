@@ -1,6 +1,31 @@
 <% content_for :scripts do -%>
   <script type="text/javascript">
     var politician_selected_1 = [];
+    var attendances = {"<%=@p1.id%>":[<%= @p1.attendance.join(",") %>], "<%=@p2.id%>":[<%=@p2.attendance.join(",")%>]};
+
+    function load_bill_activities(pol_id, age, t) {
+      if ($(t).hasClass("selected")) return;
+
+      var $old = $("#age-selector-"+pol_id+" .age-select.selected");
+      $old.text(parseInt($old.text()));
+
+      $("#age-selector-" + pol_id+" .age-select").removeClass("selected");
+      $(t).addClass("selected");
+      $(t).text($(t).text() + "대 국회");
+
+      $("#init-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+      $("#joint-initiate-bills-"+pol_id).html('<%= image_tag "/assets/ajax-loader-link.gif" %>');
+
+      $("#init-bills-"+pol_id).load("/politicians/"+pol_id+"/initiate_bills_summary?age="+age);
+      $("#joint-initiate-"+pol_id).load("/politicians/"+pol_id+"/top_joint_initiate_bills?age="+age);
+      var att = attendances[pol_id][age];
+      if (att)
+        att = att +"%";
+      else
+        att = '<span style="font-size:12pt">정보없음</span>';
+
+      $("#attendance-"+pol_id).html(att);
+    }
 
     function law_title_click($elem, id) {
       //show box
@@ -29,70 +54,7 @@
       return false;
     }
 
-    function loadTab($obj) {
-      $(".tab").removeClass("selected");
-      $obj.addClass("selected");
-      var id = $obj.attr('data-id');
-      if (!id) {
-        return false;
-      }
-      $(".tab-section").hide();
-      $tab_section = $("#"+id);
-      if ($tab_section.length > 0) {
-        $tab_section.show();
-        return false;
-      }
-
-      $tab_section = $('<div class="alpha omega tab-section"></div>');
-      $tab_section.attr('id', id);
-
-      $("#tab-sections-container").append($tab_section);
-      $tab_section.load($obj.attr('href'), function() {
-        if (id == 'politician-popular-links') {
-          <% if @p1 -%>
-            loadLinks("<%= @p1.id%>", 'popular');
-          <% end -%>
-          <% if @p2 -%>
-            loadLinks("<%= @p2.id%>", 'popular');
-          <% end -%>
-        }
-        else if (id == 'politician-recent-links') {
-          <% if @p1 -%>
-            loadLinks("<%= @p1.id%>", 'recent');
-          <% end -%>
-          <% if @p2 -%>
-            loadLinks("<%= @p2.id%>", 'recent');
-          <% end -%>
-        }
-      });
-      return false;
-    }
-
     $(function() {
-      $(".tab").click(function(){
-        if ($(this).hasClass('disabled')) {
-          alert("준비중입니다^^");
-          return false;
-        }
-
-        loadTab($(this));
-        return false;
-      });
-      $(".selected").click();
-
-      var timelineInitialized = false;
-//      $('#show-timeline').click( function() {
-//        $('#timeline-container').jqmShow();
-//
-//        if(!timelineInitialized)
-//        {
-//          timelineController.reset()
-//        }
-//        timelineInitialized = true;
-//        return false
-//      });
-
-// checkbox javascript for show page
       $('span.checkbox').addClass("unchecked");
       $(".checkbox").click(function(){
         if($(this).children("input").attr("checked")){
@@ -107,40 +69,60 @@
           $(this).addClass("checked");
         }
       });
+      var waypoint_opts = {
+        offset: '100%'
+      };
 
-      <% if params[:timeline_entry_id] -%>
-//        $("#show-timeline").click();
-        var url = "/timeline_entries/"+'<%= params[:timeline_entry_id]%>';
-        $.colorbox({href:url});
-      <% end -%>
-	
+      //waypoint
+      var $politician_bill_activities = $("#politician-bill-activities");
+      $politician_bill_activities.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $politician_bill_activities.waypoint('remove');
+
+        var taburl = "<%= bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id)%>";
+        $politician_bill_activities.load(taburl);
+      }, waypoint_opts);
+
+      var $profiles = $("#profiles");
+      $profiles.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $profiles.waypoint('remove');
+        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+        $profiles.load(taburl);
+      }, waypoint_opts);
+
+      var $promises = $("#promises");
+      $promises.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $promises.waypoint('remove');
+//        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+//        $profiles.load(taburl);
+      }, waypoint_opts);
+
     });
- </script>
+  </script>
 <% end -%>
 <script type="text/javascript">
-/// tooltip
+  /// tooltip
 $(document).ready( function() {
-	$('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
-	$('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
+  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
 
-    $('.district-candidate').each( function(index, element) {
-        var dropdown;
+  $('.district-candidate').each( function(index, element) {
+    var dropdown;
 
-        $(element).mouseenter(function() {
-            dropdown = $(element).children(".candidate-dropdown")
-            var pos = $(element).position();
-            var w = $(element).outerWidth()
-            var h = $(element).outerHeight()
-            dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
-            //dropdown.show()
+    $(element).mouseenter(function() {
+      dropdown = $(element).children(".candidate-dropdown")
+      var pos = $(element).position();
+      var w = $(element).outerWidth()
+      var h = $(element).outerHeight()
+      dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
+      //dropdown.show()
 
-        })
-        $(element).mouseleave(function() {
-            if(dropdown)  {
-              dropdown.hide()
-            }
-        })
-
+    })
+    $(element).mouseleave(function() {
+      if(dropdown)  {
+        dropdown.hide()
       }
     )
 });
@@ -182,30 +164,22 @@ $(document).ready( function() {
     <% end -%>
   </div>
 
-  <!-- tab 시작 -->
-  <div id="tab-wrapper" class="clearfix">
-    <div id="tabs" class="clearfix">
-      <%= link_to '최신링크',
-        recent_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab alpha', "data-id" => "politician-recent-links" %>
-      <!-- <%= link_to "메시지", messages_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "politician_messages" %> --> 
-      <!-- <%= link_to '인기링크',
-        popular_links_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab', "data-id" => "politician-popular-links" %> -->
-      <%= link_to '국회활동',
-        bill_activities_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id),
-        :class => 'tab selected', "data-id" => "bill-activity" %>
-      <%= link_to '프로필', profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab', "data-id" => "profile"%>
-      <%= link_to '공약',promises_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id), :class => 'tab omega disabled', "data-id" => "promise" %>
-    </div>
-    <div class="grid_11 alpha omega clearfix" id="tab-sections-container">
-    </div> <!-- end of tab conainer -->
+  <h1>국회활동</h1>
+  <div id="politician-bill-activities">
   </div>
 
-	<div class="write_message_area grid_11 alpha omega">
-			<%= render :partial => 'message_form' %>
-	</div>
-	<div id="messages_area" class="grid_11 alpha omega">
-    <%= render @messages %>
-	</div>
+  <h1>프로필</h1>
+  <div id="profiles">
+  </div>
+
+  <h1>공약</h1>
+  <div id="promises">
+  </div>
+
+  <div id="messages">
+    <%= render :partial => 'message_form' %>
+    <div id="messages_area" class="grid_11 alpha omega">
+      <%= render @messages %>
+    </div>
+  </div>
 </div>

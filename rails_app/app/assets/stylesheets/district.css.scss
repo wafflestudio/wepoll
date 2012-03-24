@@ -551,17 +551,6 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   }
 }
 
-#show-timeline {
-  background:url(/assets/btn_show_timeline.gif) no-repeat;
-  width:40px;
-  height:153px;
-  position:fixed;
-  top:150px;
-  left:0;
-  display:block;
-}
-
-
 /*** dropdown menu***/
 
 .dropdown {width:160px;
@@ -629,6 +618,8 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   display:none;
 }
 
+
+// message preview css
 .preview-wrap {
   background-color: #f6f7f8;
 
@@ -678,24 +669,93 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.write_message_area {
+
+// message css
+.write-message-area {
   width: 680px !important;
   padding: 10px;
   margin-top: 10px;
   background-color: #E6E6DC;
 
-  .comment {
-    width: 470px;
+  #message-form-politicians {
+    #district-box {
+      font-size: 13pt;
+      text-align: center;
+      width: 80px;
+      height: 55px;
+      padding-top: 25px;
+      background-color: white;
+      
+      span {
+        color: red;
+      }
+    }
+    #politicians-box {
+      img {
+        width: 50px;
+        height: 50px;
+        float: left;
+      }
+    }
   }
-  #message_submit_btn {
+  #message-body-container {
+    width: 550px;
+    position: relative;
+    float: left;
     margin-top: 10px;
-    padding: 5px;
+    padding-left: 20px;
+
+    .comment {
+      border: 2px solid #9E9E9E;
+      margin: 0;
+      padding: 3px;
+      width: 547px;
+      height: 70px;
+    }
+    #message-length-indicator {
+      position: absolute;
+      top: 60px;
+      left: 510px;
+    }
+    #message-form-preview {
+      display: none;
+      border: 2px solid #9E9E9E;
+      border-top: 1px solid #9E9E9E;
+      padding-top: 15px;
+      float: left;
+      margin: 0;
+      margin-top: -2px;
+      background-color: white;
+      width: 553px;
+      #message-form-preview-img {
+        float: left;
+        margin-left: 30px;
+        margin-bottom: 10px;
+        width: 100px;
+      }
+      #message-form-preview-right {
+        width: 400px;
+        padding: 10px 0px 10px 10px;
+        float: left;
+      }
+    }
+  }
+  #message-submit-btn {
+    float: left;
+    margin-top: 10px;
+    margin-left: 15px;
+    width: 75px;
+    height: 75px;
     background-color: white;
-    border: none;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    behavior:url(http://wepoll.or.kr/PIE.htc);
+    border: 2px solid #9E9E9E;
+  }
+  .reply_check {
+    margin-left: 20px;
+    float: left;
+    display: block;
+    .note {
+      margin-left: 10px;
+    }
   }
 }
 #messages_area {

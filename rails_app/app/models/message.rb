@@ -6,6 +6,7 @@ class Message
 	field :body, type: String
 	field :tweet_feeed_id, type: String
 	field :facebook_feed_id, type: String
+  field :district, type: String
 	
 
 	belongs_to :user

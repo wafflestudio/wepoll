@@ -1,0 +1,60 @@
+<% content_for :scripts do -%>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      <% if @politician -%>
+      var politician = $.parseJSON('<%=raw @politician.to_json(:only => [:name, :_id, :party]) %>');
+      <% end -%>
+      $(".politician-name").tokenInput(
+        "<%= search_admin_politicians_path %>",
+        {
+          queryParam:"query", minChars:2,
+          theme:"facebook",
+          tokenValue:"_id",
+          propertyToSearch:"_id",
+          resultsFormatter:function(item) {
+            return "<li>"+ item.name + "("+ item.party +")"+"</li>";
+          },
+          tokenFormatter:function(item) {
+            return "<li><p>"+item.name+"</p></li>";
+          }
+        }
+      );
+      if (politician)
+        $("#pledge_politician_id").tokenInput("add", politician);
+    });
+  </script>
+<% end -%>
+
+<%= form_for [:admin,@pledge] do |f| -%>
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="full" colspan="2">공약정보입력</th>
+      </tr>
+      <tr>
+        <td><strong>공약명</strong></td>
+        <td><%= f.text_field :title%></td>
+      </tr>
+      <tr>
+        <td><strong>내용</strong></td>
+        <td><%= f.text_area :content%></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="table">
+    <table class="listing form" cellpadding="0" cellspacing="0">
+      <tr>
+        <th class="full" colspan="2">의원정보입력</th>
+      </tr>
+      <tr>
+        <td><strong>공약후보</strong></td>
+        <td><%= f.text_field :politician_id, :class => 'politician-name' %>
+      </tr>
+    </table>
+  </div>
+
+  <div class="actions">
+    <%= submit_tag '확인' %>
+  </div>
+<% end -%>

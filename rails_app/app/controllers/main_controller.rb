@@ -9,33 +9,50 @@ layout false, :only => [:provision, :privacy]
   end
 
   def search
-    type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
-    query = params[:query].sub(" ","")
-    sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
-    id = params[:query_id]
+    Rails.logger.info "======================"
+    Rails.logger.info params.inspect
+    Rails.logger.info "======================"
+    json = params[:json].to_s
+    if !json.empty?
+      list = Politician.find(:all, :conditions => {"$and" => [{:candidate => true},{"$or" => [{:name => /#{json}/}, {:party => /#{json}/}]}]}).map {|p| {form: p.name, query: p.id, type: "1", label: "#{p.name}(#{p.party})"}}
 
-    if type == 0 && !sub_query.empty?
-      @politician = Politician.where(district: sub_query).first
-    elsif type == 1
-      @politician = Politician.find(sub_query)
+      render :json => list
     else
-      if !sub_query.empty?
+      type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
+      query = params[:query].sub(" ","")
+      sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
+      id = params[:query_id]
+
+      if type == 0 && !sub_query.empty?
         @politician = Politician.where(district: sub_query).first
+      elsif type == 1
+        @politician = Politician.find(sub_query)
       else
-        @politician = nil
+        if !sub_query.empty?
+          @politician = Politician.where(district: sub_query).first
+        else
+          @politician = nil
+        end
       end
-    end
 
-    if !@politician.nil?
-      if type != 1
-        redirect_to district_name_path(sub_query)
+      if !@politician.nil?
+        if type != 1
+          redirect_to district_name_path(sub_query)
+        else
+          redirect_to district_politician_path(@politician._id)
+        end
       else
-        redirect_to district_politician_path(@politician._id)
+	#find with subquery
+	@pol = Politician.where(:name => /#{params[:query]}/).first
+Rails.logger.info "#{@pol.name}"
+	if @pol
+          redirect_to district_politician_path(@pol._id)
+	else
+        flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
+        flash[:search_error] = "true"
+        redirect_to back
+	end
       end
-    else
-      flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
-      flash[:search_error] = "true"
-      redirect_to back
     end
   end
 

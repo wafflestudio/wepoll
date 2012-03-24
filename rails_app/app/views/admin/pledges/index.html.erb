@@ -1,0 +1,37 @@
+<div class="top-bar">
+  <h1>공약 <small>(<%= Pledge.count %>개)</small></h1>
+</div>
+
+<div class="select-bar">
+  <%= form_tag search_admin_pledges_path, :method => 'get' do %>
+    <%= text_field_tag 'query', params[:query], :placeholder => '공약제목입력' %>
+    <%= submit_tag '검색' %>
+  <% end-%>
+</div>
+
+<div class="table">
+  <table class="listing" cellpadding="0" cellspacing="0">
+    <tr>
+      <th>제목</th>
+      <th>후보</th>
+    </tr>
+    <% @pledges.each do |pledge| -%>
+      <tr>
+        <td><%= link_to pledge.title, admin_pledge_path(pledge)%></td>
+        <td><%= pledge.politician.name%></td>
+      </tr>
+    <% end -%>
+    <% if @pledges.empty? -%>
+      <tr>
+        <td colspan="2">공약이 없습니다.</td>
+      </tr>
+    <% end -%>
+  </table>
+</div>
+
+<%= paginate @pledges%>
+
+<div class="actions">
+  <%= link_to '공약 추가', new_admin_pledge_path, :class => 'action add' -%>
+</div>
+

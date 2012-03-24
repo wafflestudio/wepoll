@@ -155,15 +155,17 @@
 
 .links-container {
   background-color:white;
-  border-radius:10px;
+  /*border-radius:10px;
   -webkit-border-radius:10px;
   -moz-border-radius:10px;
 behavior:url(http://wepoll.or.kr/PIE.htc);
-  -o-border-radius:10px;
+  -o-border-radius:10px;*/
   padding-bottom:20px;
   margin-bottom:40px;
   max-height:150px;
   overflow-y:scroll;
+  border-top:2px solid #dbbbbc;
+  border-bottom:2px solid #dbbbbc;
 
   white-space:nowrap;
   text-overflow:ellipsis;
@@ -340,7 +342,6 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
 #vs-politician2 .good_links, #vs-politician2 .bad_links {
   float:left;
 }
-
 
 /* all */
 ::-webkit-input-placeholder  { font-family: '돋움'; }

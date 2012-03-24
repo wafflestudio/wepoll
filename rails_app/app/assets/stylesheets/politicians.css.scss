@@ -136,6 +136,7 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
       text-align:left;
       color:#4f4f50;
       border-right: 2px solid #fff;
+      font-size:9pt;
     }
   }
 
@@ -147,6 +148,7 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     width:71px; //81px (with padding)
     border-bottom-left-radius:5px;
     border-top-left-radius:5px;
+    font-size:8.5pt;
   }
 
   .header-commitee{//, .cell-commitee {
@@ -175,6 +177,14 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
       a:hover {
         text-decoration:underline;
       }
+    }
+
+    td.cell-commitee {
+      font-size:8.5pt;
+    }
+
+    td.cell-result {
+      font-size:8.5pt;
     }
 
     td.cell-date {
@@ -226,3 +236,33 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
 }
 
 
+.bills-age-selector {
+  margin:20px auto 0 auto;
+  &.right {
+    text-align:center;
+  }
+  &.left {
+    text-align:center;
+  }
+  .age-select {
+    height:15px;
+    border:2px solid #aaa;
+    margin-right:5px;
+    text-decoration:none;
+    color:#aaa;
+    text-align:center;
+    padding:3px;
+    background-color:#E6E6DC;
+
+    &.disabled {
+      color:#ccc;
+      border:2px solid #eee;
+      background-color:#eee;
+    }
+    &.selected {
+      border:2px solid #FEDE4D;
+      color:#555;
+      background-color:#E6E6DC;
+    }
+  }
+}

@@ -94,6 +94,8 @@ class TimelineEntriesController < ApplicationController
     @timeline_entry.user_id = current_user.id
     @politician = @timeline_entry.politician
 
+    params[:timeline_entry].delete :preview_id if params[:timeline_entry][:preview_id] and params[:timeline_entry][:preview_id] == "nil"
+
     @message = ""
     if @politician
       @politician.inc(:good_link_count, 1) if @timeline_entry.is_good
@@ -141,6 +143,7 @@ class TimelineEntriesController < ApplicationController
 		# prevent updating from previous value
 		params[:timeline_entry].delete :like_count
 		params[:timeline_entry].delete :link_count
+    params[:timeline_entry].delete :preview_id if params[:timeline_entry][:preview_id] and params[:timeline_entry][:preview_id] == "nil"
 
     respond_to do |format|
       if @timeline_entry.update_attributes(params[:timeline_entry])
@@ -156,14 +159,14 @@ class TimelineEntriesController < ApplicationController
   # DELETE /timeline_entries/1
   # DELETE /timeline_entries/1.json
   def destroy
-    @timeline_entry = TimelineEntry.find(params[:id],:user_id => current_user.id)
+    @timeline_entry = TimelineEntry.find(params[:id])
+    @id = @timeline_entry.id
+    @success = false
     # rather than @timeline_entry.destroy, we mark deleted
-    @timeline_entry.deleted = true
-    @timeline_entry.save
-
-    respond_to do |format|
-      format.html { redirect_to timeline_entries_url }
-      format.json { head :no_content }
+    if @timeline_entry.destroy
+      @success = true
+    else
+      @success = false
     end
   end
 

@@ -1,6 +1,7 @@
 require 'csv'
 f = File.open(Rails.root+"app/assets/javascripts/search.js", "w")
 f.write "var search_source=["
+=begin
 Politician.all.each do |member|
   # [ 
   # {"data":"xxxxxx", "sub_data":"xxxxxxxxxx", "label":"xxxxxxxxxxxxx"},
@@ -12,6 +13,7 @@ Politician.all.each do |member|
   s = "{'form':'#{member.name}','query':'#{member._id.to_s}','type':'1','label':'#{member.name}(#{member.party})'},"
   f.write s
 end
+=end
 CSV.foreach(Rails.root + "init_data/district.csv", :encoding => "UTF-8") do |csv|
   # district
   district = csv[0]

@@ -1,17 +1,29 @@
 <div class="alpha omega subsection clearfix">
   <div style="text-align:right;font-size:8pt;padding-top:10px; padding-right:10px;">
-*18대 국회활동을 기준으로 합니다.<br />
+*16~18대 국회활동을 기준으로 합니다.<br />
 (출처: 국회의안정보시스템, 열려라국회)
   </div>
+  <% ages = @politicians.inject([]) {|s,p| s+(p.elections||[])}.uniq.sort -%>
   <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%=i==0 ? "left":"right" %> init_bills">
-      <% if politician.is_18? %>
-        <%= render :partial => "initiate_bills_summary", :locals => { :politician => politician, :bill_categories => @bill_categories[i], :bill_counts => @bill_counts[i], :index => i, :count => politician.initiate_bills.count, :count2 => @politicians[1-i].initiate_bills.count }  %>
-      <% else %>
-        <% unless politician.is_18? %>
-          <div class="not_18" style="margin-top:80px;height:110px;">자료를 준비 중입니다.</div>
-        <% end %>
-      <% end -%>
+    <% last_elect = politician.elections.sort.last%>
+
+    <div class="subsection <%= i==0? "left":"right"%>">
+      <div id="age-selector-<%=politician.id%>" class="bills-age-selector clearfix <%= i==0? "left":"right"%>">
+        <% politician.elections.sort.each do |age| -%>
+          <% next if age < 16  -%>
+          <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, (event.srcElement ? event.srcElement:event.target))", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
+        <% end -%>
+      </div>
+    </div>
+    <% if i==0 -%><div class="subsection-label" style="background:none;"></div><% end -%>
+  <% end -%>
+
+  <div class="clear"></div>
+
+  <% @politicians.each_with_index do |politician, i| -%>
+
+    <div id="init-bills-<%=politician.id %>" class="<%=i==0 ? "left":"right" %> init_bills">
+      <div class="not_18" style="margin-top:80px;height:110px;">자료가 없습니다.</div>
     </div>
 
     <% if i==0 -%><div class="subsection-label" style="margin-top:100px;">발의한법안</div><% end -%>
@@ -20,12 +32,8 @@
 
 <div class="alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
-    <div class="<%= i==0?"left":"right"%>">
-      <% if politician.is_18? %>
-        <%= render :partial => "top_joint_initiate", :locals => {:politician => politician} %>
-      <% else %>
-        <div class="not_18" style="margin-top:90px;height:108px">자료를 준비 중입니다.</div>
-      <% end -%>
+    <div id="joint-initiate-<%=politician.id%>" class="<%= i==0?"left":"right"%>">
+      <div class="not_18" style="margin-top:90px;height:108px">자료가 없습니다.</div>
     </div>
 
     <% if i==0 -%><div class="subsection-label" style="margin-top:110px;"><small>함께발의한의원</small></div><% end -%>
@@ -35,14 +43,28 @@
 <div class="alpha omega subsection clearfix">
   <% @politicians.each_with_index do |politician, i| -%>
     <div class="<%= i==0?"left":"right"%>">
-      <div class="attendance" style="color:<%= @party_color[politician.party] || 'red' %>">
-        <% if politician.is_18? %>
-          <%= politician.attendance%>%
-        <% else %>
-          <div class="not_18" style="margin-top:-15px;">자료를 준비 중입니다.</div>
-        <% end -%>
+      <div id="attendance-<%=politician.id%>" class="attendance" style="color:<%= @party_color[politician.party] || 'red' %>">
+        <div class="not_18" style="margin-top:-15px;">자료가 없습니다.</div>
       </div>
     </div>
     <% if i==0 -%><div class="subsection-label" style="margin-top:20px;">본회의출석률</div><% end -%>
   <% end -%>
 </div>
+
+<script type="text/javascript">
+    <% @politicians.each_with_index do |politician,i| -%>
+      <% if politician.elections && politician.elections.include?(@ages[i]) -%>
+        $("#init-bills-<%= politician.id %>").load("<%= init_bills_summary_of_politician_path(politician.id, :age => @ages[i], :index => i) %>");
+        $("#joint-initiate-<%=politician.id%>").load("<%= top_joint_initiate_bills_of_politician_path(politician.id, :age => @ages[i]) %>");
+        var att = attendances["<%=politician.id%>"][<%=@ages[i]%>];
+        if (att)
+          att = att +"%";
+        else
+          att = '<span style="font-size:12pt">정보없음</span>';
+
+        $("#attendance-<%=politician.id%>").html(att);
+      <% else -%>
+        $("#attendance-<%=politician.id%>").html('<span style="font-size:12pt">정보없음</span>');
+      <% end -%>
+    <% end -%>
+</script>
