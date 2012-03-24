@@ -69,6 +69,15 @@
         $politician_bill_activities.load(taburl);
       }, waypoint_opts);
 
+      var $politician_vote_activities = $("#politician-vote-activities");
+      $politician_vote_activities.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $politician_vote_activities.waypoint('remove');
+
+        var taburl = "<%= votes_for_issues_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id)%>";
+        $politician_vote_activities.load(taburl);
+      }, waypoint_opts);
+
       var $profiles = $("#profiles");
       $profiles.waypoint(function(event, direction) {
         if (direction == 'up') return;
@@ -187,6 +196,10 @@ $(document).ready( function() {
 
   <h1>국회활동</h1>
   <div id="politician-bill-activities">
+  </div>
+
+  <h1>주요법안 표결</h1>
+  <div id="politician-vote-activities">
   </div>
 
   <h1>프로필</h1>

@@ -197,4 +197,3 @@ bills.each do |number,bill|
   puts "#{b.number}: total #{supporters+dissenters+attendees+absentees} (#{supporters},#{dissenters},#{attendees},#{absentees})"
 end
 
-0

@@ -57,7 +57,21 @@ class PoliticiansController < ApplicationController
   def votes_for_issues_tab
     numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
     @bills = Bill.where(:number.in => numbers)
+
+    # 필요한 정보: 의원 둘의 표결, 당별 표결 정보
+
+    @grouped_bills = []
+    @politicians.each do |pol|
+      bills = {}
+      bills[:supported] = @bills.any_in(:supporter_ids => [pol.id])
+      bills[:dissented] = @bills.any_in(:dissenter_ids => [pol.id])
+      bills[:attended] = @bills.any_in(:attendee_ids => [pol.id])
+      bills[:absented] = @bills.any_in(:absentee_ids => [pol.id])
+      @grouped_bills.push bills
+    end
+
     render :layout => false, :file => 'politicians/issueline'
+  end
 
   def messages_tab
   	 @p1 = params[:id1]

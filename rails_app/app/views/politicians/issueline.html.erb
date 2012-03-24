@@ -9,9 +9,33 @@
     <% end %>
     <p><%= bill.title %></p>
     <p>
-      <% bill.supporters.each do |supporter| %>
-        <%= supporter.party %>
-      <% end %>  
+      <% 0.upto(1) do |i| %>
+        <% if @grouped_bills[i][:supported].where(:number => bill.number).first == bill %>
+          찬성
+        <% elsif @grouped_bills[i][:dissented].where(:number => bill.number).first == bill%>
+          반대
+        <% elsif @grouped_bills[i][:attended].where(:number => bill.number).first == bill %>
+          기권
+        <% elsif @grouped_bills[i][:absented].where(:number => bill.number).first == bill%>
+          부재
+        <% end %>
+      <% end %>
+    </p>
+    
+    <p>찬성:<%= bill.supporters.length %>/반대:<%= bill.dissenters.length %></p>
+    <p>
+      <%
+         parties = {}
+      %>
+      
+      <%#
+        bill.supporters.each do |supporter|
+          parties[supporter.party] = [] if parties[supporter.party].nil?
+          parties[supporter.party].push supporter
+        end
+
+      %>
+      <%= %>
     </p>
   <% end %>
 </div>

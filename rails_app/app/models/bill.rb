@@ -54,6 +54,8 @@ class Bill #법안모델
   has_and_belongs_to_many :absentees, class_name: "Politician" # 본회의 부재자
   has_and_belongs_to_many :attendees, class_name: "Politician" # 표결 기권자
 
+  belongs_to :vote
+
   def self.calculate_age
     Bill.all.each {|bill| bill.calculate_age}
   end
