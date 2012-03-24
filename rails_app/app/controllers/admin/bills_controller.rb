@@ -1,7 +1,7 @@
 class Admin::BillsController < Admin::AdminController
   #XXX : for just debugging or external test connection
   #Be sure that remove this line for production
-  skip_before_filter :is_admin?
+#  skip_before_filter :is_admin?
 
   def index
     @bills = Bill.page(params[:page]).per(20)
