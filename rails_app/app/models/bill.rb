@@ -51,6 +51,8 @@ class Bill #법안모델
   has_and_belongs_to_many :coactors, class_name: "Politician" #공동발의자
   has_and_belongs_to_many :dissenters, class_name: "Politician" #법안 반대자
   has_and_belongs_to_many :supporters, class_name: "Politician" #법안 찬성자
+  has_and_belongs_to_many :absentees, class_name: "Politician" # 본회의 부재자
+  has_and_belongs_to_many :attendees, class_name: "Politician" # 표결 기권자
 
   def self.calculate_age
     Bill.all.each {|bill| bill.calculate_age}
