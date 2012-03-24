@@ -1,6 +1,6 @@
 <div class="alpha omega subsection clearfix">
   <div style="text-align:right;font-size:8pt;padding-top:10px; padding-right:10px;">
-*18대 국회활동을 기준으로 합니다.<br />
+*16~18대 국회활동을 기준으로 합니다.<br />
 (출처: 국회의안정보시스템, 열려라국회)
   </div>
   <% ages = @politicians.inject([]) {|s,p| s+(p.elections||[])}.uniq.sort -%>
@@ -10,6 +10,7 @@
     <div class="subsection <%= i==0? "left":"right"%>">
       <div id="age-selector-<%=politician.id%>" class="bills-age-selector clearfix <%= i==0? "left":"right"%>">
         <% politician.elections.sort.each do |age| -%>
+	    <% next if age < 16  -%>
 	    <%= link_to_function (last_elect == age ? "#{age}대 국회":age.to_s), "load_bill_activities('#{politician.id}', #{age}, (event.srcElement ? event.srcElement:event.target))", :class => age == last_elect ? 'age-select selected' : 'age-select' %>
         <% end -%>
       </div>
