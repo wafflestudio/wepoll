@@ -99,6 +99,7 @@ Wepoll::Application.routes.draw do
 
     get 'popular_links_tab', :on => :collection, :as => :popular_links_tab_of
     get 'recent_links_tab', :on => :collection, :as => :recent_links_tab_of
+    get 'votes_for_issues_tab', :on => :collection, :as => :votes_for_issues_of
 
     get 'profile', :on => :collection, :as => :profiles_of
     get 'promises', :on => :collection, :as => :promises_of
