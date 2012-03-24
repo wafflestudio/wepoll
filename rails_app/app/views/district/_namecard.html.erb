@@ -68,6 +68,7 @@
       data-value="<%= politician ? politician.bad_link_count : 0%>">
     </div>
   </div>
+
   <% if politician -%>
     <% if user_signed_in? -%>
       <%= link_to '링크등록', new_timeline_entry_path(:politician_id => politician.id), :title => (politician.name + "에 관한 링크를 등록하여 공유하세요"), :class => "link-button #{index==0?'left':'right'} new tooltip-top"%>
