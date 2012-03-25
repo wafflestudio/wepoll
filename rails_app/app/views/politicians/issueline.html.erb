@@ -8,15 +8,20 @@
     <div class="grid_11 alpha omega">
 
       <div class="grid_4 alpha" style="text-align:center">
-        <%=  @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[0].id).first.value %>
-        <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[0].party).each do |votes| %>
-          <% if votes.party == @politicians[0].party and votes.party != "무소속" %>
-            <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
-              <%= "소속당 (#{votes.party}) " +
-                      ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
-                      ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
-                      "표결 불참") %>
-            </p>
+        <% vote = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[0].id).first %>
+        <% if vote.nil? %>
+        해당 없음
+        <% else %>
+          <%= vote.value %>
+          <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[0].party).each do |votes| %>
+            <% if votes.party == @politicians[0].party and votes.party != "무소속" %>
+              <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
+                <%= "소속당 (#{votes.party}) " +
+                        ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
+                        ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
+                        "표결 불참") %>
+              </p>
+            <% end %>
           <% end %>
         <% end %>
       </div>
@@ -34,15 +39,21 @@
       </div>
 
       <div class="grid_4 omega" style="text-align:center">
-        <%= @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[1].id).first.value %>
-        <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[1].party).each do |votes| %>
-          <% if votes.party != "무소속" %>
-            <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
-              <%= "소속당 (#{votes.party}) " +
-                      ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
-                          ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
-                          "표결 불참") %>
-            </p>
+        <% vote = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[1].id).first %>
+        <% if vote.nil? %>
+        해당 없음
+        <% else %>
+          <%= vote.value %>
+
+          <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[1].party).each do |votes| %>
+            <% if votes.party != "무소속" %>
+              <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
+                <%= "소속당 (#{votes.party}) " +
+                        ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
+                            ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
+                            "표결 불참") %>
+              </p>
+            <% end %>
           <% end %>
         <% end %>
       </div>
