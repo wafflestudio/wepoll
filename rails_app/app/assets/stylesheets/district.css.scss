@@ -184,6 +184,8 @@
   }
 }
 
+/* for politician selector */
+/*
 .gray { border:2px solid #4f4f50; font-size:12pt; font-weight:bold; color:#0080c0; background-color:#d5f1ff; }
 .gray .menu { border:1px solid #06aeff; }
 .gray-hover { border-color:#06aeff; }
@@ -193,6 +195,7 @@
 .politician-select {
   width:165px;
 }
+*/
 
 
 .link-button {
@@ -334,19 +337,32 @@ a.init-bills-link {
   border-radius: $x;
 }
 .subsection-label {
-  width:130px;
-  min-height:43px;
   display:block;
   float:left;
-  background:url(/assets/bg_subsection_label.gif) no-repeat;
   text-align:center;
   padding-top:10px;
-  color:#fff;
-  font-size:11pt;
+  width:80px;
+  margin: 0 5px;
+  color:#555;
+  font-size:9pt;
+  height:44px - 10px;
+
+  &.yellow {
+    background:url(/assets/bg_subsection_label_yellow_small.gif);
+  }
+
+  &.gray {
+    background:url(/assets/bg_subsection_label_gray_small.gif);
+  }
+
+  &.blue {
+    background:url(/assets/bg_subsection_label_blue_small.gif);
+  }
 }
 
+
 .subsection {
-  width:700 - 20px;
+  width:710 - 20px;
   background-color:#fff;
   @include border-radius(7px);
   behavior:url(http://wepoll.or.kr/PIE.htc);
@@ -354,12 +370,12 @@ a.init-bills-link {
   margin-bottom:8px;
   .left {
     float:left;
-    width: 275px;
+    width: 300px;
   }
 
   .right {
     float:right;
-    width: 275px;
+    width: 300px;
   }
 }
 
@@ -498,8 +514,21 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   margin-top: 25px;
 }
 
-.tab-section {
-  width:700px - 20px;
+.section {
+  width:710px - 20px;
+  background-color:#e6e6dc;
+  padding:7px 5px 5px 5px;
+  margin-bottom:20px;
+}
+.section-label {
+  font-size:12pt;
+  padding:10px 0;
+  width:135px;
+  text-align:center;
+  color:#4f4f50;
+  background-color:#e6e6dc;
+  @include border-top-left-radius(10px);
+  @include border-top-right-radius(10px);
 }
 
 .joint-politicians {
@@ -540,14 +569,10 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
 
 .profile-item {
   margin-bottom:20px;
-  .subsection-label {
-    margin-top:-10px;
-    background:url(/assets/bg_subsection_label_blue.gif) no-repeat;
-  }
-
   .left, .right {
-    width:275px - 20px;
+    width:300px - 20px;
     margin:0 10px;
+    line-height:140%;
   }
 }
 

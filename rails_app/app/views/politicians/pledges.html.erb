@@ -1,0 +1,31 @@
+<div class="subsection pledges">
+  <% 0.upto(@maxcount-1) do |i|-%>
+    <div class="pledge-items-container clearfix">
+      <% 0.upto(1) do |j| -%>
+        <% pledge = @pledges[j][i] -%>
+        <div class="<%= j==0?"left":"right"%> pledge-item <%= pledge ? "":" notexist" %>">
+          <% if pledge -%>
+            <div class="pledge-like-count">
+              <a href="#" class="like count" onclick="return false;"><%= pledge.like %></a>
+              <a href="#" class="dislike count" onclick="return false;"><%= pledge.dislike %></a>
+            </div>
+            <div class="pledge-title">
+              <% if pledge -%>
+                <%= pledge.title %>
+              <% else -%>
+                &nbsp;
+              <% end -%>
+              <a href="#" class="btn-detail" onclick="showPledgeDetail();return false;">상세보기</a>
+            </div>
+          <% end -%>
+        </div>
+        <% if j==0 -%><div class="subsection-label gray">공약<%=i+1 %></div><% end -%>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>
+
+<script type="text/javascript">
+  function showPledgeDetail() {
+  }
+</script>

@@ -108,7 +108,7 @@ Wepoll::Application.routes.draw do
     get 'recent_links_tab', :on => :collection, :as => :recent_links_tab_of
 
     get 'profile', :on => :collection, :as => :profiles_of
-    get 'promises', :on => :collection, :as => :promises_of
+    get 'pledges', :on => :collection, :as => :pledges_of
     get 'messages_tab', :on => :collection, :as => :messages_tab_of
 
     get 'messages', :on => :collection, :as => :messages_of
