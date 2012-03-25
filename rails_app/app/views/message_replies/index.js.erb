@@ -1,0 +1,2 @@
+$('.message-entry-<%= @message.id %> .message_replies').show();
+$('.message-entry-<%= @message.id %> .message_replies_list').html('<%= escape_javascript(render @replies) %>');

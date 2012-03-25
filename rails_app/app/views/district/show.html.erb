@@ -156,13 +156,20 @@ $(document).ready(function() {
 
   <div id="name-cards" class="clearfix">
     <% [@p1, @p2].each_with_index do |politician,i| -%>
-      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
+      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => politician.tweets.desc('created_at').first} %>
       <% if i==0 -%>
         <div id="split-bar">
         </div>
       <% end -%>
     <% end -%>
   </div>
+
+  <% unless @best_message.nil? -%>
+    <div id="best-message">
+      <h1 class="best-label">베스트 한마디</h1>
+      <%= render @best_message%>
+    </div>
+  <% end -%>
 
   <h1 class="section-label">국회활동</h1>
   <div id="politician-bill-activities" class="section">

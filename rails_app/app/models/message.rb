@@ -7,6 +7,8 @@ class Message
 	field :tweet_feeed_id, type: String
 	field :facebook_feed_id, type: String
   field :district, type: String
+  field :like_count, type: Integer
+  field :blame_count, type: Integer
 	
 
 	belongs_to :user
@@ -15,8 +17,7 @@ class Message
 	belongs_to :politician
 	belongs_to :pledge
 
-	has_many :replies, inverse_of: :parent_message, :class_name => 'Message'
-	belongs_to :parent_message, inverse_of: :replies, :class_name => 'Message'
+	has_many :message_replies
 
   def posted_ago?
     ago = Time.now - created_at

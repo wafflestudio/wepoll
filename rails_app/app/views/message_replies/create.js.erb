@@ -1,0 +1,3 @@
+$('.message-entry-<%= @message.id %> .message_replies_list').html('<%= escape_javascript(render @replies) %>');
+$('.message-entry-<%= @message.id %> .message_reply_txt_field').val("");
+$('.message-entry-<%= @message.id %> .message_replies_count').text("<%= @message.message_replies.count%>");
