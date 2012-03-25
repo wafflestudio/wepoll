@@ -244,6 +244,6 @@ bills.each do |bill|
       else
         "해당없음"
       end
-    vote.save
+    vote.save if vote.value != "해당없음"
   end
 end

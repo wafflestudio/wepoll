@@ -653,6 +653,30 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   display:none;
 }
 
+
+#issueline {
+  word-break: break-all;
+
+  .vote {
+    font-weight:bold
+  }
+
+  h1 {
+   margin-top:30px;
+  }
+  h2 {
+    margin-bottom:10px;
+  }
+
+
+  div {
+    margin-top:20px;
+    margin-bottom:10px;
+  }
+
+}
+
+
 .preview-wrap {
   background-color: #f6f7f8;
 
