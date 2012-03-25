@@ -35,8 +35,9 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
-  def promises
-    @promises = @politicians.map{|p| p.promises[0...3]}
+  def pledges
+    @pledges = @politicians.map{|p| p.pledges}
+    @maxcount = @pledges.map {|c| c.count}.max
     render :layout => false
   end
 

@@ -91,14 +91,13 @@
         $profiles.load(taburl);
       }, waypoint_opts);
 
-      var $promises = $("#promises");
-      $promises.waypoint(function(event, direction) {
+      var $pledges = $("#pledges");
+      $pledges.waypoint(function(event, direction) {
         if (direction == 'up') return;
-        $promises.waypoint('remove');
-//        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
-//        $profiles.load(taburl);
+        $pledges.waypoint('remove');
+        var taburl = "<%= pledges_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+        $pledges.load(taburl);
       }, waypoint_opts);
-
     });
   </script>
 <% end -%>
@@ -165,16 +164,16 @@ $(document).ready(function() {
     <% end -%>
   </div>
 
-  <h1>국회활동</h1>
-  <div id="politician-bill-activities">
+  <h1 class="section-label">국회활동</h1>
+  <div id="politician-bill-activities" class="section">
   </div>
 
-  <h1>프로필</h1>
-  <div id="profiles">
+  <h1 class="section-label">프로필</h1>
+  <div id="profiles" class="section">
   </div>
 
-  <h1>공약</h1>
-  <div id="promises">
+  <h1 class="section-label">공약</h1>
+  <div id="pledges" class="section">
   </div>
 
   <div id="messages">

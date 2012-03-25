@@ -3,8 +3,8 @@ class Pledge
 
   field :title, type: String
   field :content, type: String
-  field :like, type: Integer
-  field :dislike, type: Integer
+  field :like, type: Integer, default:0
+  field :dislike, type: Integer, default:0
 
   belongs_to :politician
 

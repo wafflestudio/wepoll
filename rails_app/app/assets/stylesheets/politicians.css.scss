@@ -266,3 +266,84 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     }
   }
 }
+
+.pledge-items-container {
+  margin-bottom:10px;
+}
+.pledge-item {
+  width:300px - 2px - 2px !important;
+  border:2px solid;
+  &.left {
+    border-color:#ff5252;
+    color:#ff5252;
+  }
+  &.right {
+    border-color:#529fff;
+    color:#529fff;
+  }
+  border-radius: 10px;
+  &.notexist {
+    border:0;
+    width:300px;
+  }
+  padding:5px 0;
+
+  .pledge-like-count {
+    float:left;
+    width:63px;
+    font-size:15pt;
+    text-align:center;
+    .count {
+      text-decoration:none;
+      display:block;
+      height:44px - 22px;
+      padding-top:22px;
+
+      &:hover {
+        text-decoration:underline;
+      }
+
+      &.like {
+        color:#529fff;
+        background:url(/assets/icn_pledge_like.gif) 13px 4px no-repeat;
+      }
+
+      &.dislike {
+        color:#9a9a9a;
+        background:url(/assets/icn_pledge_dislike.gif) 13px 4px no-repeat;
+      }
+    }
+  }
+
+  .pledge-title {
+    float:right;
+    min-height:88px;
+    width:211px - 8px;
+    padding-left:8px;
+    border-left:1px solid #529fff;
+    line-height:150%;
+    &.notexist {
+      border:0;
+    }
+
+    position:relative;
+
+    .btn-detail {
+      text-decoration:none;
+      color:black;
+      display:block;
+      font-size:7.5pt;
+      width:67px - 22px;
+      background-color:#fceb9d;
+      border:1px solid gray;
+      border-radius:10px;
+      position:absolute;
+      right:5px;
+      bottom:0px;
+      background-image:url(/assets/icn_pledge_detail.gif);
+      background-position:7px 3px;
+      background-repeat: no-repeat;
+      padding-left:22px;
+    }
+  }
+}
