@@ -4,22 +4,23 @@
   %>
   <% @bills.each do |bill| %>
     <% if bill.issue != issueName  %>
-      <h1><%=  bill.issue %></h1>
+      <h2><%=  bill.issue %></h2>
       <% issueName = bill.issue %>
     <% end %>
     <p><%= bill.title %></p>
+
     <p>
-      <% 0.upto(1) do |i| %>
-        <% if @grouped_bills[i][:supported].where(:number => bill.number).first == bill %>
-          찬성
-        <% elsif @grouped_bills[i][:dissented].where(:number => bill.number).first == bill%>
-          반대
-        <% elsif @grouped_bills[i][:attended].where(:number => bill.number).first == bill %>
-          기권
-        <% elsif @grouped_bills[i][:absented].where(:number => bill.number).first == bill%>
-          부재
-        <% end %>
+      <% @politicians.each do |pol| %>
+        <%=  @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => pol.id).first.value %>
       <% end %>
+    </p>
+    
+    <p>
+      
+      <% @votes_by_parties.where(:bill_id => bill.id).each do |votes| %>
+        <%= votes.party %>:<%= votes.num_supporters || 0 %>/<%= votes.num_dissenters || 0 %>/<%= votes.num_attendees || 0 %>/<%= votes.num_absentees || 0 %>
+      <% end %>
+
     </p>
     
     <p>찬성:<%= bill.supporters.length %>/반대:<%= bill.dissenters.length %></p>

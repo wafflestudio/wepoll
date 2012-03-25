@@ -197,3 +197,53 @@ bills.each do |number,bill|
   puts "#{b.number}: total #{supporters+dissenters+attendees+absentees} (#{supporters},#{dissenters},#{attendees},#{absentees})"
 end
 
+
+numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
+bills = Bill.where(:number.in => numbers)
+politicians = Politician.all
+
+# 필요한 정보: 의원 둘의 표결, 당별 표결 정보
+votes_for_bill_by_pol = {}
+votes_for_bill_by_party = {}
+fields = [:supporters,:dissenters,:attendees,:absentees]
+
+VoteForBillByParty.destroy_all
+VoteForBillByPolitician.destroy_all
+
+
+
+bills.each do |bill|
+
+  fields.each do |fieldName|
+    bill.send(fieldName).each do |pol|
+      votes = VoteForBillByParty.where(:bill_id => bill.id).where(:party => pol.party).first ||
+          VoteForBillByParty.new(:party => pol.party,:bill => bill)
+      num = votes.send("num_" + fieldName.to_s) || 0
+      votes.send("num_" + fieldName.to_s + "=", 0) if num == 0
+      votes.send("num_" + fieldName.to_s + "=", num + 1)
+      votes.save
+    end
+  end
+
+
+  politicians.each do |pol|
+    vote =
+        VoteForBillByPolitician.where(:bill_id => bill.id).where(:politician_id => pol.id).first
+    vote =
+        VoteForBillByPolitician.new(:bill => bill, :politician => pol)
+
+    vote.value =
+      if bill.supporters.include? pol
+        "찬성"
+      elsif bill.dissenters.include? pol
+        "반대"
+      elsif bill.attendees.include? pol
+        "기권"
+      elsif bill.absentees.include? pol
+        "부재"
+      else
+        "해당없음"
+      end
+    vote.save
+  end
+end
