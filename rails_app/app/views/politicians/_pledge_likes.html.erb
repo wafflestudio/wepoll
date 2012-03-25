@@ -1,0 +1,5 @@
+<div class="pledge-like-count <%= dir %>">
+  <%= link_to_function pledge.like, "pledge_like('#{pledge.id}')", :class => "like count pledge-#{pledge.id}"%>
+  <%= link_to_function  pledge.dislike,"pledge_dislike('#{pledge.id}')", :class => "dislike count pledge-#{pledge.id}" %>
+</div>
+

@@ -1,0 +1,11 @@
+<div class="pledge-title <%= dir%>">
+  <% if pledge -%>
+    <%= pledge.title %>
+  <% else -%>
+    &nbsp;
+  <% end -%>
+  <%= link_to_function "상세보기", "togglePledgeDetail('#{pledge.id}')", :class => "btn-detail #{dir}", :id => "btn-detail-#{pledge.id}" %>
+  <div id="pledge-content-<%= pledge.id%>" class="pledge-content" style="display:none;">
+    <%= simple_format pledge.content%>
+  </div>
+</div>
