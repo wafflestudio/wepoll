@@ -7,6 +7,8 @@ class Message
 	field :tweet_feeed_id, type: String
 	field :facebook_feed_id, type: String
   field :district, type: String
+  field :like_count, type: Integer
+  field :blame_count, type: Integer
 	
 
 	belongs_to :user

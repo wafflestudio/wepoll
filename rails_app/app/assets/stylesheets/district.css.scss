@@ -404,6 +404,174 @@ a.init-bills-link {
   padding:7px 5px 5px 5px;
   margin-bottom:20px;
 }
+// preview css
+@mixin preview {
+  .preview {
+    padding-top: 15px;
+    float: left;
+    margin: 0;
+    margin-top: -2px;
+    background-color: white;
+    width: 553px;
+    .preview-img {
+      float: left;
+      margin-left: 30px;
+      margin-bottom: 10px;
+      width: 100px;
+    }
+    .preview-right {
+      width: 400px;
+      padding: 10px 0px 10px 10px;
+      float: left;
+      .preview-title {
+        font-weight: bold;
+        color: #3C5598;
+        a {
+          color: #3C5598;
+        }
+      }
+      .preview-link, .preview-txt {
+        font-size: 9pt;
+        color: #929292;
+        a {
+          color: #929292;
+        }
+      }
+      .preview-link {
+        margin-bottom: 4px;
+        overflow: hidden;
+      }
+      .preview-title, .preview-link {
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+@mixin message {
+  .message_politician_photo {
+    float: left;
+  }
+  .message_entry_body {
+    font-size: 10pt;
+    width: 480px;
+    line-height: 120%;
+    margin-left: 15px;
+    float: left;
+    .message_created_at {
+      font-size: 5pt;
+    }
+  }
+  .message_entry_btns {
+    width: 90px;
+    height: 30px;
+    float: left;
+    .message_entry_btn {
+      padding-left: 20px;
+      &.like {
+        color: #FF7682;
+      }
+      &.blame {
+        color: #717171;
+      }
+    }
+    a, span {
+      display: inline-block;
+      margin-bottom: 3px;
+      text-decoration: none;
+    }
+    span {
+      float: right;
+      margin-right: 10px;
+    }
+  }
+  .message_entries_preview {
+    margin-left: 25px;
+  }
+  .show_message_replies_btn {
+    margin-left: 53px;
+    display: block;
+    float: left;
+    margin-bottom: 5px;
+
+    a {
+      color: #717171;
+      text-decoration: none;
+    }
+    span {
+      color: #FF7682;
+    }
+  }
+  .message_replies {
+    margin-left: 53px;
+
+    .message_reply_form {
+      .message_reply_txt_field {
+        width: 490px;
+      }
+      .message_reply_submit_btn {
+        width: 45px;
+        margin-left: 20px;
+        background-color: white;
+        border: 1px solid black;
+      }
+    }
+    ul {
+      width: 555px;
+      li {
+        margin-bottom: 3px;
+        font-size: 10pt;
+        width: 525px;
+        padding-left: 30px;
+        .message_reply_user_nickname {
+          display: inline-block;
+          width: 90px;
+        }
+        .message_reply_content {
+          display: inline-block;
+          width: 435px;
+          .message_reply_created_at {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 5pt;
+          }
+        }
+      }
+    }
+  }
+}
+#best-message {
+  background-color: #E6E6DC;
+  width: 680px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  behavior:url(http://wepoll.or.kr/PIE.htc);
+  @include message;
+  @include preview;
+  .best-label {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    font-size: 12pt;
+    font-weight: normal;
+  }
+  .message_entry {
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-bottom: 10px;
+    background-color: white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    behavior:url(http://wepoll.or.kr/PIE.htc);
+    .preview {
+      padding-left: 25px;
+    }
+  }
+}
 .section-label {
   font-size:12pt;
   padding:10px 0;
@@ -540,51 +708,8 @@ a.init-bills-link {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   behavior: url(http://wepoll.or.kr/PIE.htc);
+  @include preview;
 
-
-  // preview css
-  .preview {
-    padding-top: 15px;
-    float: left;
-    margin: 0;
-    margin-top: -2px;
-    background-color: white;
-    width: 553px;
-    .preview-img {
-      float: left;
-      margin-left: 30px;
-      margin-bottom: 10px;
-      width: 100px;
-    }
-    .preview-right {
-      width: 400px;
-      padding: 10px 0px 10px 10px;
-      float: left;
-      .preview-title {
-        font-weight: bold;
-        color: #3C5598;
-        a {
-          color: #3C5598;
-        }
-      }
-      .preview-link, .preview-txt {
-        font-size: 9pt;
-        color: #929292;
-        a {
-          color: #929292;
-        }
-      }
-      .preview-link {
-        margin-bottom: 4px;
-        overflow: hidden;
-      }
-      .preview-title, .preview-link {
-        a {
-          text-decoration: none;
-        }
-      }
-    }
-  }
   // message write form css
   .write-message-area {
     float: left;
@@ -687,100 +812,8 @@ a.init-bills-link {
       padding-bottom: 20px;
       border-bottom: 1px solid #E5E7DC;
       margin-bottom: 20px;
-
-      .message_politician_photo {
-        float: left;
-      }
-      .message_entry_body {
-        font-size: 10pt;
-        width: 480px;
-        line-height: 120%;
-        margin-left: 15px;
-        float: left;
-        .message_created_at {
-          font-size: 5pt;
-        }
-      }
-      .message_entry_btns {
-        width: 90px;
-        height: 30px;
-        float: left;
-        .message_entry_btn {
-          padding-left: 20px;
-          &.like {
-            color: #FF7682;
-          }
-          &.blame {
-            color: #717171;
-          }
-        }
-        a, span {
-          display: inline-block;
-          margin-bottom: 3px;
-          text-decoration: none;
-        }
-        span {
-          float: right;
-          margin-right: 10px;
-        }
-      }
-      .message_entries_preview {
-        margin-left: 25px;
-      }
-      .show_message_replies_btn {
-        margin-left: 53px;
-        display: block;
-        float: left;
-        margin-bottom: 5px;
-
-        a {
-          color: #717171;
-          text-decoration: none;
-        }
-        span {
-          color: #FF7682;
-        }
-      }
-      .message_replies {
-        margin-left: 53px;
-
-        .message_reply_form {
-          .message_reply_txt_field {
-            width: 490px;
-          }
-          .message_reply_submit_btn {
-            width: 45px;
-            margin-left: 20px;
-            background-color: white;
-            border: 1px solid black;
-          }
-        }
-        ul {
-          width: 555px;
-          li {
-            margin-bottom: 3px;
-            font-size: 10pt;
-            width: 525px;
-            padding-left: 30px;
-            .message_reply_user_nickname {
-              display: inline-block;
-              width: 90px;
-            }
-            .message_reply_content {
-              display: inline-block;
-              width: 435px;
-              .message_reply_created_at {
-                display: inline-block;
-                margin-left: 5px;
-                font-size: 5pt;
-              }
-            }
-          }
-        }
-      }
-
+      @include message;
     }
-
   }
 }
 
