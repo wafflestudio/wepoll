@@ -55,6 +55,20 @@
     }
 
     $(function() {
+      $('span.checkbox').addClass("unchecked");
+      $(".checkbox").click(function(){
+        if($(this).children("input").attr("checked")){
+          // uncheck
+          $(this).children("input").removeAttr("checked");
+          $(this).removeClass("checked");
+          $(this).addClass("unchecked");
+        }else{
+          // check
+          $(this).children("input").attr({checked: "checked"});
+          $(this).removeClass("unchecked");
+          $(this).addClass("checked");
+        }
+      });
       var waypoint_opts = {
         offset: '100%'
       };
@@ -89,9 +103,9 @@
 <% end -%>
 <script type="text/javascript">
   /// tooltip
-$(document).ready( function() {
-  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
-  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+$(document).ready(function() {
+  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}});
+  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}});
 
   $('.district-candidate').each( function(index, element) {
     var dropdown;
@@ -99,53 +113,20 @@ $(document).ready( function() {
     $(element).mouseenter(function() {
       dropdown = $(element).children(".candidate-dropdown")
       var pos = $(element).position();
-      var w = $(element).outerWidth()
-      var h = $(element).outerHeight()
+      var w = $(element).outerWidth();
+      var h = $(element).outerHeight();
       dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
       //dropdown.show()
 
-    })
+    });
     $(element).mouseleave(function() {
       if(dropdown)  {
-        dropdown.hide()
+        dropdown.hide();
       }
-    })
-
-  }
-  )
-})
-</script>
-<script type="text/javascript">
-  function charLimit() { $(".link_reply_input").keyup(function() {
-    var $this = $(this);
-    var max = 140;
-    var len = 0;
-    var $textarea = $("textarea", $this);
-    var len = $textarea.val().length;
-    if (len > max) {
-      $textarea.val($textarea.val().substr(0, max));
-      len = $textarea.val().length;
-    }
-    $this.find(".current-comment-length").text(len);
-
-    $this.children(".link-reply-button").click(function() {
-      return true;
     });
-  });};
-  function loadUrl(url, parentDiv)  {
-    $.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
-      function(data)  { 
-        $(".preview-title a", parentDiv).html(data.title);
-        $(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "<img src='/assets/dummy-news-1.jpg' />" );
-        $(".preview-desc", parentDiv).html(data.description);
-      } 
-    }); 
-  };
+  });
+});
 </script>
-
-<%= render :file => 'timeline_entries/index' %>
-<%#=  render :partial => 'timeline_entries/timeline' %>
-<!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
 <div class="grid_12" id="vs-content-wrapper" style="margin-bottom: 40px;">
   <div id="district-title">
@@ -178,8 +159,6 @@ $(document).ready( function() {
       <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
       <% if i==0 -%>
         <div id="split-bar">
-          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph tooltip-top", :style => "margin-top:400px;", :title=> '칭찬을 받은 횟수입니다.' %>
-          <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph tooltip-bottom", :style => "margin-top:20px;", :title=> '지적을 받은 횟수입니다.'%>
         </div>
       <% end -%>
     <% end -%>
@@ -197,28 +176,10 @@ $(document).ready( function() {
   <div id="pledges" class="section">
   </div>
 
-  <div class="write_message_area grid_11 alpha omega">
+  <div id="messages">
     <%= render :partial => 'message_form' %>
-  </div>
-  <div id="messages_area" class="grid_11 alpha omega">
-    <%= render @messages %>
+    <div id="messages_area">
+      <%= render @messages %>
+    </div>
   </div>
 </div>
-<script type="text/javascript">
-  $(".link_reply_input").keyup(function() {
-    var $this = $(this);
-    var max = 250;
-    var len = 0;
-    var $textarea = $("textarea", $this);
-    var len = $textarea.val().length;
-    if (len > max) {
-      $textarea.val($textarea.val().substr(0, max));
-      len = $textarea.val().length;
-    }
-    $this.find(".current-comment-length").text(len);
-
-    $this.children(".link-reply-button").click(function() {
-      return true;
-    });
-  });
-</script>
