@@ -1,16 +1,22 @@
 <div class="message_entry message-entry-<%= message.id %> clearfix">
-  <%= image_tag message.politician.profile_photo.url(:square100), :size => "40x40", :class => "message_politician_photo" %>
+  <%= image_tag message.politician.profile_photo.url(:square100), :size => "40x40", :class => "message_politician_photo" unless message.politician.nil? %>
+  <% if message.politician.nil? -%>
+    <div class="message_politician_photo" style="color: red; text-align: center; width: 40px; height: 40px;">
+      <%= message.district %>
+    </div>
+  <% end -%>
   <div class="message_entry_body clearfix">
     <%= message.user.nickname %>
     <span class="message_created_at"><%= message.created_at.strftime("%y.%m.%d %H:%M") %></span><br />
-    <%= message.politician.name %> 후보에게<br /><br />
+
+    <%= message.politician.nil? ? message.district : message.politician.name %> 후보에게<br /><br />
     <%= message.body %>
   </div>
   <div class="message_entry_btns">
     <%= link_to '추천', '#', :class => "message_entry_btn like" %><span class="like_count">0</span><br />
     <%= link_to '반대', '#', :class => "message_entry_btn blame" %><span class="blame_count">0</span>
   </div>
-  <% if message.preview != nil %>
+  <% unless message.preview.nil? %>
     <div class="message_entries_preview preview clearfix">
       <img class="preview-img" src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'>
       <div class="preview-right">

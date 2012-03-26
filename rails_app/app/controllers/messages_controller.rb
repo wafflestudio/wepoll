@@ -20,6 +20,10 @@ class MessagesController < ApplicationController
 
 	def create
 		@message = Message.new(params[:message])
+    if params[:message][:politician_id] == "all"
+      @message.politician_id = nil
+      @message.politician = nil
+    end
 		@message.user_id = current_user.id
     @success = false
 
@@ -55,6 +59,23 @@ class MessagesController < ApplicationController
 	def destroy
 
 	end
+
+  def like
+    @re = Message.find(params[:id])
+    if @message.like(current_user)
+      render :json => {:status => "ok", :count => @message.like_count }
+    else
+      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+    end
+  end
+  def blame
+    @re = Message.find(params[:id])
+    if @message.blame(current_user)
+      render :json => {:status => "ok", :count => @message.blame_count }
+    else
+      render :json => {:status => "error", :message => "이미 신고하셨습니다."}
+    end
+  end
 
 
   #begin protected

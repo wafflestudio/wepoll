@@ -1,14 +1,19 @@
 <div class="write-message-area">
   <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
-    <%= f.hidden_field :politician_id %>
     <%= f.hidden_field :preview_id %>
+    <%= f.hidden_field :district, :value => @district %>
 
     <div id="message-form-politicians" class="clearfix">
       <div id="district-box">
-        <span><%= @p1.district %></span><br />
+        <span><%= @district %></span><br />
         후보
       </div>
       <div id="politicians-box">
+        <div class="radio-politician">
+          <%= f.label 'politician_id_all', image_tag("btn_wepoll.gif"), :class => "img-label clearfix" %>
+          <%= f.radio_button :politician_id, 'all', :checked => true %>
+          <%= f.label 'politician_id_all', '전체', :class => "txt-label" %>
+        </div>
         <% @politicians.each do |p| -%>
           <div class="radio-politician">
             <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)), :class => "img-label clearfix" %>

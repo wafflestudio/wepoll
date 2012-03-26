@@ -17,7 +17,7 @@ class DistrictController < ApplicationController
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
         @message = Message.new
-     		@messages = Message.where(:politician_id.in => [@p1.id, @p2.id]).desc("created_at").page(params[:page]).per(10)
+     		@messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
         @best_message = @messages.desc('like_count').first
         @bills = Bill.limit(20)
       end

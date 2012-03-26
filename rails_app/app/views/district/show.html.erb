@@ -185,6 +185,7 @@ $(document).ready(function() {
 
   <div id="messages">
     <%= render :partial => 'message_form' %>
+    <div id="messages_area_label">전체 한마디 <span id="total_message_count"><%= @messages.count %></span>개</div>
     <div id="messages_area">
       <%= render @messages %>
     </div>
