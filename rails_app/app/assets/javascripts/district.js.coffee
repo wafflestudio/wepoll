@@ -65,3 +65,12 @@ $ () ->
       if (! $clicked.parents().hasClass("dropdown"))
         $("dd ul", $this).hide()
 
+  # message like, blame btn
+  $('.message_entry .message_entry_btn').live 'click', ->
+    obj = this
+    $.get this.href, (data) ->
+      if data.status == "error"
+        alert data.message
+      else
+        $(obj).next().text data.count
+    false

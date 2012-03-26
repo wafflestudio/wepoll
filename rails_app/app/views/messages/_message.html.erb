@@ -13,8 +13,8 @@
     <%= message.body %>
   </div>
   <div class="message_entry_btns">
-    <%= link_to '추천', '#', :class => "message_entry_btn like" %><span class="like_count">0</span><br />
-    <%= link_to '반대', '#', :class => "message_entry_btn blame" %><span class="blame_count">0</span>
+    <%= link_to '추천', like_message_path(message), :class => "message_entry_btn like" %><span class="like_count"><%= message.like_count %></span><br />
+    <%= link_to '반대', blame_message_path(message), :class => "message_entry_btn blame" %><span class="blame_count"><%= message.blame_count %></span>
   </div>
   <% unless message.preview.nil? %>
     <div class="message_entries_preview preview clearfix">

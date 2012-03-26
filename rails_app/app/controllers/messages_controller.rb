@@ -61,19 +61,19 @@ class MessagesController < ApplicationController
 	end
 
   def like
-    @re = Message.find(params[:id])
+    @message = Message.find(params[:id])
     if @message.like(current_user)
       render :json => {:status => "ok", :count => @message.like_count }
     else
-      render :json => {:status => "error", :message => "이미 공감하셨습니다."}
+      render :json => {:status => "error", :message => "이미 추천하셨습니다."}
     end
   end
   def blame
-    @re = Message.find(params[:id])
+    @message = Message.find(params[:id])
     if @message.blame(current_user)
       render :json => {:status => "ok", :count => @message.blame_count }
     else
-      render :json => {:status => "error", :message => "이미 신고하셨습니다."}
+      render :json => {:status => "error", :message => "이미 반대하셨습니다."}
     end
   end
 

@@ -9,6 +9,8 @@ Wepoll::Application.routes.draw do
 		match '/list' => 'messages#list', :as => "list"
     post 'message_replies' => 'message_replies#create', :as => :replies
     get 'message_replies' => 'message_replies#index', :as => :replies
+    get 'blame', :on => :member
+    get 'like', :on => :member
   end
 
   match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
