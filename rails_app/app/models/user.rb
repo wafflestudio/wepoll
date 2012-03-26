@@ -101,6 +101,10 @@ class User
 
   has_many :link_replies, :inverse_of => :user
 
+  #pledges
+  has_and_belongs_to_many :like_pledges, :class_name => "Pledge", inverse_of: nil
+  has_and_belongs_to_many :dislike_pledges, :class_name => "Pledge", inverse_of: nil
+
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
 
     uid = access_token.uid
