@@ -4,9 +4,9 @@ require 'csv'
 class MainController < ApplicationController
 layout false, :only => [:provision, :privacy]
   def index
-    if !user_signed_in?
-      sign_in_and_redirect User.first, :event => :authentication
-    end
+#    if !user_signed_in?
+#      sign_in_and_redirect User.first, :event => :authentication
+#    end
 
     @politicians = Politician.all.asc('name').limit(10)
     @big_header = true

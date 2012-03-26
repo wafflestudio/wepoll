@@ -25,7 +25,11 @@
     </div>
 
     <div id="message-body-container">
-      <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %>
+      <% if user_signed_in? -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %>
+      <% else -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "로그인 후 한마디를 입력할 수 있습니다.", :onclick => "show_login(); return false;" %>
+      <% end -%>
       <div id="message-length-indicator"><span id="message-body-length">00</span>/250</div>
       <div id="message-form-preview" class="preview">
         <img class="preview-img" src="" />
@@ -36,7 +40,11 @@
         </div>
       </div>
     </div>
-    <%= f.submit '확인', :id => "message-submit-btn" %>
+    <% if user_signed_in? -%>
+      <%= f.submit '확인', :id => "message-submit-btn" %>
+    <% else -%>
+      <%= f.submit '확인', :id => "message-submit-btn", :onclick => "show_login(); return false;" %>
+    <% end -%>
     <div class="reply_check">
       <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
       <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>

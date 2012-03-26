@@ -13,8 +13,13 @@
     <%= message.body %>
   </div>
   <div class="message_entry_btns">
-    <%= link_to '추천', like_message_path(message), :class => "message_entry_btn like" %><span class="like_count"><%= message.like_count %></span><br />
-    <%= link_to '반대', blame_message_path(message), :class => "message_entry_btn blame" %><span class="blame_count"><%= message.blame_count %></span>
+    <% if user_signed_in? -%>
+      <%= link_to '추천', like_message_path(message), :class => "message_entry_btn like active" %><span class="like_count"><%= message.like_count %></span><br />
+      <%= link_to '반대', blame_message_path(message), :class => "message_entry_btn blame active" %><span class="blame_count"><%= message.blame_count %></span>
+    <% else -%>
+      <%= link_to_function '추천', "show_login()", :class => "message_entry_btn like" %><span class="like_count"><%= message.like_count %></span><br />
+      <%= link_to_function '반대', "show_login()", :class => "message_entry_btn blame" %><span class="blame_count"><%= message.blame_count %></span>
+    <% end -%>
   </div>
   <% unless message.preview.nil? %>
     <div class="message_entries_preview preview clearfix">
@@ -32,10 +37,17 @@
   <div class="clear"></div>
   <div class="message_replies" style="display: none;">
     <div class="message_reply_form">
-      <%= form_tag message_replies_path(message), :remote => true do %>
-        <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field" %>
-        <%= submit_tag '확인', :class => "message_reply_submit_btn" %>
-      <% end %>
+      <% if user_signed_in? -%>
+        <%= form_tag message_replies_path(message), :remote => true do %>
+          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "한마디에 댓글을 적어주세요." %>
+          <%= submit_tag '확인', :class => "message_reply_submit_btn" %>
+        <% end %>
+      <% else -%>
+        <%= form_tag message_replies_path(message), :remote => true do %>
+          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "로그인 후 댓글을 적을 수 있습니다.", :onclick => "show_login(); return false;" %>
+          <%= submit_tag '확인', :class => "message_reply_submit_btn", :onclick => "show_login(); return false;" %>
+        <% end %>
+      <% end -%>
     </div>
     <ul class="message_replies_list">
     </ul>

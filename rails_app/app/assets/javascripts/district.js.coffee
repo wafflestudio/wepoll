@@ -66,7 +66,7 @@ $ () ->
         $("dd ul", $this).hide()
 
   # message like, blame btn
-  $('.message_entry .message_entry_btn').live 'click', ->
+  $('.message_entry .message_entry_btn.active').live 'click', ->
     obj = this
     $.get this.href, (data) ->
       if data.status == "error"
