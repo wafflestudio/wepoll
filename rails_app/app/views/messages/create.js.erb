@@ -1,4 +1,6 @@
 <% if @success -%>
+  var total_cnt = $('#total_message_count').text()*1+1;
+  $('#total_message_count').text(total_cnt);
   $('#messages_area').prepend('<%= escape_javascript(render @message) %>');
   $('#message_body').val("");
   $('#message_preview_id').val("");
