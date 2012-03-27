@@ -47,8 +47,8 @@
     float:left;
     margin-right:10px;
     font-size:9pt;
-    cursor:pointer;
-    cursor:hand;
+    /*cursor:pointer;
+    cursor:hand;*/
     .candidate-photo {
       float:left;
       width:48px;
@@ -67,8 +67,8 @@
   }
 
   .candidate-checkbox-wrap {
+  	clear:both;
     text-align:center;
-
   }
 
   .candidate-dropdown {
@@ -108,7 +108,8 @@
 }
 
 .hover{
-  background-color:#e9e8e8;
+  /* - for the time being until personal page is ready
+  background-color:#e9e8e8;*/
 }
 
 
