@@ -28,11 +28,14 @@ class Politician #정치인 모델
   field :education, type: String
   field :experiences, type: String
   field :promises, type: Array, default: []
+  field :detail_promises, type: Array, default: []
   field :attendance, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = 0;a}
+  field :number, type: Integer, default: 0 # 기호 n번
 
   # 법안관련
   field :joint_initiate_bill_politicians, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = [];a}
   field :crawl_init_bill_completed, type: Boolean, default: false
+
 
 
   #타임라인 관련
