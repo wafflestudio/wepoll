@@ -14,6 +14,17 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     text-decoration: none;
     font-size: 13pt;
     text-align: center;
+    padding-left:30px;
+  }
+  h2 {
+    margin-top:7px;
+    color:#aeaeae;
+    text-align:center;
+  }
+  h3 {
+    margin-top:5px;
+    font-weight:normal;
+    text-align:center;
   }
 
   #login_close {
@@ -30,14 +41,14 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   }
   #login_links_box {
     margin-top: 20px;
-    padding-top: 30px;
-    padding-bottom: 40px;
+    padding-top: 15px;
+    padding-bottom: 20px;
     background-color: #F4F4F4;
     #fb_login_btn, #twitter_login_btn {
       font-size: 10pt;
       display: block;
       margin: 5px auto;
-      padding-left: 20px;
+      /*padding-left: 20px;*/
       width: 150px;
       height: 22px;
     }

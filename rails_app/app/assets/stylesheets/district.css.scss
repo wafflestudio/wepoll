@@ -47,8 +47,8 @@
     float:left;
     margin-right:10px;
     font-size:9pt;
-    cursor:pointer;
-    cursor:hand;
+    /*cursor:pointer;
+    cursor:hand;*/
     .candidate-photo {
       float:left;
       width:48px;
@@ -63,7 +63,14 @@
       .name { font-size:12pt; display:block; }
     }
 
+
   }
+
+  .candidate-checkbox-wrap {
+  	clear:both;
+    text-align:center;
+  }
+
   .candidate-dropdown {
     background-color:white;
     position:absolute;
@@ -100,7 +107,10 @@
 
 }
 
-
+.hover{
+  /* - for the time being until personal page is ready
+  background-color:#e9e8e8;*/
+}
 
 
 .namecard {
@@ -574,8 +584,8 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
 .dropdown dd { position:relative; }
 .dropdown a, .dropdown a:visited { text-decoration:none; outline:none;}
 .dropdown dt a:hover { color:#5d4617;}
-.dropdown dt a { padding-top:7px;height:28px - 7px;background:url(/assets/bg_dropdown_btn.gif) no-repeat scroll right center; display:block; padding-right:20px;}
-.dropdown dt a span {cursor:pointer; display:block; padding:5px;}
+.dropdown dt a { padding-top:7px;height:28px - 7px; display:block; padding-right:20px;}
+.dropdown dt a span {display:block; padding:5px;}
 .dropdown dd ul { z-index:3; overflow-y:scroll;height:200px;border:1px solid #aaa;display:none;
                   background-color:white;left:0px; padding:5px 0px; position:absolute; top:2px; width:auto; width:160px; list-style:none;}
 .dropdown span.value { display:none;}
