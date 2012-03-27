@@ -22,12 +22,14 @@
     <div class="photo-frame"></div>
   </div>
 
-  <dl data-district="<%= @district%>" id="<%= "politician#{(index==0 ?  1 : 2)}"%>" class="dropdown <%= index==0?"left":"right"%>">
+  <dl id="<%= "politician#{(index==0 ?  1 : 2)}"%>" class="dropdown <%= index==0?"left":"right"%>">
     <% if politician -%>
-    <dt class="tooltip-top" title="<%= @district %>의 다른 후보를 볼 수 있습니다."><a href="#"><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
+
+    <dt><a><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
     <% else -%>
     <dt><a href="#"><span class="name">후보없음</span></a></dt>
     <% end -%>
+    <!--
     <dd>
     <ul>
       <% @politicians.each do |p| -%>
@@ -36,10 +38,14 @@
       <% end -%>
     </ul>
     </dd>
+    -->
   </dl>
+
   <div class="clear"></div>
 
+  <!--
   <div class="link-graph-wrapper clearfix">
+
     <div class="graph-stopper <%=index==0?"right":"left"%>"></div>
     <div id="p<%= index+1 %>-good-link" class="bar-graph politician-<%=politician.id %> good-links"
       data-color="#81d9fb,#60cbfa"
@@ -50,6 +56,7 @@
       data-value="<%= politician ? politician.good_link_count : 0%>">
     </div>
     <div class="clear"></div>
+
 
     <div class="graph-stopper <%= index==0?"right":"left" %>"></div>
     <div id="p<%=index+1 %>-bad-link" class="bar-graph politician-<%=politician.id%> bad-links"
@@ -68,4 +75,5 @@
       <%= link_to_function '링크등록', "show_login()", :title => (politician.name + "에 관한 링크를 등록하여 공유하세요"), :class => "link-button #{index==0?'left':'right'} login tooltip-top" %>
     <% end -%>
   <% end -%>
+   -->
 </div>

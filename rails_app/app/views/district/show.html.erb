@@ -292,6 +292,7 @@ $(document).ready( function() {
     <fb:like class="fb-like" href="<%= request.url %>" width="100" show_faces="false" layout="button_count" />
   </div>
 
+  <!-- 후보 선택 체크박스 -->
   <div id="district-candidates" class="clearfix">
     <div style="margin-bottom:10px;"><%= @district%>의 후보들을 비교해보세요</div>
     <% @politicians.each do |politician|
@@ -303,8 +304,8 @@ $(document).ready( function() {
             <span class="party" style="color:<%=@party_color[politician.party] || "black" %>"><%= politician.party %></span>
             <span class="name" style="font-weight:bold"><%=politician.name %></span>
           </div>
-          <div class="candidate-checkbox-wrap"><span><input type="checkbox" class="candidate-checkbox" name="selected-candidates" value="<%=politician.id%>"/></span></div>
         </a>
+        <div class="candidate-checkbox-wrap"><span><input type="checkbox" class="candidate-checkbox" name="selected-candidates" value="<%=politician.id%>"/></span></div>
         <div class="candidate-dropdown">
           <a href="/district/<%=@district%>/<%=politician.id%>/<%=@p2.id%>"><p class='dropdown-item'><span class="target"><%=  politician.name %></span> <span class="vs">VS</span> <%=@p2.name%></p></a>
           <a href="/district/<%=@district%>/<%=@p1.id%>/<%=politician.id%>"><p class='dropdown-item'><%=@p1.name%> <span class="vs">VS</span> <span class="target"><%=  politician.name %></span></p></a>
@@ -366,6 +367,7 @@ $(document).ready( function() {
     })
   </script>
 
+  <!-- 후보 얼굴 및 이름 -->
   <div id="name-cards" class="clearfix">
     <% [@p1, @p2].each_with_index do |politician,i| -%>
       <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>

@@ -1,7 +1,7 @@
 #= require timeline/underscore
 #= require timeline/json2
 #= require timeline/module
-#= require timeline/raphael-min
+#= require raphael-min
 #= require timeline/date-ko-KR
 #= require timeline/backbone 
 #= require timeline/bill
