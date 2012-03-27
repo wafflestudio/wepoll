@@ -1,0 +1,2 @@
+$(".message-entry-<%= @entry.id %> .message_more").after("<%= escape_javascript render(:file => "messages/list.html.erb") %>");
+$(".message-entry-<%= @entry.id %> .message_more").remove();

@@ -27,7 +27,6 @@ class Politician #정치인 모델
   field :job, type: String
   field :education, type: String
   field :experiences, type: String
-  field :promises, type: Array, default: []
   field :attendance, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = 0;a}
 
   # 법안관련
@@ -62,6 +61,10 @@ class Politician #정치인 모델
 
   #타임라인 관련
   has_many :timeline_entries
+
+  #한마디
+  has_many :messages
+  has_many :pledges
 
   def total_replies
     self.tweets.map {|t| t.tweet_replies}.flatten

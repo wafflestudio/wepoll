@@ -48,6 +48,7 @@ class ApiController < ApplicationController
 			result[:title] = preview.title
 			result[:description ] = preview.description[0...117]  + "..."# 120자 제한!
 			result[:image] = preview.image_url
+      result[:url] = preview.url
 		else
 			#doc = Nokogiri::HTML(open(target_link))
 			#무슨 기사인지 판별.  
@@ -569,6 +570,7 @@ class ApiController < ApplicationController
 			end
 			preview = Preview.create(:url => target_link, :title => result[:title], :image_url => result[:image], :description => result[:description], :created => result[:created_at])
 			result[:id] = preview.id
+      result[:url] = target_link
 			if result[:description].length >= 120
 				result[:description] = result[:description][0,117] + '...'
 			end

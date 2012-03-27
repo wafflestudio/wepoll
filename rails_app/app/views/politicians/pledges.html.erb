@@ -1,0 +1,57 @@
+<div class="subsection pledges">
+  <% 0.upto(@maxcount-1) do |i|-%>
+    <div class="pledge-items-container clearfix">
+      <% 0.upto(1) do |j| -%>
+        <% pledge = @pledges[j][i] -%>
+        <div class="<%= j==0?"left":"right"%> pledge-item <%= pledge ? "":" notexist" %>">
+          <% if pledge -%>
+            <% if j == 0 -%>
+              <%= render :partial => 'pledge_content', :locals => {:pledge => pledge, :dir => j==0 ? "left":"right" } %>
+              <%= render :partial => 'pledge_likes', :locals => {:pledge => pledge, :dir => j==0 ? "left":"right"} %>
+            <% else -%>
+              <%= render :partial => 'pledge_likes', :locals => {:pledge => pledge, :dir => j==0 ? "left":"right" } %>
+              <%= render :partial => 'pledge_content', :locals => {:pledge => pledge, :dir => j==0 ? "left":"right" } %>
+            <% end -%>
+          <% end -%>
+        </div>
+        <% if j==0 -%><div class="subsection-label gray">공약<%=i+1 %></div><% end -%>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>
+
+<script type="text/javascript">
+  function pledge_like(pid) {
+    $.getJSON("/pledges/"+pid+"/like", function(data) {
+      if (data.count) {
+        $(".like.pledge-"+pid).text(data.count);
+      }
+      else if (data.err) {
+        alert("이미 평가하셨습니다.");
+      }
+    });
+  }
+
+  function pledge_dislike(pid) {
+    $.getJSON("/pledges/"+pid+"/dislike", function(data) {
+      if (data.count) {
+        $(".dislike.pledge-"+pid).text(data.count);
+      }
+      else if (data.err) {
+        alert("이미 평가하셨습니다.");
+      }
+    });
+  }
+
+  function togglePledgeDetail(pid) {
+    var $content = $("#pledge-content-"+pid);
+    if ($content.css("display") == 'none') {
+      $content.css('display','block');
+      $("#btn-detail-"+pid).text("숨기기");
+    }
+    else {
+      $content.css('display','none');
+      $("#btn-detail-"+pid).text("상세보기");
+    }
+  }
+</script>
