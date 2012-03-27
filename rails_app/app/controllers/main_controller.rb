@@ -44,13 +44,12 @@ layout false, :only => [:provision, :privacy]
       else
 	#find with subquery
 	@pol = Politician.where(:name => /#{params[:query]}/).first
-Rails.logger.info "#{@pol.name}"
-	if @pol
+	if !@pol.nil?
           redirect_to district_politician_path(@pol._id)
 	else
-        flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
-        flash[:search_error] = "true"
-        redirect_to back
+	flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
+	flash[:search_error] = "true"
+	redirect_to back
 	end
       end
     end
