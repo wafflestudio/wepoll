@@ -44,7 +44,6 @@ layout false, :only => [:provision, :privacy]
       else
 	#find with subquery
 	@pol = Politician.where(:name => /#{params[:query]}/).first
-Rails.logger.info "#{@pol.name}"
 	if @pol
           redirect_to district_politician_path(@pol._id)
 	else
