@@ -657,8 +657,54 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
 #issueline {
   word-break: break-all;
 
-  .vote {
-    font-weight:bold
+  .vote-box-border-support {
+    padding:1px;
+    background-color: #60e33a;
+  }
+
+  .vote-box-border-dissent {
+    background-color: #e32232;
+  }
+
+  .vote-box-border-absent {
+    background-color: #787878;
+  }
+
+
+  .vote-box {
+    background-color:white;
+    text-align:center;
+    .row-name {
+      font-size:8pt;
+    }
+    .row-value {
+      font-weight:bold;
+      font-size:12pt;
+    }
+
+    hr {
+
+    }
+
+  }
+
+  .vote-bill-box-border {
+    background-color:black;
+    padding:1px;
+  }
+
+  .vote-bill-box {
+    background-color:white;
+    text-align:center;
+    h2 {
+      font-weight:bold;
+      font-size:12pt;
+    }
+    .bill-description {
+      font-size:8pt;
+
+    }
+
   }
 
   h1 {
@@ -669,10 +715,8 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   }
 
 
-  div {
-    margin-top:20px;
-    margin-bottom:10px;
-  }
+
+
 
 }
 
