@@ -1,10 +1,12 @@
 <div id="login">
   <%= image_tag 'admin/hr.gif', :id => "login_close" %>
   <div>
-    <h1>로그인 후 후보자를 칭찬/지적 할 수 있습니다.</h1>
+    <h1>페이스북/트위터 계정으로 로그인</h1>
+    <h2>게시물을 등록하려면 로그인하세요</h2>
   </div>
   <div id="login_links_box">
     <%= link_to_function image_tag('login_fb_btn.png'), "show_auth_dialog('/users/auth/facebook')", :id => "fb_login_btn"%>
     <%= link_to_function image_tag('login_twitter_btn.png'), "show_auth_dialog('/users/auth/twitter')", :id => "twitter_login_btn"%>
   </div>
+  <h3> &nbsp;&nbsp;위폴은 사용자의 페이스북/트위터 암호를 저장하지 않습니다.</h3>
 </div>

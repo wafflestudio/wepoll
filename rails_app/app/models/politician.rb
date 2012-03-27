@@ -230,7 +230,7 @@ class Politician #정치인 모델
             f = File.open("raw_data/law_summary_#{code}.html", "w")
             f.write doc2_raw
             f.close
-          rescue Error => e
+          rescue Exception => e
             puts "=====ERR : #{code} summary failed, #{e.message}  ====="
           end
         end
@@ -248,7 +248,7 @@ class Politician #정치인 모델
             f = File.open("raw_data/law_detail_#{code}.html", "w")
             f.write doc3_raw
             f.close
-          rescue Error => e
+          rescue Exception => e
             puts "=====ERR : #{code} detail failed, #{e.message}====="
           end
         end
@@ -262,11 +262,17 @@ class Politician #정치인 모델
         else
           begin
             sleep(1)
-            doc4_raw = iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
+            doc4_raw = 
+            begin
+              iconv.iconv(open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read)
+            rescue Iconv::IllegalSequence => e 
+              open("http://likms.assembly.go.kr/bill/jsp/CoactorListPopup.jsp?bill_id=#{code}").read.encode("UTF-8")
+            end
+
             f = File.open("raw_data/law_coactors_#{code}.html", "w")
             f.write doc4_raw
             f.close
-          rescue Error => e
+          rescue Exception => e
             puts "=====ERR : #{code} coactors failed, #{e.message}====="
           end
         end

@@ -282,7 +282,7 @@ $(document).ready( function() {
 	};
 </script>
 
-<%= render :file => 'timeline_entries/index' %>
+<% render :file => 'timeline_entries/index' %>
 <%#=  render :partial => 'timeline_entries/timeline' %>
 <!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
@@ -370,11 +370,14 @@ $(document).ready( function() {
   <!-- 후보 얼굴 및 이름 -->
   <div id="name-cards" class="clearfix">
     <% [@p1, @p2].each_with_index do |politician,i| -%>
-      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
+      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => politician.tweets.desc('created_at').first} %>
+
       <% if i==0 -%>
         <div id="split-bar">
+          <!--
           <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph tooltip-top", :style => "margin-top:400px;", :title=> '칭찬을 받은 횟수입니다.' %>
           <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph tooltip-bottom", :style => "margin-top:20px;", :title=> '지적을 받은 횟수입니다.'%>
+          -->
         </div>
       <% end -%>
     <% end -%>

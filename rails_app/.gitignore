@@ -15,6 +15,7 @@
 /tmp
 .DS_Store
 app/assets/javascripts/search.js
+./**/.DS_Store
 
 public/system/user_profile_pictures/
 public/system/politician_profile_photos/
