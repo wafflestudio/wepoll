@@ -74,3 +74,4 @@ $ () ->
       else
         $(obj).next().text data.count
     false
+  $('#message_body').placeholder()

@@ -5,7 +5,7 @@
 $ ->
   $('#bills_all').live 'click', ->
     $.getScript all_url
-    return false
+    return
   $('#bills_accepted').live 'click', ->
     $.getScript accepted_url
-    return false
+    return
