@@ -16,7 +16,7 @@
         </div>
         <% @politicians.each do |p| -%>
           <div class="radio-politician">
-            <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)), :class => "img-label clearfix" %>
+            <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square100), :size => "50x50"), :class => "img-label clearfix" %>
             <%= f.radio_button :politician_id, p.id %>
             <%= f.label 'politician_id_'+p.id.to_s, p.name, :class => "txt-label" %>
           </div>
