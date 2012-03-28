@@ -1,0 +1,55 @@
+<div class="message_entry message-entry-<%= message.id %> clearfix">
+  <%= image_tag message.politician.profile_photo.url(:square100), :size => "40x40", :class => "message_politician_photo" unless message.politician.nil? %>
+  <% if message.politician.nil? -%>
+    <div class="message_politician_photo" style="color: red; text-align: center; width: 40px; height: 40px;">
+      <%= message.district %>
+    </div>
+  <% end -%>
+  <div class="message_entry_body clearfix">
+    <%= message.user.nickname %>
+    <span class="message_created_at"><%= message.created_at.strftime("%y.%m.%d %H:%M") %></span><br />
+
+    <%= message.politician.nil? ? message.district : message.politician.name %> 후보에게<br /><br />
+    <%= message.body %>
+  </div>
+  <div class="message_entry_btns">
+    <% if user_signed_in? -%>
+      <%= link_to '추천', like_message_path(message), :class => "message_entry_btn like active" %><span class="like_count"><%= message.like_count %></span><br />
+      <%= link_to '반대', blame_message_path(message), :class => "message_entry_btn blame active" %><span class="blame_count"><%= message.blame_count %></span>
+    <% else -%>
+      <%= link_to_function '추천', "show_login()", :class => "message_entry_btn like" %><span class="like_count"><%= message.like_count %></span><br />
+      <%= link_to_function '반대', "show_login()", :class => "message_entry_btn blame" %><span class="blame_count"><%= message.blame_count %></span>
+    <% end -%>
+  </div>
+  <% unless message.preview.nil? %>
+    <div class="message_entries_preview preview clearfix">
+      <img class="preview-img" src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'>
+      <div class="preview-right">
+        <div class="preview-title"><a target="_blank" href="<%= raw message.preview.url if message.preview != nil%>"><%= message.preview.title if message.preview %></a></div>
+        <div class="preview-link"><%= link_to message.preview.url[0..34] + "...", message.preview.url, :target => "_blank" %></div>
+        <div class="preview-txt"><%= (s=message.preview.description;s.length > 120 ? s[0...117]+"...": s) if message.preview %></div>
+      </div>
+    </div>
+  <% end %>
+  <div class="clear"></div>
+
+  <p class="show_message_replies_btn"><%= link_to '덧글 ', message_replies_path(message), :remote => true %><span class="message_replies_count"><%= message.message_replies.count %></span></p>
+  <div class="clear"></div>
+  <div class="message_replies" style="display: none;">
+    <div class="message_reply_form">
+      <% if user_signed_in? -%>
+        <%= form_tag message_replies_path(message), :remote => true do %>
+          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "한마디에 댓글을 적어주세요." %>
+          <%= submit_tag '확인', :class => "message_reply_submit_btn" %>
+        <% end %>
+      <% else -%>
+        <%= form_tag message_replies_path(message), :remote => true do %>
+          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "로그인 후 댓글을 적을 수 있습니다.", :onclick => "show_login(); return false;" %>
+          <%= submit_tag '확인', :class => "message_reply_submit_btn", :onclick => "show_login(); return false;" %>
+        <% end %>
+      <% end -%>
+    </div>
+    <ul class="message_replies_list">
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+$('.message-entry-<%= @message.id %> .message_replies_count').text("<%= @replies.count%>");
+$('.message-entry-<%= @message.id %> .message_replies').show();
+$('.message-entry-<%= @message.id %> .message_replies_list').html('<%= escape_javascript(render @replies) %>');
+$('.message-entry-<%= @message.id %> .show_message_replies_btn').click(function() {
+  $('.message-entry-<%= @message.id %> .message_replies').hide();
+  $('.message-entry-<%= @message.id %> .show_message_replies_btn').unbind('click');
+  return false;
+});

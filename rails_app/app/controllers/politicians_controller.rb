@@ -21,7 +21,6 @@ class PoliticiansController < ApplicationController
 
   def bill_activities
     @ages = @politicians.map {|p| p.elections.sort {|x,y| y<=>x}.first}
-
     c = -1
     bill_categories = @politicians.map {|p| p.initiate_bills_categories(@ages[c+=1])}
 
@@ -36,8 +35,9 @@ class PoliticiansController < ApplicationController
     render :layout => false
   end
 
-  def promises
-    @promises = @politicians.map{|p| p.promises[0...3]}
+  def pledges
+    @pledges = @politicians.map{|p| p.pledges}
+    @maxcount = @pledges.map {|c| c.count}.max
     render :layout => false
   end
 
@@ -51,6 +51,20 @@ class PoliticiansController < ApplicationController
     @entries = @politicians.map {|p| p ? p.timeline_entries.desc("like_count", "created_at").page(params[:page]).per(3) : []}
     @link = LinkReply.new 
     render :layout => false
+  end
+
+  def messages_tab
+  	 @p1 = params[:id1]
+  	 @p2 = params[:id2]
+     @messages = Message.where(:politician_id.in => [params[:id1],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
+  end
+
+  def messages
+     @messages = Message.where(:politician_id.in => [params[:id],params[:id2]]).desc("created_at").page(params[:page]).per(10)
+     @message = Message.new
+     render :layout => false
   end
 
   def recent_links

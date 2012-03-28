@@ -16,6 +16,9 @@ class DistrictController < ApplicationController
           q_time = {:deleted => false} # (all except deleted)
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
+        @message = Message.new
+     		@messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
+        @best_message = @messages.desc('like_count').first
         @bills = Bill.limit(20)
       end
       format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
@@ -116,8 +119,5 @@ class DistrictController < ApplicationController
 
     @other_politicians = @politicians.reject {|p| p == @p1 || p==@p2}
 
-    @t1 = @p1.nil? ? nil : @p1.tweets.desc('created_at').first
-    @t2 = @p2.nil? ? nil : @p2.tweets.desc('created_at').first
-    @tweets = [@t1, @t2]
   end
 end

@@ -66,6 +66,10 @@ class Politician #정치인 모델
   #타임라인 관련
   has_many :timeline_entries
 
+  #한마디
+  has_many :messages
+  has_many :pledges
+
   def total_replies
     self.tweets.map {|t| t.tweet_replies}.flatten
   end

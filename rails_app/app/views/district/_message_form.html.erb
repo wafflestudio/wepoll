@@ -1,0 +1,109 @@
+<div class="write-message-area">
+  <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
+    <%= f.hidden_field :preview_id %>
+    <%= f.hidden_field :district, :value => @district %>
+
+    <div id="message-form-politicians" class="clearfix">
+      <div id="district-box">
+        <span><%= @district %></span><br />
+        후보
+      </div>
+      <div id="politicians-box">
+        <div class="radio-politician">
+          <%= f.label 'politician_id_all', image_tag("btn_wepoll.gif"), :class => "img-label clearfix" %>
+          <%= f.radio_button :politician_id, 'all', :checked => true %>
+          <%= f.label 'politician_id_all', '전체', :class => "txt-label" %>
+        </div>
+        <% @politicians.each do |p| -%>
+          <div class="radio-politician">
+            <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)), :class => "img-label clearfix" %>
+            <%= f.radio_button :politician_id, p.id %>
+            <%= f.label 'politician_id_'+p.id.to_s, p.name, :class => "txt-label" %>
+          </div>
+        <% end -%>
+      </div>
+    </div>
+
+    <div id="message-body-container">
+      <% if user_signed_in? -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %>
+      <% else -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "로그인 후 한마디를 입력할 수 있습니다.", :onclick => "show_login(); return false;" %>
+      <% end -%>
+      <div id="message-length-indicator"><span id="message-body-length">00</span>/250</div>
+      <div id="message-form-preview" class="preview">
+        <img class="preview-img" src="" />
+        <div id="message-form-preview-right" class="preview-right">
+          <div id="message-form-preview-title" class="preview-title"></div>
+          <div id="message-form-preview-link" class="preview-link"></div>
+          <div id="message-form-preview-txt" class="preview-txt"></div>
+        </div>
+      </div>
+    </div>
+    <% if user_signed_in? -%>
+      <%= f.submit '확인', :id => "message-submit-btn" %>
+    <% else -%>
+      <%= f.submit '확인', :id => "message-submit-btn", :onclick => "show_login(); return false;" %>
+    <% end -%>
+    <div class="reply_check">
+      <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
+      <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
+      <span class="note">SNS로 보내기</span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		var loaded_url = '';
+		$('#message_body').keyup(function(event) {
+				var str = $('#message_body').val();
+			if (event.keyCode == 32) {
+				var regex = /\b([\d\w\.\/\+\-\?\:]*)((ht|f)tp(s|)\:\/\/|[\d\d\d|\d\d]\.[\d\d\d|\d\d]\.|www\.|\.tv|\.ac|\.com|\.edu|\.gov|\.int|\.mil|\.net|\.org|\.biz|\.info|\.name|\.pro|\.museum|\.co)([\d\w\.\/\%\+\-\=\&amp;\?\:\\\&quot;\'\,\|\~\;]*)\b/gi;
+				var url = str.match(regex);
+				if (url != null && loaded_url != url) {
+					loadUrl(url);
+					loaded_url = url;
+				}
+			}
+
+			var $this = $(this);
+			var max = 250;
+			var len = str.length;
+			if (len > max) {
+				$('#message_body').val(str.substr(0, max));
+				len = $('#message_body').val().length;
+			}
+			$("#message-body-length").text(len);
+		});
+
+	$('#new_message').submit(function() {
+		var data_string = $('#new_message').serialize();
+		//console.log(data_string);
+		$.ajax({
+			type: "POST",
+			url: "/messages",
+			data: data_string,
+		});
+		return false;
+	});
+});
+
+
+	function loadUrl(url)  {
+		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
+			function(data)  { 
+				$('#message_preview_id').val(data.id)
+				if(data.image)
+					$('#message-form-preview img.preview-img').attr('src', data.image);
+
+        $('#message-form-preview-title').html(data.title);
+        $('#message-form-preview-link').html(data.url);
+				$('#message-form-preview-txt').html(data.description);
+				$('#message-body-container .comment').css('border-bottom','none');
+        $('#message-form-preview').toggle();
+        $('#message-form-preview').css('display', 'block');
+			} 
+		}); 
+	}
+</script>

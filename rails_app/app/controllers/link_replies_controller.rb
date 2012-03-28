@@ -3,7 +3,7 @@ class LinkRepliesController < ApplicationController
   before_filter :authenticate_user!, :except => [:show, :list]
   layout false
   def list
-    @entry = TimelineEntry.find(params[:link_reply_id])
+    @entry = Message.find(params[:link_reply_id])
     @replies = @entry.link_replies[0...@entry.link_replies.count - 3]
   end
   def show

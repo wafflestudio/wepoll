@@ -4,14 +4,15 @@ require 'csv'
 class MainController < ApplicationController
 layout false, :only => [:provision, :privacy]
   def index
+#    if !user_signed_in?
+#      sign_in_and_redirect User.first, :event => :authentication
+#    end
+
     @politicians = Politician.all.asc('name').limit(10)
     @big_header = true
   end
 
   def search
-    Rails.logger.info "======================"
-    Rails.logger.info params.inspect
-    Rails.logger.info "======================"
     json = params[:json].to_s
     if !json.empty?
       list = Politician.find(:all, :conditions => {"$and" => [{:candidate => true},{"$or" => [{:name => /#{json}/}, {:party => /#{json}/}]}]}).map {|p| {form: p.name, query: p.id, type: "1", label: "#{p.name}(#{p.party})"}}
