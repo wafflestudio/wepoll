@@ -17,7 +17,7 @@ class Message
 	belongs_to :politician
 	belongs_to :pledge
 
-	has_many :message_replies
+	has_many :message_replies, :dependent => :destroy
 
   has_and_belongs_to_many :like_users, :class_name => "User", :inverse_of => :like_messages
   has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_messages

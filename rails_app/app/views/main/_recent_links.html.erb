@@ -1,21 +1,21 @@
-<h3 id="recent-link-header" class="link-section-header">최신링크</h3>
+<h3 id="recent-link-header" class="link-section-header">최신한마디</h3>
 <div class="links-container grid_4 alpha omega" id="recent-links">
-  <% @recent_timeline_entries.each do |link| -%>
-    <%= render :partial => '/main/link', :locals => {:link => link } %>
+  <% @recent_messages.each do |link| -%>
+    <%= render :partial => '/main/link', :locals => {:message => link } %>
   <% end -%>
 
-  <% if @recent_timeline_entries.empty? -%>
-    <%= render :partial => '/main/link', :locals => {:link => nil} %>
+  <% if @recent_messages.empty? -%>
+    <%= render :partial => '/main/link', :locals => {:message => nil} %>
   <% end -%>
 </div>
 
-<h3 class="link-section-header">인기링크</h3>
+<h3 class="link-section-header">인기한마디</h3>
 <div class="links-container grid_4 alpha omega" id="popular-links">
-  <% @popular_timeline_entries.each do |link| -%>
-    <%= render :partial => '/main/link', :locals => {:link => link} %>
+  <% @popular_messages.each do |link| -%>
+    <%= render :partial => '/main/link', :locals => {:message => link} %>
   <% end -%>
 
-  <% if @popular_timeline_entries.empty? -%>
-    <%= render :partial => '/main/link', :locals => {:link => nil }%>
+  <% if @popular_messages.empty? -%>
+    <%= render :partial => '/main/link', :locals => {:message => nil }%>
   <% end -%>
 </div>
