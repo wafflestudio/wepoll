@@ -77,9 +77,9 @@ for i in 0..(numBills-1) do
    :favored => parseMembers(table["찬성"][i]),
    :opposed => parseMembers(table["반대"][i]),
    :resigned => parseMembers(table["기권"][i]),
-   :didntvote => parseMembers(table["표결에 불참"][i]),
+   :didntvote => parseMembers(table["불참"][i]),
    :ontrip => parseMembers(table["출장"][i]),
-   :recess => parseMembers(table["휴가"][i]),
+   :recess => parseMembers(table["청가"][i]),
    :absent => parseMembers(table["결석"][i],debug)
   }
 end
