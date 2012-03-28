@@ -21,9 +21,14 @@ CSV.foreach(Rails.root + "init_data/promise.csv", :encoding => "UTF-8") do |csv|
     if p.nil?
       puts "ERROR1 #{name}(#{number}, #{party})"
     else
+      promises.each_with_index do |title, i|
+        pl = Pledge.new(title: title, content: detail_promises[i])
+        pl.politician = p
+        if !pl.save
+          puts "ERROR3 #{name} #{title} #{detail_promises[i]}"
+        end
+      end
       p.number = number
-      p.promises = promises
-      p.detail_promises = detail_promises
       if p.save
       	puts "#{cnt} - " + p.promises.join(", ")
       else
