@@ -130,6 +130,8 @@ class TimelineEntry
           t.is_messaged = true
           Rails.logger.info "message (#{m.body}) save success"
           puts "message (#{m.body}) save success"
+          m.created_at = t.created_at
+          m.save
         else
           Rails.logger.info "message save fail body: #{t.comment} user: #{t.user.nickname}"
           puts "message save fail body: #{t.comment} user: #{t.user.nickname}"
@@ -143,6 +145,8 @@ class TimelineEntry
           if mr.save
             Rails.logger.info "message reply (#{mr.body}) save success"
             puts "message reply (#{mr.body}) save success"
+            mr.created_at = l.created_at
+            mr.save
           else
             Rails.logger.info "MessageReply save fail body: #{mr.body} user: #{mr.user.nickname}"
             puts "MessageReply save fail body: #{mr.body} user: #{mr.user.nickname}"
