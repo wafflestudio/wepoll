@@ -3,8 +3,14 @@
     <% if message.nil? -%>
       <span style=\"color:#888\">링크가 없습니다.</span>
     <% else -%>
-      <% message.politician!=nil ? sidebar_link_url=district_name_path(message.district) : sidebar_link_url=district_politician_path(message.politician_id) %>
+<% sidebar_link_url = "" -%>
+      <% if message.politician==nil %>
+	<%  sidebar_link_url=district_name_path(message.district) %>
+<% else %>
+<% Rails.logger.info "id = #{message.politician_id}" %>
+<%  sidebar_link_url=district_politician_path(message.politician_id) %>
       <%= link_to (message.district + " " + (message.politician!=nil ? message.politician.name : "")), sidebar_link_url, :class => "link-excerpt-politician-name" %>
+<% end -%>
       <%= link_to truncate((message.body),:length => 20), sidebar_link_url %>
     <% end -%>
   </div>
