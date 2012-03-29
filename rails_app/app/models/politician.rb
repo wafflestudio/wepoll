@@ -38,7 +38,7 @@ class Politician #정치인 모델
 
 
   #한마디 관련
-  field :message_count, type: Interger, default: 0
+  field :message_count, type: Integer, default: 0
 
   #타임라인 관련
   field :good_link_count, type: Integer, default: 0
