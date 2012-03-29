@@ -85,6 +85,7 @@
 			url: "/messages",
 			data: data_string
 		});
+    $('#message_body').val('')
     $.gritter.add({title:"메시지 등록됨",text:"한마디 메시지가 등록되었습니다."})
 		return false;
 
