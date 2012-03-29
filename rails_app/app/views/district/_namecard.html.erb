@@ -27,7 +27,7 @@
 
     <dt><a><span class="value"><%=politician.id %></span><span class="party" style="color:<%= @party_color[politician.party]||"black" %>"><%= politician.party%></span>&nbsp;<span class="name"><%= politician.name %></span></a></dt>
     <% else -%>
-    <dt><a href="#"><span class="name">후보없음</span></a></dt>
+    <dt><a href="javascript:void(0)"><span class="name">후보없음</span></a></dt>
     <% end -%>
     <!--
     <dd>
