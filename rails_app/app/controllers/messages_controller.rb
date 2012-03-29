@@ -20,6 +20,10 @@ class MessagesController < ApplicationController
 
 	def create
 		@message = Message.new(params[:message])
+    if params[:message][:politician_id] == "all"
+      @message.politician_id = nil
+      @message.politician = nil
+    end
 		@message.user_id = current_user.id
     @success = false
 
@@ -55,6 +59,23 @@ class MessagesController < ApplicationController
 	def destroy
 
 	end
+
+  def like
+    @message = Message.find(params[:id])
+    if @message.like(current_user)
+      render :json => {:status => "ok", :count => @message.like_count }
+    else
+      render :json => {:status => "error", :message => "이미 추천하셨습니다."}
+    end
+  end
+  def blame
+    @message = Message.find(params[:id])
+    if @message.blame(current_user)
+      render :json => {:status => "ok", :count => @message.blame_count }
+    else
+      render :json => {:status => "error", :message => "이미 반대하셨습니다."}
+    end
+  end
 
 
   #begin protected
@@ -93,7 +114,7 @@ protected
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
         Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
-        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+district_politician_path(@message.politicia), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"에게 메세지를 등록하셨습니다." )
+        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+district_politician_path(@message.politician), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"에게 메세지를 등록하셨습니다." )
         true
       rescue StandardError => e
         Rails.logger.info e.message

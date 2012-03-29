@@ -28,7 +28,8 @@ end
 
 def parseMembers(rawstr, debug=false)
   #puts rawstr
-  return if rawstr.nil?
+  return {} if rawstr.nil?
+  return {} if rawstr == ""
   party_rows = rawstr.split("\n")
   puts party_rows if debug
  
@@ -39,7 +40,7 @@ def parseMembers(rawstr, debug=false)
     next if parts.length <= 1
     party = parts[0].strip
     puts party if debug
-    politicians = parts[1].split(/[0-9]+명/)[-1].split(/[() ]/).delete_if do |x| x == "" end 
+    politicians = parts[1].split(/[0-9]+명/)[-1].split(/[()  ]/).delete_if do |x| x == "" end 
     puts politicians.to_s if debug
     result[party] = politicians
   end
@@ -68,15 +69,15 @@ bills = {}
 
 for i in 0..(numBills-1) do
   debug = false
-  if table["의안 번호"][i].strip == "1803016"
-    puts "1803016"
+  if table["의안 번호"][i].strip == "1807336"
+    puts "1807336"
     debug = true
   end
   bills[table["의안 번호"][i].strip] = 	
   {:issue => table["이슈"][i],
    :favored => parseMembers(table["찬성"][i]),
-   :opposed => parseMembers(table["반대"][i]),
-   :resigned => parseMembers(table["기권"][i]),
+   :opposed => parseMembers(table["반대"][i],debug),
+   :resigned => parseMembers(table["기권"][i],debug),
    :didntvote => parseMembers(table["불참"][i]),
    :ontrip => parseMembers(table["출장"][i]),
    :recess => parseMembers(table["청가"][i]),
@@ -197,8 +198,8 @@ bills.each do |number,bill|
   puts "#{b.number}: total #{supporters+dissenters+attendees+absentees} (#{supporters},#{dissenters},#{attendees},#{absentees})"
 end
 
-
-numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
+numbers = ["1803009","1803016","1804008","1803210","1803211","1804675","1803199","1803214","1802847","1807336","1806667","1807429","1807428","1806963","1807946","1810176","1808656","1809861","1810023","1806972","1807413","1811651","1811597","1811438","1812142","1801501","1812920","1813727","1814644","1814645"]
+#numbers = ["1803016","1803009","1803214","1803199","1803211","1804008","1806667","1806972","1807336","1807413","1807946","1808656","1809861","1810023","1810176","1811438","1811597","1811651","1812142","1814644","1814645"]
 bills = Bill.where(:number.in => numbers)
 politicians = Politician.all
 

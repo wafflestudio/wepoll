@@ -1,27 +1,22 @@
-<% if @parent_message.nil? -%>
-  <% if @success -%>
-    $('#messages_area').prepend('<%= escape_javascript(render @message) %>');
-    $('#message_body').val("");
-    <% if @tweet == false -%>
-      alert("트윗 전송에 실패했습니다.");
-    <% end -%>
-    <% if @facebook == false -%>
-      alert("페이스북 전송에 실패했습니다.");
-    <% end -%>
-  <% else -%>
-    alert("한마디 작성에 실패했습니다.")
+<% if @success -%>
+  var total_cnt = $('#total_message_count').text()*1+1;
+  $('#total_message_count').text(total_cnt);
+  $('#messages_area').prepend('<%= escape_javascript(render @message) %>');
+  $('#message_body').val("");
+  $('#message_preview_id').val("");
+  $('#message-form-preview img.preview-img').removeAttr('src');
+  $('#message-form-preview-title').html("");
+  $('#message-form-preview-link').html("");
+  $('#message-form-preview-txt').html("");
+  $('#message-form-preview').toggle();
+  $('#message-body-container .comment').css('border-bottom','2px solid #9E9E9E');
+  $('#message-form-preview').css('display', 'none');
+  <% if @tweet == false -%>
+    alert("트윗 전송에 실패했습니다.");
+  <% end -%>
+  <% if @facebook == false -%>
+    alert("페이스북 전송에 실패했습니다.");
   <% end -%>
 <% else -%>
-  <% if @success -%>
-    $('.message-entry-<%=@parent_message.id%> .message_reply_input').before('<%= escape_javascript(render :partial => "message_reply", :locals => {:message => @message}) %>');
-    $('.message-entry-<%=@parent_message.id%> .message_reply_write').val("");
-    <% if @tweet == false -%>
-      alert("트윗 전송에 실패했습니다.");
-    <% end -%>
-    <% if @facebook == false -%>
-      alert("페이스북 전송에 실패했습니다.");
-    <% end -%>
-  <% else -%>
-    alert("댓글 작성에 실패했습니다.")
-  <% end -%>
+  alert("한마디 작성에 실패했습니다.")
 <% end -%>

@@ -7,6 +7,10 @@ Wepoll::Application.routes.draw do
 
   resources :messages do 
 		match '/list' => 'messages#list', :as => "list"
+    post 'message_replies' => 'message_replies#create', :as => :replies
+    get 'message_replies' => 'message_replies#index', :as => :replies
+    get 'blame', :on => :member
+    get 'like', :on => :member
   end
 
   match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
@@ -89,6 +93,11 @@ Wepoll::Application.routes.draw do
     delete 'destroy', :on => :member
   end
 
+  resources :pledges do
+    get 'like', :on => :member, :as => :like
+    get 'dislike', :on => :member, :as => :dislike
+  end
+
   match '/fb_post_callback' => 'tweet_replies#fb_post_callback', :as => :fb_post_callback
 
   match 'district/:name/:p1_id/:p2_id' => 'district#show' ,:constraints => {:p1_id => /[a-z0-9]+/, :p2_id => /[a-z0-9]+/}, :as => :district_vs_politicians
@@ -109,7 +118,7 @@ Wepoll::Application.routes.draw do
     get 'votes_for_issues_tab', :on => :collection, :as => :votes_for_issues_tab_of
 
     get 'profile', :on => :collection, :as => :profiles_of
-    get 'promises', :on => :collection, :as => :promises_of
+    get 'pledges', :on => :collection, :as => :pledges_of
     get 'messages_tab', :on => :collection, :as => :messages_tab_of
 
     get 'messages', :on => :collection, :as => :messages_of

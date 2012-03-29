@@ -6,6 +6,9 @@ class Message
 	field :body, type: String
 	field :tweet_feeed_id, type: String
 	field :facebook_feed_id, type: String
+  field :district, type: String
+  field :like_count, type: Integer, default: 0
+  field :blame_count, type: Integer, default: 0
 	
 
 	belongs_to :user
@@ -14,8 +17,10 @@ class Message
 	belongs_to :politician
 	belongs_to :pledge
 
-	has_many :replies, inverse_of: :parent_message, :class_name => 'Message'
-	belongs_to :parent_message, inverse_of: :replies, :class_name => 'Message'
+	has_many :message_replies, :dependent => :destroy
+
+  has_and_belongs_to_many :like_users, :class_name => "User", :inverse_of => :like_messages
+  has_and_belongs_to_many :blame_users, :class_name => "User", :inverse_of => :blame_messages
 
   def posted_ago?
     ago = Time.now - created_at
@@ -42,5 +47,25 @@ class Message
 
   def more_message
     replies.count - 3
+  end
+
+  def like(user)
+    if self.like_users.include? user
+      return false
+    else
+      self.like_count += 1
+      self.like_users << user
+      return self.save
+    end
+  end
+
+  def blame(user)
+    if self.blame_users.include? user
+      return false
+    else
+      self.blame_count += 1
+      self.blame_users << user
+      return self.save
+    end
   end
 end

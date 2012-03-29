@@ -1,29 +1,54 @@
-<div class="write_message grid_10 alpha omega">
+<div class="write-message-area">
   <%= form_for(@message, :remote => true, :html =>{:class => 'link-form message-form'}) do |f| %>
-    <%= f.hidden_field :politician_id %>
     <%= f.hidden_field :preview_id %>
+    <%= f.hidden_field :district, :value => @district %>
 
-    <%= select_tag "message[politician_id]", options_for_select([[@p1.name, @p1.id], [@p2.name, @p2.id]]) %>
-    <%= f.label :body, '후보에게 한마디 하기' %>
-    <div class="clear"></div>
+    <div id="message-form-politicians" class="clearfix">
+      <div id="district-box">
+        <span><%= @district %></span><br />
+        후보
+      </div>
+      <div id="politicians-box">
+        <div class="radio-politician">
+          <%= f.label 'politician_id_all', image_tag("btn_wepoll.gif"), :class => "img-label clearfix" %>
+          <%= f.radio_button :politician_id, 'all', :checked => true %>
+          <%= f.label 'politician_id_all', '전체', :class => "txt-label" %>
+        </div>
+        <% @politicians.each do |p| -%>
+          <div class="radio-politician">
+            <%= f.label 'politician_id_'+p.id.to_s, image_tag(p.profile_photo.url(:square50)), :class => "img-label clearfix" %>
+            <%= f.radio_button :politician_id, p.id %>
+            <%= f.label 'politician_id_'+p.id.to_s, p.name, :class => "txt-label" %>
+          </div>
+        <% end -%>
+      </div>
+    </div>
 
-    <div class="grid_10 alpha omega field">
-      <div class="grid_10 alpha omega">
-        <div class="reply_check timeline_new">
-          <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
-          <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
-          <span class="note">* 페이스북/트위터로 동시에 전송할 수 있습니다.</span>
+    <div id="message-body-container">
+      <% if user_signed_in? -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %>
+      <% else -%>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "로그인 후 한마디를 입력할 수 있습니다.", :onclick => "show_login(); return false;" %>
+      <% end -%>
+      <div id="message-length-indicator"><span id="message-body-length">00</span>/250</div>
+      <div id="message-form-preview" class="preview">
+        <img class="preview-img" src="" />
+        <div id="message-form-preview-right" class="preview-right">
+          <div id="message-form-preview-title" class="preview-title"></div>
+          <div id="message-form-preview-link" class="preview-link"></div>
+          <div id="message-form-preview-txt" class="preview-txt"></div>
         </div>
       </div>
-
-      <div class="grid_1 alpha" id="wepoll-logo-square" style="margin-right:0"><%= image_tag current_user.profile_picture.url(:square50), :size => "40x40" if !current_user.nil? %></div>
-      <div class="grid_8"><%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "한마디를 입력하세요." %></div>
-      <div class="grid_1 omega" id="comment-length-indicator"><span id="message-body-length">00</span>/250</div>
-      <div id="link-form-preview" class="prefix_1 grid_7 alpha omega field">
-        <div id="link-form-preview-img" class="grid_1 alpha"></div>
-        <div id="link-form-preview-txt" class="grid_5 omega note"></div>
-      </div>
-      <%= f.submit '한마디 등록', :id => "message_submit_btn" %>
+    </div>
+    <% if user_signed_in? -%>
+      <%= f.submit '확인', :id => "message-submit-btn" %>
+    <% else -%>
+      <%= f.submit '확인', :id => "message-submit-btn", :onclick => "show_login(); return false;" %>
+    <% end -%>
+    <div class="reply_check">
+      <span class="checkbox facebook"><input name="message[facebook]" type="checkbox" /></span>
+      <span class="checkbox twitter"><input name="message[tweet]" type="checkbox" /></span>
+      <span class="note">SNS로 보내기</span>
     </div>
   <% end %>
 </div>
@@ -69,15 +94,16 @@
 		$.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
 			function(data)  { 
 				$('#message_preview_id').val(data.id)
-				if(data.image)  {
-					$('#link-form-preview-img').html("<img class='grid_1' src='" + data.image + "'/>");
-					$('#link-form-preview-txt').removeClass('prefix_1');
-				}
-				else
-					$('#link-form-preview-txt').addClass('prefix_1');
+				if(data.image)
+					$('#message-form-preview img.preview-img').attr('src', data.image);
 
-				$('#link-form-preview-txt').html(data.title +  ' <br /> ' +data.description);
+        $('#message-form-preview-title').html(data.title);
+        $('#message-form-preview-link').html(data.url);
+				$('#message-form-preview-txt').html(data.description);
+				$('#message-body-container .comment').css('border-bottom','none');
+        $('#message-form-preview').toggle();
+        $('#message-form-preview').css('display', 'block');
 			} 
 		}); 
-	};
+	}
 </script>

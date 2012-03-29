@@ -93,11 +93,17 @@ class User
   has_and_belongs_to_many :like_tweets, :class_name => "Tweet", :inverse_of => :like_users
   has_and_belongs_to_many :like_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :like_users
   has_and_belongs_to_many :blame_timeline_entries, :class_name => "TimelineEntry", :inverse_of => :blame_users
+  has_and_belongs_to_many :like_messages, :class_name => "Message", :inverse_of => :like_users
+  has_and_belongs_to_many :blame_messages, :class_name => "Message", :inverse_of => :blame_users
 
   #timeline entry
   has_many :timeline_entries, :inverse_of => :user
 
   has_many :link_replies, :inverse_of => :user
+
+  #pledges
+  has_and_belongs_to_many :like_pledges, :class_name => "Pledge", inverse_of: nil
+  has_and_belongs_to_many :dislike_pledges, :class_name => "Pledge", inverse_of: nil
 
   def self.find_for_facebook_oauth(access_token, signed_in_resource=nil)
 

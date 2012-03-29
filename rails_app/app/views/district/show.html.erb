@@ -55,6 +55,20 @@
     }
 
     $(function() {
+      $('span.checkbox').addClass("unchecked");
+      $(".checkbox").click(function(){
+        if($(this).children("input").attr("checked")){
+          // uncheck
+          $(this).children("input").removeAttr("checked");
+          $(this).removeClass("checked");
+          $(this).addClass("unchecked");
+        }else{
+          // check
+          $(this).children("input").attr({checked: "checked"});
+          $(this).removeClass("unchecked");
+          $(this).addClass("checked");
+        }
+      });
       var waypoint_opts = {
         offset: '100%'
       };
@@ -69,15 +83,6 @@
         $politician_bill_activities.load(taburl);
       }, waypoint_opts);
 
-      var $politician_vote_activities = $("#politician-vote-activities");
-      $politician_vote_activities.waypoint(function(event, direction) {
-        if (direction == 'up') return;
-        $politician_vote_activities.waypoint('remove');
-
-        var taburl = "<%= votes_for_issues_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id)%>";
-        $politician_vote_activities.load(taburl);
-      }, waypoint_opts);
-
       var $profiles = $("#profiles");
       $profiles.waypoint(function(event, direction) {
         if (direction == 'up') return;
@@ -86,22 +91,30 @@
         $profiles.load(taburl);
       }, waypoint_opts);
 
-      var $promises = $("#promises");
-      $promises.waypoint(function(event, direction) {
+      var $pledges = $("#pledges");
+      $pledges.waypoint(function(event, direction) {
         if (direction == 'up') return;
-        $promises.waypoint('remove');
-//        var taburl = "<%= profiles_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
-//        $profiles.load(taburl);
+        $pledges.waypoint('remove');
+        var taburl = "<%= pledges_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id) %>";
+        $pledges.load(taburl);
       }, waypoint_opts);
 
+      var $politician_vote_activities = $("#politician-vote-activities");
+      $politician_vote_activities.waypoint(function(event, direction) {
+        if (direction == 'up') return;
+        $politician_vote_activities.waypoint('remove');
+
+        var taburl = "<%= votes_for_issues_tab_of_politicians_path(:id1 => @p1.nil? ? nil : @p1.id, :id2 => @p2.nil? ? nil : @p2.id)%>";
+        $politician_vote_activities.load(taburl);
+      }, waypoint_opts);
     });
   </script>
 <% end -%>
 <script type="text/javascript">
   /// tooltip
-$(document).ready( function() {
-  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}})
-  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}})
+$(document).ready(function() {
+  $('.tooltip-top').qtip({position:{my:'bottom center',at:'top center'},style: {classes: 'ui-tooltip-dark'}});
+  $('.tooltip-bottom').qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}});
 
   $('.district-candidate').each( function(index, element) {
     var dropdown;
@@ -109,52 +122,20 @@ $(document).ready( function() {
     $(element).mouseenter(function() {
       dropdown = $(element).children(".candidate-dropdown")
       var pos = $(element).position();
-      var w = $(element).outerWidth()
-      var h = $(element).outerHeight()
+      var w = $(element).outerWidth();
+      var h = $(element).outerHeight();
       dropdown.css({left:pos.left + 'px', top: pos.top+ h + 'px', width:w + 20 +'px'})
       //dropdown.show()
 
-    })
+    });
     $(element).mouseleave(function() {
       if(dropdown)  {
-        dropdown.hide()
+        dropdown.hide();
       }
-    })
-
-  }
-  )
-})
-</script>
-<script type="text/javascript">
-  function charLimit() { $(".link_reply_input").keyup(function() {
-    var $this = $(this);
-    var max = 140;
-    var len = 0;
-    var $textarea = $("textarea", $this);
-    var len = $textarea.val().length;
-    if (len > max) {
-      $textarea.val($textarea.val().substr(0, max));
-      len = $textarea.val().length;
-    }
-    $this.find(".current-comment-length").text(len);
-
-    $this.children(".link-reply-button").click(function() {
-      return true;
     });
-  });};
-  function loadUrl(url, parentDiv)  {
-    $.ajax({ url: '/api/article_parse', data: 'url='+encodeURIComponent(url), type: 'POST', dataType: 'json', success: 
-      function(data)  { 
-        $(".preview-title a", parentDiv).html(data.title);
-        $(".preview-image", parentDiv).empty().append(data.image ? "<img src='" + data.image + "'/>" : "<img src='/assets/dummy-news-1.jpg' />" );
-        $(".preview-desc", parentDiv).html(data.description);
-      } 
-    }); 
-  };
+  });
+});
 </script>
-
-<%#= render :file => 'timeline_entries/index' %>
-<!--<a href="#" id="show-timeline">&nbsp;</a>-->
 
 <div class="grid_12" id="vs-content-wrapper" style="margin-bottom: 40px;">
   <div id="district-title">
@@ -240,69 +221,42 @@ $(document).ready( function() {
   <!-- 후보 얼굴 및 이름 -->
   <div id="name-cards" class="clearfix">
     <% [@p1, @p2].each_with_index do |politician,i| -%>
-      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => @tweets[i]} %>
-
+      <%= render :partial => 'namecard', :locals => {:politician => politician, :index => i, :tweet => politician.tweets.desc('created_at').first} %>
       <% if i==0 -%>
         <div id="split-bar">
-          <!--
-          <%= image_tag '/assets/icn_smile.gif', :class => "icn-bar-graph tooltip-top", :style => "margin-top:400px;", :title=> '칭찬을 받은 횟수입니다.' %>
-          <%= image_tag '/assets/icn_frown.gif', :class => "icn-bar-graph tooltip-bottom", :style => "margin-top:20px;", :title=> '지적을 받은 횟수입니다.'%>
-          -->
         </div>
       <% end -%>
     <% end -%>
   </div>
 
-  <hr/>
+  <% unless @best_message.nil? -%>
+    <div id="best-message">
+      <h1 class="best-label">베스트 한마디</h1>
+      <%= render @best_message%>
+    </div>
+  <% end -%>
 
-  <h1><a name="profile">프로필</a></h1>
-  <div id="profiles">
+  <h1 class="section-label">국회활동</h1>
+  <div id="politician-bill-activities" class="section">
   </div>
 
-  <hr/>
-
-  <h1><a name="bill-activities">국회활동</a></h1>
-  <div id="politician-bill-activities">
+  <h1 class="section-label">프로필</h1>
+  <div id="profiles" class="section">
   </div>
 
-  <hr/>
-
-  <h1><a name="vote-activities">주요법안 표결</a></h1>
-  <div id="politician-vote-activities">
+  <h1 class="section-label">공약</h1>
+  <div id="pledges" class="section">
   </div>
 
-  <hr/>
-
-  <!-- disabled for a moment
-  <h1><a name=promise">공약</a></h1>
-  <div id="promises">
+  <h1 class="section-label">공약</h1>
+  <div id="politician-vote-activities" class="section">
   </div>
 
-  <hr/>
-  -->
-
-  <div class="write_message_area grid_11 alpha omega">
+  <div id="messages">
     <%= render :partial => 'message_form' %>
-  </div>
-  <div id="messages_area" class="grid_11 alpha omega">
-    <%= render @messages %>
+    <div id="messages_area_label">전체 한마디 <span id="total_message_count"><%= @messages.count %></span>개</div>
+    <div id="messages_area">
+      <%= render @messages %>
+    </div>
   </div>
 </div>
-<script type="text/javascript">
-  $(".link_reply_input").keyup(function() {
-    var $this = $(this);
-    var max = 250;
-    var len = 0;
-    var $textarea = $("textarea", $this);
-    var len = $textarea.val().length;
-    if (len > max) {
-      $textarea.val($textarea.val().substr(0, max));
-      len = $textarea.val().length;
-    }
-    $this.find(".current-comment-length").text(len);
-
-    $this.children(".link-reply-button").click(function() {
-      return true;
-    });
-  });
-</script>

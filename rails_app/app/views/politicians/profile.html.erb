@@ -8,7 +8,7 @@
           정보없음
         <% end -%>
       </div>
-      <% if i==0 -%><div class="subsection-label">출생</div><% end -%>
+      <% if i==0 -%><div class="subsection-label gray">출생</div><% end -%>
     <% end -%>
   </div>
 
@@ -17,7 +17,7 @@
       <div class="<%= i==0?"left":"right"%>">
         <%= politician.military.nil? || politician.military.length == 0  ?  "정보없음" : politician.military %>
       </div>
-      <% if i==0 -%><div class="subsection-label">본인병역</div><% end -%>
+      <% if i==0 -%><div class="subsection-label gray">본인병역</div><% end -%>
     <% end -%>
   </div>
 
@@ -26,7 +26,7 @@
       <div class="<%= i==0?"left":"right"%>">
         <%= politician.job.nil? || politician.job.length == 0 ? "정보없음" : politician.job %>
       </div>
-      <% if i==0 -%><div class="subsection-label">현직</div><% end -%>
+      <% if i==0 -%><div class="subsection-label gray">현직</div><% end -%>
     <% end -%>
   </div>
 
@@ -36,7 +36,7 @@
       <div class="<%= i==0?"left":"right"%>">
         <%= politician.education.nil? || politician.education.length == 0 ? "정보없음" : politician.education%>
       </div>
-      <% if i==0 -%><div class="subsection-label">학력</div><% end -%>
+      <% if i==0 -%><div class="subsection-label gray">학력</div><% end -%>
     <% end -%>
   </div>
 
@@ -46,7 +46,7 @@
       <div class="<%= i==0?"left":"right"%>">
         <%= politician.experiences.nil? || politician.experiences.length == 0 ? "정보없음" : politician.experiences%>
       </div>
-      <% if i==0 -%><div class="subsection-label">주요경력</div><% end -%>
+      <% if i==0 -%><div class="subsection-label gray">주요경력</div><% end -%>
     <% end -%>
   </div>
 </div>
