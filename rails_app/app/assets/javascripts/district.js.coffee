@@ -73,6 +73,10 @@ $ () ->
       if data.status == "error"
         alert data.message
       else
-        $(obj).next().text data.count
+        if data.type == "like"
+          $('.message-entry-'+data.id+' .like_count').text data.count
+        else if data.type == "blame"
+          $('.message-entry-'+data.id+' .blame_count').text data.count
+        else
     false
   $('#message_body').placeholder()
