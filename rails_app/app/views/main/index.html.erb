@@ -1,7 +1,7 @@
 <div id="seoul-map" class="map">
   <div id="seoul-map-bubble" class="bubble">
     <div class="bubble-text">
-      지역구를<br />
+      서울시 지도를 <br />
       클릭해보세요!
     </div>
   </div>
@@ -44,18 +44,18 @@ $.colorbox({href:'/about?20120320',opacity:0.2});
 <% content_for :sidebar do -%>
   <div id="region-selector">
     <div class="clearfix">
-      <%= link_to "서울", '#', :id => "seoul-region", :class => "region selected" %>
-      <%= link_to "부산", '#', :id => "busan-region", :class => "region" %>
+      <!--<%= link_to "서울", '#', :id => "seoul-region", :class => "region selected" %>
+      <%= link_to "부산", '#', :id => "busan-region", :class => "region" %>-->
     </div>
     <div class="small-map-container">
       <a class="small-map selected" id="seoul-small-map" href="#">
         <%= image_tag '/assets/seoul_map_small.gif' %>
       </a>
-
+      <!--
       <a class="small-map" id="busan-small-map">
         <%= image_tag '/assets/busan_map_small.gif', :style => "opacity: 0.6; position:absolute;" %>
         <%= image_tag '/assets/comming_soon.png', :style => "position: absolute; width: 150px; top: 60px; margin-left: 50px;opacity: 0.8" %>
-      </a>
+      </a>-->
     </div>
   </div>
 
