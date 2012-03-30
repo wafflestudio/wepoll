@@ -20,7 +20,7 @@ layout false, :only => [:provision, :privacy]
       render :json => list
     else
       type = params[:query_type].to_i # 0 : 지역구, 1 : 국회의원, 2 : 동
-      query = params[:query].sub(" ","")
+      query = params[:query].sub(/[\s\\?]+/,"")
       sub_query = params[:query_hidden].sub(" ","") # 국회의원일 경우 당이 따라옴. 동일 경우에는 지역구가 따라옴
       id = params[:query_id]
 
@@ -44,14 +44,13 @@ layout false, :only => [:provision, :privacy]
         end
       else
 	#find with subquery
-	@pol = Politician.where(:name => /#{params[:query]}/).first
-Rails.logger.info "#{@pol.name}"
-	if @pol
-          redirect_to district_politician_path(@pol._id)
+	@pol = Politician.where(:name => /#{query}/).first
+	if !@pol.nil?
+      redirect_to district_politician_path(@pol._id)
 	else
-        flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
-        flash[:search_error] = "true"
-        redirect_to back
+	flash[:search] = "'#{params[:query]}'에 대한 검색 결과가 없습니다"
+	flash[:search_error] = "true"
+	redirect_to back
 	end
       end
     end

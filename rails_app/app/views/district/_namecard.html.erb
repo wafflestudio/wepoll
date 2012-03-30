@@ -1,6 +1,6 @@
 <div class="namecard<%=index==0 ? " alpha" : ""%>">
   <% unless politician.nil? -%>
-    <% unless politician.tweet_name.nil? -%>
+    <% unless (politician.tweet_name.nil? || politician.tweet_name == "" ) -%>
       <%= link_to forum_path(politician.tweet_name) do  %>
         <div class="tweet-bubble <%= index==0?"left":"right"%>">
           <%= tweet ? (tweet.content.length>100 ? (raw tweet.content[0..100].html_safe)+"..." : (raw tweet.content.html_safe) ) : "최근 트윗이 없습니다." %>

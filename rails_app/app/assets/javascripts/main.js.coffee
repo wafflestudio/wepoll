@@ -162,7 +162,57 @@ worldmap = {
               46: "100 315 0 0",
               47: "400 150 0 0",
               48: "537 500 1 1",
-            }
+            },
+    dongs: {
+              1: "청운효자동, 사직동, 삼청동, 부암동, 평창동, 무악동, 교남동, 가회동, 종로1동, 종로2동, 종로3동, 종로4동, 종로5동, 종로6동, 이화동, 혜화동, 명륜3가동, 창신1동, 창신2동, 창신3동, 숭인1동, 숭인2동",
+              2: "쌍문1동, 쌍문3동, 창1동, 창2동, 창3동, 창4동, 창5동",
+              3: "쌍문2동, 쌍문4동, 방학1동, 방학2동, 방학3동, 도봉1동, 도봉2동",
+              4: "상계1동, 상계2동, 상계3·4동, 상계5동, 상계8동, 상계9동, 상계10동",
+              5: "하계1동, 하계2동, 중계본동, 중계1동, 중계2·3동, 중계4동, 상계6·7동",
+              6: "월계1동, 월계2동, 월계3동, 공릉1동, 공릉2동",
+              7: "삼양동, 미아동, 송중동, 송천동, 삼각산동, 번제3동",
+              8: "돈암제1동, 길음제2동, 종암동, 월곡제1동, 월곡제2동, 장위제1동, 장위제2동, 장위제3동, 석관동",
+              9: "상봉제1동, 중화제1동, 중화제2동, 묵제1동, 묵제2동, 망우본동, 신내제1동, 신내제2동",
+              10: "면목본동, 면목제2동, 면목제3·8동, 면목제4동, 면목제5동, 면목제7동, 상봉제2동, 망우제3동",
+              11: "전농제1동, 전농제2동, 답십리제1동, 답십리제2동, 장안제1동, 장안제2동",
+              12: "창조한국당 새누리당","불광제1동, 불광제2동, 갈현제1동, 갈현제2동, 구산동, 대조동, 역촌동, 진관동",
+              13: "녹번동, 응암제1동, 응암제2동, 응암제3동, 신사제1동, 신사제2동, 증산동, 수색동",
+              14: "홍제제3동, 홍은제1동, 홍은제2동, 남가좌제1동, 남가좌제2동, 북가좌제1동, 북가좌제2동",
+              15: "충현동, 천연동, 북아현동, 신촌동, 연희동, 홍제제1동, 홍제제2동",
+              16: "성북동, 삼선동, 동선동, 돈암제2동, 안암동, 보문동, 정릉제1동, 정릉제2동, 정릉제3동, 정릉제4동, 길음제1동",
+              17: "용신동, 제기동, 청량리동, 회기동, 휘경제1동, 휘경제2동, 이문제1동, 이문제2동",
+              18: "소공동, 회현동, 명동, 필동, 장충동, 광희동, 을지로동, 신당1동, 신당2동, 신당3동, 신당4동, 신당5동, 신당6동, 확학동, 중림동",
+              19: "왕십리도선동, 왕십리제2동, 마장동, 사근동, 행당제1동, 행당제2동, 송정동, 용답동",
+              20: "응봉동, 금호1가동, 금호2·3가동, 금호4가동, 옥수동, 성수1가제1동, 성수1가제2동, 성수2가제1동, 성수2가제3동",
+              21: "구의제1동, 구의제3동, 자양제1동, 자양제2동, 자양제3동, 자양제4동, 화양동",
+              22: "중곡제1동, 중곡제2동, 중곡제3동, 중곡제4동, 능동, 구의제2동, 광장동, 군자동",
+              23: "강일동, 상일동, 명일제1동, 명일제2동, 고덕제1동, 고덕제2동, 암사제1동, 암사제2동, 암사제3동, 길동",
+              24: "천호제1동, 천호제2동, 천호제3동, 성내제1동, 성내제2동, 성내제3동, 둔촌제1동, 둔촌제2동",
+              25: "풍납1동, 풍납2동, 방이1동, 방이2동, 오륜동, 송파1동, 송파2동, 잠실4동, 잠실6동",
+              26: "거여1동, 거여2동, 마천1동, 마천2동, 오금동, 가락본동, 가락2동, 문정1동, 장지동",
+              27: "석촌동, 삼전동, 가락1동, 문정2동, 잠실본동, 잠실2동, 잠실3동, 잠실7동",
+              28: "신사동, 논현1동, 논현2동, 압구정동, 청담동, 삼성1동, 삼성2동, 역삼1동, 역삼2동, 도곡1동, 도곡2동",
+              29: "서초1동, 서초2동, 서초3동, 서초4동, 방배2동, 방배3동, 양재1동, 양재2동, 내곡동",
+              30: "상도제1동, 흑석동, 사당제1동, 사당제2동, 사당제3동, 사당제4동, 사당제5동",
+              31: "잠원동, 반포본동, 반포1동, 반포2동, 반포3동, 반포4동, 방배본동, 방배1동, 방배4동",
+              32: "후암동, 남영동, 용산2가동, 한강로동, 서빙고동, 청파동, 원효로1동, 원효로2동, 효창동, 용문동, 이촌1동, 이촌2동, 이태원1동, 이태원2동, 한남동, 보광동",
+              33: "공덕동, 아현동, 도화동, 용강동, 대흥동, 염리동, 신수동",
+              34: "서강동, 서교동, 합정동, 망원1동, 망원2동, 연남동, 성산1동, 성산2동, 상암동",
+              35: "목1동, 목2동, 목3동, 목4동, 목5동, 신정1동, 신정2동, 신정6동, 신정7동",
+              36: "여의동, 신길제1동, 신길제4동, 신길제5동, 신길제6동, 신길제7동, 대림제1동, 대림제2동, 대림제3동",
+              37: "노량진제1동, 노량진제2동, 상도제2동, 상도제3동, 상도제4동, 대방동, 신대방제1동, 신대방제2동",
+              38: "보라매동, 은천동, 성현동, 중앙동, 청림동, 행운동, 청룡동, 낙성대동, 인헌동, 남현동, 신림동",
+              39: "신사동, 조원동, 미성동, 난곡동, 난향동, 서원동, 신원동, 서림동, 삼성동, 대학동",
+              40: "가산동, 독산1동, 독산2동, 독산3동, 독산4동, 시흥1동, 시흥2동, 시흥3동, 시흥4동, 시흥5동",
+              41: "신도림동, 구로제1동, 구로제2동, 구로제3동, 구로제4동, 구로제5동, 가리봉동",
+              42: "고척제1동, 고척제2동, 개봉제1동, 개봉제2동, 개봉제3동, 오류제1동, 오류제2동, 수궁동",
+              43: "영등포본동, 영등포동, 당산제1동, 당산제2동, 도림동, 문래동, 양평제1동, 양평제2동, 신길제3동",
+              44: "신월1동, 신월2동, 신월3동, 신월4동, 신월5동, 신월6동, 신월7동, 신정3동, 신정4동",
+              45: "등촌제2동, 화곡본동, 화곡제1동, 화곡제2동, 화곡제3동, 화곡제4동, 화곡제6동, 화곡제8동, 우장산동, 발산제1동",
+              46: "염창동, 등촌제1동, 등촌제3동, 가양제1동, 가양제2동, 가양제3동, 공항동, 방화제1동, 방화제2동, 방화제3동",
+              47: "번제1동, 번제2동, 수유제1동, 수유제2동, 수유제3동, 우이동, 인수동",
+              48: "대치1동, 대치2동, 대치4동, 개포1동, 개포2동, 개포4동, 일원본동, 일원1동, 일원2동, 수서동, 세곡동"
+            },
 }
 getInternetExplorerVersion = () ->
   #Returns the version of Internet Explorer or a -1
@@ -291,83 +341,23 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		this.arrow.rotate(beta)
 		$("#vs-container").show()
 
-		$img1 = $(".winner-photo-wrapper img")
-		$img2 = $(".loser-photo-wrapper img")
-
-		if ($img1.length == 0)
-			$img1 = $ "<img class=\"profile-image\" />"
-			$(".winner-photo-wrapper").prepend($img1)
-		if ($img2.length == 0)
-			$img2 = $ "<img class=\"profile-image\" />"
-			$(".loser-photo-wrapper").prepend($img2)
-
-		if ($("#vs-container").attr("data-district") == worldmap.names[this.id])
-			return
-		else
-			$img1.attr "src",""
-			$img2.attr "src",""
-
 		$("#vs-district").text worldmap.names[this.id]
+		$("#vs-dong").text worldmap.dongs[this.id]
 
-		show_vs = (data) ->
+		show_vs = (data, district) ->
 			$("#vs-container").attr "data-district", worldmap.names[this.id]
-
-			p1 = data[0]
-			p2 = data[1]
-
-			#photo
-			photourl1 = if p1? then	"/system/politician_profile_photos/"+p1._id+"/square100.jpg" else ""
-			photourl2 = if p2? then	"/system/politician_profile_photos/"+p2._id+"/square100.jpg" else ""
-
-			if photourl1 == ""
-				$img1.fadeOut()
-			else
-				$img1.attr "src", photourl1
-				$img1.fadeIn()
-
-			if photourl2 == ""
-				$img2.fadeOut()
-			else
-				$img2.attr("src", photourl2)
-				$img2.fadeIn()
-
-			$("#vs-politician1 .politician-name").text("#{p1?.party} #{p1?.name}")
-			$("#vs-politician2 .politician-name").text "#{p2?.party} #{p2?.name}"
-
-			$("#vs-politician1 .good_links").text p1?.good_link_count
-			$("#vs-politician2 .good_links").text p2?.good_link_count
-
-			$("#vs-politician1 .bad_links").text p1?.bad_link_count
-			$("#vs-politician2 .bad_links").text p2?.bad_link_count
-
-			#draw bar grpah
-			$("#vs-politician1 .good_links").attr "data-value",p1?.good_link_count
-			$("#vs-politician2 .good_links").attr "data-value",p2?.good_link_count
-
-			$("#vs-politician1 .bad_links").attr "data-value",p1?.bad_link_count
-			$("#vs-politician2 .bad_links").attr "data-value",p2?.bad_link_count
-
-			$(".good_links, .bad_links").html ""
-
-			$(".good_links, .bad_links").simpleBarGraph {
-				width:100,
-				height:8,
-				labelWidth:20,
-				labelPosition:"outside",
-				animate:true,
-				labelClass:"links-bar-label",
-				total:-1, #ref model
-				minWidth:10,
-				label: (x, fx) ->
-					return "#{Math.round(x)}"
-			}
+			
+			for p in data
+                photourl = if p? then	"/system/politician_profile_photos/"+p._id+"/square100.jpg" else ""
+                name = p.name
+                party = p.party
+                $li = "<li class='vs-list-elem clearfix'><img src='" +photourl+ "' /><div class='vs-info'><p>" +p.party+ "</p><h3><span>기호" +p.number+ "번</span> " +p.name+ "</h3></div></li>"
+                $("#vs-list").append($li);
 
 		sector_id = this.id
 		if (!vs_cache[sector_id])
 			$.getJSON "/district/"+encodeURIComponent(worldmap.names[this.id]),{utf8:"✓"}, (data) ->
 				vs_cache[sector_id] = data
-				console.log(vs_cache.length)
-				console.log(vs_cache[sector_id])
 				show_vs(data)
 		else
 			show_vs(vs_cache[sector_id])
@@ -401,7 +391,9 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		if this.arrow?
 			this.arrow.hide()
 
+		$(".vs-list-elem").remove()
 		$("#vs-container").hide()
+
 		this.stop().animate {fill: this.c}, 500
 		if this.textel
 			textel = this.textel

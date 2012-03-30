@@ -21,7 +21,7 @@ class DistrictController < ApplicationController
         @best_message = @messages.desc('like_count').first
         @bills = Bill.limit(20)
       end
-      format.js {render :json => [@p1, @p2], :only => [:name, :party, :district, :good_link_count, :bad_link_count, :_id]}
+      format.js {render :json => Politician.where(district: @district, candidate: 1).sort {|x,y| x.number <=> y.number }, :only => [:name, :party, :_id, :number]}
     end
   end
 
