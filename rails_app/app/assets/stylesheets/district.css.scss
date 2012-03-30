@@ -469,6 +469,7 @@ a.init-bills-link {
     line-height: 120%;
     margin-left: 15px;
     float: left;
+    word-wrap: break-word;
     .message_created_at {
       font-size: 5pt;
     }
@@ -745,7 +746,7 @@ a.init-bills-link {
       }
       #politicians-box {
         float: right;
-        margin-right: 105px;
+        margin-right: 85px;
 
         .radio-politician {
           width: 70px;

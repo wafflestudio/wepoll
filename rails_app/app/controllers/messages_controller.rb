@@ -28,13 +28,16 @@ class MessagesController < ApplicationController
     @success = false
 
 	
-		if params[:parent_message_id] != nil
-			@parent_message = Message.find(params[:parent_message_id])
-			@parent_message.replies << @message
-			@message.parent_message = @parent_message
-		end
+#		if params[:parent_message_id] != nil
+#			@parent_message = Message.find(params[:parent_message_id])
+#			@parent_message.replies << @message
+#			@message.parent_message = @parent_message
+#		end
 		if @message.save
       @politician = @message.politician
+      unless @politician.nil?
+        @politician.inc(:message_count)
+      end
       if params[:message][:tweet]
         @tweet = tweet_after_create
       end
@@ -91,7 +94,12 @@ protected
       end
 
       begin
-        Twitter.update(params[:message][:body]+" http://wepoll.or.kr"+district_politician_path(@message.politician)+" \nhttp://wepoll.or.kr 에서 등록")
+        if @politician.nil?
+          path = district_name_path(message.district)
+        else
+          path = district_politician_path(@politician)
+        end
+        Twitter.update(params[:message][:body]+" http://wepoll.or.kr"+path+" \nhttp://wepoll.or.kr 에서 등록")
         true
       rescue Twitter::Error => e
         Rails.logger.info "Twitter tweet error"
@@ -114,7 +122,16 @@ protected
         @access_token = @facebook_cookies["access_token"]
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
         Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
-        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+district_politician_path(@message.politicia), :picture => "http://wepoll.or.kr"+@politician.profile_photo(:square100), :description => "위폴 "+@politician.name+"에게 메세지를 등록하셨습니다." )
+        if @politician.nil?
+          path = district_name_path(@message.district)
+          imgpath = "btn_wepoll.gif"
+          msg = "위폴에서 "+@message.district+"에 한마디를 등록하셨습니다." 
+        else
+          path = district_politician_path(@politician)
+          imgpath = @politician.profile_photo.url(:square100)
+          msg = "위폴에서 "+@message.district+" "+@politician.name+"에게 한마디를 등록하셨습니다."
+        end
+        @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+path, :picture => "http://wepoll.or.kr"+imgpath, :description => msg )
         true
       rescue StandardError => e
         Rails.logger.info e.message

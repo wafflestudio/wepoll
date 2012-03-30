@@ -110,4 +110,53 @@ class TimelineEntry
   def adjust_link_count_of_politician
     self.politician.inc (self.is_good ? :good_link_count : :bad_link_count), -1
   end
+
+  # for timeline_entry to message change
+  field :is_messaged, type: Boolean, default: false
+  def self._timeline_entry_to_message_
+    TimelineEntry.all.each do |t|
+      if t.is_messaged == false
+        m = Message.new
+        m.user = t.user
+        m.body = (t.title? ? t.title : "")+" "+(t.comment? ? t.comment : "")+" "+(t.url? ? t.url : "")
+        m.politician = t.politician
+        m.district = t.politician.district
+        m.like_count = t.like_count
+        m.blame_count = t.blame_count
+        m.like_users = t.like_users
+        m.blame_users = t.blame_users
+        m.preview = t.preview
+        if m.save
+          t.is_messaged = true
+          Rails.logger.info "message (#{m.body}) save success"
+          puts "message (#{m.body}) save success"
+          m.created_at = t.created_at
+          m.save
+        else
+          Rails.logger.info "message save fail body: #{t.comment} user: #{t.user.nickname}"
+          puts "message save fail body: #{t.comment} user: #{t.user.nickname}"
+        end
+
+        t.link_replies.all.each do |l|
+          mr = MessageReply.new
+          mr.user = l.user
+          mr.body = l.body
+          mr.message = m
+          if mr.save
+            Rails.logger.info "message reply (#{mr.body}) save success"
+            puts "message reply (#{mr.body}) save success"
+            mr.created_at = l.created_at
+            mr.save
+          else
+            Rails.logger.info "MessageReply save fail body: #{mr.body} user: #{mr.user.nickname}"
+            puts "MessageReply save fail body: #{mr.body} user: #{mr.user.nickname}"
+          end
+        end
+
+        t.user.like_messages << m
+        t.user.blame_messages << m
+      end
+    end
+
+  end
 end

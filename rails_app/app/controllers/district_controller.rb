@@ -17,8 +17,8 @@ class DistrictController < ApplicationController
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
         @message = Message.new
-     		@messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
-        @best_message = @messages.desc('like_count').first
+	@messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
+        @best_message = Message.where(:district => @district).desc('like_count').first
         @bills = Bill.limit(20)
       end
       format.js {render :json => Politician.where(district: @district, candidate: 1).sort {|x,y| x.number <=> y.number }, :only => [:name, :party, :_id, :number]}
@@ -26,6 +26,9 @@ class DistrictController < ApplicationController
   end
 
   def show_timeline_entry
+    @message = Message.new
+    @messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
+    @best_message = Message.where(:district => @district).desc('like_count').first
     @politicians = Politician.where(:district => @district).where(:candidate => true).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
     @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
     @timeline_entry = TimelineEntry.find(params[:timeline_entry_id])
@@ -85,7 +88,7 @@ class DistrictController < ApplicationController
 
   def ready_politicians
     Rails.logger.info "district = " +@district
-    @politicians = Politician.where(:district => @district).where(:candidate => true).sort {|x,y| (y.good_link_count + y.bad_link_count) <=> (x.good_link_count + x.bad_link_count)}
+    @politicians = Politician.where(:district => @district).where(:candidate => true).sort {|x,y| y.message_count <=> x.message_count}
     @party_color = {"자유선진" => "#007DC5", "통합진보" => "#6F0086", "무소속" =>"#4F4F50","진보신당" => "#f5314f", "민주통합" => "#257a01", "새누리당" => "#c2271e" }
     if @politicians.count == 1
       @p1 = @politicians.first

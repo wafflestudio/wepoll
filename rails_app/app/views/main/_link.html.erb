@@ -1,17 +1,24 @@
 <div class="link-excerpt">
   <div class="title">
-    <% if link.nil? -%>
+    <% if message.nil? -%>
       <span style=\"color:#888\">링크가 없습니다.</span>
     <% else -%>
-      <%= link_to (link.politician.district + " " + link.politician.name), district_politician_path(link.politician.id), :class => "link-excerpt-politician-name" %>
-      <%= link_to truncate((link.title||"제목이 없습니다."),:length => 20), display_timeline_entry_path(link.id) %>
+<% sidebar_link_url = "" -%>
+      <% if message.politician==nil %>
+	<%  sidebar_link_url=district_name_path(message.district) %>
+<% else %>
+<% Rails.logger.info "id = #{message.politician_id}" %>
+<%  sidebar_link_url=district_politician_path(message.politician_id) %>
+      <%= link_to (message.district + " " + (message.politician!=nil ? message.politician.name : "")), sidebar_link_url, :class => "link-excerpt-politician-name" %>
+<% end -%>
+      <%= link_to truncate((message.body),:length => 20), sidebar_link_url %>
     <% end -%>
   </div>
   <div class="meta-info clearfix">
     <div class="support-count">
-      공감 <%= link.nil? ? 0 : link.like_count %>&nbsp;&nbsp;&nbsp;
-      댓글 <%= link.nil? ? 0 : link.link_replies.count %>
+      추천 <%= message.nil? ? 0 : message.like_count %>&nbsp;&nbsp;&nbsp;
+      댓글 <%= message.nil? ? 0 : message.message_replies.count %>
     </div>
-    <div class="nickname"><%= (link.nil? || link.user.nil?) ? "위폴" : (link_to link.user.nickname, display_timeline_entry_path(link.id))%></div>
+    <div class="nickname"><%= (message.nil? || message.user.nil?) ? "위폴" : (link_to message.user.nickname, sidebar_link_url)%></div>
   </div>
 </div>

@@ -118,6 +118,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def after_auth
     Rails.logger.info "====after_auth_path===="
-    redirect_to root_path
+    redirect_to :back
   end
 end

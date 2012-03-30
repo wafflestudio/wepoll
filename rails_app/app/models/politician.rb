@@ -35,6 +35,8 @@ class Politician #정치인 모델
   field :crawl_init_bill_completed, type: Boolean, default: false
 
 
+  #한마디 관련
+  field :message_count, type: Integer, default: 0
 
   #타임라인 관련
   field :good_link_count, type: Integer, default: 0

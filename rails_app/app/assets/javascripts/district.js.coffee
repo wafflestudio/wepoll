@@ -8,6 +8,7 @@
 # =require jcombox-1.0b.packed
 # =require politicians
 # =require waypoints
+
 $ () ->
   $('.politician-photo-wrapper.right .photo-frame').click ->
     $('.link-button.right').click()
@@ -74,3 +75,4 @@ $ () ->
       else
         $(obj).next().text data.count
     false
+  $('#message_body').placeholder()
