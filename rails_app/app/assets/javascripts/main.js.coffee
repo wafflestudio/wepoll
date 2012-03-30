@@ -364,8 +364,11 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 			show_vs(vs_cache[sector_id])
 
 		bubbleOut()
-		this.curve.show()
-		this.arrow.show()
+		this.curve.hide()
+		this.arrow.hide()
+#		this.curve.show()
+#		this.arrow.show()
+
 
 	# obj is "from", evt.relatedTarget is "to"	
 	out_ = (evt, obj)->
@@ -395,12 +398,12 @@ paper = Raphael("seoul-map-image", 800, 600, () ->
 		$(".vs-list-elem").remove()
 		$("#vs-container").hide()
 
-		this.stop().animate {fill: this.c}, 500
+		this.stop().animate {fill: this.c}, 200
 		if this.textel
 			textel = this.textel
 			this.textel.animate {"opacity":0,callback:()->
 				textel.hide()
-			}, 200
+			}, 50
 		bubbleIn()
 
 	out = (evt) ->

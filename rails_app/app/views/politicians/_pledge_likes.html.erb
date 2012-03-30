@@ -1,5 +1,11 @@
-<div class="pledge-like-count <%= dir %>">
-  <%= link_to_function pledge.like, "pledge_like('#{pledge.id}')", :class => "like count pledge-#{pledge.id}"%>
-  <%= link_to_function  pledge.dislike,"pledge_dislike('#{pledge.id}')", :class => "dislike count pledge-#{pledge.id}" %>
-</div>
-
+<% if user_signed_in? -%>
+  <div class="pledge-like-count <%= dir %>">
+    <%= link_to_function pledge.like, "pledge_like('#{pledge.id}')", :class => "like count pledge-#{pledge.id}"%>
+    <%= link_to_function  pledge.dislike,"pledge_dislike('#{pledge.id}')", :class => "dislike count pledge-#{pledge.id}" %>
+  </div>
+<% else -%>
+  <div class="pledge-like-count <%= dir %>">
+    <%= link_to_function pledge.like, "show_login()", :class => "like count pledge-#{pledge.id}"%>
+    <%= link_to_function  pledge.dislike,"show_login()", :class => "dislike count pledge-#{pledge.id}" %>
+  </div>
+<% end -%>
