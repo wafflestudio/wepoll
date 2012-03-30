@@ -27,8 +27,6 @@ class Politician #정치인 모델
   field :job, type: String
   field :education, type: String
   field :experiences, type: String
-  field :promises, type: Array, default: []
-  field :detail_promises, type: Array, default: []
   field :attendance, type: Array, default: (1..18).to_a.inject([]) {|a,x| a[x] = 0;a}
   field :number, type: Integer, default: 0 # 기호 n번
 

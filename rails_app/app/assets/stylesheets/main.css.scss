@@ -77,31 +77,59 @@
 }
 
 #vs-container {
-  padding:30px 40px 30px 40px;
-  width:320px - 80px;
-  height:260px - 60px;
-  background:url(/assets/bg_vs.png) no-repeat;
+  padding:20px 15px 0px 15px;
+  width:210px;
   top:75px;
-  left:-70px;
+  left:0;
   position:absolute;
+  z-index: 1000;
+  border: 4px solid #666666;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  background: white;
+  ul {
+    margin-top: 15px;
+  }
+  li {
+    border: 3px solid #8d8d8e;
+    margin-bottom: 15px;
+  }
+  img {
+    width: 65px;
+    float: left;
+  }
+  .vs-info {
+    float: left;
+    padding: 10px;
+    p {
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #444444;
+    }
+    span {
+      font-size: 12px;
+      color: #444444;
+    }
+    h3 {
+      font-size: 17px;
+      color: #444444;
+    }
+  }
 }
 
 #vs-district {
   text-align:center;
-  margin-top:10px;
+  font-size: 20px;
 }
 
-.vs-part {
-  float:left;
-  width:110px;
-}
-
-.vs-part.alpha {
-  margin-right:10px;
-}
-
-.vs-part.omega {
-  margin-left:10px;
+#vs-dong {
+  font-size: 14px;  
+  font-weight: normal;
+  margin-top: 10px;
+  word-wrap: break-word;
+  line-height: 1.2em;
+  margin-bottom: 25px;
 }
 
 #seoul-map {
@@ -333,14 +361,6 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   .links-bar-label {
     color:#4a4a4a;
   }
-}
-
-#vs-politician1 .good_links, #vs-politician1 .bad_links {
-  float:right;
-}
-
-#vs-politician2 .good_links, #vs-politician2 .bad_links {
-  float:left;
 }
 
 /* all */
