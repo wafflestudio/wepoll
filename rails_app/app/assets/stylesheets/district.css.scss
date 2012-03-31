@@ -497,6 +497,11 @@ a.init-bills-link {
       margin-right: 10px;
     }
   }
+  .message_remove_btn {
+    position: absolute;
+    top: -7px;
+    right: -6px;
+  }
   .message_entries_preview {
     margin-left: 25px;
   }
@@ -570,6 +575,7 @@ a.init-bills-link {
     font-weight: normal;
   }
   .message_entry {
+    position: relative;
     padding-top: 10px;
     padding-left: 25px;
     padding-bottom: 10px;
@@ -836,6 +842,7 @@ a.init-bills-link {
     behavior:url(http://wepoll.or.kr/PIE.htc);
 
     .message_entry {
+      position: relative;
       padding-bottom: 20px;
       border-bottom: 1px solid #E5E7DC;
       margin-bottom: 20px;

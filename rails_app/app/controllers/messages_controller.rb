@@ -60,7 +60,18 @@ class MessagesController < ApplicationController
 	end
 
 	def destroy
-
+    @message = Message.find(params[:id])
+    @success = false
+    @id = params[:id]
+    if @message.user == current_user
+      if @message.destroy
+        @success = true
+      else
+        @success = false
+      end
+    else
+      @success = false
+    end
 	end
 
   def like

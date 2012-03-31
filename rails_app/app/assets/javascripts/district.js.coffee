@@ -10,6 +10,7 @@
 # =require waypoints
 
 $ () ->
+  $('.message_entry .message_remove_btn').hide()
   $('.politician-photo-wrapper.right .photo-frame').click ->
     $('.link-button.right').click()
     return
@@ -80,3 +81,7 @@ $ () ->
         else
     false
   $('#message_body').placeholder()
+  $('.message_entry').hover () ->
+    $(this).children('.message_remove_btn').show()
+  , ()->
+    $(this).children('.message_remove_btn').hide()

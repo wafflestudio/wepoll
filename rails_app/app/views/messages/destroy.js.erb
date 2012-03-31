@@ -1,0 +1,5 @@
+<% if @success -%>
+  $('.message-entry-<%= @id %>').remove();
+<% else -%>
+  alert("한마디를 삭제하는데 실패했습니다.");
+<% end -%>
