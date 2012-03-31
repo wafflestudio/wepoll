@@ -81,6 +81,7 @@ $ () ->
         else
     false
   $('#message_body').placeholder()
+  # message destroy btn
   $('.message_entry').hover () ->
     $(this).children('.message_remove_btn').show()
   , ()->

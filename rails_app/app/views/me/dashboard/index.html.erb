@@ -33,19 +33,19 @@
       
       <% if current_user.status["status"] == User::STATUS_OK -%>
         <div class="alert alert-success user-status">
-          <span class="label">현재상태</span><span class="text good">링크를 올릴 수 있습니다.</span>
+          <span class="label">현재상태</span><span class="text good">한마디를 올릴 수 있습니다.</span>
         </div>
       <% elsif current_user.status["status"] == User::STATUS_SUSPEND -%>
         <div class="alert user-status">
-          <span class="label">현재상태</span><span class="text"><%= ((current_user.status["end"]-current_user.status["start"])/(3600*24)).to_i %>일간 링크 등록이 금지되었습니다.</span>
+          <span class="label">현재상태</span><span class="text"><%= ((current_user.status["end"]-current_user.status["start"])/(3600*24)).to_i %>일간 한마디 등록이 금지되었습니다.</span>
         </div>
       <% else -%>
       <% end -%>
     </div>
 
     <div class="grid_14 push_1">
-      <h3 class="small_title">내가 올린 링크</h3>
-      <h3 class="small_title pull-right"><%= @uploaded_links.count %>개</h3>
+      <h3 class="small_title">내가 올린 한마디</h3>
+      <h3 class="small_title pull-right"><%= @uploaded_messages.count %>개</h3>
       <div class="link_list">
         <table>
           <thead>
@@ -57,36 +57,36 @@
             </tr>
           </thead>
           <tbody id="uploaded_links">
-            <%= render @uploaded_links %>
+            <%= render @uploaded_messages %>
           </tbody>
         </table>
       </div>
       <div id="uploaded_paginator" class="paginator">
-        <%= paginate @uploaded_links, :remote => true %>
+        <%= paginate @uploaded_messages, :remote => true %>
       </div>
     </div>
     <div class="clear"></div>
 
     <div class="grid_14 push_1">
-      <h3 class="small_title">내가 공감한 링크</h3>
-      <h3 class="small_title pull-right"><%= @recommend_links.count %>개</h3>
+      <h3 class="small_title">내가 추천한 한마디</h3>
+      <h3 class="small_title pull-right"><%= @recommend_messages.count %>개</h3>
       <div class="link_list">
         <table>
           <thead>
             <tr>
               <th class="list_date">날짜</th>
-              <th class="list_title">제목</th>
-              <th class="list_count">공감</th>
-              <th class="list_count">신고</th>
+              <th class="list_title">내용</th>
+              <th class="list_count">추천</th>
+              <th class="list_count">반대</th>
             </tr>
           </thead>
           <tbody id="recommend_links">
-            <%= render @recommend_links %>
+            <%= render @recommend_messages %>
           </tbody>
         </table>
       </div>
       <div id="recommend_paginator" class="paginator">
-        <%= paginate @recommend_links, :remote => true, :param_name => 'page_2' %>
+        <%= paginate @recommend_messages, :remote => true, :param_name => 'page_2' %>
       </div>
     </div>
     <div class="clear"></div>
