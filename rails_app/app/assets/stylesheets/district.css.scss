@@ -546,12 +546,17 @@ a.init-bills-link {
         }
         .message_reply_content {
           display: inline-block;
-          width: 435px;
+          width: 420px;
           .message_reply_created_at {
             display: inline-block;
             margin-left: 5px;
             font-size: 5pt;
           }
+        }
+        .message_reply_remove_btn {
+          width: 15px;
+          text-decoration: none;
+          color: gray;
         }
       }
     }
