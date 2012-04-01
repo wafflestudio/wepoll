@@ -1,3 +1,8 @@
+
+<div style="text-align:right;font-size:8pt;padding-top:10px; padding-right:10px;">
+  * 당:현 소속 기준 | 당내 표결 분포:표결 당시 기준.<br />
+  (출처: 국회의안정보시스템, 열려라국회)
+</div>
   <%
      issueName = ""
   %>
@@ -9,7 +14,20 @@
     <% 0.upto(1) do |i| %>
       <% vote[i] = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[i].id).first %>
       <% value[i] = !vote[i].nil? ? vote[i].value : "해당 없음"%>
-      <% self_img_class[i] = value[i] == "찬성" ? "support" : (value[i] == "반대" ? "dissent" : (value[i] == "기권" ? "attend" : "absent")) %>
+      <% self_img_class[i] =
+           case value[i]
+             when "찬성"
+               "support"
+             when "반대"
+               "dissent"
+             when "기권"
+               "attend"
+             when "부재"
+                "absent"
+             else
+                nil
+           end
+      %>
       <% party_full[i] = "" %>
       <% party_value[i] = "" %>
       <% party_img_class[i] = nil %>
@@ -41,93 +59,92 @@
       <% end %>
     <% end %>
 
-
-    <div class="grid_11 alpha omega">
-      <div class="left">
-
-        <table class="left vote-box-<%= value[0] == "찬성" ? "support" : (value[0] == "반대" ? "dissent" : "absent")%>">
-          <tr class="vote-self">
-            <td class="row-name">본인 의견</td>
-            <td class="row-value">
-            <%=  value[0] %>
-            </td>
-            <td><img src="/assets/issueline-<%= self_img_class[0] %>.png"/></td>
-          </tr>
-
-          <tr class="vote-party tooltip-bottom" title="<%= party_full[0] %>">
-            <td class="row-name">당 의견</td>
-            <td class="row-value dim">
-              <p>
-                <%= party_value[0] %>
-              </p>            
-            </td>
-            <td>
-              <% if !party_img_class[0].nil? %>
-                  <img src="/assets/issueline-<%= party_img_class[0] %>.png"/>
-              <% end %>
-            </td>
-
-          </tr>
-        </table>
-      </div>
-
-      <div class="center">
-        <div class="vote-bill-container">
-          <div class="vote-bill-box">
-            <div class="text">
-              <%# if bill.issue != issueName  %>
-                <h2><%=  bill.issue %></h2>
-                <% issueName = bill.issue %>
-              <%# else %>
-                <!--<h2>&nbsp;</h2>-->
-              <%# end %>
-
-              <div class="bill-description">
-              <p><a title="<%=bill.title%>"><%= bill.title %></a></p>
-              </div>
-              <!--<p>찬성:<%= bill.supporters.length %>/반대:<%= bill.dissenters.length %></p>
-              <p>기권:<%= bill.attendees.length %>/부재:<%= bill.absentees.length %></p>-->
-            </div>
-          </div>
-          <div class="clear"></div>
-          <div class="vote-bill-point"></div>
-
+    <% unless vote[0].nil? and vote[1].nil? %>
+      <div class="grid_11 alpha omega">
+        <div class="left">
+          <% unless vote[0].nil? %>
+            <table class="left vote-box-<%= value[0] == "찬성" ? "support" : (value[0] == "반대" ? "dissent" : "absent")%>">
+              <tr class="vote-self">
+                <td class="row-name">본인 의견</td>
+                <td class="row-value">
+                <%=  value[0] %>
+                </td>
+                <td><img src="/assets/issueline-<%= self_img_class[0] %>.png"/></td>
+              </tr>
+  
+              <tr class="vote-party">
+                <td class="row-name">당 의견</td>
+                <td class="row-value dim">
+                  <p class="tooltip-bottom" title="<%= party_full[0] %>">
+                    <%= party_value[0] %>
+                  </p>
+                </td>
+                <td>
+                  <% if !party_img_class[0].nil? %>
+                      <img src="/assets/issueline-<%= party_img_class[0] %>.png"/>
+                  <% end %>
+                </td>
+  
+              </tr>
+            </table>
+          <% end %>
         </div>
+  
+        <div class="center">
+          
+          <div class="vote-bill-container bill-description-link" title="<%=bill.summary%>">
+            <div class="vote-bill-box">
+              <div class="text">
+                  <h2><%=  bill.issue %></h2>
+                  <% issueName = bill.issue %>
+                <div class="bill-description">
+                <p><%= bill.title %></p>
+                </div>
+
+              </div>
+            </div>
+            <div class="clear"></div>
+            <div class="vote-bill-point"></div>
+          </div>
+      
+        </div>
+  
+        <div class="right">
+          <% unless vote[1].nil? %>
+          <table class="left vote-box-<%= value[1] == "찬성" ? "support" : (value[1] == "반대" ? "dissent" : "absent")%>">
+            <tr class="vote-self">
+              <td class="row-name">본인 의견</td>
+              <td class="row-value">
+                <%=  value[1] %>
+              </td>
+              <td><img src="/assets/issueline-<%= self_img_class[1] %>.png"/></td>
+            </tr>
+  
+            <tr class="vote-party">
+              <td class="row-name">당 의견</td>
+              <td class="row-value dim">
+                <p class="tooltip-bottom" title="<%= party_full[1] %>">
+                  <%= party_value[1] %>
+                </p>
+              </td>
+              <td>
+                <% if !party_img_class[1].nil? %>
+                  <img src="/assets/issueline-<%= party_img_class[1] %>.png"/>
+                <% end %>
+              </td>
+  
+            </tr>
+          </table>
+          <% end %>
+        </div>
+  
+        <div class="clear"></div>
+  
       </div>
-
-      <div class="right">
-
-        <table class="left vote-box-<%= value[1] == "찬성" ? "support" : (value[1] == "반대" ? "dissent" : "absent")%>">
-          <tr class="vote-self">
-            <td class="row-name">본인 의견</td>
-            <td class="row-value">
-              <%=  value[1] %>
-            </td>
-            <td><img src="/assets/issueline-<%= self_img_class[1] %>.png"/></td>
-          </tr>
-
-          <tr class="vote-party tooltip-bottom" title="<%= party_full[1] %>">
-            <td class="row-name">당 의견</td>
-            <td class="row-value dim">
-              <p>
-                <%= party_value[1] %>
-              </p>
-            </td>
-            <td>
-              <% if !party_img_class[1].nil? %>
-                <img src="/assets/issueline-<%= party_img_class[1] %>.png"/>
-              <% end %>
-            </td>
-
-          </tr>
-        </table>
-      </div>
-
-      <div class="clear"></div>
-
-    </div>
+    <% end %>
 
   <% end %>
 <script type="text/javascript">
-  $(".tooltip-bottom").qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}});
+  $(".tooltip-bottom").qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-cream'}});
+  $(".bill-description-link").qtip({position:{my:'middle left',at:'middle right'},style: {classes: 'ui-tooltip-dark'}});
 </script>

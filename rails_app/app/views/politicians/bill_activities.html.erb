@@ -1,4 +1,4 @@
-<div class="alpha omega subsection clearfix">
+<div id="bill-graphs" class="alpha omega subsection clearfix" title="분야를 클릭하시면 법안의 세부 내용을 볼 수 있습니다">
   <div style="text-align:right;font-size:8pt;padding-top:10px; padding-right:10px;">
 *16~18대 국회활동을 기준으로 합니다.<br />
 (출처: 국회의안정보시스템, 열려라국회)
@@ -67,4 +67,8 @@
         $("#attendance-<%=politician.id%>").html('<span style="font-size:12pt">정보없음</span>');
       <% end -%>
     <% end -%>
+
+
+    $('#bill-graphs').qtip({position:{my:'middle left',at:'middle right'},style: {classes: 'ui-tooltip-dark'}});
+
 </script>

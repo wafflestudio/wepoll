@@ -6,7 +6,7 @@ require 'json'
 i = 0
 names = []
 arrOfArr = []
-CSV.foreach("MajorBill.csv",:encoding => "UTF-8" ) do |row|
+CSV.foreach("init_data/majorbills/MajorBill2.csv",:encoding => "UTF-8" ) do |row|
   if i == 0
     names = row
   else
@@ -75,6 +75,7 @@ for i in 0..(numBills-1) do
   end
   bills[table["의안 번호"][i].strip] = 	
   {:issue => table["이슈"][i],
+   :summary => table["설명"][i],
    :favored => parseMembers(table["찬성"][i]),
    :opposed => parseMembers(table["반대"][i],debug),
    :resigned => parseMembers(table["기권"][i],debug),
@@ -122,6 +123,7 @@ bills.each do |number,bill|
   b.attendees = []
   b.absentees = []
   b.issue = bill[:issue]
+  b.summary = bill[:summary]
   b.save
 
   if bill[:favored]

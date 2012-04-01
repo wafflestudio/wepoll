@@ -249,9 +249,11 @@ $(document).ready(function() {
   <div id="politician-bill-activities" class="section">
   </div>
 
-  <h1 class="section-label">공약</h1>
+  <% if @vote_exists %>
+  <h1 class="section-label">주요 이슈 표결</h1>
   <div id="politician-vote-activities" class="section">
   </div>
+  <% end %>
 
 
   <div id="messages">

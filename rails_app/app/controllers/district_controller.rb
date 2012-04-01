@@ -17,9 +17,10 @@ class DistrictController < ApplicationController
         end
         @timeline_entries = TimelineEntry.where(q_time).where(:politician_id.in => [@p1,@p2].map {|p| p.nil? ? nil : p.id})
         @message = Message.new
-	@messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
+        @messages = Message.where(:district => @district).desc("created_at").page(params[:page]).per(10)
         @best_message = Message.where(:district => @district).desc('like_count').first
         @bills = Bill.limit(20)
+        @vote_exists = !VoteForBillByPolitician.where(:politician_id.in => [@p1.id,@p2.id]).first.nil?
       end
       format.js {render :json => Politician.where(district: @district, candidate: 1).sort {|x,y| x.number <=> y.number }, :only => [:name, :party, :_id, :number]}
     end
