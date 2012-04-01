@@ -9,6 +9,7 @@
 # =require politicians
 # =require waypoints
 # =require timeline/jquery.corner
+
 $ () ->
   $('.politician-photo-wrapper.right .photo-frame').click ->
     $('.link-button.right').click()

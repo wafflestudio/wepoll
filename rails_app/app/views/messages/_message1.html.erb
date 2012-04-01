@@ -73,7 +73,7 @@
           <% if user_signed_in? -%>
             <textarea class="message_reply_write" cols="60" id="message_reply_write_<%=message.id.to_s%>" maxlength="140" name="message[body]" placeholder="댓글을 입력하세요." rows="5"></textarea>
           <% else -%>
-            <a href="#" onclick="show_login(); return false;"><textarea cols="60" disabled="disabled" id="message_body" name="message[body]" placeholder="로그인하면 댓글을 남길 수 있습니다." rows="5"></textarea></a>
+            <a href="javascript:void(0)" onclick="show_login(); return false;"><textarea cols="60" disabled="disabled" id="message_body" name="message[body]" placeholder="로그인하면 댓글을 남길 수 있습니다." rows="5"></textarea></a>
           <% end -%>
         </div>
         <div class="clearfix">

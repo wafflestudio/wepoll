@@ -1,105 +1,133 @@
-<div id="issueline" class="grid_11 alpha omega">
   <%
      issueName = ""
   %>
+  <div class="centerline"></div>
+
   <% @bills.each do |bill| %>
-    <% vote1 = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[0].id).first %>
-    <% value1 = !vote1.nil? ? vote1.value : "해당 없음"%>
+
+    <% vote,value,self_img_class,party_full,party_value,party_img_class = [],[],[],[],[],[] %>
+    <% 0.upto(1) do |i| %>
+      <% vote[i] = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[i].id).first %>
+      <% value[i] = !vote[i].nil? ? vote[i].value : "해당 없음"%>
+      <% self_img_class[i] = value[i] == "찬성" ? "support" : (value[i] == "반대" ? "dissent" : (value[i] == "기권" ? "attend" : "absent")) %>
+      <% party_full[i] = "" %>
+      <% party_value[i] = "" %>
+      <% party_img_class[i] = nil %>
+      <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[i].party).each do |votes| %>
+        <% if votes.party == @politicians[i].party and votes.party != "무소속" %>
+          <% party_full[i] = "#{votes.party}: 찬성 #{votes.num_supporters.to_i}/반대 #{votes.num_dissenters.to_i}/기권 #{votes.num_attendees.to_i}/부재 #{votes.num_absentees.to_i}" %>
+          <% total = votes.num_supporters.to_i + votes.num_dissenters.to_i + votes.num_attendees.to_i + votes.num_absentees.to_i %>
+          <% if total > 0 %>
+            <% p_supported,p_dissented,p_attended,p_absented = [votes.num_supporters, votes.num_dissenters, votes.num_attendees, votes.num_absentees].map do |num| num.to_i*100/total end %>
+            <% largest = [p_supported,p_dissented,p_attended,p_absented].sort()[-1] %>
+            <% if largest == p_supported and p_supported >= 50 %>
+              <% party_value[i] = "다수찬성"
+                 party_img_class[i] = "mostly-support"
+              %>
+            <% elsif largest == p_dissented and p_dissented >= 50 %>
+              <% party_value[i] = "다수반대"
+                 party_img_class[i] = "mostly-dissent"
+              %>
+            <% elsif (p_attended + p_absented) >= 50 %>
+              <% party_value[i] = "다수불참"
+                 party_img_class[i] = "mostly-absent"
+              %>
+            <% else %>
+              <% party_value[i] = "경합"
+              %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
 
 
     <div class="grid_11 alpha omega">
-      <div class="grid_4 alpha">
-        <div class="vote-box-border-<%= value1 == "찬성" ? "support" : (value1 == "반대" ? "dissent" : "absent")%>">
-          <div class="vote-box">
-            <div class="vote-self">
-              <div class="grid_1 alpha row-name">본인 의견</div>
-              <div class="omega row-value">
-              <%=  value1 %>
-              </div>
-            </div>
+      <div class="left">
 
-            <div class="clear"></div>
-            <div class="vote-party">
-              <div class="grid_1 alpha row-name">당 의견</div>
+        <table class="left vote-box-<%= value[0] == "찬성" ? "support" : (value[0] == "반대" ? "dissent" : "absent")%>">
+          <tr class="vote-self">
+            <td class="row-name">본인 의견</td>
+            <td class="row-value">
+            <%=  value[0] %>
+            </td>
+            <td><img src="/assets/issueline-<%= self_img_class[0] %>.png"/></td>
+          </tr>
 
-              <div class="omega row-value">
-                <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[0].party).each do |votes| %>
-                  <% if votes.party == @politicians[0].party and votes.party != "무소속" %>
-                    <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
-                      <%= "#{votes.party} " +
-                              ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
-                              ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
-                              "표결 불참") %>
-                    </p>
-                  <% end %>
-                <% end %>
+          <tr class="vote-party tooltip-bottom" title="<%= party_full[0] %>">
+            <td class="row-name">당 의견</td>
+            <td class="row-value dim">
+              <p>
+                <%= party_value[0] %>
+              </p>            
+            </td>
+            <td>
+              <% if !party_img_class[0].nil? %>
+                  <img src="/assets/issueline-<%= party_img_class[0] %>.png"/>
+              <% end %>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+
+      <div class="center">
+        <div class="vote-bill-container">
+          <div class="vote-bill-box">
+            <div class="text">
+              <%# if bill.issue != issueName  %>
+                <h2><%=  bill.issue %></h2>
+                <% issueName = bill.issue %>
+              <%# else %>
+                <!--<h2>&nbsp;</h2>-->
+              <%# end %>
+
+              <div class="bill-description">
+              <p><a title="<%=bill.title%>"><%= bill.title %></a></p>
               </div>
+              <!--<p>찬성:<%= bill.supporters.length %>/반대:<%= bill.dissenters.length %></p>
+              <p>기권:<%= bill.attendees.length %>/부재:<%= bill.absentees.length %></p>-->
             </div>
           </div>
+          <div class="clear"></div>
+          <div class="vote-bill-point"></div>
+
         </div>
       </div>
 
-      <div class="grid_3">
-        <div class="vote-bill-box-border">
-        <div class="vote-bill-box">
-          <% if bill.issue != issueName  %>
-            <h2><%=  bill.issue %></h2>
-            <% issueName = bill.issue %>
-          <% end %>
+      <div class="right">
 
-          <p><%= bill.title %></p>
-          <p>찬성:<%= bill.supporters.length %>/반대:<%= bill.dissenters.length %></p>
-          <p>기권:<%= bill.attendees.length %>/부재:<%= bill.absentees.length %></p>
-        </div>
-        </div>
-      </div>
+        <table class="left vote-box-<%= value[1] == "찬성" ? "support" : (value[1] == "반대" ? "dissent" : "absent")%>">
+          <tr class="vote-self">
+            <td class="row-name">본인 의견</td>
+            <td class="row-value">
+              <%=  value[1] %>
+            </td>
+            <td><img src="/assets/issueline-<%= self_img_class[1] %>.png"/></td>
+          </tr>
 
-      <% vote2 = @votes_by_politicians.where(:bill_id => bill.id).where(:politician_id => @politicians[1].id).first %>
-      <% value2 = !vote2.nil? ? vote2.value : "해당 없음"%>
+          <tr class="vote-party tooltip-bottom" title="<%= party_full[1] %>">
+            <td class="row-name">당 의견</td>
+            <td class="row-value dim">
+              <p>
+                <%= party_value[1] %>
+              </p>
+            </td>
+            <td>
+              <% if !party_img_class[1].nil? %>
+                <img src="/assets/issueline-<%= party_img_class[1] %>.png"/>
+              <% end %>
+            </td>
 
-      <div class="grid_4 alpha">
-        <div class="vote-box-border-<%= value2 == "찬성" ? "support" : (value2 == "반대" ? "dissent" : "absent")%>">
-          <div class="vote-box">
-            <div class="vote-self">
-              <div class="grid_1 alpha row-name">본인 의견</div>
-              <div class="omega row-value">
-                <%= value2 %>
-              </div>
-            </div>
-            <div class="clear"></div>
-            <div class="vote-party">
-              <div class="grid_1 alpha row-name">당 의견</div>
-
-              <div class="omega row-value">
-                <% @votes_by_parties.where(:bill_id => bill.id).where(:party => @politicians[1].party).each do |votes| %>
-                  <% if votes.party == @politicians[1].party and votes.party != "무소속" %>
-                    <p class="tooltip-top" title="<%= votes.party %>:<%= votes.num_supporters.to_i %>/<%= votes.num_dissenters.to_i %>/<%= votes.num_attendees.to_i %>/<%= votes.num_absentees.to_i %>">
-                      <%= "#{votes.party} " +
-                              ((votes.num_supporters.to_i + votes.num_dissenters.to_i) > 0 ?
-                                  ((votes.num_supporters.to_i*100 / (votes.num_supporters.to_i + votes.num_dissenters.to_i)).to_s + "% 찬성") :
-                                  "표결 불참") %>
-                    </p>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
+          </tr>
+        </table>
       </div>
 
       <div class="clear"></div>
 
-
     </div>
 
   <% end %>
-</div>
 <script type="text/javascript">
-  $(function() {
-
-    $('.vote-box,.vote-bill-box').corner("round 9px").parent().css('padding', '2px').corner("round 10px")
-
-  })
-
-
+  $(".tooltip-bottom").qtip({position:{my:'top center',at:'bottom center'},style: {classes: 'ui-tooltip-dark'}});
 </script>

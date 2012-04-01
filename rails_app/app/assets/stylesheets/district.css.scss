@@ -844,26 +844,80 @@ a.init-bills-link {
   }
 }
 
-
-#issueline {
+#politician-vote-activities {
+  background-color:#e6e6dc;
   word-break: break-all;
+  float:left;
 
-  .vote-box-border-support {
-    padding:1px;
-    background-color: #60e33a;
+  .dim {
+    font-weight:normal !important;
+    color:#9E9E9E;
   }
 
-  .vote-box-border-dissent {
-    background-color: #e32232;
+
+  .left,.right {
+
+    float:left;
+    position:relative;
+    margin:0px;
+    width:266px;
   }
 
-  .vote-box-border-absent {
-    background-color: #787878;
+  .left {
+    margin-left:0px;
+  }
+  .right {
+    margin-right:0px;
+  }
+
+  .vote-box-support, .vote-box-dissent, .vote-box-attend, .vote-box-absent {
+    position:relative;
+    height:104px;
+  }
+
+
+
+  .vote-box-support {
+    background: url('/assets/issueline-green.png')
+  }
+
+  .vote-box-dissent {
+    background: url('/assets/issueline-red.png') no-repeat;
+  }
+
+  .vote-box-absent,.vote-box.attend {
+    background: url('/assets/issueline-black.png') no-repeat;
+  }
+
+  .row-name {
+    width: 50px;
+    padding-left:10px;
+    font-size:8pt;
+  }
+
+  tr {
+    height:32px;
+  }
+
+  
+  .row-value {
+
+    width:140px;
+    text-align: center;
+    padding:20px 0px 2px 0px;
+    font-weight:bold;
+    font-size:12pt;
+
+
+  }
+
+  img {
+    vertical-align: middle;
   }
 
 
   .vote-box {
-    background-color:white;
+
     text-align:center;
     height:60px;
 
@@ -873,39 +927,64 @@ a.init-bills-link {
 
     }
 
+  }
 
-    .row-name {
-      font-size:8pt;
-    }
-    .row-value {
-      font-weight:bold;
-      font-size:12pt;
-    }
-
-    hr {
-
-    }
+  .center {
+    position:relative;
+    float:left;
+    margin-left:13px;
+    margin-right:13px;
+    width:130px;
 
   }
 
-  .vote-bill-box-border {
-    background-color:black;
-    padding:1px;
+  .vote-bill-container {
+
+    .vote-bill-point {
+      margin-top:5px;
+      margin-bottom:5px;
+      left:-2px;
+      position:relative;
+      background: url('/assets/issueline-point.png') no-repeat;
+      width:8px;
+      height:8px;
+      margin-left:auto;
+      margin-right:auto;
+
+    }
+
   }
 
   .vote-bill-box {
-    background-color:white;
+    background: url('/assets/issueline-bill.png') no-repeat;
+    height:110px;
     text-align:center;
-    h2 {
-      font-weight:bold;
-      font-size:12pt;
-    }
-    .bill-description {
-      font-size:8pt;
+    .text {
 
+      position:relative;
+      overflow:hidden;
+      height:100px;
+
+
+      h2 {
+        text-align:center;
+        padding:10px 3px 5px 3px;
+        font-weight:bold;
+        font-size:12pt;
+        word-break: break-all;
+      }
+
+      .bill-description {
+        padding:5px;
+
+        font-size:8pt;
+      }
     }
 
   }
+
+
+
 
   h1 {
     margin-top:30px;

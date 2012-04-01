@@ -42,10 +42,12 @@
   <span class="by">designed by</span>  <span class="who">디자인 칠</span>
 </div>
 
-<p><input type="checkbox" onchange="hideToday()" />오늘하루보지않기</p>
+<!--<p><input type="checkbox" onchange="hideToday()" />오늘하루보지않기</p>-->
 
 </div>
 </div>
 <script type="text/javascript">
     $(".tooltip-facebook").qtip({position:{my:'bottom center',at:'top center'},style:{classes:'ui-tooltip-dark'}})
+    // 거슬리는 팝업 무조건 오늘 한번만!
+    $.cookie('hidemainpopup','ok',{expires:1});
 </script>
