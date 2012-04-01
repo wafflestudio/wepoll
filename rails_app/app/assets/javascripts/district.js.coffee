@@ -87,3 +87,8 @@ $ () ->
     $(this).children('.message_remove_btn').show()
   , ()->
     $(this).children('.message_remove_btn').hide()
+  # message form submit btn
+  $('#new_message').submit ->
+    $('#message-submit-btn').val '전송중...'
+    $('#message-submit-btn').attr 'disabled','true'
+    true

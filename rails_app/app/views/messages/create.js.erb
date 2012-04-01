@@ -1,8 +1,11 @@
 <% if @success -%>
   var total_cnt = $('#total_message_count').text()*1+1;
+  $('#message-submit-btn').val('확인');
+  $('#message-submit-btn').removeAttr('disabled');
   $('#total_message_count').text(total_cnt);
   $('#messages_area').prepend('<%= escape_javascript(render @message) %>');
   $('#message_body').val("");
+  $('#message-body-length').text("0");
   $('#message_preview_id').val("");
   $('#message-form-preview img.preview-img').removeAttr('src');
   $('#message-form-preview-title').html("");
