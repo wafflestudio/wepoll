@@ -1,7 +1,8 @@
 
-<div style="text-align:right;font-size:8pt;padding-top:10px; padding-right:10px;">
+<div style="text-align:right;font-size:8pt;padding:10px 10px 10px 0px">
   * 당:현 소속 기준 | 당내 표결 분포:표결 당시 기준.<br />
   (출처: 국회의안정보시스템, 열려라국회)
+
 </div>
   <%
      issueName = ""
@@ -92,7 +93,7 @@
   
         <div class="center">
           
-          <div class="vote-bill-container bill-description-link" title="<%=bill.summary%>">
+          <div class="vote-bill-container bill-description-link" title="<%= bill.summary%> (표결일: <%=bill.voted_at.strftime("%Y.%m.%d")%>)">
             <div class="vote-bill-box">
               <div class="text">
                   <h2><%=  bill.issue %></h2>
