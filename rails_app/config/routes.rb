@@ -13,6 +13,7 @@ Wepoll::Application.routes.draw do
     get 'like', :on => :member
   end
 
+  resources :message_replies, :only => [:destroy]
   match "link_counts/:id" => "politicians#link_counts", :as => :link_counts_of_politician, :constraints => {:id => /[a-z0-9]+/}
   match "link_counts/:district" => "politicians#link_counts", :as => :link_counts_of_politician
   match 'timeline/:timeline_entry_id' => 'district#show_timeline_entry', :via => :get, :as => :display_timeline_entry

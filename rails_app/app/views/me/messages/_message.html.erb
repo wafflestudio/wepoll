@@ -1,0 +1,10 @@
+<% if message.politician.nil? -%>
+  <tr data-href="<%= district_name_path(message.district) %>" class="dashboard-link-entry">
+<% else -%>
+  <tr data-href="<%= district_politician_path(message.politician) %>" class="dashboard-link-entry">
+<% end -%>
+  <td class="list_date"><%= message.created_at.strftime("%Y-%m-%d") %></td>
+  <td class="list_title"><%= truncate((message.body),:length => 60) %></td>
+  <td class="list_count"><%= message.like_count %></td>
+  <td class="list_count"><%= message.blame_count %></td>
+</tr>

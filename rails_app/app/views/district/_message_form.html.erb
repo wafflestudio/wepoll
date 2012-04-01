@@ -28,7 +28,7 @@
       <% if user_signed_in? -%>
         <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "원하는 후보에게 한마디 남겨주세요." %>
       <% else -%>
-        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "로그인 후 한마디를 입력할 수 있습니다.", :onclick => "show_login(); return false;" %>
+        <%= f.text_area :body, :class => 'comment', :maxlength => 250, :placeholder => "원하는 후보에게 한마디 남겨주세요.", :onclick => "show_login(); return false;" %>
       <% end -%>
       <div id="message-length-indicator"><span id="message-body-length">00</span>/250</div>
       <div id="message-form-preview" class="preview">

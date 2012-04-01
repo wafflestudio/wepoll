@@ -60,13 +60,24 @@ class MessagesController < ApplicationController
 	end
 
 	def destroy
-
+    @message = Message.find(params[:id])
+    @success = false
+    @id = params[:id]
+    if @message.user == current_user
+      if @message.destroy
+        @success = true
+      else
+        @success = false
+      end
+    else
+      @success = false
+    end
 	end
 
   def like
     @message = Message.find(params[:id])
     if @message.like(current_user)
-      render :json => {:status => "ok", :count => @message.like_count }
+      render :json => {:status => "ok", :count => @message.like_count, :id => @message.id, :type => "like" }
     else
       render :json => {:status => "error", :message => "이미 추천하셨습니다."}
     end
@@ -74,7 +85,7 @@ class MessagesController < ApplicationController
   def blame
     @message = Message.find(params[:id])
     if @message.blame(current_user)
-      render :json => {:status => "ok", :count => @message.blame_count }
+      render :json => {:status => "ok", :count => @message.blame_count, :id => @message.id, :type => "blame" }
     else
       render :json => {:status => "error", :message => "이미 반대하셨습니다."}
     end

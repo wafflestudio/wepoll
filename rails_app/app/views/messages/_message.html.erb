@@ -21,6 +21,7 @@
       <%= link_to_function '반대', "show_login()", :class => "message_entry_btn blame" %><span class="blame_count"><%= message.blame_count %></span>
     <% end -%>
   </div>
+  <%= link_to image_tag('/assets/admin/hr.gif'), message_path(message), :remote => true, :method => 'delete', :confirm => '삭제하시겠습니까?', :class => 'message_remove_btn' if current_user == message.user %>
   <% unless message.preview.nil? %>
     <div class="message_entries_preview preview clearfix">
       <img class="preview-img" src='<%= (message.preview and message.preview.image_url and message.preview.image_url.length>0) ? message.preview.image_url : "/assets/dummy-news-1.jpg" %>'>
@@ -44,7 +45,7 @@
         <% end %>
       <% else -%>
         <%= form_tag message_replies_path(message), :remote => true do %>
-          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "로그인 후 댓글을 적을 수 있습니다.", :onclick => "show_login(); return false;" %>
+          <%= text_field_tag 'message_reply[body]', nil, :class => "message_reply_txt_field", :placeholder => "한마디에 댓글을 적어주세요.", :onclick => "show_login(); return false;" %>
           <%= submit_tag '확인', :class => "message_reply_submit_btn", :onclick => "show_login(); return false;" %>
         <% end %>
       <% end -%>

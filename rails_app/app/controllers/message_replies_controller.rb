@@ -19,6 +19,16 @@ class MessageRepliesController < ApplicationController
 
   def destroy
     @message_reply = MessageReply.find(params[:id])
-    @message_reply.destroy
+    @success = false
+    @id = params[:id]
+    if @message_reply.user == current_user
+      if @message_reply.destroy
+        @success = true
+      else
+        @success = false
+      end
+    else
+      @success = false
+    end
   end
 end

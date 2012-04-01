@@ -1,0 +1,5 @@
+<% if @success -%>
+  $('.message_reply_entry_<%= @id %>').remove();
+<% else -%>
+  alert("댓글을 삭제하는데 실패했습니다.");
+<% end -%>
