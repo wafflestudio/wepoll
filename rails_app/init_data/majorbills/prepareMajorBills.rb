@@ -216,7 +216,7 @@ VoteForBillByPolitician.destroy_all
 
 
 bills.each do |bill|
-
+  puts bill.title
   fields.each do |fieldName|
     bill.send(fieldName).each do |pol|
       votes = VoteForBillByParty.where(:bill_id => bill.id).where(:party => pol.party).first ||
@@ -227,7 +227,7 @@ bills.each do |bill|
       votes.save
     end
   end
-
+  puts "   saved: per party"  
 
   politicians.each do |pol|
     vote =
@@ -249,4 +249,6 @@ bills.each do |bill|
       end
     vote.save if vote.value != "해당없음"
   end
+
+  puts "   saved: per politician"  
 end
