@@ -38,7 +38,7 @@ class PoliticiansController < ApplicationController
   end
 
   def pledges
-    @pledges = @politicians.map{|p| p.pledges.desc("_id")}
+    @pledges = @politicians.map{|p| p.pledges.asc("_id")}
     @maxcount = @pledges.map {|c| c.count}.max
     render :layout => false
   end

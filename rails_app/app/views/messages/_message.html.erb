@@ -9,8 +9,8 @@
     <%= message.user.nickname %>
     <span class="message_created_at"><%= message.created_at.strftime("%y.%m.%d %H:%M") %></span><br />
 
-    <%= message.politician.nil? ? message.district : message.politician.name %> 후보에게<br /><br />
-    <%= message.body %>
+    <%= message.politician.nil? ? message.district : message.politician.name %> 후보에게<br />
+    <%= url_maker(message.body).html_safe %>
   </div>
   <div class="message_entry_btns">
     <% if user_signed_in? -%>
