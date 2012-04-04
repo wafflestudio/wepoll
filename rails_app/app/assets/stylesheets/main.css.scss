@@ -206,7 +206,7 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
   height:50px - 1px;
   border-bottom:1px dashed #bdbbbc;
 //  margin-top:15px;
-  margin: 15px 10px 0 15px;
+  margin: 15px 15px 0 15px;
 //  padding:0 15px;
   font-size:10pt;
 
@@ -221,6 +221,7 @@ behavior:url(http://wepoll.or.kr/PIE.htc);
     float:right;
     color:#c29f01;
     text-align:right;
+    overflow: hidden;
     a {
       color:#c29f01;
       text-decoration:none;
