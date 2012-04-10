@@ -134,7 +134,7 @@ protected
         @graph = Koala::Facebook::GraphAPI.new(@access_token)
         if @politician.nil?
           path = district_name_path(@message.district)
-          imgpath = "btn_wepoll.gif"
+          imgpath = "/btn_wepoll.gif"
           msg = "위폴에서 "+@message.district+"에 한마디를 등록하셨습니다." 
           Rails.logger.info "페이스북 포스팅중, 선거구는 #{@message.district} "
         else
@@ -143,6 +143,8 @@ protected
           msg = "위폴에서 "+@message.district+" "+@politician.name+"에게 한마디를 등록하셨습니다."
           Rails.logger.info "페이스북 포스팅중, 정치인 이름은 #{@politician.name} "
         end
+        Rails.logger.info imgpath
+        Rails.logger.info "http://wepoll.or.kr"+imgpath
         @graph.put_object("me","feed",:message => params[:message][:body], :link => "http://wepoll.or.kr"+path, :picture => "http://wepoll.or.kr"+imgpath, :description => msg )
         true
       rescue StandardError => e
